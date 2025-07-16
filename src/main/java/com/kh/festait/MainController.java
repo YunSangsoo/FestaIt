@@ -10,13 +10,10 @@ public class MainController {
 	public String home() {
 		return "main";
 	}
-	
 
 	@GetMapping("/common")
 	public String homTest() {
 		return "/common/footer";
 	}
 	
-	
 }
-
