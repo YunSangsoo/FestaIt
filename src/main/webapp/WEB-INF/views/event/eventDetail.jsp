@@ -15,8 +15,15 @@
 </style>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include> --%>
 
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+<h1>${event.title}</h1>
+<p>장소: ${event.location}</p>
+<p>홈페이지: <a href="${event.homepage}" target="_blank">바로가기</a></p>
+<p>분류: ${event.category}</p>
+<img src="/images/${event.imagePath}" alt="포스터" style="width:300px;">
+<p>${event.content}</p>
+
+<%-- <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include> --%>
 </body>
 </html>
