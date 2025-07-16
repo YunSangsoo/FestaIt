@@ -12,9 +12,9 @@ public class MainController {
 	}
 	
 
-	@GetMapping("/test")
+	@GetMapping("/common")
 	public String homTest() {
-		return "/test/main";
+		return "/common/footer";
 	}
 	
 	
