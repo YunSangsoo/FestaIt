@@ -10,6 +10,11 @@ public class MainController {
 	public String home() {
 		return "main";
 	}
+	
+	@GetMapping("/board")
+	public String homeBoard() {
+		return "/board/boardListView";
+	}
 
 	@GetMapping("/common")
 	public String homTest() {
