@@ -8,22 +8,23 @@
         http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!-- Spring MVC 어노테이션 활성화 -->
     <annotation-driven />
 
-    <!-- 정적 리소스 위치 지정 -->
     <resources mapping="/resources/**" location="/resources/" />
 
-    <!-- View Resolver -->
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
 
-    <!-- 컴포넌트 스캔 (Controller만 찾음) -->
-<context:component-scan base-package="com.kh.festait.event.controller" />
+    <context:component-scan base-package="com.kh.festait" /> </beans:beans>
 
-</beans:beans>
+
+
+
+
+
+
 
 <!-- <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
@@ -49,7 +50,8 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.kh.festait" />
-
+	
+	
+	
 </beans:beans>
  -->
- 
