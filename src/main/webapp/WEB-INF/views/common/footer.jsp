@@ -19,8 +19,8 @@
         }
         #footer-1 {
             height:20%;
-            border-top:2px solid black;
-            border-bottom:2px solid black;
+            border-top:2px solid plum;
+            border-bottom:2px solid white;
             
         }
         #footer-2 {width:100%; height:80%; 
@@ -55,9 +55,10 @@
 
         <div id="footer-2">
             <p id="p1">
-                강남지원 1관 : 서울특별시 강남구 테헤란로14길 6 남도빌딩 3F<br><br>
+                강남지원 1관 : 서울특별시 강남구 테헤란로14길 6 남도빌딩 3F<br>
+                (디지털컨버전스) React & Spring 활용 자바(Java) 개발자 양성과정 30(9)<br>
                 Team : Testa-it<br>
-                Member : 윤상수 강동현 김현주 고훈 조아현 장성민
+                Team Member : 윤상수 강동현 김현주 고훈 조아현 장성민
             </p>
             <p id="p2">Copyright &copy; 2025 Festa-it. All rights reserved.</p>
         </div>
