@@ -21,4 +21,8 @@ public class MainController {
 		return "/common/footer";
 	}
 	
+	@GetMapping("/test")
+	public String test() {
+		return "/test/main";
+	}
 }
