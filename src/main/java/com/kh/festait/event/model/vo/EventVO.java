@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor 
 @AllArgsConstructor 
 @ToString 
-@Builder // 빌더 패턴. 혹시 몰라서.
+@Builder // 빌더 패턴. 일단 넣어놓기
 public class EventVO {
 	// 김현주 : 행사 정보 데이터
 
@@ -43,8 +43,6 @@ public class EventVO {
     private String appOrg; // APP_ORG (문자)
     private String appSponser; // APP_SPONSER (문자)
     private String adminComment; // ADMIN_COMMENT (CLOB 타입은 Java에서 String으로 처리)
-
-	// getter & setter (자동 생성)
 	
 }
 

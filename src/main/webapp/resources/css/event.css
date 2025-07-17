@@ -1,1 +1,332 @@
 /* 김현주 : 행사 페이지 전용 스타일 */
+
+/* 행사세부페이지(1) CSS 스타일*/
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif; /* 나중에 처리 */
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1160px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* 헤더 스타일 */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px 40px;
+    border-bottom: 1px solid #eee;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.header-logo {
+    font-weight: bold;
+    font-size: 24px;
+    color: #3498db; /* 로고 색상 */
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.main-nav a:hover {
+    color: #3498db;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-menu a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+}
+
+.user-icon {
+    width: 28px; /* 이미지 크기 조절 */
+    height: 28px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+/* 메인 콘텐츠 영역 */
+.content-wrapper {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.left-sidebar {
+    flex: 0 0 350px; /* 고정 너비 */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.main-content {
+    flex: 1; /* 남은 공간을 모두 차지 */
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 내가 만든 네모네모 (포스터, 지도) */
+.placeholder-box {
+    background-color: #e9ebee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #999;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+.poster-box {
+    width: 100%;
+    height: 450px;
+}
+
+/* 포스터 이미지 */
+.event-poster-img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover; /* 이미지 꽉 차게 만든거임 */
+    border-radius: 8px;
+    display: block;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.map-box {
+    width: 100%;
+    height: 300px; /* 지도 크기 조절 */
+}
+
+.homepage-link {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.homepage-link:hover {
+    background-color: #FFD700;
+    color: #000000;
+}
+
+.external-icon {
+    margin-left: 5px;
+    font-size: 0.9em;
+}
+
+/* 메인 쪽 */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.category {
+    background-color: #FFD700;
+    color: #000000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.views-share {
+    display: flex; /* 내부 요소들을 가로로 정렬 */
+    gap: 15px; /* 요소들 간의 간격 */
+    color: #777; /* 기본 텍스트 색상 */
+    font-size: 14px; /* 기본 텍스트 크기 */
+    align-items: center; /* 아이콘과 텍스트를 세로 중앙 정렬 */
+}
+
+/* 부트스트랩 아이콘 공통 스타일 */
+.views-share .bi { 
+    font-size: 1em; /* 부모 font-size (14px)에 따라 크기 조절 (14px의 1배) */
+    vertical-align: middle; /* 텍스트와 세로 중앙 정렬 */
+    margin-right: 5px; /* 아이콘과 숫자/텍스트 사이 간격 */
+    color: #555; /* 아이콘 색상 (원하는 색상으로 변경 가능) */
+}
+
+.event-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #222;
+}
+
+.event-date {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.detail-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 두 개의 컬럼 */
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.info-box {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.info-label {
+    display: block;
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eee;
+    margin-top: 30px;
+}
+
+.event-description p {
+    font-size: 16px;
+    color: #444;
+}
+
+/* <pre> 태그에 대한 추가 스타일 (행사 상세 내용 출력 시) */
+.event-description pre {
+    font-family: 'Noto Sans KR', sans-serif; /* 폰트 설정 나중에 */
+    white-space: pre-wrap; /* 자동 줄 바꿈 */
+    word-break: break-word; /* 긴 단어도 줄 바꿈 */
+    background-color: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #444;
+}
+
+.event-details-list p,
+.contact-info p {
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #444;
+}
+
+.event-details-list .label,
+.contact-info .label {
+    font-weight: bold;
+    color: #555;
+    display: inline-block;
+    min-width: 80px; /* 라벨 너비 일정하게 */
+}
+
+/* 하단 버튼 */
+.bottom-buttons-wrapper {
+    display: flex;
+    justify-content: center; /* 양 끝 정렬 */
+    align-items: flex-end; /* 세로 정렬: 하단에 맞춰 정렬 */
+    margin-top: 30px;
+    position: relative; /* 자식 요소의 absolute 위치 지정을 위함 */
+    width: 100%; /* 부모의 전체 너비를 차지하도록 명시 (안정성) */
+}
+
+.bottom-left-buttons {
+	width: auto;
+}
+
+.bottom-right-buttons {
+    position: absolute;
+    right: 0; 
+    bottom: 0;
+}
+
+.btn {
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* border-color도 트랜지션 추가 */
+}
+
+/* "목록 보기" 버튼 스타일 */
+.list-btn {
+	margin: 0 auto;
+	display: block;
+    background-color: #fff !important; 
+    color: #black;
+    border: 1px solid #000 !important; 
+}
+
+.list-btn:hover {
+    background-color: #FFD700 !important; 
+    color: #black !important; 
+    border-color: #black !important;
+}
+
+/* "게시물 홍보하기" 버튼 스타일 */
+.promote-btn {
+    background-color: #fff !important; 
+    color: #black;
+    border: 1px solid #000 !important; 
+}
+
+.promote-btn:hover {
+    background-color: #bd3dbd !important; 
+    color: #black !important; 
+    border-color: #black !important;
+}
+
+}

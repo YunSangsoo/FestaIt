@@ -1,170 +1,145 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"  %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
-<title>제목</title>
-<!--  공통적으로사용할 라이브러리 추가 -->
-<!-- Jquey 라이브러리 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<!-- 부트스트랩에서 제공하있는 스타일 -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<!-- 부투스트랩에서 제공하고있는 스크립트 -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- alertify -->
-<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-<!-- alertify css -->
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
-<!-- Default theme -->
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
-<!-- Semantic UI theme -->
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
+<title>헤더</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-	div {box-sizing:border-box;}
-#header {
-	width: 80%;
-	height: 130px;
-	padding-top:20px;
-	margin :auto;
-	
-	/* 추가 */
-	position: sticky;
-    top: 0; /* 최상단에 붙임*/
-    background-color: white;
-    border-bottom : 2px solid black;
-    z-index: 10;
+.navbar {
+	background-color: #6A1B9A;
+	padding-top: 12px;
+	padding-bottom: 12px;
 }
-#header>div{width:100%; margin-bottom: 10px;}
-#header_1 {height : 40%;}
-#header_2 {height : 60%;}
 
-#header_1>div{
-	height:100%;
-	float:left;
+.navbar-brand {
+	font-size: 24px;
+	font-weight: bold;
+	color: white !important;
 }
-#header_1_left {width :30%; position : relative;}
-#header_1_center{width: 40%;}
-#header_1_right{width : 30%;}
 
-#header_1_left>img{
-height:80%; position:absolute; margin:auto; top:0px; bottom:0px; right:0px; left :0px;
+.nav-link {
+	font-size: 18px;
+	color: white !important;
 }
-#header_1_right {text-align:center; line-height: 35px; font-size: 12px; text-indent:35px;}
-#header_1_right>a{margin:5px;}
-#header_1_right>a:hover{cursor:pointer}
 
-#header_2>ul{width:100%; height:100%; list-style-type : none; margin:auto; padding: 0; 
-    display: flex; /* 추가 */
-
+.nav-link.active {
+	color: #FFD700 !important;
+	font-weight: bold;
 }
-#header_2>ul>li {float:left; width: 25%; height:100%; line-height: 55px; text-align:center;}
-#header_2>ul>li a {font-size: 18px; font-weight:900}
 
-#header_2 {border-top : 1px solid lightgray;}
-
-#header a {text-decoration:none; color:black;}
-
-/* 세부페이지에 들어갈 공통 css 부여*/
-.content{
-	background-color: pink;
-	width:80%;
-	margin:auto;
+.btn {
+	font-size: 16px;
+	padding: 8px 20px;
 }
-.innerOuter{
-	border:1px solid lightgray;
-	width: 80%;
-	margin:auto;
-	padding: 5% 10%;
-	background-color : white;
+
+.navbar-nav .nav-item {
+    margin: 0 20px; /* 좌우 여백 */
+}
+
+
+.navbar-nav {
+	display: flex;
+	align-items: center;
+}
+
+.navbar-nav .nav-link {
+	font-size: 18px;
+	color: white !important;
+	padding: 0 8px; /* 메뉴 사이 간격 */
+}
+
+.navbar-nav .separator {
+	color: white;
+	font-size: 18px;
+	padding: 0 4px;
+	user-select: none;
 }
 </style>
 </head>
+
 <body>
-<script
-		src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>	
-<sec:authorize access="isAuthenticated()">
-<script>
-	$(function(){
-		const webSocket = new SockJS("${contextPath}/stomp");
-		const stompClient = Stomp.over(webSocket);
-		
-		stompClient.connect({} , function(){
-			// 전체 공지사항 url 구독
-			stompClient.subscribe("/topic/notice", function(message){
-				alertify.alert(message.body);
-			})
-		});
-	})
-</script>
-</sec:authorize>
-<c:if test="${not empty alertMsg}">
-<script>
-	alertify.alert("서비스요청결과",'${alertMsg}')
-</script>
-</c:if>
-	<div id="header">
-		<div id="header_1">
-			<div id="header_1_left">
-				<img src="https://www.iei.or.kr/resources/images/main/main_renewal/top_logo.jpg" />
-			</div>
-			<div id="header_1_center">
-			</div>
-			<c:set var="contextPath" value="${pageContext.request.contextPath}" scope="application" />
-			<c:set var="principal" value="${pageContext.request.userPrincipal}"/>
-			
-			<div id="header_1_right">
-				
-				<!-- 로그인하지 않은 사용자가 보이는 화면 -->
-				<sec:authorize access="isAnonymous()">
-					<a href="${contextPath }/security/insert">회원가입</a>
-					<a href="${contextPath }/member/login">로그인</a>
-				</sec:authorize>
-				
-				<sec:authorize access="isAuthenticated()">
-					<span><sec:authentication property="principal.username"/> 님
-						환영합니다 ^^</span>
-					<a href="${contextPath}/security/myPage"
-						class="text-decoration-none text-secondary">마이페이지</a>
-					<form:form action="${contextPath}/member/logout" method="post" style="display:inline;">
-					    <button type="submit" 
-					            class="border-0 bg-transparent text-secondary p-0 ml-2"
-					            style="cursor:pointer;">
-					        로그아웃
-					    </button>
-					</form:form>		
-				</sec:authorize>
+
+	<!-- 헤더 시작 -->
+	<nav class="navbar navbar-expand-lg navbar-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">Festa-it</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse justify-content-between"
+				id="navbarNav">
+
+				<!-- 가운데: 메뉴 -->
+				<ul class="navbar-nav mx-auto flex-row align-items-center">
+					<c:choose>
+						
+						<c:when test="${not empty sessionScope.loginUser and sessionScope.loginUser.role == 'ROLE_ADMIN'}">
+							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">리뷰</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">회원</a></li>
+						</c:when>
+						
+						<c:when test="${not empty sessionScope.loginUser}">
+							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+						</c:when>
+						
+						<c:otherwise>
+							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item separator">|</li>
+							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+						</c:otherwise>
+					</c:choose>
+				</ul>
+
+				<!-- 오른쪽: 로그인/회원가입 or 마이페이지 -->
+				<div class="d-flex align-items-center gap-2">
+					<c:choose>
+						<c:when test="${not empty sessionScope.loginUser}">
+							<a href="/mypage" class="btn btn-outline-light me-2">${sessionScope.loginUser.username}님
+								마이페이지</a>
+							<a href="/logout" class="btn btn-warning">로그아웃</a>
+						</c:when>
+						<c:otherwise>
+							<a href="/login" class="btn btn-outline-light">로그인</a>
+							<a href="/signup" class="btn btn-warning">회원가입</a>
+						</c:otherwise>
+					</c:choose>
+				</div>
 			</div>
 		</div>
-		<div id="header_2">
-			<ul>
-				<!-- 권한별 노출 url설정 -->
-				<sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_USER')">
-					<li><a href="${contextPath }">HOME</a></li>
-					<li><a href="${contextPath }/chat/chatRoomList">채팅</a></li>
-					<c:forEach var="map" items="${boardTypeMap}">
-						<li><a href="${contextPath }/board/list/${map.key}">${map.value.boardName}</a></li>					
-					</c:forEach>
-				</sec:authorize>
-				<sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')">
-					<li><a>관리자</a></li>
-				</sec:authorize>
-			</ul>
-		</div>	
-	</div>
-
-
-
-
-
-
-
-
+	</nav>
+	<!-- 헤더 끝 -->
 
 </body>
+
 </html>

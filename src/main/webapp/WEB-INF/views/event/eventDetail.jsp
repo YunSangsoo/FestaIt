@@ -2,75 +2,156 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>행사 상세 보기</title>
-    <style>
-        /* 여기에 행사세부페이지(1).jpg 디자인에 맞는 CSS 스타일을 추가하세요 */
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .event-detail-container { max-width: 800px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .event-header h1 { color: #333; margin-bottom: 10px; }
-        .event-header h2 { color: #666; font-size: 1.2em; margin-bottom: 20px; }
-        .event-info p { margin-bottom: 5px; }
-        .event-content { margin-top: 30px; line-height: 1.6; }
-        .button-group { margin-top: 30px; text-align: center; }
-        .button-group button { padding: 10px 15px; margin: 0 5px; border: none; border-radius: 5px; cursor: pointer; }
-        .button-group .list-btn { background-color: #007bff; color: white; }
-        .button-group .promote-btn { background-color: #28a745; color: white; }
-        /* 이미지와 같은 다른 요소들을 위한 스타일도 여기에 추가 */
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festa-it - 행사 상세</title>
+    
+    <%-- contextPath 설정 --%>
+    <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+    
+    <%-- 외부 CSS 파일 연결 --%>
+    <link rel="stylesheet" href="${contextPath}/resources/css/event.css">
+    
+    <%-- jQuery 라이브러리 --%>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <%-- 카카오맵 JavaScript API 라이브러리 로드 --%>
+    
+    <%-- 부트스트랩 아이콘 CDN 추가 --%>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script>
+        // JSP에서 JavaScript로 필요한 변수 토스~
+        var contextPath = "${contextPath}";
+        var eventLocation = "${event.location} ${event.locationDetail}"; // 주소
+        var eventPostCode = "${event.postCode}"; // 우편번호
+    </script>
 </head>
 <body>
-    <div class="event-detail-container">
+    <%-- 공통 헤더 포함 --%>
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
+
+    <main class="container">
         <c:if test="${empty event}">
-            <p>행사 정보를 찾을 수 없습니다.</p>
+            <p style="text-align: center; margin-top: 50px;">행사 정보를 찾을 수 없습니다.</p>
         </c:if>
         <c:if test="${not empty event}">
-            <div class="event-header">
-                <div class="event-poster">
-                    <img src="/resources/images/event/${event.appId}_poster.jpg" alt="행사 포스터" style="width:100%; max-width: 600px; height: auto; display: block; margin: 0 auto 20px;">
-                </div>
-                <h1>${event.appTitle}</h1> <h2>${event.appSubTitle}</h2> </div>
+            <div class="content-wrapper">
+                <aside class="left-sidebar">
+                    <div class="poster-section">
+                        <%-- 행사 포스터 이미지 --%>
+                        <img src="${contextPath}/resources/images/${event.appId}_poster.png" alt="행사 포스터" class="event-poster-img">
+                        
+                        <%-- 홈페이지 링크 (있을 경우에만 표시) --%>
+                        <c:if test="${not empty event.website}">
+                            <a href="${event.website}" target="_blank" class="homepage-link">홈페이지 바로가기 <span class="external-icon">↗</span></a>
+                        </c:if>
+                    </div>
+                    <div class="map-section">
+                        <%-- 지도가 표시될 영역에 ID 부여 --%>
+                        <div id="map" class="placeholder-box map-box"></div> 
+                    </div>
+                </aside>
 
-            <hr>
+                <section class="main-content">
+                    <div class="content-header">
+                        <span class="category">[${event.appItem}]</span> <%-- 목록명으로 분류 --%>
+                        <div class="views-share">
+                            <span>
+                                <%-- 조회수 아이콘: Bootstrap Icons (bi-eye) 사용 --%>
+                                <i class="bi bi-eye"></i> 8
+                            </span>
+                            <span>
+                                <%-- 북마크 아이콘: Bootstrap Icons (bi-bookmark) 사용 --%>
+                                <i class="bi bi-bookmark"></i> 3
+                            </span>
+                                <span id="shareLinkButton" style="cursor: pointer;" title="클릭하여 링크 복사">
+						        <i class="bi bi-share"></i> <span>공유하기</span>
+						    </span>
+                        </div>
+                    </div>
 
-            <div class="event-info">
-                <p><strong>일시:</strong>
-                    <%-- <fmt:parseDate value="${event.startDate}" pattern="yyyy/MM/dd" var="sDate"/> --%>
-                    <%-- <fmt:parseDate value="${event.endDate}" pattern="yyyy/MM/dd" var="eDate"/> --%>
-                    <fmt:formatDate value="${event.startDate}" pattern="yyyy년 MM월 dd일"/> <%-- sDate 대신 event.startDate 직접 사용 --%>
-                    <fmt:formatDate value="${event.endDate}" pattern="yyyy년 MM월 dd일"/>   <%-- eDate 대신 event.endDate 직접 사용 --%>
-                    (${event.startTime} ~ ${event.endTime})
-                </p>
-                <p><strong>장소:</strong> ${event.location} ${event.locationDetail} (${event.postCode})</p>
-                <p><strong>요금:</strong> ${event.appFee}원</p>
-                <p><strong>주최:</strong> ${event.appHost}</p>
-                <p><strong>주관:</strong> ${event.appOrg}</p>
-                <p><strong>후원:</strong> ${event.appSponser}</p>
-                <c:if test="${not empty event.website}">
-                    <p><strong>홈페이지:</strong> <a href="${event.website}" target="_blank">${event.website}</a></p>
-                </c:if>
-                </div>
+                    <h1 class="event-title">${event.appTitle}</h1>
+                    <p class="event-date">
+                        <fmt:formatDate value="${event.startDate}" pattern="yyyy년 MM월 dd일"/> -
+                        <fmt:formatDate value="${event.endDate}" pattern="yyyy년 MM월 dd일"/>
+                    </p>
 
-            <hr>
+                    <div class="detail-info-grid">
+                        <div class="info-box time-box">
+                            <span class="info-label">[관람 시간]</span>
+                            <p class="info-value">${event.startTime} - ${event.endTime}</p>
+                        </div>
+                        <div class="info-box location-box">
+                            <span class="info-label">[행사 장소]</span>
+                            <p class="info-value">${event.location} ${event.locationDetail} (${event.postCode})</p>
+                        </div>
+                    </div>
 
-            <div class="event-content">
-                <h3>행사 내용</h3>
-                <pre>${event.appDetail}</pre>
-                <c:if test="${not empty event.adminComment}">
-                    <h4>관리자 코멘트</h4>
-                    <pre>${event.adminComment}</pre>
-                </c:if>
+                    <div class="event-description">
+                        <h2 class="section-title">행사 소개</h2>
+                        <%-- 상세 내용은 <pre> 태그로 줄바꿈 유지 --%>
+                        <pre>${event.appDetail}</pre>
+                    </div>
+
+                    <div class="event-details-list">
+                        <h2 class="section-title">상세 정보</h2>
+                        <p><span class="label">[입장료]</span> ${event.appFee}원</p>
+                        <p><span class="label">[전시품목]</span> ${event.appItem}</p>
+                        <p><span class="label">[주최]</span> ${event.appHost}</p>
+                        <p><span class="label">[주관]</span> ${event.appOrg}</p>
+                        <p><span class="label">[후원]</span> ${event.appSponser}</p>
+                    </div>
+                    
+                    <%-- 담당자 정보 없음 // DB에 추가해서 가져오기. --%>
+                    
+                    <div class="contact-info">
+                        <h2 class="section-title">담당자 정보</h2>
+                        <p><span class="label">[담당자]</span> 담당자명</p>
+                        <p><span class="label">EMAIL</span> EMAIL</p>
+                        <p><span class="label">TEL</span> TEL</p>
+                    </div>
+                </section>
             </div>
 
-            <hr>
 
-            <div class="button-group">
-                <button class="list-btn" onclick="location.href='/event/list'">목록으로</button>
-                <button class="promote-btn" onclick="alert('이 게시물을 홍보합니다!');">게시물 홍보하기</button>
+			<div class="bottom-buttons-wrapper"> 
+                <div class="bottom-left-buttons">
+                    <button class="btn list-btn">목록 보기</button>
                 </div>
+                <div class="bottom-right-buttons">
+                    <button class="btn promote-btn">게시물 홍보하기</button>
+                </div>
+            </div>
         </c:if>
-    </div>
+    </main>
+
+    <%-- 공통 푸터 포함 --%>
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
+
+    <%-- 외부 JavaScript 파일 연결 --%>
+    <script src="${contextPath}/resources/js/event.js"></script>
+    
+    <script>
+	    document.addEventListener('DOMContentLoaded', function() {
+	        const shareButton = document.getElementById('shareLinkButton');
+	
+	        if (shareButton) {
+	            shareButton.addEventListener('click', function() {
+	                const currentUrl = window.location.href;
+
+	                navigator.clipboard.writeText(currentUrl).then(function() {
+	                    alert('링크 복사 완료'); 
+	                    console.log('링크 복사 성공:', currentUrl);
+	                }).catch(function(err) {
+	                    console.error('링크 복사 실패:', err);
+	                    alert('링크 복사 실패');
+	                });
+	            });
+	        }
+	    });
+	</script>
 </body>
 </html>
