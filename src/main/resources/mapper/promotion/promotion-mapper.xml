@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
- "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
- <mapper namespace="promotion">
- 	<!-- 김현주 : 홍보 관련 SQL 쿼리 포함 -->
-	
- </mapper>
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="promotionDAO"> 
+
+    <resultMap id="promotionResultMap" type="com.kh.festait.promotion.model.vo.PromotionVO">
+        <id property="promotionNo" column="PROM_ID"/>
+        <result property="promotionTitle" column="PROM_TITLE"/>
+        <result property="promotionContent" column="PROM_DETAIL"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="views" column="VIEWS"/>
+    </resultMap>
+
+    <select id="selectPromotionCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM EVENT_PROMOTION
+    </select>
+
+    <select id="selectPromotionList" resultMap="promotionResultMap">
+        SELECT PROM_ID, PROM_TITLE, PROM_DETAIL, CREATE_DATE, VIEWS
+        FROM EVENT_PROMOTION
+        ORDER BY CREATE_DATE DESC
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+</mapper>

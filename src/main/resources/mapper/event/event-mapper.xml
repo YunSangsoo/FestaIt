@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
- "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="eventMapper"> <resultMap id="eventResultMap" type="com.kh.festait.event.model.vo.EventVO">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="eventMapper">
+
+	<resultMap id="eventResultMap" type="com.kh.festait.event.model.vo.EventVO">
         <id property="appId" column="APP_ID"/>
         <result property="userNo" column="USER_NO"/>
         <result property="eventCode" column="EVENT_CODE"/>
         <result property="statCode" column="STAT_CODE"/>
         <result property="appTitle" column="APP_TITLE"/>
-        <result property="appSubTitle" column="APP_SUB_TITLE"/>
-        <result property="appDetail" column="APP_DETAIL" jdbcType="CLOB" javaType="java.lang.String"/>
+        <result property="appDetail" column="APP_DETAIL"/>
         <result property="location" column="LOCATION"/>
-        <result property="locationDetail" column="LOCATION_DETAIL"/>
-        <result property="postCode" column="POST_CODE"/>
         <result property="website" column="WEBSITE"/>
         <result property="startDate" column="START_DATE"/>
         <result property="endDate" column="END_DATE"/>
         <result property="startTime" column="START_TIME"/>
         <result property="endTime" column="END_TIME"/>
         <result property="createDate" column="CREATE_DATE"/>
-        <result property="updateDate" column="UPDATE_DATE"/>
         <result property="submittedDate" column="SUBMITTED_DATE"/>
         <result property="approvedDate" column="APPROVED_DATE"/>
         <result property="appFee" column="APP_FEE"/>
@@ -26,7 +23,11 @@
         <result property="appHost" column="APP_HOST"/>
         <result property="appOrg" column="APP_ORG"/>
         <result property="appSponser" column="APP_SPONSER"/>
-        <result property="adminComment" column="ADMIN_COMMENT" jdbcType="CLOB" javaType="java.lang.String"/>
+        <result property="managerName" column="MANAGER_NAME"/>
+        <result property="email" column="EMAIL"/>
+        <result property="tel" column="TEL"/>
+        <result property="fax" column="FAX"/>
+        <result property="adminComment" column="ADMIN_COMMENT"/>
     </resultMap>
 
     <select id="selectEventDetail" parameterType="int" resultMap="eventResultMap">
@@ -36,18 +37,18 @@
             EVENT_CODE,
             STAT_CODE,
             APP_TITLE,
-            APP_SUB_TITLE,
+            -- APP_SUB_TITLE 제거
             APP_DETAIL,
             LOCATION,
-            LOCATION_DETAIL,
-            POST_CODE,
+            -- LOCATION_DETAIL 제거
+            -- POST_CODE 제거
             WEBSITE,
             START_DATE,
             END_DATE,
             START_TIME,
             END_TIME,
             CREATE_DATE,
-            UPDATE_DATE,
+            -- UPDATE_DATE 제거
             SUBMITTED_DATE,
             APPROVED_DATE,
             APP_FEE,
@@ -55,6 +56,11 @@
             APP_HOST,
             APP_ORG,
             APP_SPONSER,
+            -- 새로 추가된 컬럼들
+            MANAGER_NAME,
+            EMAIL,
+            TEL,
+            FAX,
             ADMIN_COMMENT
         FROM EVENT_APPLICATION
         WHERE APP_ID = #{appId}
