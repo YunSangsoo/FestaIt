@@ -69,12 +69,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* ✨ 추가/수정: 아이콘의 기본 글꼴 색상 설정 (원하는 색상으로 변경 가능) */
+    color: #333; 
 }
 
-.search-button img {
-    width: 18px;
-    height: 18px;
+/* ✨ 추가: Bootstrap 아이콘 (<i> 태그)에 대한 스타일 */
+.search-button .bi {
+    font-size: 18px; /* 아이콘 크기 조절 */
+    /* 필요에 따라 마진을 추가하여 아이콘 위치 미세 조정 */
+    /* margin: 0; */
 }
+
 
 /* 등록하기 버튼 영역 */
 .register-button-area {
@@ -111,37 +116,33 @@ body {
 }
 
 /* --- 포스터 컨테이너 --- */
+
+.page-wrapper {
+    max-width: 1160px !important;  /* 행사 페이지랑 같은 최대 너비 */
+    margin: 0 auto;     /* 중앙 정렬 */
+    padding: 20px;      /* 원하는 패딩 */
+    background-color: #fff; /* 필요하면 배경색 통일 */
+    box-sizing: border-box; /* 사이즈 계산 시 패딩 포함 */
+}
+
 .promotion-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 50px;
     padding: 0;
     gap: 20px;
     background-color: #fff;
-    /* ✨ 수정: 포스터들이 유동적으로 크기 변하도록 min-height 제거. 
-              이제 페이지네이션은 포스터 높이에 따라 함께 움직입니다. */
-    /* min-height: 750px; <-- 이 줄을 완전히 제거해주세요. */
 }
 
 /* JavaScript가 생성하는 .post 클래스에 대한 스타일 */
 .post {
-    /* 기존 width: 265px; 주석 처리 또는 삭제 */
-    /* width: 265px; */
-
-    /* ✨ 수정: 포스터들이 화면 크기에 따라 유동적으로 크기 조절되도록 설정 */
-    /* flex: 1 1 calc(25% - 15px); = flex-grow: 1, flex-shrink: 1, flex-basis: calc(25% - 15px); */
-    /* 화면이 좁아지면 25%보다 작아질 수 있고, 넓어지면 늘어날 수 있습니다. */
-    flex: 1 1 calc(25% - 15px); 
-    
-    /* ✨ 추가: 포스터가 너무 작아지지 않도록 최소 너비 설정 */
-    min-width: 180px; /* 이 값은 필요에 따라 조절할 수 있습니다. */
-    /* ✨ 추가: 포스터가 너무 커지지 않도록 최대 너비 설정 (원래 고정 너비였던 값) */
-    max-width: 265px; 
-
+    flex: 1 1 calc(25% - 15px);
+    min-width: 180px;
+    max-width: 265px;
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 10px 12px; /* 좌우 공간 충분히 확보 */
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     box-sizing: border-box;
@@ -149,19 +150,23 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* 높이 고정 혹은 최대 높이 지정 */
+    max-height: 380px;  /* 임의 조절 가능 */
+    verflow-wrap: break-word;  /* 긴 단어도 줄바꿈 */
+    word-break: break-word;     /* 긴 단어 자동 줄바꿈 */
+    overflow: hidden;           /* 넘치는 내용 숨김 */
 }
-
 
 .poster {
     width: 100%;
     position: relative;
     padding-bottom: 100%;
     background-color: #e0e0e0;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     overflow: hidden;
 }
 
-.poster img {
+.poster-img {
     position: absolute;
     top: 0;
     left: 0;
@@ -187,8 +192,8 @@ body {
 }
 
 .post-title {
-    font-size: 16px;
-    margin: 10px 0 5px;
+    font-size: 17px;
+    margin: 0px 0 0px; /* 기존 10px 0 5px -> 위 5px, 아래 3px으로 줄임 */
     font-weight: bold;
     word-break: break-word;
 }
@@ -196,7 +201,7 @@ body {
 .post-date {
     font-size: 14px;
     color: #666;
-    margin-bottom: 10px;
+    margin-bottom: 6px; /* 기존 10px → 6px로 줄임 */
 }
 
 /* --- 페이지네이션 스타일 (중앙 정렬) --- */
@@ -225,103 +230,4 @@ body {
     background-color: #3478f6;
     color: #fff;
     border-color: #3478f6;
-}
-
-/* 🌟 모달 스타일 🌟 */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    /* ✨ 수정: 패딩을 30px 25px로 조정하여 세로를 줄이고 가로를 늘림 */
-    padding: 30px 30px; 
-    border: 1px solid #888;
-    /* ✨ 수정: 가로 너비를 450px로 늘림 */
-    width: 450px !important; 
-    max-width: 90%;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    position: relative;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.modal-content p {
-    /* ✨ 수정: 폰트 크기를 조금 더 줄임 */
-    font-size: 1em; /* 1.1em에서 1em으로 줄여서 작게 만듦 */ 
-    margin-top: 20px; 
-    margin-bottom: 20px; 
-    line-height: 1.5;
-}
-
-.close-button {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-    /* ✨ 수정: 버튼 순서를 반대로 뒤집음 */
-    flex-direction: row-reverse; 
-}
-
-.modal-button {
-    /* ✨ 수정: 패딩을 6px 20px로 조정하여 세로를 줄이고 가로를 늘림 */
-    padding: 6px 20px; 
-    border: none;
-    border-radius: 5px;
-    font-size: 15px; 
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    /* ✨ 수정: 버튼 너비를 120px로 늘림 */
-    width: 120px; 
-}
-
-.modal-button.confirm {
-    background-color: #000;
-    color: #fff;
-    border: 1px solid #000;
-}
-
-.modal-button.confirm:hover {
-    background-color: #333;
-}
-
-.modal-button.cancel {
-    background-color: #fff;
-    color: #000;
-    border: 1px solid #ddd;
-}
-
-.modal-button.cancel:hover {
-    background-color: #f0f0f0;
 }

@@ -4,6 +4,13 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <%-- 부트스트랩 아이콘 CDN 추가 --%>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Festa-it - 행사 상세</title>
@@ -20,8 +27,6 @@
     <%-- 카카오맵 JavaScript API 라이브러리 로드 (필요하다면 API 키 등을 추가) --%>
     <%-- <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&libraries=services"></script> --%>
 
-    <%-- 부트스트랩 아이콘 CDN 추가 --%>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <%-- Noto Sans KR 폰트 CDN 추가 (event.css에서 사용) --%>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
