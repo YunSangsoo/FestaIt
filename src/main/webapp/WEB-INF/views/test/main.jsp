@@ -1,16 +1,20 @@
 <%-- /WEB-INF/views/myPage.jsp --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>내 페이지</title>
+    <title>Festa-It</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
         body { padding: 20px; }
     </style>
 </head>
 <body>
+    <jsp:include page="/WEB-INF/views/common/header.jsp" />
+
     <h1>내 애플리케이션 페이지</h1>
     <p>여기는 `myPage.jsp`의 콘텐츠입니다.</p>
 

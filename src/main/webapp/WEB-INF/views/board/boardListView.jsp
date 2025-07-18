@@ -72,7 +72,7 @@
 			            </tr>            	
 	            	</c:when>
 	            	
-	            	<c:otherwise>
+	            	<!-- <c:otherwise>
 	            		<c:forEach var="board" items="${list}">
 	            			<tr onclick="movePage(${board.boardNo})">
 	            				<td>${board.boardNo}</td>
@@ -82,7 +82,7 @@
 	            				<td>${board.createDate}</td>
 	            			</tr>
 	            		</c:forEach>
-	            	</c:otherwise>
+	            	</c:otherwise> -->
 	            </c:choose>
             </tbody>
         </table>
