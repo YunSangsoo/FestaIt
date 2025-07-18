@@ -18,26 +18,24 @@ public class EventController {
     private EventService eventService;
 
     /*
-     * @param appId 조회할 행사의 APP_ID (요청 파라미터로 받음)
-     * @param model 데이터를 뷰로 전달하기 위한 Spring Model 객체
-     * @return 행사 상세 페이지의 뷰 이름 (JSP 경로)
+     * 행사 상세 조회
+     * @param appId 조회할 행사 ID
+     * @param model 뷰에 데이터 전달용 Model
+     * @return 행사 상세 페이지 뷰 또는 에러 페이지
      */
-    
     @GetMapping("/detail")
     public String selectEventDetail(@RequestParam("appId") int appId, Model model) {
        
-    	// 1. 서비스 호출하여 행사 상세 정보 가져오기
+        // 행사 상세 정보 조회
         EventVO event = eventService.selectEventDetail(appId);
 
-        // 2. 조회된 EventVO 객체를 Model에 담아 뷰로 전달
+        // 조회 결과 처리
         if (event != null) {
             model.addAttribute("event", event);
-
-            return "event/eventDetail"; 
+            return "event/eventDetail";
         } else {
             model.addAttribute("msg", "해당하는 행사를 찾을 수 없습니다.");
             return "common/errorPage";
         }
     }
-
 }

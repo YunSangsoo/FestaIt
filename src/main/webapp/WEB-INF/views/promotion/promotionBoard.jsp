@@ -9,6 +9,12 @@
     <%-- contextPath 설정 --%>
     <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
+    <%-- 🌟 중요: CONTEXT_PATH 변수를 JavaScript에서 사용 가능하도록 선언 🌟 --%>
+    <script>
+        // 이 변수는 promotion.js에서 사용되므로, promotion.js가 로드되기 전에 선언되어야 합니다.
+        const CONTEXT_PATH = "${contextPath}";
+    </script>
+
     <%-- CSS 파일 연결 --%>
     <link rel="stylesheet" href="${contextPath}/resources/css/promotion.css">
 
@@ -19,29 +25,30 @@
     <%-- 공통 헤더 포함 --%>
     <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
-    <div class="page-wrapper"> <%-- 페이지 전체 내용을 감싸는 래퍼 (1160px 고정 및 중앙 정렬) --%>
-        <div class="top-spacer"></div> <%-- 헤더와 검색창 사이 공간 추가 --%>
+    <div class="page-wrapper">
+        <div class="top-spacer"></div>
 
-        <div class="board-header-section"> <%-- 상단 검색/등록 버튼 영역 래퍼 --%>
-            <div class="search-bar-area"> <%-- 검색창 전용 컨테이너 --%>
+        <div class="board-header-section">
+            <div class="search-bar-area">
                 <div class="search-wrapper">
                     <input type="text" placeholder="search" class="search-input">
                     <button class="search-button">
-                        <img src="${contextPath}/resources/images/search_icon.png" alt="Search"> <%-- 검색 아이콘 경로 (실제 경로 확인) --%>
+                        <img src="${contextPath}/resources/images/search_icon.png" alt="Search">
                     </button>
                 </div>
             </div>
-            <div class="register-button-area"> <%-- 등록하기 버튼 전용 컨테이너 --%>
-                <button class="register-promo-btn">등록하기</button>
+            <div class="register-button-area">
+                <%-- 🌟 수정: 등록하기 버튼에 id 추가 🌟 --%>
+                <button class="register-promo-btn" id="openRegisterModalBtn">등록하기</button>
             </div>
-            <hr class="section-divider"> <%-- 검색/등록 영역과 포스터 목록 사이의 구분선 --%>
+            <hr class="section-divider">
         </div>
 
         <div class="promotion-container" id="postGrid">
             <%-- JavaScript가 동적으로 12개의 게시물을 여기에 추가할 것입니다. --%>
         </div>
 
-        <div class="pagination"> <%-- 페이지네이션 영역 (임시 HTML 구조) --%>
+        <div class="pagination">
             <a href="#">&lt;</a>
             <a href="#" class="active">1</a>
             <a href="#">2</a>
@@ -53,7 +60,17 @@
             <a href="#">&gt;</a>
         </div>
 
-    </div> <%-- .page-wrapper 닫는 태그 --%>
+    </div>
+
+    <%-- 🌟 추가: 모달창 HTML 구조 (</body> 닫는 태그 바로 위에 배치) 🌟 --%>
+    <div id="registerModal" class="modal"> <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p>행사를 등록하시겠습니까?</p> <div class="modal-buttons">
+                <button id="confirmRegisterBtn" class="modal-button confirm">확인</button>
+                <button id="cancelRegisterBtn" class="modal-button cancel">취소</button>
+            </div>
+        </div>
+    </div>
 
     <%-- JavaScript 파일 연결 --%>
     <script src="${contextPath}/resources/js/promotion.js"></script>

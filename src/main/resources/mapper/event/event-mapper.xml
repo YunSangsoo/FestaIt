@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="eventMapper">
 
-	<resultMap id="eventResultMap" type="com.kh.festait.event.model.vo.EventVO">
+    <resultMap id="eventResultMap" type="com.kh.festait.event.model.vo.EventVO">
         <id property="appId" column="APP_ID"/>
         <result property="userNo" column="USER_NO"/>
         <result property="eventCode" column="EVENT_CODE"/>
@@ -37,18 +37,14 @@
             EVENT_CODE,
             STAT_CODE,
             APP_TITLE,
-            -- APP_SUB_TITLE 제거
             APP_DETAIL,
             LOCATION,
-            -- LOCATION_DETAIL 제거
-            -- POST_CODE 제거
             WEBSITE,
             START_DATE,
             END_DATE,
             START_TIME,
             END_TIME,
             CREATE_DATE,
-            -- UPDATE_DATE 제거
             SUBMITTED_DATE,
             APPROVED_DATE,
             APP_FEE,
@@ -56,7 +52,6 @@
             APP_HOST,
             APP_ORG,
             APP_SPONSER,
-            -- 새로 추가된 컬럼들
             MANAGER_NAME,
             EMAIL,
             TEL,

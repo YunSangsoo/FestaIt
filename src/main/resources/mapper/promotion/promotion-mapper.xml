@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="promotionDAO"> 
+<mapper namespace="promotionDAO">
 
     <resultMap id="promotionResultMap" type="com.kh.festait.promotion.model.vo.PromotionVO">
         <id property="promotionNo" column="PROM_ID"/>
@@ -13,8 +13,7 @@
     </resultMap>
 
     <select id="selectPromotionCount" resultType="_int">
-        SELECT COUNT(*)
-        FROM EVENT_PROMOTION
+        SELECT COUNT(*) FROM EVENT_PROMOTION
     </select>
 
     <select id="selectPromotionList" resultMap="promotionResultMap">

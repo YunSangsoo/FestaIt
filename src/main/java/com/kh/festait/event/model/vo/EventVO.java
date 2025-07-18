@@ -18,36 +18,32 @@ import lombok.ToString;
 public class EventVO {
 	// 김현주 : 행사 정보 데이터
 
-	private int appId; // APP_ID (숫자)
-    private int userNo; // USER_NO (숫자)
-    private String eventCode; // EVENT_CODE (문자)
-    private String statCode; // STAT_CODE (문자)
-    private String appTitle; // APP_TITLE (문자)
-    // private String appSubTitle; // APP_SUB_TITLE (문자) - 제거됨
-    private String appDetail; // APP_DETAIL (CLOB 타입은 Java에서 String으로 처리)
-    private String location; // LOCATION (문자)
-    // private String locationDetail; // LOCATION_DETAIL (문자) - 제거됨
-    private String website; // WEBSITE (문자)
-    private Date startDate; // START_DATE (날짜)
-    private Date endDate; // END_DATE (날짜)
-    private String startTime; // START_TIME (문자)
-    private String endTime; // END_TIME (문자)
-    private Date createDate; // CREATE_DATE (날짜)
-    // private Date updateDate; // UPDATE_DATE (날짜) - 제거됨
-    private Date submittedDate; // SUBMITTED_DATE (날짜)
-    private Date approvedDate; // APPROVED_DATE (날짜)
-    private String appFee; // APP_FEE (문자)
-    private String appItem; // APP_ITEM (문자)
-    private String appHost; // APP_HOST (문자)
-    private String appOrg; // APP_ORG (문자)
-    private String appSponser; // APP_SPONSER (문자)
+	 private int appId;
+	    private int userNo;
+	    private String eventCode;
+	    private String statCode;
+	    private String appTitle;
+	    private String appDetail;
+	    private String location;
+	    private String website;
+	    private Date startDate;
+	    private Date endDate;
+	    private String startTime;
+	    private String endTime;
+	    private Date createDate;
+	    private Date submittedDate;
+	    private Date approvedDate;
+	    private String appFee;
+	    private String appItem;
+	    private String appHost;
+	    private String appOrg;
+	    private String appSponser;
 
-    // 새로 추가된 담당자 정보 필드
-    private String managerName; // MANAGER_NAME (문자)
-    private String email; // EMAIL (문자)
-    private String tel; // TEL (문자)
-    private String fax; // FAX (문자)
+	    // 담당자 정보
+	    private String managerName;
+	    private String email;
+	    private String tel;
+	    private String fax;
 
-    private String adminComment; // ADMIN_COMMENT (CLOB 타입은 Java에서 String으로 처리)
-
-}
+	    private String adminComment;
+	}
