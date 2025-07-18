@@ -22,7 +22,7 @@
 		<!-- mybatis설정파일 위치 지정 -->
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
 		<property name="dataSource" ref="dataSource"/>
-		<!-- <property name="mapperLocations" value="classpath:mapper/**/*.xml"></property>  -->
+		<property name="mapperLocations" value="classpath:mapper/**/*.xml"></property>
 	</bean>
 	
 	<!-- 3단계) SqlSessionTemplate을 제공하는 bean등록 -->
