@@ -11,12 +11,18 @@ public class MainController {
 		return "main";
 	}
 	
+	@GetMapping("/board")
+	public String homeBoard() {
+		return "/board/boardListView";
+	}
 
-	@GetMapping("/test")
+	@GetMapping("/common")
 	public String homTest() {
-		return "/test/main";
+		return "/common/footer";
 	}
 	
-	
+	@GetMapping("/test")
+	public String test() {
+		return "/test/main";
+	}
 }
-

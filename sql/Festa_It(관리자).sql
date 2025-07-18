@@ -1,12 +1,27 @@
 ALTER SESSION SET CONTAINER = XEPDB1;
 
-
+/*
 CREATE tablespace festa_it
 DATAFILE 'C:\FestaIt\data\festa_it.dbf' size 500m reuse
-autoextend on next 100m maxsize unlimited;
+autoextend on next 100m maxsize unlimited;*/
+
+
+/*DROP USER FESTADB CASCADE;*/
+
+/* ASSM으로 테이블스페이스 생성, */
+CREATE tablespace FESTA_IT
+DATAFILE 'C:\FestaIt\data\FESTAIT.dbf' size 500m reuse
+AUTOEXTEND ON NEXT 100m maxsize unlimited
+SEGMENT SPACE MANAGEMENT AUTO;
+
+/* 유저 생성해서 테이블스페이스에 할당, */
+
 CREATE USER FESTA_DB IDENTIFIED BY 1234
-DEFAULT TABLESPACE festa_it
+DEFAULT TABLESPACE FESTA_IT
 TEMPORARY TABLESPACE temp;
 
 GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO FESTA_DB;
-/*DROP USER FESTADB CASCADE;*/
+
+ALTER USER FESTA_DB DEFAULT TABLESPACE FESTA_IT;
+ALTER USER FESTA_DB QUOTA UNLIMITED ON FESTA_IT;
+
