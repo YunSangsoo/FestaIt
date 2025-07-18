@@ -1,22 +1,268 @@
+/* 기본 초기화 및 폰트 */
+* {
+	box-sizing: border-box;
+}
 
-/* 화면 크기에 따른 페이지 컨테이너 사이즈 지정 */
-@media (min-width: 576px) {
-    #container {
-        max-width: 540px ;
-    }
+body {
+	font-family: 'Pretendard', sans-serif;
+	background-color: #FAFAFA;
+	color: #212121;
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+	/* 	color: rgb(var(- -bs-tertiary-color-rgb)); */
 }
-@media (min-width: 768px) {
-    #container {
-        max-width: 720px;
-    }
+
+a {
+	text-decoration: none;
+	color: inherit;
 }
-@media (min-width: 992px) {
-    #container {
-        max-width: 960px;
-    }
+
+/* 메인 컨테이너 */
+.container {
+	display: flex;
+	justify-content: space-between;
+	padding: 30px 5%;
+	gap: 40px;
+	flex-wrap: wrap;
 }
-@media (min-width: 1200px) {
-    #container {
-        max-width: 1160px;
-    }
+
+/* 화면 크기에 따른 페이지 컨테이너 사이즈 지정 ------------------------------ 1080 이하 수정 필요 */
+@media ( max-width : 1080px) {
+	#container {
+		max-width: 100%;
+	}
+}
+
+@media ( min-width : 1080px) {
+	#container {
+		max-width: 1040px;
+	}
+	.main-content {
+		margin-right: 40px;
+	}
+}
+
+@media ( min-width : 1200px) {
+	#container {
+		max-width: 1160px;
+	}
+	.main-content {
+		margin-right: 40px;
+	}
+}
+
+.top-content {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	height: fit-content;
+}
+
+/* 좌측 메인 콘텐츠 */
+.main-content {
+	flex: 1;
+}
+
+@media ( max-width : 1080px) {
+	.main-content {
+		height: fit-content;
+		margin-bottom: 40px;
+	}
+}
+
+/* 배너 영역 */
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	margin-bottom: 40px;
+	height: 40%;
+	width: 100%;
+}
+
+@media ( max-width : 1080px) {
+	.bd-placeholder-img {
+		height: 50%;
+	}
+}
+
+/* 
+-
+-
+-
+-
+-
+-
+ */
+
+/* 섹션 제목 --------------------------------------title로 합칠 것 */
+.section-title, .review-title, .today-title {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 20px;
+	color: #6A1B9A;
+}
+
+/* 진행 중인 행사 카드 그리드 */
+.events-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
+
+/* 행사 카드 */
+.event-card {
+	background-color: white;
+	border: 2px solid #D1C4E9;
+	border-radius: 8px;
+	padding: 16px;
+	position: relative;
+	aspect-ratio: 1/1; /* 정사각형 비율 */
+}
+
+/* 카드 상단 태그 */
+.event-card .tag {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background-color: #ea870e;
+	color: white;
+	font-size: 12px;
+	padding: 2px 6px;
+	border-radius: 4px;
+}
+
+/* 행사 이름 텍스트 */
+.event-name {
+	font-weight: bold;
+	margin-bottom: 10px;
+	color: #6A1B9A;
+}
+
+/* 우측 오늘의 행사 */
+.today-section {
+	min-height: 980px;
+	width: 30%;
+	flex-shrink: 0;
+	background-color: white;
+	border-left: 4px solid #6A1B9A;
+	padding: 20px 20px 0px 20px;
+	border-radius: 8px;
+	height: fit-content;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+@media ( max-width : 1080px) {
+	.today-section {
+		min-height: 0px;
+		width: 100%;
+	}
+	.today-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
+}
+
+/* 오늘의 행사 */
+.today-event {
+	display: flex;
+	align-items: center;
+	margin-bottom: 30px; /* 간격 확대 */
+}
+
+.today-event .thumb {
+	background-color: #D1C4E9;
+	width: 100px;
+	height: 100px;
+	margin-right: 15px;
+	border-radius: 4px;
+	flex-shrink: 0;
+}
+
+.today-event .info {
+	/* font-size: 18px; */
+}
+
+.today-event .info .org {
+	color: black;
+	font-weight: bold;
+	font-size: 10px;
+}
+
+.today-event .info .title {
+	color: #6A1B9A;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+/* 리뷰 섹션 */
+.review-section {
+	flex: 1;
+}
+
+.review-sectionasdf {
+	/* display: flex; */
+	/* 	padding: 40px 5%; */
+	width: 100%;
+	flex-shrink: 0;
+	/* background-color: white;
+	border-left: 4px solid #6A1B9A;
+	padding: 20px;
+	border-radius: 8px;
+	height: fit-content;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+	margin-top: 50px; */
+}
+
+.review-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
+
+.review-card {
+	background-color: white;
+	border: 1px solid #DDD;
+	border-radius: 8px;
+	padding: 16px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.review-profile {
+	width: 60px;
+	height: 60px;
+	background-color: #E0E0E0;
+	border-radius: 4px;
+}
+
+.review-info {
+	flex: 1;
+}
+
+/* 공지사항 영역 */
+.notice-section {
+	width: 100%;
+}
+
+.notice-title {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.notice-table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: white;
+}
+
+.notice-table th, .notice-table td {
+	border-top: 1px solid #CCC;
+	padding: 10px;
+	text-align: left;
 }
