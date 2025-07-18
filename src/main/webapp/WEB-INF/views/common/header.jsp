@@ -7,11 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>헤더</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 .navbar {
 	background-color: #6A1B9A;
@@ -90,7 +87,7 @@
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
 							<li class="nav-item separator">|</li>
@@ -104,7 +101,7 @@
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
 						</c:when>
@@ -114,7 +111,7 @@
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
 						</c:otherwise>
