@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page session="false"%>
 <html>
 <head>
@@ -82,13 +83,13 @@
 				<div class="section-title">진행 중인 행사</div>
 				<div class="events-grid">
 					<!-- 카드 6개 -->
+<!-- 					<div class="event-card"></div>
 					<div class="event-card"></div>
 					<div class="event-card"></div>
 					<div class="event-card"></div>
 					<div class="event-card"></div>
-					<div class="event-card"></div>
-					<div class="event-card"></div>
-					<!-- 
+					<div class="event-card"></div> -->
+					
 					<div class="event-card">
 						<div class="tag">진행중</div>
 						<div class="event-name">여름 해변축제</div>
@@ -131,7 +132,7 @@
 						<div>지역: 인천</div>
 						<div>주최: 방송국</div>
 					</div>
-					 -->
+					
 				</div>
 			</div>
 
@@ -215,7 +216,7 @@
 						<div>
 							<strong>행사명 1-1</strong>
 						</div>
-						<div>ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
+						<div class="review-content">ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -229,6 +230,7 @@
 						<div>
 							<strong>행사명 1-2</strong>
 						</div>
+						<div class="review-content">리뷰 내용</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -243,7 +245,7 @@
 						<div>
 							<strong>행사명 1-3</strong>
 						</div>
-						<div>리뷰 내용</div>
+						<div class="review-content">리뷰 내용</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -258,7 +260,7 @@
 						<div>
 							<strong>행사명 2-1</strong>
 						</div>
-						<div>리뷰 내용</div>
+						<div class="review-content">리뷰 내용</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -273,7 +275,7 @@
 						<div>
 							<strong>행사명 2-2</strong>
 						</div>
-						<div>ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
+						<div class="review-content">글자수 넘치면 3줄까지만 출력하고 자동 줄임 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -288,7 +290,7 @@
 						<div>
 							<strong>행사명 2-3</strong>
 						</div>
-						<div>리뷰 내용</div>
+						<div class="review-content">리뷰 내용</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -303,7 +305,7 @@
 						<div>
 							<strong>행사명 3-1</strong>
 						</div>
-						<div>리뷰 내용</div>
+						<div class="review-content">리뷰 내용</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -318,7 +320,7 @@
 						<div>
 							<strong>행사명 3-2</strong>
 						</div>
-						<div>리뷰 내용</div>
+						<div class="review-content">리뷰 내용</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -333,7 +335,7 @@
 						<div>
 							<strong>행사명 3-3</strong>
 						</div>
-						<div>리뷰 내용</div>
+						<div class="review-content">리뷰 내용</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -351,43 +353,74 @@
 		<div class="notice-section">
 			<div class="notice-title">공지사항</div>
 			<table class="notice-table">
-				<tr>
-					<th>번호</th>
-					<th>제목</th>
-					<th>등록일</th>
-				</tr>
+				
+			</table>
+			
+        <table class="table table-hover text-center align-middle">
+            <thead class="lavender-header">
+                <tr>
+                    <th style="width: 10%;">번호</th>
+                    <th>제목</th>
+                    <th style="width: 20%;">작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:choose>
+                    <c:when test="${not empty noticeList}">
+                        <c:forEach var="notice" items="${noticeList}">
+                            <tr>
+                                <td>${notice.noticeId}</td>
+                                <td class="text-start">
+                                    <a href="${pageContext.request.contextPath}/noticeBoard/detail?noticeId=${notice.noticeId}" class="text-decoration-none text-dark">
+    									${notice.noticeTitle}
+									</a>
+                                </td>
+                                <td>
+                                    <fmt:formatDate value="${notice.createDate}" pattern="yyyy.MM.dd HH:mm" />
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <tr>
+                            <td colspan="3">등록된 공지사항이 없습니다.</td>
+                        </tr>
+                    </c:otherwise>
+                </c:choose>
+                
+                <!-- 백엔드 구현 전 임시 데이터 -->
+                
 				<tr>
 					<td>8</td>
-					<td>(긴급) 5월 7일 XX페스티벌 취소 안내</td>
+					<td class="text-start">------백엔드 구현 전 임시 데이터------</td>
 					<td>2025.04.13</td>
 				</tr>
 				<tr>
 					<td>7</td>
-					<td>2025년도 5월 행사 신청 안내</td>
+					<td class="text-start">2025년도 5월 행사 신청 안내</td>
 					<td>2025.04.10</td>
 				</tr>
 				<tr>
 					<td>6</td>
-					<td>2025년도 4월 행사 신청 안내</td>
+					<td class="text-start">2025년도 4월 행사 신청 안내</td>
 					<td>2025.03.10</td>
 				</tr>
 				<tr>
 					<td>5</td>
-					<td>(수정)2025년도 3월 행사 신청 안내</td>
+					<td class="text-start">(수정)2025년도 3월 행사 신청 안내</td>
 					<td>2025.02.07</td>
 				</tr>
 				<tr>
 					<td>4</td>
-					<td>(긴급) 2월 23일 XX페스티벌 취소 안내</td>
+					<td class="text-start">(긴급) 2월 23일 XX페스티벌 취소 안내</td>
 					<td>2025.02.03</td>
 				</tr>
-			</table>
-		</div>
+                
+                
+            </tbody>
+        </table>
 	</div>
-
-
-
-	<div class="container"></div>
+		</div>
 
 
 
