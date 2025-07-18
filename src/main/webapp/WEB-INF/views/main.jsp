@@ -10,8 +10,6 @@
 	rel="stylesheet">
 <c:set var="contextPath" value="${pageContext.request.contextPath}"
 	scope="application" />
-<!-- 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
 <link href="${contextPath }/resources/css/mainpage.css" rel="stylesheet">
 
 </head>
@@ -206,11 +204,6 @@
 
 		</div>
 
-
-
-
-
-
 		<!-- 리뷰 영역 -->
 
 		<div class="review-section">
@@ -220,10 +213,13 @@
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 1-1</strong>
 						</div>
-						<div>리뷰 내용</div>
-						<div>⭐⭐☆☆☆</div>
+						<div>ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
 				<!-- 👇 추가 8개 -->
@@ -231,84 +227,126 @@
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 1-2</strong>
 						</div>
-						<div>리뷰 내용</div>
-						<div>⭐⭐⭐☆☆</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
+
+
 				<div class="review-card">
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 1-3</strong>
 						</div>
 						<div>리뷰 내용</div>
-						<div>★★★★★</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
+
+
 				<div class="review-card">
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 2-1</strong>
 						</div>
 						<div>리뷰 내용</div>
-						<div>⭐⭐⭐⭐☆</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
+
+
 				<div class="review-card">
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 2-2</strong>
 						</div>
-						<div>리뷰 내용</div>
-						<div>⭐⭐⭐☆☆</div>
+						<div>ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
+
+
 				<div class="review-card">
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 2-3</strong>
 						</div>
 						<div>리뷰 내용</div>
-						<div>⭐⭐☆☆☆</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
+
+
 				<div class="review-card">
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 3-1</strong>
 						</div>
 						<div>리뷰 내용</div>
-						<div>★★★★★</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
+
+
 				<div class="review-card">
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 3-2</strong>
 						</div>
 						<div>리뷰 내용</div>
-						<div>⭐⭐⭐⭐☆</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
+
+
 				<div class="review-card">
 					<div class="review-profile"></div>
 					<div class="review-info">
 						<div>
-							<strong>행사명</strong>
+							<strong>행사명 3-3</strong>
 						</div>
 						<div>리뷰 내용</div>
-						<div>⭐⭐⭐☆☆</div>
+					</div>
+					<div class="review-bottom">
+						<div class="rating">⭐⭐☆☆☆</div>
+						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
+
+
 			</div>
 		</div>
+		
+
+
 		<!-- 공지사항 영역 -->
 		<div class="notice-section">
 			<div class="notice-title">공지사항</div>
