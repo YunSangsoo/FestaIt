@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="promoDetail">
+    <resultMap id="promoDetailResultMap" type="com.kh.festait.promodetail.model.vo.PromoDetailVo">
+        <id property="promoNo" column="PROM_ID"/> <result property="promoTitle" column="PROM_TITLE"/>
+        <result property="promoContent" column="PROM_DETAIL"/>
+        <result property="promoWriter" column="NICKNAME"/> <result property="promoDate" column="CREATE_DATE"/>
+        <result property="promoViews" column="VIEWS"/>
+        <result property="promoStatus" column="STATUS"/>
+        <result property="posterPath" column="MAIN_IMG_PATH"/> <result property="promotionPageUrl" column="WEBSITE"/> <result property="isPromoted" column="IS_PROMOTED"/> </resultMap>
+
+    <select id="selectPromoDetail" resultMap="promoDetailResultMap" parameterType="int">
+        SELECT
+            P.PROM_ID,          -- 게시물 번호
+            P.PROM_TITLE,       -- 게시물 제목
+            P.PROM_DETAIL,      -- 게시물 내용
+            P.CREATE_DATE,      -- 작성일
+            P.VIEWS,            -- 조회수
+            P.STATUS,           -- 게시물 상태
+            E.MAIN_IMG_PATH,    -- 포스터 이미지 경로
+            EA.WEBSITE,         -- 프로모션 페이지 URL
+            CASE                -- EA.STAT_CODE가 'A'면 'Y', 아니면 'N'으로 IS_PROMOTED 반환
+                WHEN EA.STAT_CODE = 'A' THEN 'Y'
+                ELSE 'N'
+            END AS IS_PROMOTED,
+            U.NICKNAME AS NICKNAME -- 작성자 닉네임
+        FROM EVENT_PROMOTION P
+        JOIN EVENT E ON P.EVENT_ID = E.EVENT_ID            -- 프로모션과 이벤트 조인
+        JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID   -- 이벤트와 이벤트 신청 조인
+        JOIN "USER" U ON EA.USER_NO = U.USER_NO             -- 이벤트 신청과 사용자 조인 (작성자 닉네임 가져오기 위함)
+        WHERE P.PROM_ID = #{promoNo} </select>
+
+    <update id="increasePromoViews" parameterType="int">
+        UPDATE EVENT_PROMOTION
+        SET VIEWS = VIEWS + 1
+        WHERE PROM_ID = #{promoNo}
+    </update>
+
+</mapper>

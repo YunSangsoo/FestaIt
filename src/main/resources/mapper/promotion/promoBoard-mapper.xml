@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="promoBoard">
+
+    <resultMap id="promoResultMap" type="com.kh.festait.promoboard.model.vo.PromoBoardVo">
+        <id property="promoNo" column="PROM_ID"/>
+        <result property="promoTitle" column="PROM_TITLE"/>
+        <result property="promoContent" column="PROM_DETAIL"/>
+        <result property="promoDate" column="CREATE_DATE"/>
+        <result property="promoViews" column="VIEWS"/>
+        <result property="promoWriter" column="NICKNAME"/> <result property="promoStatus" column="STATUS"/>
+        
+        <result property="posterPath" column="MAIN_IMG_PATH"/> 
+        <result property="promotionPageUrl" column="WEBSITE"/> 
+        <result property="isPromoted" column="IS_PROMOTED"/>
+    </resultMap>
+
+    <select id="selectPromoCount" resultType="int">
+        SELECT COUNT(*) FROM EVENT_PROMOTION
+    </select>
+
+    <select id="selectPromoList" resultMap="promoResultMap" parameterType="map">
+        SELECT 
+            P.PROM_ID, P.PROM_TITLE, P.PROM_DETAIL, P.CREATE_DATE, P.VIEWS, P.STATUS,
+            E.MAIN_IMG_PATH, EA.WEBSITE, 
+            U.NICKNAME AS NICKNAME FROM EVENT_PROMOTION P
+        JOIN EVENT E ON P.EVENT_ID = E.EVENT_ID
+        JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
+        JOIN "USER" U ON EA.USER_NO = U.USER_NO ORDER BY P.CREATE_DATE DESC
+        OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.limit} ROWS ONLY
+    </select>
+
+    <select id="selectSearchPromoCount" resultType="int" parameterType="map">
+        SELECT COUNT(*) 
+        FROM EVENT_PROMOTION P
+        JOIN EVENT E ON P.EVENT_ID = E.EVENT_ID
+        JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
+        JOIN "USER" U ON EA.USER_NO = U.USER_NO WHERE P.PROM_TITLE LIKE '%' || #{keyword} || '%'
+    </select>
+
+    <select id="selectSearchPromo" resultMap="promoResultMap" parameterType="map">
+        SELECT 
+            P.PROM_ID, P.PROM_TITLE, P.PROM_DETAIL, P.CREATE_DATE, P.VIEWS, P.STATUS,
+            E.MAIN_IMG_PATH, EA.WEBSITE,
+            U.NICKNAME AS NICKNAME FROM EVENT_PROMOTION P
+        JOIN EVENT E ON P.EVENT_ID = E.EVENT_ID
+        JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
+        JOIN "USER" U ON EA.USER_NO = U.USER_NO WHERE P.PROM_TITLE LIKE '%' || #{keyword} || '%'
+        ORDER BY P.CREATE_DATE DESC
+        OFFSET #{pi.offset} ROWS FETCH NEXT #{pi.limit} ROWS ONLY
+    </select>
+
+    <select id="selectPromoDetail" resultMap="promoResultMap" parameterType="int">
+        SELECT
+            P.PROM_ID, P.PROM_TITLE, P.PROM_DETAIL, P.CREATE_DATE, P.VIEWS, P.STATUS,
+            E.MAIN_IMG_PATH,
+            EA.WEBSITE,
+            CASE WHEN EA.STAT_CODE = 'A' THEN 'Y' ELSE 'N' END AS IS_PROMOTED,
+            U.NICKNAME AS NICKNAME FROM EVENT_PROMOTION P
+        JOIN EVENT E ON P.EVENT_ID = E.EVENT_ID
+        JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
+        JOIN "USER" U ON EA.USER_NO = U.USER_NO WHERE P.PROM_ID = #{promoNo}
+    </select>
+
+    <update id="increasePromoViews" parameterType="int">
+        UPDATE EVENT_PROMOTION
+        SET VIEWS = VIEWS + 1
+        WHERE PROM_ID = #{promoNo}
+    </update>
+
+</mapper>

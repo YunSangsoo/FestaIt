@@ -21,13 +21,16 @@
         <property name="dataSource" ref="dataSource" />
         <property name="configLocation" value="classpath:mybatis-config.xml" />
         <property name="mapperLocations" value="classpath:mapper/**/*.xml" />
+        <property name="typeAliasesPackage" value="com.kh.festait.mypromo.model.vo, com.kh.festait.member.model.vo, com.kh.festait.eventdetail.model.vo, com.kh.festait.common.model.vo" />
     </bean>
 
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg ref="sqlSessionFactory" />
     </bean>
 
-    <context:component-scan base-package="com.kh.festait" /> <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <context:component-scan base-package="com.kh.festait" />
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
     </bean>
 
@@ -38,67 +41,3 @@
     </bean>
 
 </beans>
-
-
-
-
-
- 
-<!-- <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
-		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd">
-
-	Root Context: defines shared resources visible to all other web components
-
-	<context:property-placeholder location="classpath:driver.properties"/>
-
-	1단계 DB연결
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="${datasource.driver}" />
-		<property name="url" value="${datasource.url}" />
-		<property name="username" value="${datasource.username}" />
-		<property name="password" value="${datasource.password}" />
-	</bean>
-		
-	2단계) MyBatis Spring을 활용하여 SqlSessionFactory생성
-	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
-		mybatis설정파일 위치 지정
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="dataSource" ref="dataSource"/>
-<<<<<<< HEAD
-		매퍼 XML 파일 위치 지정
-		<property name="mapperLocations" value="classpath:/sql/*-mapper.xml" />
-=======
-		<property name="mapperLocations" value="classpath:mapper/**/*.xml"></property>
->>>>>>> main
-	</bean>
-	
-	3단계) SqlSessionTemplate을 제공하는 bean등록
-	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession">
-		<constructor-arg ref="sqlSessionFactory" />
-	</bean>
-
-	DAO 인터페이스 스캔
-	<context:component-scan base-package="com.kh.festait.dao" />
-
-	트랜잭션 매니저
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-
-	multipartResolver (파일 업로드 처리)
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="defaultEncoding" value="UTF-8"></property>
-		<property name="maxUploadSize" value="10000000"></property>
-		<property name="maxInMemorySize" value="2000000"></property>
-	</bean>
-
-</beans>
- -->
- 

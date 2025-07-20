@@ -19,7 +19,7 @@
     <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
     <%-- 외부 CSS 파일 연결 --%>
-    <link rel="stylesheet" href="${contextPath}/resources/css/event.css">
+    <link rel="stylesheet" href="${contextPath}/resources/css/eventDetail.css">
 
     <%-- jQuery 라이브러리 --%>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
