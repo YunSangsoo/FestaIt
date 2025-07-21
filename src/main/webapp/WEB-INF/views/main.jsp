@@ -38,7 +38,7 @@
 							data-bs-slide-to="2" aria-label="Slide 3"></button>
 					</div>
 
-					<div class="carousel-inner">
+					<div class="carousel-inner" id="banner">
 						<div class="carousel-item active">
 							<svg aria-hidden="true" class="bd-placeholder-img "
 								preserveAspectRatio="xMidYMid slice"
@@ -74,22 +74,53 @@
 					</button>
 				</div>
 
+				<%-- 				<c:choose>
+					<c:when test="${empty list}">
+						<tr>
+							<td colspan="5">게시글이 없습니다</td>
+						</tr>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="board" items="${list }">
+							<tr onclick="movePage(${board.boardNo})">
+								<td>${board.boardNo }</td>
+								<td>${board.boardTitle }</td>
+								<td>${board.boardWriter}</td>
+								<td>${board.count }</td>
+								<td>${board.createDate }</td>
+							</tr>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose> --%>
+
+				<c:forEach var="banner" items="${list}">
+					<tr onclick="movePage(${board.boardNo})">
+						<td>${board.boardNo }</td>
+						<td>${board.boardTitle }</td>
+						<td>${board.boardWriter}</td>
+						<td>${board.count }</td>
+						<td>${board.createDate }</td>
+					</tr>
+				</c:forEach>
+
 
 
 				<!-- 
 				<div class="banner">행사 배너</div>
 				 -->
 
+				<!-- 진행중인 행사 -->
+
 				<div class="section-title">진행 중인 행사</div>
 				<div class="events-grid">
 					<!-- 카드 6개 -->
-<!-- 					<div class="event-card"></div>
+					<!-- 					<div class="event-card"></div>
 					<div class="event-card"></div>
 					<div class="event-card"></div>
 					<div class="event-card"></div>
 					<div class="event-card"></div>
 					<div class="event-card"></div> -->
-					
+
 					<div class="event-card">
 						<div class="tag">진행중</div>
 						<div class="event-name">여름 해변축제</div>
@@ -132,7 +163,7 @@
 						<div>지역: 인천</div>
 						<div>주최: 방송국</div>
 					</div>
-					
+
 				</div>
 			</div>
 
@@ -275,7 +306,8 @@
 						<div>
 							<strong>행사명 2-2</strong>
 						</div>
-						<div class="review-content">글자수 넘치면 3줄까지만 출력하고 자동 줄임 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
+						<div class="review-content">글자수 넘치면 3줄까지만 출력하고 자동 줄임
+							ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
 					</div>
 					<div class="review-bottom">
 						<div class="rating">⭐⭐☆☆☆</div>
@@ -346,92 +378,82 @@
 
 			</div>
 		</div>
-		
+
 
 
 		<!-- 공지사항 영역 -->
 		<div class="notice-section">
 			<div class="notice-title">공지사항</div>
 			<table class="notice-table">
-				
+
 			</table>
-			
-        <table class="table table-hover text-center align-middle">
-            <thead class="lavender-header">
-                <tr>
-                    <th style="width: 10%;">번호</th>
-                    <th>제목</th>
-                    <th style="width: 20%;">작성일</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:choose>
-                    <c:when test="${not empty noticeList}">
-                        <c:forEach var="notice" items="${noticeList}">
-                            <tr>
-                                <td>${notice.noticeId}</td>
-                                <td class="text-start">
-                                    <a href="${pageContext.request.contextPath}/noticeBoard/detail?noticeId=${notice.noticeId}" class="text-decoration-none text-dark">
-    									${notice.noticeTitle}
-									</a>
-                                </td>
-                                <td>
-                                    <fmt:formatDate value="${notice.createDate}" pattern="yyyy.MM.dd HH:mm" />
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <tr>
-                            <td colspan="3">등록된 공지사항이 없습니다.</td>
-                        </tr>
-                    </c:otherwise>
-                </c:choose>
-                
-                <!-- 백엔드 구현 전 임시 데이터 -->
-                
-				<tr>
-					<td>8</td>
-					<td class="text-start">------백엔드 구현 전 임시 데이터------</td>
-					<td>2025.04.13</td>
-				</tr>
-				<tr>
-					<td>7</td>
-					<td class="text-start">2025년도 5월 행사 신청 안내</td>
-					<td>2025.04.10</td>
-				</tr>
-				<tr>
-					<td>6</td>
-					<td class="text-start">2025년도 4월 행사 신청 안내</td>
-					<td>2025.03.10</td>
-				</tr>
-				<tr>
-					<td>5</td>
-					<td class="text-start">(수정)2025년도 3월 행사 신청 안내</td>
-					<td>2025.02.07</td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td class="text-start">(긴급) 2월 23일 XX페스티벌 취소 안내</td>
-					<td>2025.02.03</td>
-				</tr>
-                
-                
-            </tbody>
-        </table>
-	</div>
+
+			<table class="table table-hover text-center align-middle">
+				<thead class="lavender-header">
+					<tr>
+						<th style="width: 10%;">번호</th>
+						<th>제목</th>
+						<th style="width: 20%;">작성일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:choose>
+						<c:when test="${not empty noticeList}">
+							<c:forEach var="notice" items="${noticeList}">
+								<tr>
+									<td>${notice.noticeId}</td>
+									<td class="text-start"><a
+										href="${pageContext.request.contextPath}/noticeBoard/detail?noticeId=${notice.noticeId}"
+										class="text-decoration-none text-dark">
+											${notice.noticeTitle} </a></td>
+									<td><fmt:formatDate value="${notice.createDate}"
+											pattern="yyyy.MM.dd HH:mm" /></td>
+								</tr>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<tr>
+								<td colspan="3">등록된 공지사항이 없습니다.</td>
+							</tr>
+						</c:otherwise>
+					</c:choose>
+
+					<!-- 백엔드 구현 전 임시 데이터 -->
+
+					<tr>
+						<td>8</td>
+						<td class="text-start" id="notice-title">------백엔드 구현 전 임시
+							데이터--ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ----</td>
+						<td>2025.04.13</td>
+					</tr>
+					<tr>
+						<td>7</td>
+						<td class="text-start" id="notice-title">2025년도 5월 행사 신청 안내</td>
+						<td>2025.04.10</td>
+					</tr>
+					<tr>
+						<td>6</td>
+						<td class="text-start" id="notice-title">2025년도 4월 행사 신청 안내</td>
+						<td>2025.03.10</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td class="text-start" id="notice-title">(수정)2025년도 3월 행사 신청
+							안내</td>
+						<td>2025.02.07</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td class="text-start" id="notice-title">(긴급) 2월 23일 XX페스티벌
+							취소 안내</td>
+						<td>2025.02.03</td>
+					</tr>
+
+
+				</tbody>
+			</table>
 		</div>
-
-
-
-
-	<!-- 진행중인 행사 -->
-
-	<!-- 오늘의 행사 -->
-
-	<!-- 실시간 리뷰 -->
-
-	<!-- 공지 사항 -->
+	</div>
 
 
 
@@ -441,5 +463,63 @@
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
 		crossorigin="anonymous"></script>
+
+	<script>
+	function movePage(bno) {
+		location.href = "${contextPath}/board/detail/${boardCode}/"+bno
+		
+		/* 
+		A : Application( 행사 신청서 )
+		P : Promotion ( 홍보 )
+		R : Review ( 리뷰 )
+		Q : QnA ( 문의 )
+		N : Notice ( 공지 )
+		U : User profile ( 프로필 이미지 )
+		
+		bname에 따라 
+		*/
+		}
+     </script>
+
+
+	<!-- 	<script>
+		document.getElementById("banner").addEventListener("click",
+				function() {
+					const in1 = document.getElementById('in1');
+					const result1 = document.getElementById('result1');
+
+					$.ajax({
+						url : 'member/selectOne',
+						data : {
+							userId : in1.value
+						},
+						type : 'POST',
+						success : function(result) {
+							result1.innerHTML = "";
+
+							// jackson-databind를 사용하지 않았을 경우
+							// 자바 객체의 toString() 메소드의 호출 결과가 넘어왔을 것
+							console.log(result);
+
+							if (result["USER_ID"]) {
+								//1) ul요소 생성
+								const ul = document.createElement("ul"); // <ul></ul>
+
+								//2) li요소 생성 *2개
+								const li1 = document.createElement("li");
+								li1.innerText = "아이디 : " + result.USER_ID;
+								const li2 = document.createElement("li");
+								li2.innerText = "이름  :" + result.USER_NAME;
+
+								//3) ul에 li추가
+								ul.append(li1, li2);
+
+								//4) ul을 div에 추가
+								result1.append(ul);
+							}
+						}
+					})
+				})
+	</script> -->
 </body>
 </html>

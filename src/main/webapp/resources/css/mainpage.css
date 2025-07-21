@@ -24,7 +24,7 @@ a {
 	flex-wrap: wrap;
 }
 
-/* 화면 크기에 따른 페이지 컨테이너 사이즈 지정 ------------------------------ 1080 이하 수정 필요 */
+/* 화면 크기에 따른 페이지 컨테이너 사이즈 지정 ------------------------------ 1080 이하 수정 필요 ------------------------- */
 @media ( max-width : 1080px) {
 	#container {
 		max-width: 100%;
@@ -85,16 +85,7 @@ a {
 	}
 }
 
-/* 
--
--
--
--
--
--
- */
-
-/* 섹션 제목 ------------------------------------------------------------------------title로 합칠 것? */
+/* 섹션 제목 */
 .section-title, .review-title, .today-title, .notice-title {
 	font-size: 20px;
 	font-weight: bold;
@@ -281,6 +272,13 @@ a {
 	font-size: 20px;
 	font-weight: bold;
 	margin-bottom: 20px;
+}
+/* 1줄 이상 hidden 처리------------------------------------------------------- 추후 일괄 작업 */
+.notice-title, #notice-title {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp:1;
+	overflow: hidden;
 }
 
 .notice-table {
