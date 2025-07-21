@@ -25,7 +25,7 @@ public class NoticeBoardController {
 	private NoticeBoardService noticeBoardService;
 	
 	//1. 공지 리스트
-	@GetMapping("/list")
+	@GetMapping("")
 	public String noticeList(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
 	    int limit = 10; // 한 페이지에 보여줄 게시글 수
 	    int offset = (page - 1) * limit;
@@ -68,7 +68,7 @@ public class NoticeBoardController {
     public String createNotice(NoticeBoard notice, RedirectAttributes ra) {
         int result = noticeBoardService.insertNotice(notice);
         ra.addFlashAttribute("msg", result > 0 ? "등록 완료" : "등록 실패");
-        return "redirect:/noticeBoard/list";
+        return "redirect:/noticeBoard";
     }
 
     //4. 수정
@@ -84,7 +84,7 @@ public class NoticeBoardController {
     public String deleteNotice(@RequestParam("noticeId") int noticeId, RedirectAttributes ra) {
         int result = noticeBoardService.deleteNotice(noticeId);
         ra.addFlashAttribute("msg", result > 0 ? "삭제 완료" : "삭제 실패");
-        return "redirect:/noticeBoard/list";
+        return "redirect:/noticeBoard";
     }
 	
 	

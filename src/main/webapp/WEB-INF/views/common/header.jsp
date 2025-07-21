@@ -87,7 +87,7 @@
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
 							<li class="nav-item separator">|</li>
@@ -101,7 +101,7 @@
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
 						</c:when>
@@ -111,7 +111,7 @@
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
 						</c:otherwise>

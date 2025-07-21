@@ -90,7 +90,7 @@
         	<c:choose>
             	<c:when test="${currentPage > 1}">
                 	<li class="page-item">
-                    	<a class="page-link" href="${pageContext.request.contextPath}/noticeBoard/list?page=${currentPage - 1}">이전</a>
+                    	<a class="page-link" href="${pageContext.request.contextPath}/noticeBoard?page=${currentPage - 1}">이전</a>
                 	</li>
             	</c:when>
             	<c:otherwise>
@@ -110,7 +110,7 @@
                 	</c:when>
                 	<c:otherwise>
                     	<li class="page-item">
-                        	<a class="page-link" href="${pageContext.request.contextPath}/noticeBoard/list?page=${i}">${i}</a>
+                        	<a class="page-link" href="${pageContext.request.contextPath}/noticeBoard?page=${i}">${i}</a>
                     	</li>
                 	</c:otherwise>
             	</c:choose>
@@ -120,7 +120,7 @@
         	<c:choose>
             	<c:when test="${currentPage < totalPage}">
                 	<li class="page-item">
-                    	<a class="page-link" href="${pageContext.request.contextPath}/noticeBoard/list?page=${currentPage + 1}">다음</a>
+                    	<a class="page-link" href="${pageContext.request.contextPath}/noticeBoard?page=${currentPage + 1}">다음</a>
                 	</li>
             	</c:when>
             	<c:otherwise>
