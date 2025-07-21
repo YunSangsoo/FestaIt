@@ -229,7 +229,6 @@ a {
 	align-content: space-between;
 	flex-wrap: wrap;
 	gap: 12px;
-	flex-wrap: wrap;
 }
 
 .review-profile {
@@ -256,7 +255,6 @@ a {
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	display: flex;
 }
 
 .review-bottom.create-date {
