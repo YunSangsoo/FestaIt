@@ -9,89 +9,68 @@ import org.mybatis.spring.SqlSessionTemplate;
 
 import com.kh.festait.promoboard.model.vo.PromoBoardVo;
 
-/*
- * 프로모 관련 DAO 구현체
- * PromoBoardDAO 인터페이스를 구현하여 MyBatis를 통해 DB에 접근
- */
-@Repository("promoBoardDAO") // 빈 이름은 "promoBoard" 대신 "promoBoardDAO"와 같이 명확하게 지정하는 것이 좋습니다.
+// 프로모 게시글 DAO 구현체 (MyBatis를 통해 DB 접근)
+@Repository("promoBoardDAO") // Spring Bean으로 등록 (빈 이름: promoBoardDAO)
 public class PromoBoardDaoImpl implements PromoBoardDao {
 
-    @Autowired
+    @Autowired // SqlSessionTemplate 의존성 자동 주입
     private SqlSessionTemplate sqlSession;
 
-    /*
-     * 전체 프로모 게시글 수 조회
-     */
     @Override
     public int selectPromoCount() {
+        // 전체 프로모 게시글 수 조회
         return sqlSession.selectOne("promoBoard.selectPromoCount");
     }
 
-    /*
-     * 페이징 처리된 프로모 목록 조회
-     * 매퍼에서 OFFSET/LIMIT를 파라미터 맵의 "pi" 객체에서 가져오므로, Map으로 PageInfo가 포함된 파라미터를 그대로 넘깁니다.
-     */
     @Override
     public List<PromoBoardVo> selectPromoList(Map<String, Object> paramMap) {
+        // 페이징 처리된 프로모 목록 조회
+        // paramMap에는 PageInfo 객체가 포함되어 OFFSET/LIMIT를 매퍼에서 사용.
         return sqlSession.selectList("promoBoard.selectPromoList", paramMap);
     }
 
-    /*
-     * 검색 조건에 따른 프로모 게시글 수 조회
-     */
     @Override
     public int selectSearchPromoCount(Map<String, Object> searchParam) {
+        // 검색 조건에 따른 프로모 게시글 수 조회
         return sqlSession.selectOne("promoBoard.selectSearchPromoCount", searchParam);
     }
 
-    /*
-     * 검색 조건 및 페이징 처리된 프로모 목록 조회
-     * 매퍼에서 OFFSET/LIMIT를 파라미터 맵의 "pi" 객체에서 가져오므로, Map으로 PageInfo가 포함된 파라미터를 그대로 넘깁니다.
-     */
     @Override
     public List<PromoBoardVo> selectSearchPromo(Map<String, Object> searchParam) {
+        // 검색 조건 및 페이징 처리된 프로모 목록 조회
+        // searchParam에는 PageInfo 객체가 포함되어 OFFSET/LIMIT를 매퍼에서 사용.
         return sqlSession.selectList("promoBoard.selectSearchPromo", searchParam);
     }
 
-    /*
-     * 특정 프로모 게시글 상세 정보 조회
-     * @param promoId 조회할 프로모션 ID
-     */
     @Override
     public PromoBoardVo selectPromoDetail(int promoId) {
+        // 특정 프로모 게시글 상세 정보 조회
         return sqlSession.selectOne("promoBoard.selectPromoDetail", promoId);
     }
 
-    /*
-     * 프로모 게시글 조회수 증가
-     * @param promoId 조회수를 증가시킬 프로모션 ID
-     */
     @Override
     public int increasePromoViews(int promoId) {
+        // 프로모 게시글 조회수 증가
         return sqlSession.update("promoBoard.increasePromoViews", promoId);
     }
 
-    /*
-     * ⭐️ 추가: 홍보 게시글 등록 구현
-     */
     @Override
     public int insertPromo(PromoBoardVo promo) {
+        // 홍보 게시글 등록
+        // ⭐ 이 부분에서 SQLSessionTemplate의 insert 메서드가 호출됩니다. ⭐
+        // ⭐ 매퍼의 namespace.id("promoBoard.insertPromo")와 파라미터(promo)가 정확한지 확인해야 합니다. ⭐
         return sqlSession.insert("promoBoard.insertPromo", promo);
     }
 
-    /*
-     * ⭐️ 추가: 홍보 게시글 수정 구현
-     */
     @Override
     public int updatePromo(PromoBoardVo promo) {
+        // 홍보 게시글 수정
         return sqlSession.update("promoBoard.updatePromo", promo);
     }
 
-    /*
-     * ⭐️ 추가: 홍보 게시글 삭제 구현
-     */
     @Override
     public int deletePromo(Map<String, Object> params) {
+        // 홍보 게시글 삭제
         return sqlSession.delete("promoBoard.deletePromo", params);
     }
 }

@@ -11,5 +11,5 @@ public interface EventDetailDao {
      * @param eventId 조회할 행사 ID (EVENT 테이블의 EVENT_ID)
      * @return 조회된 행사 정보
      */
-    EventDetailVo selectEventDetail(int eventId); // ⭐️ appId -> eventId로 변경
+    EventDetailVo selectEventDetail(int eventId);
 }

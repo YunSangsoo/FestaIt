@@ -16,10 +16,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Custom CSS: promoBoard.css -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="${contextPath}/resources/css/promoBoard.css">
 
-    <%-- JavaScript 파일에서 contextPath를 사용하기 위해 전역 변수로 선언 --%>
+    <!-- contextPath for JavaScript -->
     <script>
         var contextPath = "<c:out value='${contextPath}'/>";
     </script>
@@ -28,20 +28,20 @@
 
     <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
-    <!-- 페이지 전체를 감싸는 래퍼 -->
+    <!-- Page Wrapper -->
     <div class="page-wrapper">
 
-        <!-- 헤더와 검색창 사이 공간 -->
+        <!-- Header Spacer -->
         <div class="top-spacer"></div>
 
-        <!-- Flash Message (알림 메시지) -->
+        <!-- Flash Message -->
         <c:if test="${not empty alertMsg}">
             <div class="alert alert-info">${alertMsg}</div>
         </c:if>
 
-        <!-- 상단 섹션 (검색창, 등록하기 버튼) -->
+        <!-- Top Section (Search, Register Button) -->
         <div class="board-header-section">
-            <!-- 검색창 영역 -->
+            <!-- Search Bar -->
             <div class="search-bar-area">
                 <form action="<c:url value="/promoBoard"/>" method="GET" class="search-form">
                     <div class="search-wrapper">
@@ -49,82 +49,76 @@
                         <button class="search-button" type="submit">
                             <i class="bi bi-search"></i>
                         </button>
-                        <%-- 검색 시 항상 1페이지로 이동하도록 hidden input 추가 --%>
+                        <!-- Always go to page 1 on search -->
                         <input type="hidden" name="cpage" value="1">
                     </div>
                 </form>
             </div>
-            <!-- 등록하기 버튼 영역 -->
+            <!-- Register Button -->
             <div class="register-button-area">
-                <!-- 이 버튼 클릭 시 showCommonModal 함수 호출 -->
                 <button type="button" class="register-promo-btn" id="registerPromoButton">
                     등록하기
                 </button>
             </div>
         </div>
 
-        <!-- 검색/등록 영역과 포스터 목록 사이의 구분선 -->
+        <!-- Section Divider -->
         <hr class="section-divider">
 
-        <!-- 포스터 컨테이너 -->
+        <!-- Poster Container -->
         <div class="promotion-container">
-            <c:set var="minPosts" value="12" /> <%-- 최소 표시할 포스터 개수 (4개씩 3줄을 채우기 위해 12개) --%>
-            <c:set var="currentPromoCount" value="${fn:length(promoList)}" />
-            <c:set var="displayCount" value="${currentPromoCount > minPosts ? currentPromoCount : minPosts}" />
+            <c:set var="minPosts" value="12" /> <!-- Minimum posts to display (e.g., 3 rows of 4) -->
 
-            <c:forEach var="i" begin="0" end="${displayCount - 1}">
-                <c:set var="promo" value="${promoList[i]}" /> <%-- i번째 promo 객체 가져오기 --%>
-
-                <c:choose>
-                    <c:when test="${not empty promo}">
-                        <%-- 실제 게시글 데이터 --%>
-                        <div class="post" onclick="location.href='<c:url value="/promoBoard/detail">
-                                                                    <c:param name="promoId" value="${promo.promoId}"/>
-                                                                </c:url>'">
-                            <!-- 포스터 이미지 영역 -->
-                            <div class="poster">
-                                <img src="${contextPath}/resources/uploadFiles/${promo.posterPath}" alt="포스터 이미지" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
-                            </div>
-                            <!-- 조회수 -->
-                            <div class="views-count">조회수 ${promo.views}</div>
-                            <!-- 제목 -->
-                            <div class="post-title">${promo.promoTitle}</div>
-                            <!-- 이벤트 날짜 -->
-                            <div class="post-date">
-                                <c:if test="${not empty promo.startDate and not empty promo.endDate}">
-                                    <fmt:formatDate value="${promo.startDate}" pattern="yyyy.MM.dd" /> - <fmt:formatDate value="${promo.endDate}" pattern="yyyy.MM.dd" />
-                                </c:if>
-                                <c:if test="${empty promo.startDate or empty promo.endDate}">
-                                    <!-- 시작/종료 날짜가 없는 경우 생성 날짜 사용 -->
-                                    <fmt:formatDate value="${promo.createDate}" pattern="yyyy.MM.dd" />
-                                </c:if>
-                            </div>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <%-- 플레이스홀더 게시글 --%>
-                        <div class="post placeholder-post">
-                            <!-- 포스터 이미지 영역 -->
-                            <div class="poster">
-                                <img src="https://placehold.co/400x400/e0e0e0/ffffff?text=Preparing" alt="준비 중인 이미지">
-                            </div>
-                            <!-- 조회수 -->
-                            <div class="views-count">조회수 0</div>
-                            <!-- 제목 -->
-                            <div class="post-title">준비 중인 게시글</div>
-                            <!-- 이벤트 날짜 -->
-                            <div class="post-date">날짜 미정</div>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+            <!-- Actual Posts -->
+            <c:forEach var="promo" items="${list}">
+                <div class="post" onclick="location.href='<c:url value="/promoBoard/detail">
+                                                            <c:param name="promoId" value="${promo.promoId}"/>
+                                                        </c:url>'">
+                    <!-- Poster Image -->
+                    <div class="poster">
+                        <img src="${contextPath}/resources/uploadFiles/${promo.posterPath}" alt="포스터 이미지" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
+                    </div>
+                    <!-- Views Count -->
+                    <div class="views-count">조회수 ${promo.views}</div>
+                    <!-- Title -->
+                    <div class="post-title">${promo.promoTitle}</div>
+                    <!-- Event Date -->
+                    <div class="post-date">
+                        <c:if test="${not empty promo.startDate and not empty promo.endDate}">
+                            <fmt:formatDate value="${promo.startDate}" pattern="yyyy.MM.dd" /> - <fmt:formatDate value="${promo.endDate}" pattern="yyyy.MM.dd" />
+                        </c:if>
+                        <c:if test="${empty promo.startDate or empty promo.endDate}">
+                            <!-- Use creation date if start/end dates are missing -->
+                            <fmt:formatDate value="${promo.createDate}" pattern="yyyy.MM.dd" />
+                        </c:if>
+                    </div>
+                </div>
             </c:forEach>
+
+            <!-- Placeholder Posts (if actual posts are less than minPosts) -->
+            <c:if test="${fn:length(list) lt minPosts}">
+                <c:forEach begin="${fn:length(list)}" end="${minPosts - 1}">
+                    <div class="post placeholder-post">
+                        <!-- Placeholder Image -->
+                        <div class="poster">
+                            <img src="https://placehold.co/400x400/e0e0e0/ffffff?text=Preparing" alt="준비 중인 이미지">
+                        </div>
+                        <!-- Placeholder Views -->
+                        <div class="views-count">조회수 0</div>
+                        <!-- Placeholder Title -->
+                        <div class="post-title">준비 중인 게시글</div>
+                        <!-- Placeholder Date -->
+                        <div class="post-date">날짜 미정</div>
+                    </div>
+                </c:forEach>
+            </c:if>
         </div>
 
-        <%-- 페이지네이션 --%>
+        <!-- Pagination -->
         <div class="pagination-container d-flex justify-content-center">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
-                    <!-- 이전 페이지 버튼 -->
+                    <!-- Previous Page Button -->
                     <li class="page-item ${pi.currentPage <= 1 ? 'disabled' : ''}">
                         <c:url var="prevPageUrl" value="/promoBoard">
                             <c:param name="cpage" value="${pi.currentPage - 1}"/>
@@ -135,7 +129,7 @@
                         </a>
                     </li>
 
-                    <!-- 페이지 번호들 -->
+                    <!-- Page Numbers -->
                     <c:forEach var="i" begin="${pi.startPage}" end="${pi.endPage}">
                         <li class="page-item ${i == pi.currentPage ? 'active' : ''}">
                             <c:url var="pageUrl" value="/promoBoard">
@@ -146,7 +140,7 @@
                         </li>
                     </c:forEach>
 
-                    <!-- 다음 페이지 버튼 -->
+                    <!-- Next Page Button -->
                     <li class="page-item ${pi.currentPage >= pi.maxPage ? 'disabled' : ''}">
                         <c:url var="nextPageUrl" value="/promoBoard">
                             <c:param name="cpage" value="${pi.currentPage + 1}"/>
@@ -160,36 +154,35 @@
             </nav>
         </div>
 
-    </div> <!-- .page-wrapper 닫기 -->
+    </div> <!-- End of .page-wrapper -->
 
     <jsp:include page="/WEB-INF/views/common/footer.jsp" />
-    <jsp:include page="/WEB-INF/views/common/modal.jsp" /> <%-- 공통 모달 포함 경로 수정 --%>
+    <jsp:include page="/WEB-INF/views/common/modal.jsp" /> <!-- Common Modal Include -->
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- Custom JS for promoBoard (검색 기능) -->
+    <!-- Custom JS for promoBoard -->
     <script src="${contextPath}/resources/js/promoBoard.js"></script>
-    <script src="${contextPath}/resources/js/commonModal.js"></script> <%-- 공통 모달 JS 포함 --%>
+    <script src="${contextPath}/resources/js/commonModal.js"></script> <!-- Common Modal JS Include -->
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // "등록하기" 버튼 요소 가져오기
+            // Get "Register" button element
             const registerPromoButton = document.getElementById('registerPromoButton');
-            // 기존 검색 관련 JavaScript 로직 제거됨 (폼 제출 방식으로 변경)
 
             if (registerPromoButton) {
                 registerPromoButton.addEventListener('click', async function() {
-                    // showCommonModal 함수 호출 (Promise 반환)
+                    // Call showCommonModal function (returns Promise)
                     const confirmed = await window.showCommonModal(
-                        "행사 등록 확인", // 모달 제목
-                        "행사를 등록하시겠습니까?" // 모달 내용
+                        "행사 등록 확인", // Modal title
+                        "행사를 등록하시겠습니까?" // Modal content
                     );
 
                     if (confirmed) {
-                        // 사용자가 "확인"을 눌렀을 경우, 글쓰기 페이지로 이동
+                        // If user confirms, navigate to the write page
                         window.location.href = '${contextPath}/promoBoard/promoWrite';
                     } else {
-                        // 사용자가 "취소"를 눌렀거나 모달을 닫았을 경우, 아무것도 하지 않음
+                        // If user cancels or closes modal, do nothing
                         console.log("행사 등록 취소됨.");
                     }
                 });

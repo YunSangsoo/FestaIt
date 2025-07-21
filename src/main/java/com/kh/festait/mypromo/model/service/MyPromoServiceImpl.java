@@ -1,4 +1,4 @@
-package com.kh.festait.mypromo.model.service; // 패키지 이름 'service'로 변경
+package com.kh.festait.mypromo.model.service; 
 
 import java.util.List;
 import java.util.Map;
@@ -11,49 +11,22 @@ import com.kh.festait.mypromo.model.dao.MyPromoDao; // 'Dao'로 클래스 이름
 import com.kh.festait.mypromo.model.vo.MyPromoVo; // 'Vo'로 클래스 이름 변경
 
 @Service("myPromoService") // @Service 어노테이션 추가
-public class MyPromoServiceImpl implements MyPromoService { // 클래스 이름 'MyPromoServiceImpl'로 변경
+public class MyPromoServiceImpl implements MyPromoService { 
 
     @Autowired
-    private MyPromoDao myPromoDao; // 'Dao'로 필드명 변경
+    private MyPromoDao myPromoDao; 
 
     // 내 홍보 게시글 목록 조회 (페이징 적용)
     @Override
-    public List<MyPromoVo> selectMyPromoList(Map<String, Object> params) { // 메서드 이름 변경
+    public List<MyPromoVo> selectMyPromoList(Map<String, Object> params) { 
         return myPromoDao.selectMyPromoList(params);
     }
 
     // 특정 사용자의 전체 홍보 게시글 수 조회
     @Override
-    public int selectListCount(int userNo) { // 메서드 이름 변경
+    public int selectListCount(int userNo) {
         return myPromoDao.selectListCount(userNo);
     }
 
-    // ⭐️ 홍보 게시글 상세 조회 메소드 제거됨.
-    //    이제 내 홍보 리스트에서 게시글 클릭 시 바로 홍보 수정 페이지로 이동합니다.
-    // @Override
-    // @Transactional
-    // public MyPromoVo selectMyPromoById(int promoId) {
-    //     return myPromoDao.selectMyPromoById(promoId);
-    // }
 
-    // ⭐️ 새 홍보 게시글 삽입 메소드 제거 (PromoBoardService로 이관)
-    // @Override
-    // @Transactional
-    // public int insertMyPromo(MyPromoVo promo) {
-    //     return myPromoDao.insertMyPromo(promo);
-    // }
-
-    // ⭐️ 홍보 게시글 수정 메소드 제거 (PromoBoardService로 이관)
-    // @Override
-    // @Transactional
-    // public int updateMyPromo(MyPromoVo promo) {
-    //     return myPromoDao.updateMyPromo(promo);
-    // }
-
-    // ⭐️ 홍보 게시글 삭제 메소드 제거 (PromoBoardService로 이관)
-    // @Override
-    // @Transactional
-    // public int deleteMyPromo(Map<String, Object> params) {
-    //     return myPromoDao.deleteMyPromo(params);
-    // }
 }

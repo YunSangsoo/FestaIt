@@ -66,12 +66,4 @@
         OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
-    <!-- ⭐️ 내 홍보 게시글 상세 조회 쿼리 제거됨. -->
-    <!-- <select id="selectMyPromoById" ... </select> -->
-
-    <!-- ⭐️ 홍보 게시글 등록, 수정, 삭제 쿼리들은 PromoBoardMapper로 이관되었으므로 제거합니다. -->
-    <!-- <insert id="insertMyPromo" ... </insert> -->
-    <!-- <update id="updateMyPromo" ... </update> -->
-    <!-- <delete id="deleteMyPromo" ... </delete> -->
-
 </mapper>

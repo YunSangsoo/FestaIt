@@ -23,18 +23,18 @@ public class EventDetailVo {
     private String eventCode;
     private String statCode;
     private String appTitle;
-    private String appSubTitle; // DB 설계서에 추가된 컬럼
+    private String appSubTitle; 
     private String appDetail;
     private String location;
-    private String locationDetail; // DB 설계서에 추가된 컬럼
-    private String postCode; // DB 설계서에 추가된 컬럼
+    private String locationDetail; 
+    private String postCode; 
     private String website;
     private Date startDate;
     private Date endDate;
     private String startTime;
     private String endTime;
     private Date createDate;
-    private Date updateDate; // DB 설계서에 추가된 컬럼
+    private Date updateDate; 
     private Date submittedDate;
     private Date approvedDate;
     private String appFee;

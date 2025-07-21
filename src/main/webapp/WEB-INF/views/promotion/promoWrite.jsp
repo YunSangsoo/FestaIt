@@ -6,60 +6,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>홍보 게시글 작성</title>
-    <!-- Google Fonts - Noto Sans KR (CSS에서 사용) -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- promoWrite.css 파일 링크 -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/promoWrite.css">
-    <!-- Font Awesome 아이콘 (검색 버튼 등) -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/common/header.jsp" />
-    <!-- 상단 여백 (헤더가 있을 경우를 대비) -->
+    <jsp:include page="/WEB-INF/views/common/header.jsp" />
+    <!-- Header Spacer -->
     <div class="top-spacer"></div>
 
     <div class="page-wrapper">
         <h1 class="promo-write-title">홍보 게시글 작성</h1>
 
-        <!-- 게시글 등록 폼 -->
-        <form action="${pageContext.request.contextPath}/promo/registerPromo.do" method="post" enctype="multipart/form-data">
-            <!-- 제목 입력 필드 -->
+        <!-- Post Registration Form -->
+        <!-- ⭐ 이 부분의 action 속성을 수정해야 합니다. ⭐ -->
+        <form action="${pageContext.request.contextPath}/promoBoard/promoWrite" method="post" enctype="multipart/form-data">
+            <!-- Title Input -->
             <div class="form-group">
                 <label for="promoTitle">제목</label>
                 <input type="text" id="promoTitle" name="promoTitle" class="form-control" placeholder="게시글 제목을 입력하세요" required>
             </div>
 
-            <!-- 내용 입력 필드 -->
+            <!-- Content Input -->
             <div class="form-group">
                 <label for="promoContent">내용</label>
                 <textarea id="promoContent" name="promoContent" class="form-control" rows="10" placeholder="게시글 내용을 입력하세요" required></textarea>
             </div>
 
-            <!-- 포스터 이미지 첨부 필드 -->
+            <!-- Poster Image Upload -->
             <div class="form-group file-input-group">
                 <label for="promoPoster">포스터 이미지</label>
-					<div class="file-input-wrapper">
-					    <!-- 기본 input 숨김 처리 -->
-					    <input type="file" id="promoPoster" name="promoPoster" accept="image/*" style="display: none;" />	
-					    <!-- 이 라벨이 커스텀 파일 선택 버튼 역할 -->
-					    <label for="promoPoster" class="file-upload-button">파일 선택</label>
-					
-					    <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
-					</div>
-                <!-- 이미지 미리보기 영역 -->
+                <div class="file-input-wrapper">
+                    <input type="file" id="promoPoster" name="promoPoster" accept="image/*" />
+                    <!-- Custom File Select Button -->
+                    <label for="promoPoster" class="file-upload-button">파일 선택</label>
+                    <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
+                </div>
+                <!-- Image Preview Area -->
                 <div class="image-preview" id="imagePreview">
                     <span class="no-image-text">이미지 미리보기</span>
                 </div>
             </div>
 
-            <!-- 버튼 그룹 -->
+            <!-- Button Group -->
             <div class="button-group">
                 <button type="submit" class="submit-btn">등록하기</button>
-                <button type="button" class="cancel-btn" onclick="location.href='${pageContext.request.contextPath}/promo/list.do'">취소</button>
+                <!-- ⭐ 이 부분의 onclick 속성도 수정해야 합니다. ⭐ -->
+                <button type="button" class="cancel-btn" onclick="location.href='${pageContext.request.contextPath}/promoBoard'">취소</button>
             </div>
         </form>
     </div>
-	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+    <jsp:include page="/WEB-INF/views/common/footer.jsp" />
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const promoPosterInput = document.getElementById('promoPoster');
