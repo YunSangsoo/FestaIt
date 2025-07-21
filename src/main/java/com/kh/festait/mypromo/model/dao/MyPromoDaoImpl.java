@@ -25,28 +25,31 @@ public class MyPromoDaoImpl implements MyPromoDao { // MyPromoDao 인터페이�
         return sqlSession.selectOne("myPromoMapper.selectListCount", userNo);
     }
 
-    @Override
-    public int insertMyPromo(MyPromoVo promo) {
-        return sqlSession.insert("myPromoMapper.insertMyPromo", promo);
-    }
+    // ⭐️ 홍보 게시글 상세 조회 메소드 제거됨.
+    //    이제 내 홍보 리스트에서 게시글 클릭 시 바로 홍보 수정 페이지로 이동합니다.
+    // @Override
+    // public MyPromoVo selectMyPromoById(int promoId) {
+    //     return sqlSession.selectOne("myPromoMapper.selectMyPromoById", promoId);
+    // }
 
-    @Override
-    public MyPromoVo selectMyPromoById(int promoNo) {
-        return sqlSession.selectOne("myPromoMapper.selectMyPromoById", promoNo);
-    }
+    // ⭐️ 홍보 게시글 작성, 수정, 삭제, 조회수 증가 메소드들은 PromoBoardDao로 이관되었으므로 제거합니다.
+    // @Override
+    // public int insertMyPromo(MyPromoVo promo) {
+    //     return sqlSession.insert("myPromoMapper.insertMyPromo", promo);
+    // }
 
-    @Override
-    public int increaseViews(int promoNo) {
-        return sqlSession.update("myPromoMapper.increaseViews", promoNo);
-    }
+    // @Override
+    // public int increaseViews(int promoNo) {
+    //     return sqlSession.update("myPromoMapper.increaseViews", promoNo);
+    // }
 
-    @Override
-    public int updateMyPromo(MyPromoVo promo) {
-        return sqlSession.update("myPromoMapper.updateMyPromo", promo);
-    }
+    // @Override
+    // public int updateMyPromo(MyPromoVo promo) {
+    //     return sqlSession.update("myPromoMapper.updateMyPromo", promo);
+    // }
 
-    @Override
-    public int deleteMyPromo(Map<String, Object> params) {
-        return sqlSession.update("myPromoMapper.deleteMyPromo", params);
-    }
+    // @Override
+    // public int deleteMyPromo(Map<String, Object> params) {
+    //     return sqlSession.update("myPromoMapper.deleteMyPromo", params);
+    // }
 }

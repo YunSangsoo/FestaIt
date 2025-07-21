@@ -11,7 +11,7 @@ import com.kh.festait.eventdetail.model.service.EventDetailService;
 import com.kh.festait.eventdetail.model.vo.EventDetailVo;
 
 @Controller
-@RequestMapping("/event")
+@RequestMapping("/eventBoard") // ⭐️ /event -> /eventBoard로 변경
 public class EventDetailController {
 
     @Autowired
@@ -19,15 +19,15 @@ public class EventDetailController {
 
     /**
      * 행사 상세 조회
-     * @param appId 조회할 행사 ID
+     * @param eventId 조회할 행사 ID (EVENT 테이블의 EVENT_ID)
      * @param model 뷰에 데이터 전달용 Model
      * @return 행사 상세 페이지 뷰 또는 에러 페이지
      */
     @GetMapping("/detail")
-    public String selectEventDetail(@RequestParam("appId") int appId, Model model) {
+    public String selectEventDetail(@RequestParam("eventId") int eventId, Model model) { // ⭐️ appId -> eventId로 변경
         
-        // 행사 상세 정보 조회
-        EventDetailVo event = eventService.selectEventDetail(appId);
+        // 행사 상세 정보 조회 (EVENT_ID를 기준으로 조회)
+        EventDetailVo event = eventService.selectEventDetail(eventId); // ⭐️ appId -> eventId로 변경
 
         // 조회 결과 처리
         if (event != null) {

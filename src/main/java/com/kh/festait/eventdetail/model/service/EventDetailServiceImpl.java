@@ -18,8 +18,8 @@ public class EventDetailServiceImpl implements EventDetailService {
      * @return 조회된 행사 정보
      */
     @Override
-    public EventDetailVo selectEventDetail(int appId) {
+    public EventDetailVo selectEventDetail(int eventId) {
         // 조회수 증가 만들면 여기다가 넣으면 됌
-        return eventDAO.selectEventDetail(appId);
+        return eventDAO.selectEventDetail(eventId);
     }
 }

@@ -4,9 +4,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
     <%-- 부트스트랩 아이콘 CDN 추가 --%>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -50,6 +49,7 @@
                 <aside class="left-sidebar">
                     <div class="poster-section">
                         <%-- 행사 포스터 이미지 --%>
+                        <%-- EventDetailVo의 appId를 사용하여 이미지 경로 구성 (기존 유지) --%>
                         <img src="${contextPath}/resources/images/${event.appId}_poster.png" alt="행사 포스터" class="event-poster-img">
 
                         <%-- 홈페이지 링크 (있을 경우에만 표시) --%>
@@ -69,11 +69,11 @@
                         <div class="views-share">
                             <span>
                                 <%-- 조회수 아이콘: Bootstrap Icons (bi-eye) 사용 --%>
-                                <i class="bi bi-eye"></i> 8 <%-- 실제 조회수 값은 ${event.views} 같은 방식으로 넣어주세요 --%>
+                                <i class="bi bi-eye"></i> ${event.views} <%-- ⭐️ 실제 조회수 값은 ${event.views}로 변경 --%>
                             </span>
                             <span>
                                 <%-- 북마크 아이콘: Bootstrap Icons (bi-bookmark) 사용 --%>
-                                <i class="bi bi-bookmark"></i> 3 <%-- 실제 북마크 수 값 넣어주세요 --%>
+                                <i class="bi bi-bookmark"></i> 3 <%-- 북마크 수는 EventDetailVo에 없으므로 일단 하드코딩 유지 --%>
                             </span>
                             <span id="shareLinkButton" style="cursor: pointer;" title="클릭하여 링크 복사">
                                 <i class="bi bi-share"></i> <span>공유하기</span>
@@ -127,7 +127,8 @@
 
             <div class="bottom-buttons-wrapper"> 
                 <div class="bottom-left-buttons">
-                    <button class="btn list-btn" onclick="location.href='${contextPath}/promotion/list.do'">목록 보기</button>
+                    <%-- "목록 보기" 버튼은 홍보 게시판 목록으로 이동 --%>
+                    <button class="btn list-btn" onclick="location.href='${contextPath}/promotion/list'">목록 보기</button>
                 </div>
                 <div class="bottom-right-buttons">
                     <button class="btn promote-btn">게시물 홍보하기</button>
@@ -149,11 +150,11 @@
                 shareButton.addEventListener('click', function() {
                     const currentUrl = window.location.href;
                     navigator.clipboard.writeText(currentUrl).then(function() {
-                        alert('링크 복사 완료'); 
+                        // ⭐️ alert 제거, 필요시 비침해적인 UI (예: 토스트 메시지) 추가
                         console.log('링크 복사 성공:', currentUrl);
                     }).catch(function(err) {
                         console.error('링크 복사 실패:', err);
-                        alert('링크 복사 실패');
+                        // ⭐️ alert 제거, 필요시 비침해적인 UI 추가
                     });
                 });
             }

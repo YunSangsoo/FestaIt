@@ -5,8 +5,11 @@
 
 <configuration>
     <settings>
+        <!-- 데이터베이스 컬럼명에 있는 밑줄(_)을 자바 객체의 카멜케이스 속성으로 자동 매핑 -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        
+        <!-- NULL 값을 SQL에서 명시적으로 NULL로 처리 -->
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
 
-    </configuration>
+</configuration>

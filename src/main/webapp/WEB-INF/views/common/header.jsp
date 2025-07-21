@@ -85,7 +85,7 @@
 						<c:when test="${not empty sessionScope.loginUser and sessionScope.loginUser.role == 'ROLE_ADMIN'}">
 							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promotion/list">홍보</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promoBoard">홍보</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
 							<li class="nav-item separator">|</li>
@@ -99,7 +99,7 @@
 						<c:when test="${not empty sessionScope.loginUser}">
 							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promotion/list">홍보</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promoBoard">홍보</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
 							<li class="nav-item separator">|</li>
@@ -109,7 +109,7 @@
 						<c:otherwise>
 							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promotion/list">홍보</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promoBoard">홍보</a></li>
 							<li class="nav-item separator">|</li>
 							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard/list">공지</a></li>
 							<li class="nav-item separator">|</li>

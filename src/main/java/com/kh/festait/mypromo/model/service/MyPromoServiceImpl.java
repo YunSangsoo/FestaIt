@@ -28,36 +28,32 @@ public class MyPromoServiceImpl implements MyPromoService { // 클래스 이름 
         return myPromoDao.selectListCount(userNo);
     }
 
-    // 새 홍보 게시글 삽입
-    @Override
-    @Transactional // 트랜잭션 관리 추가
-    public int insertMyPromo(MyPromoVo promo) {
-        return myPromoDao.insertMyPromo(promo);
-    }
+    // ⭐️ 홍보 게시글 상세 조회 메소드 제거됨.
+    //    이제 내 홍보 리스트에서 게시글 클릭 시 바로 홍보 수정 페이지로 이동합니다.
+    // @Override
+    // @Transactional
+    // public MyPromoVo selectMyPromoById(int promoId) {
+    //     return myPromoDao.selectMyPromoById(promoId);
+    // }
 
-    // 홍보 게시글 상세 조회 (조회수 증가 로직 포함)
-    @Override
-    @Transactional // 트랜잭션 관리 추가 (조회수 증가와 게시글 조회는 한 묶음)
-    public MyPromoVo selectMyPromoById(int promoNo) {
-        int result = myPromoDao.increaseViews(promoNo); // 조회수 증가
-        MyPromoVo promo = null;
-        if (result > 0) {
-            promo = myPromoDao.selectMyPromoById(promoNo); // 게시글 조회
-        }
-        return promo;
-    }
+    // ⭐️ 새 홍보 게시글 삽입 메소드 제거 (PromoBoardService로 이관)
+    // @Override
+    // @Transactional
+    // public int insertMyPromo(MyPromoVo promo) {
+    //     return myPromoDao.insertMyPromo(promo);
+    // }
 
-    // 홍보 게시글 수정
-    @Override
-    @Transactional // 트랜잭션 관리 추가
-    public int updateMyPromo(MyPromoVo promo) {
-        return myPromoDao.updateMyPromo(promo);
-    }
+    // ⭐️ 홍보 게시글 수정 메소드 제거 (PromoBoardService로 이관)
+    // @Override
+    // @Transactional
+    // public int updateMyPromo(MyPromoVo promo) {
+    //     return myPromoDao.updateMyPromo(promo);
+    // }
 
-    // 홍보 게시글 삭제 (STATUS를 'N'으로 변경)
-    @Override
-    @Transactional // 트랜잭션 관리 추가
-    public int deleteMyPromo(Map<String, Object> params) { // 파라미터 타입 변경
-        return myPromoDao.deleteMyPromo(params);
-    }
+    // ⭐️ 홍보 게시글 삭제 메소드 제거 (PromoBoardService로 이관)
+    // @Override
+    // @Transactional
+    // public int deleteMyPromo(Map<String, Object> params) {
+    //     return myPromoDao.deleteMyPromo(params);
+    // }
 }

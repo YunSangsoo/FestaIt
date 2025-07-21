@@ -29,12 +29,35 @@ public interface PromoBoardService {
     List<PromoBoardVo> searchPromo(Map<String, Object> searchParam, PageInfo pi);
 
     /*
-     * ⭐ 추가: 홍보 게시글 상세 조회 ⭐
+     * 홍보 게시글 상세 조회
+     * @param promoId 조회할 프로모션 ID
      */
-    PromoBoardVo selectPromotionDetail(int promoNo);
+    PromoBoardVo selectPromotionDetail(int promoId);
 
     /*
-     * ⭐ 추가: 조회수 증가 ⭐
+     * 조회수 증가
+     * @param promoId 조회수를 증가시킬 프로모션 ID
      */
-    int increasePromoViews(int promoNo);
+    int increasePromoViews(int promoId);
+
+    /*
+     * ⭐️ 추가: 홍보 게시글 등록
+     * @param promo 등록할 홍보 게시글 정보
+     * @return 처리된 행의 수
+     */
+    int insertPromo(PromoBoardVo promo); // ⭐️ MyPromoController에서 이동된 기능
+
+    /*
+     * ⭐️ 추가: 홍보 게시글 수정
+     * @param promo 수정할 홍보 게시글 정보
+     * @return 처리된 행의 수
+     */
+    int updatePromo(PromoBoardVo promo); // ⭐️ MyPromoController에서 이동된 기능
+
+    /*
+     * ⭐️ 추가: 홍보 게시글 삭제
+     * @param params 삭제할 홍보 게시글 ID를 담은 Map (promoId 키 사용)
+     * @return 처리된 행의 수
+     */
+    int deletePromo(Map<String, Object> params); // ⭐️ MyPromoController에서 이동된 기능
 }

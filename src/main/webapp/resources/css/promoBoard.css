@@ -1,168 +1,191 @@
-/* promoBoard.css */
-
-/* 전역 box-sizing 설정: 패딩과 보더가 요소의 너비/높이에 포함되도록 함 */
-
-body {
-    background-color: #e0dbef !important;
-}
-html {
+/* 모든 요소에 box-sizing 적용 (패딩/보더가 너비에 포함되도록) */
+* {
     box-sizing: border-box;
 }
-*, *::before, *::after {
-    box-sizing: inherit;
-}
 
-/* body 기본 마진 제거 및 폰트 설정 */
+/* 기본 설정 */
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    color: #333;
     margin: 0;
     padding: 0;
-    line-height: 1.6;
-    background-color: #f9f9f9;
+    background-color: #f8f9fa; /* 배경색 */
+    color: #333;
 }
 
-/* --- 페이지 전체를 감싸는 래퍼 (1160px 고정 및 중앙 정렬) --- */
+/* 페이지 전체 래퍼 */
 .page-wrapper {
-    max-width: 1160px;
-    margin: 0 auto;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    min-height: 100vh;
+    max-width: 1200px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
     padding: 20px;
 }
 
-/* --- 헤더와 검색창 사이 공간 추가 --- */
+/* 헤더와 검색창 사이 공간 */
 .top-spacer {
-    height: 40px;
+    height: 80px; /* 헤더 높이 고려, 필요에 따라 조정 */
+}
+\\
+/* Flash Message (알림 메시지) */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
 }
 
-/* --- 상단 섹션 (검색창, 등록하기 버튼) --- */
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* 상단 섹션 (검색창, 등록하기 버튼) */
 .board-header-section {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* 세로로 정렬 */
+    align-items: center; /* 기본적으로 중앙 정렬 */
+    margin-bottom: 30px;
+    padding: 0 10px; /* 좌우 패딩 추가 */
 }
 
 /* 검색창 영역 */
 .search-bar-area {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+    width: 100%; /* 부모 너비 꽉 채우기 */
+    display: flex; /* 내부 요소 정렬을 위해 flex 사용 */
+    justify-content: center; /* 검색창 자체를 중앙 정렬 */
+    margin-bottom: 15px; /* 등록하기 버튼과의 간격 (기존 값 유지) */
 }
 
 .search-wrapper {
     display: flex;
-    align-items: center;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 0; /* 네모난 모양 */
     overflow: hidden;
+    width: 100%; /* 부모 너비를 최대한 활용 */
+    max-width: 800px; /* 700px에서 600px로 다시 조정 */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .search-input {
     border: none;
-    padding: 8px 10px;
-    font-size: 14px;
+    padding: 10px 20px;
+    flex-grow: 1;
     outline: none;
-    width: 300px;
+    font-size: 16px;
+    color: #555;
+    border-radius: 0; /* 네모난 모양 */
+}
+
+.search-input::placeholder {
+    color: #aaa;
 }
 
 .search-button {
-    background-color: #f0f0f0;
+    background-color: #007bff; /* 파란색 */
+    color: white;
     border: none;
-    padding: 8px 10px;
+    padding: 10px 15px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* ✨ 추가/수정: 아이콘의 기본 글꼴 색상 설정 (원하는 색상으로 변경 가능) */
-    color: #333; 
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    border-radius: 0; /* 네모난 모양 */
 }
 
-/* ✨ 수정: 기존 .search-button img 스타일 제거 (Bootstrap 아이콘 사용 시 불필요) */
-/*
-.search-button img {
-    width: 18px;
-    height: 18px;
+.search-button:hover {
+    background-color: #0056b3;
 }
-*/
-
-/* ✨ 추가: Bootstrap 아이콘 (<i> 태그)에 대한 스타일 */
-.search-button .bi {
-    font-size: 18px; /* 아이콘 크기 조절 */
-    /* 필요에 따라 마진을 추가하여 아이콘 위치 미세 조정 */
-    /* margin: 0; */
-}
-
 
 /* 등록하기 버튼 영역 */
 .register-button-area {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 30px;
+    width: 100%; /* 부모 너비 꽉 채우기 */
+    text-align: right; /* 오른쪽 정렬 */
+    margin-top: 25px; /* 10px에서 25px로 늘려 아래로 이동 */
 }
 
-/* "등록하기" 버튼 스타일 */
 .register-promo-btn {
-    background-color: #3478f6;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    white-space: nowrap;
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #28a745; /* 초록색 */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px; /* 이미지와 유사하게 약간 둥글게 */
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    border: none; /* 버튼 기본 보더 제거 */
 }
 
 .register-promo-btn:hover {
-    background-color: #2a65d1;
+    background-color: #218838;
+    transform: translateY(-2px);
 }
 
-/* 검색/등록 영역과 포스터 목록 사이의 구분선 */
+/* 구분선 */
 .section-divider {
     border: 0;
     height: 1px;
-    background: #ccc;
-    width: 100%;
-    margin: 0;
+    background-color: #eee;
+    margin: 40px 0;
 }
 
-/* --- 포스터 컨테이너 --- */
+/* 포스터 컨테이너 */
 .promotion-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    padding: 0;
-    gap: 20px;
-    background-color: #fff;
-    /* min-height: 750px; <-- 이 줄은 제거된 상태를 유지합니다. */
+    display: flex; /* Flexbox 활성화 */
+    flex-wrap: wrap; /* 여러 줄로 배치 허용 */
+    gap: 30px; /* 아이템 간의 간격 (모든 방향) */
+    justify-content: flex-start; /* 아이템들을 시작 지점(왼쪽)으로 정렬 */
+    margin-bottom: 50px;
 }
 
-/* JavaScript가 생성하는 .post 클래스에 대한 스타일 */
+/* 각 포스터 아이템 */
 .post {
-    flex: 1 1 calc(25% - 15px); 
-    min-width: 180px; 
-    max-width: 265px; 
-    border: 1px solid #ddd;
-    padding: 10px;
+    /* 4개씩 배치: (전체 너비 - 3 * 30px) / 4 */
+    flex: 0 0 calc((100% - 3 * 30px) / 4);
+    max-width: calc((100% - 3 * 30px) / 4);
+    min-width: 200px; /* 최소 너비 설정 (반응형 대비) */
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    box-sizing: border-box;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex; /* 내부 요소 정렬을 위해 flex 사용 */
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    position: relative; /* 조회수 위치 지정을 위해 */
 }
 
+.post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* 플레이스홀더 포스터는 hover 효과 없음 */
+.placeholder-post {
+    cursor: default; /* 플레이스홀더는 클릭되지 않도록 */
+}
+
+.placeholder-post:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* hover 시에도 그림자 유지 */
+}
+
+/* 플레이스홀더 게시글 제목과 날짜 가운데 정렬 */
+.placeholder-post .post-title,
+.placeholder-post .post-date {
+    text-align: center;
+}
+
+
+/* 포스터 이미지 영역 */
 .poster {
     width: 100%;
+    padding-top: 100%; /* 1:1 비율 유지 (정사각형) */
     position: relative;
-    padding-bottom: 100%;
-    background-color: #e0e0e0;
-    margin-bottom: 10px;
     overflow: hidden;
+    border-bottom: 1px solid #eee;
 }
 
 .poster img {
@@ -171,157 +194,121 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* 이미지가 잘리지 않고 비율 유지 */
+    border-radius: 10px 10px 0 0;
 }
 
-.poster::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #666;
-    font-weight: bold;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.post-title {
-    font-size: 16px;
-    margin: 10px 0 5px;
-    font-weight: bold;
-    word-break: break-word;
-}
-
-.post-date {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-/* --- 페이지네이션 스타일 (중앙 정렬) --- */
-.pagination {
-    margin: 30px auto !important;
-    text-align: center !important;
-    padding: 0 !important;
-    display: flex;
-    justify-content: center;
-}
-
-.pagination a {
-    display: inline-block;
-    padding: 8px 12px;
-    margin: 0 4px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-decoration: none;
-    color: #333;
-    background-color: #fff;
-    transition: background-color 0.3s ease;
-}
-
-.pagination a.active,
-.pagination a:hover {
-    background-color: #3478f6;
-    color: #fff;
-    border-color: #3478f6;
-}
-
-/* 🌟🌟🌟 수정: 기존 커스텀 모달 스타일 모두 제거 (Bootstrap 모달 사용 시 충돌 방지) 🌟🌟🌟 */
-/*
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 30px 30px; 
-    border: 1px solid #888;
-    width: 450px !important; 
-    max-width: 90%;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    position: relative;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.modal-content p {
-    font-size: 1em; 
-    margin-top: 20px; 
-    margin-bottom: 20px; 
-    line-height: 1.5;
-}
-
-.close-button {
-    color: #aaa;
+/* 조회수 */
+.views-count {
     position: absolute;
     top: 10px;
-    right: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-    flex-direction: row-reverse; 
-}
-
-.modal-button {
-    padding: 6px 20px; 
-    border: none;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 10px;
     border-radius: 5px;
-    font-size: 15px; 
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    width: 120px; 
+    font-size: 12px;
+    z-index: 10;
 }
 
-.modal-button.confirm {
-    background-color: #000;
-    color: #fff;
-    border: 1px solid #000;
+/* 제목 */
+.post-title {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 15px 15px 5px;
+    color: #333;
+    line-height: 1.4;
+    max-height: 3.2em; /* 2줄 정도 표시, 넘치면 ... */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 2줄로 제한 */
+    -webkit-box-orient: vertical;
 }
 
-.modal-button.confirm:hover {
-    background-color: #333;
+/* 이벤트 날짜 */
+.post-date {
+    font-size: 14px;
+    color: #777;
+    padding: 0 15px 15px;
+    margin-top: auto; /* 하단 정렬 */
 }
 
-.modal-button.cancel {
-    background-color: #fff;
-    color: #000;
-    border: 1px solid #ddd;
+/* 페이지네이션 컨테이너 (중앙 정렬을 위한 여백만 설정) */
+.pagination-container {
+    margin-top: 30px; /* 위쪽 여백 추가 */
+    margin-bottom: 50px; /* 아래쪽 여백 추가 */
+    width: 100%; /* 부모 너비 꽉 채우기 */
+    /* display: flex; justify-content: center; 는 JSP에서 Bootstrap 클래스로 직접 적용 */
 }
 
-.modal-button.cancel:hover {
-    background-color: #f0f0f0;
+/* 페이지네이션 아이템 간의 간격 (부트스트랩 기본값에 약간의 여백 추가) */
+.pagination .page-item {
+    margin: 0 2px; /* 각 페이지 아이템 간의 간격 */
 }
-*/
+
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .post {
+        /* 3개씩 배치: (전체 너비 - 2 * 30px) / 3 */
+        flex: 0 0 calc((100% - 2 * 30px) / 3);
+        max-width: calc((100% - 2 * 30px) / 3);
+    }
+    /* 태블릿에서는 검색창 너비를 조금 줄여 여백 확보 */
+    .search-wrapper {
+        max-width: 500px; /* 600px에서 500px로 조정 */
+    }
+}
+
+@media (max-width: 768px) {
+    .board-header-section {
+        flex-direction: column; /* 세로로 정렬 */
+        align-items: stretch; /* 너비 꽉 채우기 */
+    }
+
+    .search-bar-area {
+        margin-right: 0;
+        margin-bottom: 20px; /* 아래 간격 */
+    }
+
+    .search-wrapper {
+        max-width: 100%; /* 검색창 너비 꽉 채우기 */
+    }
+
+    .post {
+        /* 2개씩 배치: (전체 너비 - 1 * 30px) / 2 */
+        flex: 0 0 calc((100% - 1 * 30px) / 2);
+        max-width: calc((100% - 1 * 30px) / 2);
+    }
+}
+
+@media (max-width: 480px) {
+    .post {
+        flex: 0 0 100%; /* 1개씩 배치 */
+        max-width: 100%;
+    }
+
+    .search-input {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .search-button {
+        padding: 8px 12px;
+        font-size: 16px;
+    }
+
+    .register-promo-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .post-title {
+        font-size: 16px;
+    }
+
+    .post-date {
+        font-size: 12px;
+    }
+}

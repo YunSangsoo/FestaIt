@@ -3,20 +3,24 @@
 <mapper namespace="eventMapper">
 
     <resultMap id="eventResultMap" type="com.kh.festait.eventdetail.model.vo.EventDetailVo">
-        <id property="appId" column="APP_ID"/>
+        <id property="appId" column="APP_ID"/> <!-- APP_ID는 EVENT_APPLICATION에서 가져옴 -->
         <result property="userNo" column="USER_NO"/>
-        <result property="eventCode" column="EVENT_CODE"/>
+        <result property="eventCode" column="EVENT_CODE"/> <!-- NVL로 EVENT.CATEGORY 또는 EA.EVENT_CODE 매핑 -->
         <result property="statCode" column="STAT_CODE"/>
-        <result property="appTitle" column="APP_TITLE"/>
-        <result property="appSubTitle" column="APP_SUB_TITLE"/> <result property="appDetail" column="APP_DETAIL"/>
-        <result property="location" column="LOCATION"/>
-        <result property="locationDetail" column="LOCATION_DETAIL"/> <result property="postCode" column="POST_CODE"/> <result property="website" column="WEBSITE"/>
-        <result property="startDate" column="START_DATE"/>
-        <result property="endDate" column="END_DATE"/>
+        <result property="appTitle" column="APP_TITLE"/> <!-- NVL로 EVENT.EVENT_TITLE 또는 EA.APP_TITLE 매핑 -->
+        <result property="appSubTitle" column="APP_SUB_TITLE"/>
+        <result property="appDetail" column="APP_DETAIL"/> <!-- NVL로 EVENT.APP_DETAIL 또는 EA.APP_DETAIL 매핑 -->
+        <result property="location" column="LOCATION"/> <!-- NVL로 EVENT.LOCATION 또는 EA.LOCATION 매핑 -->
+        <result property="locationDetail" column="LOCATION_DETAIL"/>
+        <result property="postCode" column="POST_CODE"/>
+        <result property="website" column="WEBSITE"/>
+        <result property="startDate" column="START_DATE"/> <!-- NVL로 EVENT.START_DATE 또는 EA.START_DATE 매핑 -->
+        <result property="endDate" column="END_DATE"/> <!-- NVL로 EVENT.END_DATE 또는 EA.END_DATE 매핑 -->
         <result property="startTime" column="START_TIME"/>
         <result property="endTime" column="END_TIME"/>
         <result property="createDate" column="CREATE_DATE"/>
-        <result property="updateDate" column="UPDATE_DATE"/> <result property="submittedDate" column="SUBMITTED_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="submittedDate" column="SUBMITTED_DATE"/>
         <result property="approvedDate" column="APPROVED_DATE"/>
         <result property="appFee" column="APP_FEE"/>
         <result property="appItem" column="APP_ITEM"/>
@@ -30,22 +34,26 @@
         <result property="adminComment" column="ADMIN_COMMENT"/>
     </resultMap>
 
-    <select id="selectEventDetail" parameterType="int" resultMap="eventResultMap">
+    <select id="selectEventDetail" parameterType="_int" resultMap="eventResultMap"> <!-- ⭐️ parameterType int로 변경 -->
         SELECT
             EA.APP_ID,
             EA.USER_NO,
-            EA.EVENT_CODE,
+            NVL(E.CATEGORY, EA.EVENT_CODE) AS EVENT_CODE,
             EA.STAT_CODE,
-            EA.APP_TITLE,
-            EA.APP_SUB_TITLE, EA.APP_DETAIL,
-            EA.LOCATION,
-            EA.LOCATION_DETAIL, EA.POST_CODE, EA.WEBSITE,
-            EA.START_DATE,
-            EA.END_DATE,
+            NVL(E.EVENT_TITLE, EA.APP_TITLE) AS APP_TITLE,
+            EA.APP_SUB_TITLE,
+            NVL(E.APP_DETAIL, EA.APP_DETAIL) AS APP_DETAIL,
+            NVL(E.LOCATION, EA.LOCATION) AS LOCATION,
+            EA.LOCATION_DETAIL,
+            EA.POST_CODE,
+            EA.WEBSITE,
+            NVL(E.START_DATE, EA.START_DATE) AS START_DATE,
+            NVL(E.END_DATE, EA.END_DATE) AS END_DATE,
             EA.START_TIME,
             EA.END_TIME,
             EA.CREATE_DATE,
-            EA.UPDATE_DATE, EA.SUBMITTED_DATE,
+            EA.UPDATE_DATE,
+            EA.SUBMITTED_DATE,
             EA.APPROVED_DATE,
             EA.APP_FEE,
             EA.APP_ITEM,
@@ -57,9 +65,10 @@
             AM.TEL,
             AM.FAX,
             AM.ADMIN_COMMENT
-        FROM EVENT_APPLICATION EA
-        JOIN APP_MANAGER AM ON EA.APP_ID = AM.APP_ID
-        WHERE EA.APP_ID = #{appId}
+        FROM EVENT E                                     -- ⭐️ EVENT 테이블을 기준으로 시작
+        LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID -- EVENT_APPLICATION 조인
+        LEFT JOIN APP_MANAGER AM ON EA.APP_ID = AM.APP_ID
+        WHERE E.EVENT_ID = #{eventId}                    -- ⭐️ EVENT_ID를 기준으로 조회
     </select>
 
 </mapper>

@@ -22,38 +22,13 @@ public interface MyPromoDao {
      */
     int selectListCount(int userNo);
 
-    /**
-     * 새 홍보 게시글을 삽입합니다.
-     * @param promo 삽입할 MyPromoVo 객체
-     * @return 처리된 행의 개수
-     */
-    int insertMyPromo(MyPromoVo promo);
+    // ⭐️ 홍보 게시글 상세 조회 메소드 제거됨.
+    //    이제 내 홍보 리스트에서 게시글 클릭 시 바로 홍보 수정 페이지로 이동합니다.
+    // MyPromoVo selectMyPromoById(int promoId);
 
-    /**
-     * 특정 홍보 게시글을 ID로 상세 조회합니다.
-     * @param promoNo 홍보 게시글 번호
-     * @return 조회된 MyPromoVo 객체
-     */
-    MyPromoVo selectMyPromoById(int promoNo);
-
-    /**
-     * 특정 홍보 게시글의 조회수를 증가시킵니다.
-     * @param promoNo 홍보 게시글 번호
-     * @return 처리된 행의 개수
-     */
-    int increaseViews(int promoNo);
-
-    /**
-     * 홍보 게시글을 수정합니다.
-     * @param promo 수정할 MyPromoVo 객체
-     * @return 처리된 행의 개수
-     */
-    int updateMyPromo(MyPromoVo promo);
-
-    /**
-     * 홍보 게시글의 상태를 'N'으로 변경하여 삭제 처리합니다.
-     * @param params promoNo, userNo 정보를 담은 Map
-     * @return 처리된 행의 개수
-     */
-    int deleteMyPromo(Map<String, Object> params);
+    // ⭐️ 홍보 게시글 작성, 수정, 삭제, 조회수 증가 메소드들은 PromoBoardDao로 이관되었으므로 제거합니다.
+    // int insertMyPromo(MyPromoVo promo);
+    // int increaseViews(int promoNo);
+    // int updateMyPromo(MyPromoVo promo);
+    // int deleteMyPromo(Map<String, Object> params);
 }
