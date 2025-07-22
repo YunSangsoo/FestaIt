@@ -15,6 +15,16 @@ public class MainController {
 	public String homeBoard() {
 		return "/board/boardListView";
 	}
+	
+	@GetMapping("/review")
+	public String review() {
+		return "/review/reviewBoard";
+	}
+	
+	@GetMapping("/review/list")
+	public String reviewList() {
+		return "/review/reviewList";
+	}
 
 	@GetMapping("/common")
 	public String homTest() {
@@ -23,6 +33,6 @@ public class MainController {
 	
 	@GetMapping("/test")
 	public String test() {
-		return "/test/main";
+		return "/admin/memberListBoard";
 	}
 }

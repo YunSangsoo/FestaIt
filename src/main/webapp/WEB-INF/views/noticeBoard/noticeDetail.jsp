@@ -45,7 +45,7 @@
 		</div>
 
 		<div class="d-flex justify-content-between mt-4">
-  			<a href="${pageContext.request.contextPath}/noticeBoard/list" class="btn btn-outline-secondary">게시판으로 돌아가기</a>
+  			<a href="${pageContext.request.contextPath}/noticeBoard" class="btn btn-outline-secondary">게시판으로 돌아가기</a>
 
   			<!-- 수정 폼 -->
   			<form id="noticeForm" action="${pageContext.request.contextPath}/noticeBoard/update" method="post" style="display: inline;">
