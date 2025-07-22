@@ -1,32 +1,35 @@
-package com.kh.festait.mypromo.model.service; 
+package com.kh.festait.mypromo.model.service;
 
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // 트랜잭션 관리를 위해 추가
 
-import com.kh.festait.mypromo.model.dao.MyPromoDao; // 'Dao'로 클래스 이름 변경
-import com.kh.festait.mypromo.model.vo.MyPromoVo; // 'Vo'로 클래스 이름 변경
+import com.kh.festait.common.model.vo.PageInfo;
+import com.kh.festait.mypromo.model.dao.MyPromoDao; // MyPromoDao 인터페이스 임포트
+import com.kh.festait.mypromo.model.vo.MyPromoVo;
 
-@Service("myPromoService") // @Service 어노테이션 추가
-public class MyPromoServiceImpl implements MyPromoService { 
+import lombok.RequiredArgsConstructor;
 
-    @Autowired
-    private MyPromoDao myPromoDao; 
+@Service
+@RequiredArgsConstructor
+public class MyPromoServiceImpl implements MyPromoService {
 
-    // 내 홍보 게시글 목록 조회 (페이징 적용)
+    private final MyPromoDao myPromoDao; // MyPromoDao 인터페이스 주입
+
     @Override
-    public List<MyPromoVo> selectMyPromoList(Map<String, Object> params) { 
-        return myPromoDao.selectMyPromoList(params);
+    public int selectListCount(Map<String, Object> paramMap) {
+        return myPromoDao.selectListCount(paramMap);
     }
 
-    // 특정 사용자의 전체 홍보 게시글 수 조회
     @Override
-    public int selectListCount(int userNo) {
-        return myPromoDao.selectListCount(userNo);
+    public List<MyPromoVo> selectMyPromoList(Map<String, Object> paramMap, PageInfo pi) {
+        // RowBounds 객체 생성 (offset, limit)
+        int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+        RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+        
+        return myPromoDao.selectMyPromoList(paramMap, rowBounds);
     }
-
 
 }

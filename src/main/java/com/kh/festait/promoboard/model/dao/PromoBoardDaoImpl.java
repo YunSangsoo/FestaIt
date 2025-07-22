@@ -3,74 +3,99 @@ package com.kh.festait.promoboard.model.dao;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
 
+import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.promoboard.model.vo.PromoBoardVo;
 
-// 프로모 게시글 DAO 구현체 (MyBatis를 통해 DB 접근)
-@Repository("promoBoardDAO") // Spring Bean으로 등록 (빈 이름: promoBoardDAO)
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor // final 필드를 사용하는 생성자를 자동으로 생성하여 의존성 주입
 public class PromoBoardDaoImpl implements PromoBoardDao {
 
-    @Autowired // SqlSessionTemplate 의존성 자동 주입
-    private SqlSessionTemplate sqlSession;
+    private final SqlSessionTemplate sqlSession; // SqlSessionTemplate 의존성 주입
 
     @Override
     public int selectPromoCount() {
-        // 전체 프로모 게시글 수 조회
         return sqlSession.selectOne("promoBoard.selectPromoCount");
     }
 
     @Override
-    public List<PromoBoardVo> selectPromoList(Map<String, Object> paramMap) {
-        // 페이징 처리된 프로모 목록 조회
-        // paramMap에는 PageInfo 객체가 포함되어 OFFSET/LIMIT를 매퍼에서 사용.
+    public List<PromoBoardVo> selectPromoList(PageInfo pi, Map<String, Object> paramMap) {
+        // paramMap에 PageInfo 객체가 "pi" 키로 이미 포함되어 있으므로, paramMap만 전달합니다.
         return sqlSession.selectList("promoBoard.selectPromoList", paramMap);
     }
 
     @Override
-    public int selectSearchPromoCount(Map<String, Object> searchParam) {
-        // 검색 조건에 따른 프로모 게시글 수 조회
-        return sqlSession.selectOne("promoBoard.selectSearchPromoCount", searchParam);
+    public int selectSearchPromoCount(Map<String, Object> paramMap) {
+        return sqlSession.selectOne("promoBoard.selectSearchPromoCount", paramMap);
     }
 
     @Override
-    public List<PromoBoardVo> selectSearchPromo(Map<String, Object> searchParam) {
-        // 검색 조건 및 페이징 처리된 프로모 목록 조회
-        // searchParam에는 PageInfo 객체가 포함되어 OFFSET/LIMIT를 매퍼에서 사용.
-        return sqlSession.selectList("promoBoard.selectSearchPromo", searchParam);
+    public List<PromoBoardVo> selectSearchPromo(Map<String, Object> paramMap, PageInfo pi) {
+        // paramMap에 PageInfo 객체가 "pi" 키로 이미 포함되어 있으므로, paramMap만 전달합니다.
+        return sqlSession.selectList("promoBoard.selectSearchPromo", paramMap);
     }
 
     @Override
     public PromoBoardVo selectPromoDetail(int promoId) {
-        // 특정 프로모 게시글 상세 정보 조회
         return sqlSession.selectOne("promoBoard.selectPromoDetail", promoId);
     }
 
     @Override
     public int increasePromoViews(int promoId) {
-        // 프로모 게시글 조회수 증가
         return sqlSession.update("promoBoard.increasePromoViews", promoId);
     }
 
     @Override
     public int insertPromo(PromoBoardVo promo) {
-        // 홍보 게시글 등록
-        // ⭐ 이 부분에서 SQLSessionTemplate의 insert 메서드가 호출됩니다. ⭐
-        // ⭐ 매퍼의 namespace.id("promoBoard.insertPromo")와 파라미터(promo)가 정확한지 확인해야 합니다. ⭐
         return sqlSession.insert("promoBoard.insertPromo", promo);
     }
 
     @Override
+    public int insertImage(PromoBoardVo promo) {
+        return sqlSession.insert("promoBoard.insertImage", promo);
+    }
+
+    @Override
+    public int insertPromImage(PromoBoardVo promo) {
+        return sqlSession.insert("promoBoard.insertPromImage", promo);
+    }
+
+    @Override
+    public int updateEventApplicationWebsite(PromoBoardVo promo) {
+        return sqlSession.update("promoBoard.updateEventApplicationWebsite", promo);
+    }
+
+    @Override
     public int updatePromo(PromoBoardVo promo) {
-        // 홍보 게시글 수정
         return sqlSession.update("promoBoard.updatePromo", promo);
     }
 
     @Override
-    public int deletePromo(Map<String, Object> params) {
-        // 홍보 게시글 삭제
-        return sqlSession.delete("promoBoard.deletePromo", params);
+    public int updateImage(PromoBoardVo promo) {
+        return sqlSession.update("promoBoard.updateImage", promo);
+    }
+
+    @Override
+    public int deletePromImageByPromoId(int promoId) {
+        return sqlSession.delete("promoBoard.deletePromImageByPromoId", promoId);
+    }
+
+    @Override
+    public int deleteImageByImgNo(int imgNo) {
+        return sqlSession.delete("promoBoard.deleteImageByImgNo", imgNo);
+    }
+
+    @Override
+    public int deletePromo(int promoId) {
+        return sqlSession.delete("promoBoard.deletePromo", promoId);
+    }
+
+    @Override
+    public PromoBoardVo selectEventIdAndAppIdByEventTitle(String eventTitle) {
+        return sqlSession.selectOne("promoBoard.selectEventIdAndAppIdByEventTitle", eventTitle);
     }
 }

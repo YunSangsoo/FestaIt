@@ -120,7 +120,6 @@
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             },
-                            // promo.promoId 값을 문자열로 감싸서 JavaScript 구문 오류 방지
                             body: 'promoId=' + '${promo.promoId}' 
                         })
                         .then(response => response.json())

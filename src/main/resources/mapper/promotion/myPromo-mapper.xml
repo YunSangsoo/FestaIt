@@ -28,42 +28,80 @@
         <result property="appId" column="APP_ID"/>
     </resultMap>
 
-    <!-- 1. 내 홍보 게시글 전체 수 조회 -->
-    <select id="selectListCount" parameterType="_int" resultType="_int">
+    <!-- 1. 내 홍보 게시글 전체 수 조회 (검색 조건 추가) -->
+    <select id="selectListCount" parameterType="map" resultType="_int">
         SELECT
             COUNT(*)
         FROM EVENT_PROMOTION EP
         LEFT JOIN EVENT E ON EP.EVENT_ID = E.EVENT_ID
         LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
         WHERE EA.USER_NO = #{userNo}
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchType == 'title'">
+                    AND EP.PROM_TITLE LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchType == 'content'">
+                    AND EP.PROM_DETAIL LIKE '%' || #{searchKeyword} || '%'
+                </when>
+            </choose>
+        </if>
     </select>
 
-    <!-- 2. 내 홍보 게시글 목록 조회 (페이징 포함) -->
+    <!-- 2. 내 홍보 게시글 목록 조회 (페이징 및 검색 조건 추가) -->
     <select id="selectMyPromoList" parameterType="map" resultMap="myPromoResultMap">
         SELECT
-            EP.PROM_ID,
-            EP.EVENT_ID,
-            EP.PROM_TITLE,
-            EP.PROM_DETAIL,
-            EP.CREATE_DATE,
-            EP.UPDATE_DATE,
-            EP.VIEWS,
-            U.USER_NO,          -- 행사 신청자의 USER_NO
-            U.NICKNAME,         -- 행사 신청자의 닉네임
-            U.STATUS AS USER_STATUS, -- 행사 신청자의 계정 상태 (별칭 부여)
-            IMG.CHANGE_NAME,    -- 포스터 이미지 경로
-            EA.WEBSITE,         -- 프로모션 페이지 URL
-            EA.STAT_CODE,       -- 프로모션 여부 상태 코드
-            EA.APP_ID           -- 연관된 행사 신청 ID
-        FROM EVENT_PROMOTION EP
-        LEFT JOIN EVENT E ON EP.EVENT_ID = E.EVENT_ID
-        LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
-        LEFT JOIN "USER" U ON EA.USER_NO = U.USER_NO
-        LEFT JOIN PROM_IMAGE PM ON EP.PROM_ID = PM.PROM_ID
-        LEFT JOIN IMAGE IMG ON PM.IMG_NO = IMG.IMG_NO
-        WHERE EA.USER_NO = #{userNo}
-        ORDER BY EP.CREATE_DATE DESC
-        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+            PROM_ID,
+            EVENT_ID,
+            PROM_TITLE,
+            PROM_DETAIL,
+            CREATE_DATE,
+            UPDATE_DATE,
+            VIEWS,
+            USER_NO,
+            NICKNAME,
+            USER_STATUS,
+            CHANGE_NAME,
+            WEBSITE,
+            STAT_CODE,
+            APP_ID
+        FROM (
+            SELECT
+                EP.PROM_ID,
+                EP.EVENT_ID,
+                EP.PROM_TITLE,
+                EP.PROM_DETAIL,
+                EP.CREATE_DATE,
+                EP.UPDATE_DATE,
+                EP.VIEWS,
+                U.USER_NO,
+                U.NICKNAME,
+                U.STATUS AS USER_STATUS,
+                IMG.CHANGE_NAME,
+                EA.WEBSITE,
+                EA.STAT_CODE,
+                EA.APP_ID,
+                ROWNUM RN
+            FROM EVENT_PROMOTION EP
+            LEFT JOIN EVENT E ON EP.EVENT_ID = E.EVENT_ID
+            LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
+            LEFT JOIN "USER" U ON EA.USER_NO = U.USER_NO
+            LEFT JOIN PROM_IMAGE PM ON EP.PROM_ID = PM.PROM_ID
+            LEFT JOIN IMAGE IMG ON PM.IMG_NO = IMG.IMG_NO
+            WHERE EA.USER_NO = #{userNo}
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchType == 'title'">
+                        AND EP.PROM_TITLE LIKE '%' || #{searchKeyword} || '%'
+                    </when>
+                    <when test="searchType == 'content'">
+                        AND EP.PROM_DETAIL LIKE '%' || #{searchKeyword} || '%'
+                    </when>
+                </choose>
+            </if>
+            ORDER BY EP.CREATE_DATE DESC
+        )
+        WHERE RN BETWEEN #{offset} + 1 AND #{offset} + #{limit}
     </select>
 
 </mapper>

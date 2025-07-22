@@ -12,7 +12,7 @@ body {
     color: #333;
 }
 
-/* 페이지 전체 래퍼 */
+/* 페이지 전체 래퍼 (기존 .container와 역할 유사, 필요시 통합 고려) */
 .page-wrapper {
     max-width: 1200px; /* 최대 너비 설정 */
     margin: 0 auto; /* 중앙 정렬 */
@@ -23,7 +23,7 @@ body {
 .top-spacer {
     height: 80px; /* 헤더 높이 고려, 필요에 따라 조정 */
 }
-\\
+
 /* Flash Message (알림 메시지) */
 .alert {
     padding: 15px;
@@ -40,7 +40,7 @@ body {
     border-color: #bee5eb;
 }
 
-/* 상단 섹션 (검색창, 등록하기 버튼) */
+/* 상단 섹션 (검색창, 등록하기 버튼) - 사용자 제공 CSS 반영 */
 .board-header-section {
     display: flex;
     flex-direction: column; /* 세로로 정렬 */
@@ -49,12 +49,19 @@ body {
     padding: 0 10px; /* 좌우 패딩 추가 */
 }
 
-/* 검색창 영역 */
+/* 검색창 영역 - 사용자 제공 CSS 반영 */
 .search-bar-area {
     width: 100%; /* 부모 너비 꽉 채우기 */
     display: flex; /* 내부 요소 정렬을 위해 flex 사용 */
     justify-content: center; /* 검색창 자체를 중앙 정렬 */
-    margin-bottom: 15px; /* 등록하기 버튼과의 간격 (기존 값 유지) */
+    margin-bottom: 15px; /* 등록하기 버튼과의 간격 */
+}
+
+/* ⭐⭐⭐ 검색 폼 자체의 너비 조절 ⭐⭐⭐ */
+.search-form {
+    width: 100%; /* 부모에 맞춰 너비 100% */
+    max-width: 600px !important;
+    margin: 0 auto; /* 중앙 정렬 */
 }
 
 .search-wrapper {
@@ -62,8 +69,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 0; /* 네모난 모양 */
     overflow: hidden;
-    width: 100%; /* 부모 너비를 최대한 활용 */
-    max-width: 800px; /* 700px에서 600px로 다시 조정 */
+    width: 100%; /* 부모 (search-form) 너비를 꽉 채움 */
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
@@ -83,7 +89,7 @@ body {
 }
 
 .search-button {
-    background-color: #007bff; /* 파란색 */
+    background-color: #b481d9;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -94,10 +100,10 @@ body {
 }
 
 .search-button:hover {
-    background-color: #0056b3;
+    background-color: #a069cb;
 }
 
-/* 등록하기 버튼 영역 */
+/* 등록하기 버튼 영역 - 사용자 제공 CSS 반영 */
 .register-button-area {
     width: 100%; /* 부모 너비 꽉 채우기 */
     text-align: right; /* 오른쪽 정렬 */
@@ -107,23 +113,22 @@ body {
 .register-promo-btn {
     display: inline-block;
     padding: 10px 25px;
-    background-color: #28a745; /* 초록색 */
+    background-color: #b481d9;
     color: white;
+    border: 1px solid #a069cb;
     text-decoration: none;
-    border-radius: 5px; /* 이미지와 유사하게 약간 둥글게 */
     font-weight: 500;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     cursor: pointer;
-    border: none; /* 버튼 기본 보더 제거 */
 }
 
 .register-promo-btn:hover {
-    background-color: #218838;
+    background-color: #a069cb;
     transform: translateY(-2px);
 }
 
-/* 구분선 */
+/* 구분선 (기존 .hr 대체) */
 .section-divider {
     border: 0;
     height: 1px;
@@ -131,7 +136,7 @@ body {
     margin: 40px 0;
 }
 
-/* 포스터 컨테이너 */
+/* 포스터 컨테이너 (기존 .row .g-4 대체) */
 .promotion-container {
     display: flex; /* Flexbox 활성화 */
     flex-wrap: wrap; /* 여러 줄로 배치 허용 */
@@ -140,7 +145,7 @@ body {
     margin-bottom: 50px;
 }
 
-/* 각 포스터 아이템 */
+/* 각 포스터 아이템 (기존 .col .card 대체) */
 .post {
     /* 4개씩 배치: (전체 너비 - 3 * 30px) / 4 */
     flex: 0 0 calc((100% - 3 * 30px) / 4);
@@ -159,7 +164,7 @@ body {
 
 .post:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    box-shadow: #FFD700;
 }
 
 /* 플레이스홀더 포스터는 hover 효과 없음 */
@@ -169,7 +174,7 @@ body {
 
 .placeholder-post:hover {
     transform: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* hover 시에도 그림자 유지 */
+    box-shadow: #FFD700; /* hover 시에도 그림자 유지 */
 }
 
 /* 플레이스홀더 게시글 제목과 날짜 가운데 정렬 */
@@ -203,7 +208,7 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: #EA870E;
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
@@ -213,12 +218,12 @@ body {
 
 /* 제목 */
 .post-title {
-    font-size: 18px;
+    font-size: 16px !important;
     font-weight: 700;
-    padding: 15px 15px 5px;
+    padding: 15px 15px 5px !important;
     color: #333;
-    line-height: 1.4;
-    max-height: 3.2em; /* 2줄 정도 표시, 넘치면 ... */
+    line-height: 1.5 !important; 
+    max-height: 4.25em !important; 
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -247,6 +252,27 @@ body {
     margin: 0 2px; /* 각 페이지 아이템 간의 간격 */
 }
 
+.pagination .page-item .page-link {
+    border-radius: 5px;
+    margin: 0 2px; /* 각 페이지 아이템 간의 간격 */
+    color: #b481d9; /* 예시: 기본 페이지 링크 텍스트 색상 (파란색) */
+    border-color: #b481d9; /* 예시: 기본 페이지 링크 테두리 색상 */
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #e9ecef; 
+    border-color: #a069cb; 
+    color: #black; 
+
+}
+
+.pagination .page-item .page-link:hover {
+	background-color: #a069cb; 
+    border-color: #a069cb;
+    color: white;
+}
+/* ⭐⭐⭐ 페이지네이션 색상 변경 끝 ⭐⭐⭐ */
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
@@ -256,8 +282,8 @@ body {
         max-width: calc((100% - 2 * 30px) / 3);
     }
     /* 태블릿에서는 검색창 너비를 조금 줄여 여백 확보 */
-    .search-wrapper {
-        max-width: 500px; /* 600px에서 500px로 조정 */
+    .search-form { /* ⭐ 미디어 쿼리에서도 max-width 조정 ⭐ */
+        max-width: 600px !important; 
     }
 }
 
@@ -272,8 +298,8 @@ body {
         margin-bottom: 20px; /* 아래 간격 */
     }
 
-    .search-wrapper {
-        max-width: 100%; /* 검색창 너비 꽉 채우기 */
+    .search-form { /* ⭐ 미디어 쿼리에서도 max-width 조정 ⭐ */
+        max-width: 100% !important; 
     }
 
     .post {
@@ -309,6 +335,6 @@ body {
     }
 
     .post-date {
-        font-size: 12px;
+        font-size: 14px;
     }
 }

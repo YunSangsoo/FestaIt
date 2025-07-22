@@ -1,18 +1,128 @@
-/* 내 홍보 리스트 페이지 전용 스타일 */
-a.btn.lavender-btn {
-    background-color: #B481D9;
-    color: white;
-    border: 1px solid #A069CB;
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
 }
-a.btn.lavender-btn:hover {
-    background-color: #A069CB;
-    border-color: #904EBC;
-}
-thead.lavender-header th {
-    background-color: #E6CCFF;
-    color: #5E2B97;
-}
+
 .container {
-    min-height: 600px; /* 푸터가 겹치지 않도록 충분한 높이 확보 */
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
-/* 추가적인 내 홍보 리스트 관련 스타일이 있다면 여기에 추가 */
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.lavender-header {
+    background-color: #e6e6fa; /* 연한 라벤더 색상 */
+    color: #333;
+}
+
+.lavender-btn {
+    background-color: #9370db; /* 미디엄 퍼플 */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.lavender-btn:hover {
+    background-color: #8a2be2; /* 블루 바이올렛 */
+    color: white;
+}
+
+/* 검색 폼 컨테이너의 여백 조정 */
+.row.mb-3.justify-content-end {
+    margin-bottom: 20px;
+}
+
+/* ⭐⭐⭐ 검색창 입력 필드와 버튼 크기 조정 ⭐⭐⭐ */
+/* .col-md-6 내부의 form-select.form-select-lg */
+.col-md-6 form .form-select.form-select-lg {
+    height: 34px !important; /* 더 줄인 높이 */
+    padding: 0.2rem 0.75rem !important; /* 패딩 조정 */
+    font-size: 0.85rem !important; /* 폰트 크기 조정 */
+}
+
+/* .col-md-6 내부의 input.form-control.form-control-lg */
+.col-md-6 form .form-control.form-control-lg {
+    height: 34px !important; /* 더 줄인 높이 */
+    padding: 0.2rem 0.75rem !important; /* 패딩 조정 */
+    font-size: 0.85rem !important; /* 폰트 크기 조정 */
+}
+
+/* .col-md-6 내부의 button.btn.btn-outline-secondary.btn-lg */
+.col-md-6 form .btn.btn-outline-secondary.btn-lg {
+    height: 34px !important; /* 입력 필드와 동일한 높이 */
+    padding: 0.2rem 0.75rem !important; /* 패딩 조정 */
+    font-size: 0.85rem !important; /* 폰트 크기 조정 */
+    line-height: 1 !important; /* 텍스트 중앙 정렬 */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 65px !important; /* ⭐ 검색 버튼의 최소 너비 충분히 확보 ⭐ */
+    white-space: nowrap !important; /* ⭐ 텍스트 줄 바꿈 방지 ⭐ */
+}
+/* ⭐⭐⭐ 검색 폼 스타일 조정 끝 ⭐⭐⭐ */
+
+
+/* ⭐⭐⭐ 페이지네이션 스타일 ⭐⭐⭐ */
+.pagination-container {
+    display: flex !important;
+    justify-content: center !important; /* 중앙 정렬 */
+    margin-top: 40px !important;
+}
+
+.pagination .page-item .page-link {
+    border-radius: 5px !important;
+    margin: 0 3px !important;
+    color: #007bff !important; /* 기본 페이지 링크 텍스트 색상 */
+    border-color: #dee2e6 !important; /* 기본 페이지 링크 테두리 색상 */
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff !important; /* 활성 페이지 배경색 */
+    border-color: #007bff !important; /* 활성 페이지 테두리 색상 */
+    color: white !important; /* 활성 페이지 텍스트 색상 */
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #e9ecef !important; /* hover 시 배경색 */
+    color: #0056b3 !important; /* hover 시 텍스트 색상 */
+}
+
+/* ⭐⭐⭐ 페이지네이션 화살표 (span) 스타일 ⭐⭐⭐ */
+.pagination .page-item .page-link span {
+    display: inline-block !important; /* 숨겨지지 않도록 */
+    font-size: 1rem !important; /* 적절한 폰트 크기 (부모 링크와 동일하게) */
+    color: #007bff !important; /* 화살표 색상 (기본 링크 색상과 동일하게) */
+    line-height: 1 !important; /* 텍스트 정렬 */
+}
+
+/* 활성 페이지의 화살표 색상 (만약 활성 페이지에 화살표가 있다면) */
+.pagination .page-item.active .page-link span {
+    color: white !important; /* 활성 페이지 텍스트 색상과 동일하게 */
+}
+/* ⭐⭐⭐ 페이지네이션 화살표 (span) 스타일 끝 ⭐⭐⭐ */
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .col-md-6 {
+        width: 100%;
+    }
+    /* 모바일에서는 검색창과 버튼 크기를 다시 조정할 수 있습니다. */
+    .col-md-6 form .form-select.form-select-lg,
+    .col-md-6 form .form-control.form-control-lg,
+    .col-md-6 form .btn.btn-lg {
+        height: auto !important; /* 자동 높이로 변경 */
+        padding: 0.375rem 0.75rem !important; /* 기본 패딩 유지 */
+        font-size: 0.875rem !important; /* 폰트 크기 줄이기 */
+        min-width: unset !important; /* 모바일에서는 최소 너비 제한 해제 */
+        white-space: normal !important; /* 모바일에서는 줄 바꿈 허용 */
+    }
+}

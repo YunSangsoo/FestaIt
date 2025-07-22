@@ -22,7 +22,6 @@
         <h1 class="promo-write-title">홍보 게시글 작성</h1>
 
         <!-- Post Registration Form -->
-        <!-- ⭐ 이 부분의 action 속성을 수정해야 합니다. ⭐ -->
         <form action="${pageContext.request.contextPath}/promoBoard/promoWrite" method="post" enctype="multipart/form-data">
             <!-- Title Input -->
             <div class="form-group">
@@ -54,7 +53,6 @@
             <!-- Button Group -->
             <div class="button-group">
                 <button type="submit" class="submit-btn">등록하기</button>
-                <!-- ⭐ 이 부분의 onclick 속성도 수정해야 합니다. ⭐ -->
                 <button type="button" class="cancel-btn" onclick="location.href='${pageContext.request.contextPath}/promoBoard'">취소</button>
             </div>
         </form>
@@ -73,10 +71,38 @@
                     fileNameDisplay.textContent = file.name; // 파일 이름 표시
 
                     const reader = new FileReader();
+
+                    // 파일 읽기 성공 시
                     reader.onload = function(e) {
-                        // 이미지 미리보기 업데이트
-                        imagePreview.innerHTML = `<img src="${e.target.result}" alt="Image Preview">`;
+                        const imageUrl = e.target.result;
+                        console.log("FileReader result (for assignment):", imageUrl); // 할당 직전 최종 Data URL 확인
+
+                        // 기존의 "이미지 미리보기" 텍스트 제거
+                        const noImageTextSpan = imagePreview.querySelector('.no-image-text');
+                        if (noImageTextSpan) {
+                            noImageTextSpan.remove();
+                        }
+
+                        let imgElement = imagePreview.querySelector('img');
+                        if (imgElement) {
+                            // 이미 <img> 태그가 있다면 src만 업데이트
+                            imgElement.src = imageUrl;
+                        } else {
+                            // <img> 태그가 없다면 새로 생성하여 추가
+                            imgElement = document.createElement('img');
+                            imgElement.src = imageUrl;
+                            imgElement.alt = "Image Preview";
+                            imagePreview.appendChild(imgElement);
+                        }
                     };
+
+                    // 파일 읽기 실패 시
+                    reader.onerror = function() {
+                        console.error("파일 읽기 오류:", reader.error);
+                        fileNameDisplay.textContent = '파일 읽기 오류';
+                        imagePreview.innerHTML = `<span class="no-image-text">이미지 미리보기 (오류)</span>`; // 오류 메시지 표시
+                    };
+
                     reader.readAsDataURL(file); // 파일을 Data URL로 읽기
                 } else {
                     fileNameDisplay.textContent = '선택된 파일 없음';

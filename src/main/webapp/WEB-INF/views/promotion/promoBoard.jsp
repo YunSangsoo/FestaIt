@@ -43,7 +43,7 @@
         <div class="board-header-section">
             <!-- Search Bar -->
             <div class="search-bar-area">
-                <form action="<c:url value="/promoBoard"/>" method="GET" class="search-form">
+                <form action="<c:url value="/promoBoard"/>" method="GET" class="search-form"> <!-- ⭐ width="700px" 제거 ⭐ -->
                     <div class="search-wrapper">
                         <input type="text" class="search-input" placeholder="search" aria-label="Search" name="searchKeyword" value="${param.searchKeyword}">
                         <button class="search-button" type="submit">
@@ -72,8 +72,8 @@
             <!-- Actual Posts -->
             <c:forEach var="promo" items="${list}">
                 <div class="post" onclick="location.href='<c:url value="/promoBoard/detail">
-                                                            <c:param name="promoId" value="${promo.promoId}"/>
-                                                        </c:url>'">
+                                            <c:param name="promoId" value="${promo.promoId}"/>
+                                        </c:url>'">
                     <!-- Poster Image -->
                     <div class="poster">
                         <img src="${contextPath}/resources/uploadFiles/${promo.posterPath}" alt="포스터 이미지" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">

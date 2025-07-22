@@ -3,25 +3,31 @@ package com.kh.festait.mypromo.model.dao;
 import java.util.List;
 import java.util.Map;
 
-import org.mybatis.spring.SqlSessionTemplate; // SqlSessionTemplate 사용
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.festait.mypromo.model.vo.MyPromoVo;
 
-@Repository("myPromoDao") // 이 구현체가 "myPromoDao"라는 이름의 스프링 빈으로 등록
-public class MyPromoDaoImpl implements MyPromoDao { // MyPromoDao 인터페이스를 구현
+import lombok.RequiredArgsConstructor;
 
-    @Autowired
-    private SqlSessionTemplate sqlSession; // SqlSessionTemplate 주입 (root-context.xml에서 설정된 sqlSession 빈)
+// MyPromoDao 인터페이스의 구현체
+@Repository // Spring Bean으로 등록
+@RequiredArgsConstructor // final 필드에 대한 생성자 자동 생성 (SqlSessionTemplate 주입)
+public class MyPromoDaoImpl implements MyPromoDao { // MyPromoDao 인터페이스 구현
+
+    private final SqlSessionTemplate sqlSession; // MyBatis SqlSessionTemplate 주입
 
     @Override
-    public List<MyPromoVo> selectMyPromoList(Map<String, Object> params) {
-        return sqlSession.selectList("myPromoMapper.selectMyPromoList", params);
+    public int selectListCount(Map<String, Object> paramMap) {
+        // myPromoMapper 네임스페이스의 selectListCount 쿼리 실행
+        return sqlSession.selectOne("myPromoMapper.selectListCount", paramMap);
     }
 
     @Override
-    public int selectListCount(int userNo) {
-        return sqlSession.selectOne("myPromoMapper.selectListCount", userNo);
+    public List<MyPromoVo> selectMyPromoList(Map<String, Object> paramMap, RowBounds rowBounds) {
+        // myPromoMapper 네임스페이스의 selectMyPromoList 쿼리 실행 (RowBounds 적용)
+        return sqlSession.selectList("myPromoMapper.selectMyPromoList", paramMap, rowBounds);
     }
+
 }

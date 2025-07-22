@@ -33,25 +33,32 @@ public class PromoBoardVo {
     // 조회수 (VIEWS)
     private int views;
 
-    // promoStatus는 EVENT_PROMOTION 테이블에 직접 컬럼이 없으므로 제거.
-    // 필요 시 다른 테이블의 상태값을 조합하여 사용하거나, 테이블에 컬럼 추가 고려.
-
     // --- 조인을 통해 가져오는 파생 정보 ---
     // 작성자 (USER 테이블 NICKNAME)
     private String promoWriter;
 
-    // 포스터 이미지 경로 (IMAGE.CHANGE_NAME)
+    // 포스터 이미지 경로 (IMAGE.CHANGE_NAME) - 실제 파일명 (웹 경로 포함)
     private String posterPath;
+    // ⭐ 추가: 이미지 원본 파일명 (IMAGE.ORIGIN_NAME) ⭐
+    private String originalFilename;
+    // ⭐ 추가: 이미지 번호 (IMAGE.IMG_NO) ⭐
+    private int imgNo;
+    // ⭐⭐ 새로 추가: PROM_IMAGE 테이블의 기본 키 (PROM_IMG_NO) ⭐⭐
+    private int promImgNo;
+
     // 포스터 클릭 시 이동할 URL (EVENT_APPLICATION.WEBSITE)
     private String promotionPageUrl;
     // 포스터 클릭 기능 활성화 여부 ('Y' 또는 'N')
     private String isPromoted;
 
-    // APP_ID (연관된 행사 신청 ID)
+    // APP_ID (연관된 행사 신청 ID) - EVENT_APPLICATION 테이블과 연동 시 필요
     private int appId;
 
     // ⭐ 추가: 이벤트 시작일 (EVENT 테이블에서 가져옴)
     private Date startDate;
     // ⭐ 추가: 이벤트 종료일 (EVENT 테이블에서 가져옴)
     private Date endDate;
+    
+    // userNo는 현재 Controller/Service에서 사용되지 않지만, 필요시 추가 가능
+    // private int userNo; 
 }

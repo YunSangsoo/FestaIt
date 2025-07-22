@@ -1,16 +1,16 @@
-package com.kh.festait.mypromo.model.service; 
+package com.kh.festait.mypromo.model.service;
 
 import java.util.List;
 import java.util.Map;
 
-import com.kh.festait.mypromo.model.vo.MyPromoVo; // 'Vo'로 클래스 이름 변경
+import com.kh.festait.common.model.vo.PageInfo;
+import com.kh.festait.mypromo.model.vo.MyPromoVo;
 
 public interface MyPromoService {
 
-    // 내 홍보 게시글 목록 조회 (페이징 적용)
-    List<MyPromoVo> selectMyPromoList(Map<String, Object> params);
+    // 1. 내 홍보 게시글 전체 수 조회 (검색 조건 포함)
+    int selectListCount(Map<String, Object> paramMap); // 파라미터 Map으로 변경
 
-    // 특정 사용자의 전체 홍보 게시글 수 조회
-    int selectListCount(int userNo);
-
+    // 2. 내 홍보 게시글 목록 조회 (페이징 및 검색 조건 포함)
+    List<MyPromoVo> selectMyPromoList(Map<String, Object> paramMap, PageInfo pi); // 파라미터 Map과 PageInfo 전달
 }

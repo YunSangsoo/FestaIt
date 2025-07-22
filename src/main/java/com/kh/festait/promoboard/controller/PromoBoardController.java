@@ -1,5 +1,7 @@
 package com.kh.festait.promoboard.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.festait.common.model.vo.PageInfo;
@@ -24,214 +27,309 @@ import lombok.extern.slf4j.Slf4j;
 
 // 홍보 게시판 웹 요청 처리 컨트롤러
 @Controller
-@RequiredArgsConstructor // final 필드를 사용하는 생성자를 자동으로 생성하여 의존성 주입
-@RequestMapping("/promoBoard") // 기본 요청 경로: /promoBoard
-@Slf4j // 로깅을 위한 Lombok 어노테이션
+@RequiredArgsConstructor
+@RequestMapping("/promoBoard")
+@Slf4j
 public class PromoBoardController {
 
-    private final PromoBoardService promoService; // PromoBoardService 의존성 주입
+    private final PromoBoardService promoService;
 
     // 홍보 게시글 목록 조회 및 검색 결과 조회 통합
-    // URL: /promoBoard (전체 목록) 또는 /promoBoard?searchKeyword=... (검색)
     @GetMapping
     public String selectPromotionList(
-            @RequestParam(value = "cpage", defaultValue = "1") int currentPage, // 현재 페이지 번호
-            @RequestParam Map<String, Object> paramMap, // 검색 키워드 등 모든 요청 파라미터
-            Model model) { // 뷰에 데이터 전달용 Model
+            @RequestParam(value = "cpage", defaultValue = "1") int currentPage,
+            @RequestParam Map<String, Object> paramMap,
+            Model model) {
 
         log.info("홍보 게시글 목록/검색 요청 - 현재 페이지: {}, 파라미터: {}", currentPage, paramMap);
 
         PageInfo pi;
         List<PromoBoardVo> list;
 
-        // 검색어가 존재하는지 확인 (searchKeyword 파라미터가 있고 비어있지 않은 경우)
         String searchKeyword = (String) paramMap.get("searchKeyword");
         if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
-            // 검색어가 있을 경우 검색 로직 수행
             pi = promoService.getSearchPromoPageInfo(currentPage, paramMap);
             list = promoService.searchPromo(paramMap, pi);
         } else {
-            // 검색어가 없을 경우 전체 목록 조회 로직 수행
             pi = promoService.getPromoPageInfo(currentPage);
             list = promoService.getPromoList(pi, paramMap);
         }
 
-        model.addAttribute("list", list); // 게시글 목록 추가
-        model.addAttribute("pi", pi);     // 페이지네이션 정보 추가
-        model.addAttribute("param", paramMap); // 검색 파라미터 유지 (JSP에서 검색어 입력 필드에 표시)
+        log.info("조회된 게시글 목록 (list) 크기: {}", list.size());
+        for (PromoBoardVo promo : list) {
+            log.info("게시글 정보: PROM_ID={}, PROM_TITLE={}, POSTER_PATH={}",
+                     new Object[]{promo.getPromoId(), promo.getPromoTitle(), promo.getPosterPath()});
+        }
 
-        return "promotion/promoBoard"; // 홍보 게시판 목록 뷰 반환.
+        model.addAttribute("list", list);
+        model.addAttribute("pi", pi);
+        model.addAttribute("param", paramMap);
+
+        return "promotion/promoBoard";
     }
 
     // 홍보 게시글 상세 조회
-    // URL: /promoBoard/detail?promoId={promoId}
     @GetMapping("/detail")
     public String selectPromoDetail(
-            @RequestParam("promoId") int promoId, // 조회할 게시글 ID
-            Model model, // 뷰에 데이터 전달용 Model
-            RedirectAttributes redirectAttributes) { // 리다이렉트 시 메시지 전달용
+            @RequestParam("promoId") int promoId,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         log.info("홍보 상세 페이지 요청 - 게시글 번호: {}", promoId);
 
-        // 조회수 증가
         int result = promoService.increasePromoViews(promoId);
 
         PromoBoardVo promo = null;
         if (result > 0) {
-            // 조회수 증가 성공 시 상세 정보 조회
             promo = promoService.selectPromotionDetail(promoId);
         }
 
-        // 조회 결과에 따라 뷰 반환
         if (promo != null) {
-            model.addAttribute("promo", promo); // Model에 게시글 객체 추가
+            model.addAttribute("promo", promo);
             log.info("홍보 상세 조회 성공: {}", promo);
-            return "promotion/promoDetail"; // 상세 페이지 뷰 반환.
+            return "promotion/promoDetail";
         } else {
             log.warn("홍보 게시물을 찾기 실패: 게시글 번호 {}", promoId);
-            redirectAttributes.addFlashAttribute("alertMsg", "해당 홍보 게시물을 찾을 수 없습니다."); // 메시지 추가
-            return "redirect:/promoBoard"; // 목록 페이지로 리다이렉트.
+            redirectAttributes.addFlashAttribute("alertMsg", "해당 홍보 게시물을 찾을 수 없습니다.");
+            return "redirect:/promoBoard";
         }
     }
 
     // 홍보 게시글 작성 페이지로 이동
-    // URL: /promoBoard/promoWrite (GET)
     @GetMapping("/promoWrite")
     public String enrollForm() {
-        return "promotion/promoWrite"; // 작성 폼 뷰 반환.
+        return "promotion/promoWrite";
     }
 
-    // 홍보 게시글 작성 처리
-    // URL: /promoBoard/promoWrite (POST)
+    // 홍보 게시글 작성 처리 (이미지 파일 시스템 저장 및 DB 연동)
     @PostMapping("/promoWrite")
     public String insertMyPromo(PromoBoardVo promo,
-                                HttpServletRequest request, // 세션에서 사용자 정보 가져올 때 필요 (현재 사용 안 함)
-                                RedirectAttributes redirectAttributes) {
+                                 @RequestParam(value = "promoPoster", required = false) MultipartFile promoPoster,
+                                 HttpServletRequest request,
+                                 RedirectAttributes redirectAttributes) {
 
-        // ⭐⭐⭐ 임시: eventId를 하드코딩하여 테스트합니다. ⭐⭐⭐
-        // 실제 애플리케이션에서는 사용자 입력 또는 선택 (예: 드롭다운 목록)을 통해 받아야 합니다.
-        // 사용자님이 제공한 SQL 데이터에 따르면 EVENT_ID 1, 2, 3이 존재합니다.
-        // 여기서는 테스트를 위해 1번 이벤트를 가정합니다.
-        promo.setEventId(1); // 또는 2, 3 등 유효한 EVENT_ID로 설정
+        log.info("홍보 게시글 작성 요청: {}", promo);
+        log.info("업로드된 파일: {}", promoPoster != null ? promoPoster.getOriginalFilename() : "없음");
+        log.info("업로드된 파일 크기: {} bytes", promoPoster != null ? promoPoster.getSize() : 0);
 
-        // --- Spring Security 미사용 시 사용자 인증/권한 로직 (주석 처리) ---
-        // 현재 로그인된 사용자 정보 (예: userNo)를 promo 객체에 설정해야 합니다.
-        // User loginUser = (User)request.getSession().getAttribute("loginUser"); // 세션에서 사용자 객체 가져오기
-        // if(loginUser != null) {
-        //     promo.setUserNo(loginUser.getUserNo()); // PromoBoardVo에 작성자 userNo 설정
-        // } else {
-        //     redirectAttributes.addFlashAttribute("alertMsg", "로그인 후 이용해주세요.");
-        //     return "redirect:/login"; // 로그인 페이지로 리다이렉트.
-        // }
-        // --- Spring Security 미사용 시 사용자 인증/권한 로직 끝 ---
+        String webPath = "/resources/uploadFiles/"; // 웹에서 접근할 경로
+        String realPath = request.getSession().getServletContext().getRealPath(webPath); // 서버 실제 경로
+        log.info("파일 저장될 웹 경로: {}", webPath);
+        log.info("파일 저장될 서버 실제 경로: {}", realPath);
 
-        // 홍보 게시글 DB에 삽입
-        int result = promoService.insertPromo(promo);
+        // 이미지 파일이 업로드된 경우
+        if (promoPoster != null && !promoPoster.isEmpty()) {
+            String originalFilename = promoPoster.getOriginalFilename();
+            String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String changeName = System.currentTimeMillis() + ext; // 변경된 파일명 (시간 기반)
 
-        // 결과에 따른 리다이렉트 및 메시지 설정
+            try {
+                File targetFile = new File(realPath + changeName);
+                if (!targetFile.getParentFile().exists()) { // 디렉토리가 없으면 생성
+                    log.info("파일 저장 디렉토리 생성: {}", targetFile.getParentFile().getAbsolutePath());
+                    targetFile.getParentFile().mkdirs();
+                }
+                promoPoster.transferTo(targetFile); // 파일 저장
+
+                promo.setPosterPath(webPath + changeName); // DB에 저장할 변경된 파일명 (경로 포함)
+                promo.setOriginalFilename(originalFilename); // DB에 저장할 원본 파일명
+
+                log.info("파일 업로드 성공: 서버 저장 경로: {}", targetFile.getAbsolutePath());
+                log.info("DB에 저장될 posterPath: {}", promo.getPosterPath());
+                log.info("DB에 저장될 originalFilename: {}", promo.getOriginalFilename());
+
+            } catch (IOException e) {
+                log.error("파일 업로드 실패: {}", e.getMessage(), e); // 스택 트레이스 출력
+                redirectAttributes.addFlashAttribute("alertMsg", "파일 업로드에 실패했습니다.");
+                return "common/errorPage";
+            }
+        } else {
+            promo.setPosterPath(null); // 파일이 업로드되지 않은 경우 null로 설정
+            promo.setOriginalFilename(null);
+            log.info("업로드된 파일 없음. posterPath 및 originalFilename을 null로 설정.");
+        }
+
+        // 서비스 호출 (이미지 및 URL 처리를 포함한 통합 로직)
+        int result = promoService.insertPromoWithImageAndUrl(promo);
+
         if (result > 0) {
             redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글이 성공적으로 작성되었습니다.");
-            return "redirect:/promoBoard"; // 목록 페이지로 리다이렉트.
+            return "redirect:/promoBoard";
         } else {
-            redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글 작성에 실패했습니다.");
-            return "common/errorPage"; // 오류 페이지 뷰 반환.
+            redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글 작성에 실패했습니다. 유효한 이벤트 정보가 없거나 다른 오류가 발생했습니다.");
         }
+        return "common/errorPage";
     }
 
     // 홍보 게시글 수정 페이지로 이동
-    // URL: /promoBoard/promoUpdate?promoId={promoId}
     @GetMapping("/promoUpdate")
     public String updateMyPromoForm(
-            @RequestParam(value = "promoId", required = false) Integer promoId, // promoId를 선택적(optional)으로 변경
+            @RequestParam(value = "promoId", required = false) Integer promoId,
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        // promoId가 전달되지 않았을 경우 (직접 URL 접근 등)
         if (promoId == null) {
             redirectAttributes.addFlashAttribute("alertMsg", "수정할 게시글 번호가 지정되지 않았습니다.");
-            return "redirect:/promoBoard"; // 목록 페이지로 리다이렉트.
+            return "redirect:/promoBoard";
         }
 
-        // --- Spring Security 미사용 시 사용자 권한 확인 로직 (주석 처리) ---
-        // 게시글 작성자와 현재 로그인한 사용자가 일치하는지 확인하는 로직이 필요할 수 있습니다.
-        // User loginUser = (User)request.getSession().getAttribute("loginUser");
-        // PromoBoardVo originalPromo = promoService.selectPromotionDetail(promoId);
-        // if (originalPromo == null || (loginUser != null && originalPromo.getUserNo() != loginUser.getUserNo())) {
-        //     redirectAttributes.addFlashAttribute("alertMsg", "게시글 수정 권한이 없거나 존재하지 않는 게시글입니다.");
-        //     return "redirect:/promoBoard";
-        // }
-        // --- Spring Security 미사용 시 사용자 권한 확인 로직 끝 ---
-
-        // 게시글 상세 정보 조회
         PromoBoardVo promo = promoService.selectPromotionDetail(promoId);
 
-        // 조회 결과에 따른 뷰 반환
         if (promo == null) {
             redirectAttributes.addFlashAttribute("alertMsg", "게시글 수정 권한이 없거나 존재하지 않는 게시글입니다.");
-            return "redirect:/promoBoard"; // 목록 페이지로 리다이렉트.
+            return "redirect:/promoBoard";
         }
 
-        model.addAttribute("promo", promo); // Model에 게시글 객체 추가
-        return "promotion/promoUpdate"; // 수정 폼 뷰 반환.
+        model.addAttribute("promo", promo);
+        return "promotion/promoUpdate";
     }
 
-    // 홍보 게시글 수정 처리
-    // URL: /promoBoard/update
+    // 홍보 게시글 수정 처리 (이미지 파일 시스템 저장/삭제 및 DB 연동)
     @PostMapping("/update")
     public String updateMyPromo(PromoBoardVo promo,
-                                HttpServletRequest request, // 세션에서 사용자 정보 가져올 때 필요 (현재 사용 안 함)
-                                RedirectAttributes redirectAttributes) {
+                                 @RequestParam(value = "promoPoster", required = false) MultipartFile promoPoster,
+                                 @RequestParam(value = "originalPromoPosterPath", required = false) String originalPromoPosterPath, // 기존 파일 경로 (웹 경로)
+                                 @RequestParam(value = "deleteOriginalImage", required = false) String deleteOriginalImage, // 기존 이미지 삭제 체크박스
+                                 HttpServletRequest request,
+                                 RedirectAttributes redirectAttributes) {
 
-        // --- Spring Security 미사용 시 사용자 권한 확인 로직 (주석 처리) ---
-        // 게시글 작성자와 현재 로그인한 사용자가 일치하는지 확인하는 로직이 필요할 수 있습니다.
-        // User loginUser = (User)request.getSession().getAttribute("loginUser");
-        // if(loginUser == null || promo.getUserNo() != loginUser.getUserNo()){ // promo 객체에 userNo가 설정되어 있다고 가정
-        //     redirectAttributes.addFlashAttribute("alertMsg", "게시글 수정 권한이 없습니다.");
-        //     return "redirect:/promoBoard/detail?promoId=" + promo.getPromoId();
-        // }
-        // --- Spring Security 미사용 시 사용자 권한 확인 로직 끝 ---
+        log.info("홍보 게시글 수정 요청: {}", promo);
+        log.info("업로드된 새 파일: {}", promoPoster != null ? promoPoster.getOriginalFilename() : "없음");
+        log.info("업로드된 새 파일 크기: {} bytes", promoPoster != null ? promoPoster.getSize() : 0);
+        log.info("기존 포스터 경로 (originalPromoPosterPath): {}", originalPromoPosterPath);
+        log.info("기존 이미지 삭제 체크박스 (deleteOriginalImage): {}", deleteOriginalImage);
 
-        // 홍보 게시글 DB 업데이트
-        int result = promoService.updatePromo(promo);
+        String webPath = "/resources/uploadFiles/";
+        String realPath = request.getSession().getServletContext().getRealPath(webPath);
+        log.info("파일 저장될 웹 경로: {}", webPath);
+        log.info("파일 저장될 서버 실제 경로: {}", realPath);
 
-        // 결과에 따른 리다이렉트 및 메시지 설정
+        String updatedPosterPath = originalPromoPosterPath; // 기본적으로 기존 경로 유지
+        String updatedOriginalFilename = promo.getOriginalFilename(); // 기존 VO의 원본 파일명 유지
+
+        // 1. 새 파일이 업로드된 경우
+        if (promoPoster != null && !promoPoster.isEmpty()) {
+            log.info("새 파일이 업로드됨: {}", promoPoster.getOriginalFilename());
+            // 기존 파일이 있다면 서버에서 삭제
+            if (originalPromoPosterPath != null && !originalPromoPosterPath.isEmpty()) {
+                File deleteFile = new File(request.getSession().getServletContext().getRealPath(originalPromoPosterPath));
+                if (deleteFile.exists()) {
+                    if (deleteFile.delete()) {
+                        log.info("기존 파일 삭제 성공: {}", originalPromoPosterPath);
+                    } else {
+                        log.warn("기존 파일 삭제 실패: {}", originalPromoPosterPath);
+                    }
+                }
+            }
+
+            // 새 파일 저장
+            String originalFilename = promoPoster.getOriginalFilename();
+            String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String changeName = System.currentTimeMillis() + ext;
+            try {
+                File targetFile = new File(realPath + changeName);
+                if (!targetFile.getParentFile().exists()) {
+                    log.info("파일 저장 디렉토리 생성 (수정): {}", targetFile.getParentFile().getAbsolutePath());
+                    targetFile.getParentFile().mkdirs();
+                }
+                promoPoster.transferTo(targetFile);
+                updatedPosterPath = webPath + changeName; // 업데이트될 경로
+                updatedOriginalFilename = originalFilename; // 새 원본 파일명 설정
+                log.info("새 파일 업로드 및 경로 설정 성공 (수정): 서버 저장 경로: {}", targetFile.getAbsolutePath());
+                log.info("DB에 저장될 posterPath (수정): {}", updatedPosterPath);
+                log.info("DB에 저장될 originalFilename (수정): {}", updatedOriginalFilename);
+            } catch (IOException e) {
+                log.error("파일 업로드 실패 (수정): {}", e.getMessage(), e); // 스택 트레이스 출력
+                redirectAttributes.addFlashAttribute("alertMsg", "파일 업로드에 실패했습니다.");
+                return "common/errorPage";
+            }
+        }
+        // 2. 새 파일은 없고 기존 이미지 삭제 체크박스가 체크된 경우
+        else if ("true".equals(deleteOriginalImage)) {
+            log.info("기존 이미지 삭제 체크박스 선택됨.");
+            // 기존 파일이 있다면 서버에서 삭제
+            if (originalPromoPosterPath != null && !originalPromoPosterPath.isEmpty()) {
+                File deleteFile = new File(request.getSession().getServletContext().getRealPath(originalPromoPosterPath));
+                if (deleteFile.exists()) {
+                    if (deleteFile.delete()) {
+                        log.info("기존 파일 삭제 성공 (체크박스): {}", originalPromoPosterPath);
+                    } else {
+                        log.warn("기존 파일 삭제 실패 (체크박스): {}", originalPromoPosterPath);
+                    }
+                }
+            }
+            updatedPosterPath = null; // DB에서 이미지 경로를 null로 설정
+            updatedOriginalFilename = null; // 원본 파일명도 null로 설정
+            log.info("posterPath 및 originalFilename을 null로 설정.");
+        }
+        // 3. 새 파일도 없고, 기존 이미지 삭제 체크박스도 체크되지 않은 경우 (기존 이미지 유지)
+        else {
+            log.info("새 파일 없음, 삭제 체크 안 됨. 기존 posterPath 유지: {}", updatedPosterPath);
+        }
+
+        promo.setPosterPath(updatedPosterPath); // 최종적으로 업데이트될 posterPath 설정
+        promo.setOriginalFilename(updatedOriginalFilename); // 최종적으로 업데이트될 originalFilename 설정
+
+        // 서비스 호출 (이미지 및 URL 처리를 포함한 통합 로직)
+        int result = promoService.updatePromoWithImageAndUrl(promo);
+
         if (result > 0) {
             redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글이 성공적으로 수정되었습니다.");
-            return "redirect:/promoBoard/detail?promoId=" + promo.getPromoId(); // 상세 페이지로 리다이렉트.
+            return "redirect:/promoBoard/detail?promoId=" + promo.getPromoId();
         } else {
             redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글 수정에 실패했습니다.");
-            return "common/errorPage"; // 오류 페이지 뷰 반환.
+            return "common/errorPage";
         }
     }
 
-    // 홍보 게시글 삭제 처리
-    // URL: /promoBoard/delete
+    // 홍보 게시글 삭제 처리 (이미지 파일 시스템 삭제 및 DB 연동)
     @PostMapping("/delete")
-    @ResponseBody // 응답 본문에 데이터를 직접 포함 (Ajax 요청용)
-    public Map<String, String> deleteMyPromo(@RequestParam("promoId") int promoId) { // 삭제할 게시글 ID
+    @ResponseBody
+    public Map<String, String> deleteMyPromo(@RequestParam("promoId") int promoId, HttpServletRequest request) {
 
-        Map<String, String> response = new HashMap<>(); // 응답 데이터 맵
-        Map<String, Object> params = new HashMap<>(); // 서비스/DAO에 전달할 파라미터 맵
+        Map<String, String> response = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("promoId", promoId);
 
-        // --- Spring Security 미사용 시 사용자 권한 확인 로직 (주석 처리) ---
-        // 게시글 작성자와 현재 로그인한 사용자가 일치하는지 확인하는 로직이 필요할 수 있습니다.
-        // User loginUser = (User)request.getSession().getAttribute("loginUser"); // HttpServletRequest 필요
-        // if(loginUser == null || !promoService.isWriter(promoId, loginUser.getUserNo())){ // isWriter 메서드 가정
-        //     response.put("msg", "unauthorized"); // 권한 없음 메시지
-        //     return response;
-        // }
-        // --- Spring Security 미사용 시 사용자 권한 확인 로직 끝 ---
+        // 삭제 전 기존 이미지 경로 및 이미지 번호 조회 (실제 파일 삭제를 위해 필요)
+        PromoBoardVo promoToDelete = promoService.selectPromotionDetail(promoId);
+        String posterPathToDelete = null;
+        int imgNoToDelete = 0; // 이미지 번호
 
-        // 홍보 게시글 DB에서 삭제
-        int result = promoService.deletePromo(params);
-
-        // 결과에 따른 응답 메시지 설정
-        if (result > 0) {
-            response.put("msg", "success"); // 성공 메시지
+        if (promoToDelete != null) {
+            posterPathToDelete = promoToDelete.getPosterPath();
+            imgNoToDelete = promoToDelete.getImgNo(); // 이미지 번호 가져오기
+            // ⭐⭐ 로그 오류 수정 부분 ⭐⭐
+            log.info("삭제할 게시글의 기존 이미지 정보 - promoId: {}, posterPath: {}, imgNo: {}",
+                     new Object[]{promoId, posterPathToDelete, imgNoToDelete});
+            // ⭐⭐ 로그 오류 수정 끝 ⭐⭐
         } else {
-            response.put("msg", "fail"); // 실패 메시지
+            log.warn("삭제할 게시글 정보를 찾을 수 없습니다: promoId {}", promoId);
         }
-        return response; // 응답 맵 반환.
+
+        // 서비스 호출 (이미지 및 URL 처리를 포함한 통합 로직)
+        int result = promoService.deletePromoWithImageAndUrl(promoId, imgNoToDelete); // 이미지 번호 함께 전달
+
+        if (result > 0) {
+            // DB 삭제 성공 시, 서버에서 실제 파일 삭제
+            if (posterPathToDelete != null && !posterPathToDelete.isEmpty()) {
+                File deleteFile = new File(request.getSession().getServletContext().getRealPath(posterPathToDelete));
+                if (deleteFile.exists()) {
+                    if (deleteFile.delete()) {
+                        log.info("게시글 삭제와 함께 파일 삭제 성공: {}", posterPathToDelete);
+                    } else {
+                        log.warn("게시글 삭제 시 파일 삭제 실패: {}", posterPathToDelete);
+                    }
+                } else {
+                    log.info("삭제할 파일이 서버에 존재하지 않습니다: {}", posterPathToDelete);
+                }
+            } else {
+                log.info("삭제할 이미지 경로가 없으므로 파일 시스템 삭제 건너뜀.");
+            }
+            response.put("msg", "success");
+        } else {
+            response.put("msg", "fail");
+        }
+        return response;
     }
 }
