@@ -34,19 +34,33 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 	<main class="container">
 	
-        <form:form modelAttribute="eventApplication" action="${pageContext.request.contextPath}/app/appForm" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+        <form:form modelAttribute="eventApplication" action="${pageContext.request.contextPath}/myEventApp/appSave" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+        <form:hidden path="appId"/>
+        <input type="hidden" name="existingImgNo" id="existingImgNo" 
+               value="${empty eventApplication.posterImage.imgNo ? 0 : eventApplication.posterImage.imgNo }" />
+        <c:if test="${eventApplication.statCode == 'S'}">  <%-- 조건 변경: 'S'와 같을 때 --%>
+        	<fieldset disabled>
+    	</c:if>
+        
 		<div class="row p-md-5">
 		
 		<div class="col-4">
 			
     		<div class="container">
 			
+					<c:if test="${not empty eventApplication.posterImage.imgNo && eventApplication.posterImage.imgNo != 0}">
+			        <button type="button" class="btn btn-outline-secondary btn-lg px-4 delete-image-btn mb-2" 
+			                  style="z-index: 10;" data-img-no="${eventApplication.posterImage.imgNo}">이미지 비우기</button>
+			        </c:if>
 					
 			        <div class="w-100 border border-1 d-flex justify-content-center align-items-center bg-gray-200 text-center overflow-hidden position-relative" id="posterArea">
-			            <span id="posterPlaceholder">포스터</span>
-			            <img id="posterImage" class="w-100 h-100 d-none object-fit-contain img-poster" src="#" alt="업로드된 포스터 이미지">
+			            <span id="posterPlaceholder" class="${not empty eventApplication.posterImage.changeName ? 'd-none' : ''}">포스터</span>
+			            
+			            <img id="posterImage" class="w-100 h-100 object-fit-contain img-poster ${empty eventApplication.posterImage.changeName ? 'd-none' : ''}"
+			            src="${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}"
+			            alt="업로드된 포스터 이미지">
 			        </div>
-			        <input type="file" class="form-control input-poster" accept="images/*" id="inputPoster"/>
+			        <input type="file" class="form-control input-poster" accept="images/*" id="inputPoster" name="inputPoster"/>
 			        
 					
 					<div class="homepage-link-section mt-4">
@@ -65,8 +79,15 @@
           <div class="row g-3">
           	
 			<div class="col-md-3">
+			
               <form:select path="eventCode" class="form-select text-center" id="category" required="required">
-                <option value="" disabled selected>행사 종류</option>
+                <option value="" disabled
+	                <c:choose>
+			            <c:when test="${empty eventApplication.eventCode}">
+			                selected
+			            </c:when>
+			        </c:choose>
+                >행사 종류</option>
                 <option value="L">지역축제</option>
                 <option value="F">박람회</option>
                 <option value="E">전시회</option>
@@ -120,10 +141,10 @@
           		<p class="form-label col-9"> 행사 장소 </p>
           		<button type="button" onclick="findAddress()" class="col-3 fs-6 btn-sm" id="findAddressBtn">검색</button>
           		<div class="col-5 my-1">
-          			<form:input type="text" path="postcode" class="form-control" id="postCode" placeholder="우편 번호" value="" required="required"/>
+          			<form:input type="text" path="postCode" class="form-control" readonly="true" id="postcode" placeholder="우편 번호" value="" required="required"/>
           		</div>
           		<div class="col-12 my-1">
-          			<form:input type="text" path="location" class="form-control" id="address" placeholder="주소" value="" required="required"/>
+          			<form:input type="text" path="location" class="form-control" readonly="true" id="address" placeholder="주소" value="" required="required"/>
           		</div>
           		<div class="col-12 my-1">
           			<form:input type="text" path="locationDetail" class="form-control" id="adressDetail" placeholder="상세 주소" value=""/>
@@ -173,6 +194,8 @@
 		  </div>
           <hr class="my-3 mx-3">
           
+          
+          <form:hidden path="appManager.appId"/>
 		  <div class="col-5">
 		  	<div class="input-group">
 		  		<span class="input-group-text">담당자명</span>
@@ -203,14 +226,22 @@
 		  </div>
           <hr class="my-3 mx-3">
 
-</div>
+			</div>
 
         </div>
         
 	</div>
-		<div class="d-grid col-6 mx-auto">
-	          <button class="w-10 btn btn-primary btn-lg" type="submit">행사 신청</button> 
-	    </div>
+			<div class="row">
+				<div class="d-grid col-3 mx-auto">
+			          <button class="w-10 btn btn-primary btn-lg" name="action" type="submit" formaction="${pageContext.request.contextPath}/myEventApp/appSave" value="save" formnovalidate="formnovalidate">임시 저장</button> 
+			    </div>
+				<div class="d-grid col-3 mx-auto">
+			          <button class="w-10 btn btn-primary btn-lg" name="action" type="submit" value="submit">행사 신청</button> 
+			    </div>
+		    </div>
+	    <c:if test="${eventApplication.statCode == 'S'}">  <%-- 조건 변경: 'S'와 같을 때 --%>
+	    	</fieldset>
+	    </c:if>
 	</form:form>
 	</main>
 	
@@ -218,8 +249,15 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	
+	<script>
+		
+    // 이 변수들은 JSP 템플릿 엔진에 의해 렌더링될 때 값이 채워집니다.
+    	const initialPosterSrc = "${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}";
+    	const initialExistingImgNo = "${empty eventApplication.posterImage.imgNo ? 0 : eventApplication.posterImage.imgNo }";
+	</script>
 	<script src="<%= request.getContextPath() %>/resources/js/app/eventApplicationForm.js"></script>
 </body>
 </html>

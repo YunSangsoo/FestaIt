@@ -7,6 +7,8 @@ import com.kh.festait.common.model.vo.Image;
 
 public interface AppService {
 
-	int insertApplication(EventApplication eventApplication, List<Image> imgList);
+	EventApplication getEvAppById(int appId);
+
+	int saveOrUpdateApplication(EventApplication eventApplication);
 
 }
