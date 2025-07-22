@@ -1,22 +1,64 @@
 
-(() => {
-  'use strict'
+(function () {
+  'use strict';
+
+  // Bootstrap 유효성 검사 스타일을 적용할 모든 폼 가져오기
+  var forms = document.querySelectorAll('.needs-validation');
+  
+  
+  // 각 폼을 순회하며 제출 이벤트 리스너 추가
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        // 제출을 발생시킨 버튼을 찾습니다. (HTML5 'submit' 이벤트의 submitter 속성 활용)
+        const submitter = event.submitter;
+        
+        console.log(submitter);
+        
+        // 1. 만약 제출된 버튼에 'formnovalidate' 속성이 있다면
+        if (submitter && submitter.hasAttribute('formnovalidate')) {
+          // 브라우저의 기본 동작(폼 제출)을 막지 않고, Bootstrap의 유효성 검사도 건너뜝니다.
+          // 이렇게 하면 HTML5 formnovalidate가 의도한 대로 작동합니다.
+          console.log("Formnovalidate 버튼 클릭됨. Bootstrap 유효성 검사를 건너뜝니다.");
+          return; // 이벤트 리스너에서 빠져나가 기본 폼 제출을 허용
+        }
+
+        // 2. 'formnovalidate' 속성이 없는 일반 제출 버튼인 경우 (예: '최종 제출')
+        //    Bootstrap의 유효성 검사 로직을 수행합니다.
+        if (!form.checkValidity()) {
+          event.preventDefault(); // 기본 폼 제출 동작을 막음
+          event.stopPropagation(); // 이벤트 버블링 중지
+        } else {
+          // 유효성 검사 통과 시 추가적인 동작이 필요하다면 여기에 추가
+        }
+
+        // 유효성 검사 결과를 시각적으로 보여주기 위한 클래스 추가
+        form.classList.add('was-validated');
+      }, false);
+    });
+})();
+
+
+
+
+
+//(() => {
+//  'use strict'
 
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  const forms = document.querySelectorAll('.needs-validation')
-
+  //const forms = document.querySelectorAll('.needs-validation')
   // Loop over them and prevent submission
-  Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-      if (!form.checkValidity()) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
+//  Array.from(forms).forEach(form => {
+//    form.addEventListener('submit', event => {
+//      if (!form.checkValidity()) {
+//        event.preventDefault()
+//        event.stopPropagation()
+//      }
 
-      form.classList.add('was-validated')
-    }, false)
-  })
-})()
+//      form.classList.add('was-validated')
+//    }, false);
+//  })
+//})();
 
 
 
@@ -51,6 +93,8 @@ $('#endDate').datepicker({
 });
 
 const posterInput = document.querySelector('.input-poster');
+const existingImgNoInput = document.getElementById('existingImgNo'); // 추가: hidden input
+const deleteImageBtn = document.querySelector('.delete-image-btn'); // 삭제 버튼
 
 posterInput.addEventListener('change', function(event) {
 	const file = event.target.files[0];
@@ -62,16 +106,62 @@ posterInput.addEventListener('change', function(event) {
 			const reader = new FileReader();
 			reader.onload = function(e) {
 				posterImg.src = e.target.result;
-				posterImg.style.display = 'block'; // 이미지 보이기
-				posterPlaceholder.style.display = 'none'; // "포스터" 텍스트 숨기기
+	            posterImg.classList.remove('d-none'); // 이미지를 보이게 함
+	            posterPlaceholder.classList.add('d-none'); // 플레이스홀더 숨김
+	            existingImgNoInput.value = 0; // 새 파일 업로드 시 existingImgNo를 0으로 설정
 			};
 			reader.readAsDataURL(file);
 	} else {
-		uploadedImage.src = '#';
-		uploadedImage.style.display = 'none'; // 이미지 숨기기
-		posterPlaceholder.style.display = 'block'; // "포스터" 텍스트 다시 보이기
+		// 파일 선택 취소 시 (파일을 선택했다가 취소 버튼 누른 경우)
+        // 기존 이미지가 있었으면 다시 표시하고, 없었으면 플레이스홀더 표시
+        if (existingImgNoInput.value !== '0' && existingImgNoInput.value !== '-1' && existingImgNoInput.value !== '') { 
+            // 원래 있던 이미지라면 이 시점에서는 원래 이미지가 없으므로 서버로부터 다시 받아와야 정확하지만,
+            // 간단하게는 기존 이미지 정보(src)가 있었다면 그것을 유지하도록 할 수 있습니다.
+            // 여기서는 페이지를 다시 로드하거나, 원래 이미지 URL을 저장해두는 방식이 더 확실합니다.
+            // 다만, 사용자가 파일을 선택하다가 취소했을 때, 이전 상태를 복원하는 것은 JS만으로는 한계가 있습니다.
+            // 새로고침을 유도하거나, '취소' 버튼을 통해 폼을 초기화하는 기능을 제공하는 것이 일반적입니다.
+
+            // 현재는 파일이 없으므로 플레이스홀더를 보여주고 이미지 숨기기
+            posterImage.src = 'initialPosterSrc';
+            posterImage.classList.add('d-none');
+            posterPlaceholder.classList.remove('d-none');
+            existingImgNoInput.value = initialExistingImgNo; // 기존 이미지 번호 복원
+            // existingImgNoInput 값은 그대로 유지
+            if (deleteImageBtn) deleteImageBtn.classList.remove('d-none'); // 삭제 버튼 다시 보여주기
+            
+        } else { // 원래 이미지가 없던 상태에서 취소
+            posterImage.src = '#';
+            posterImage.classList.add('d-none');
+            posterPlaceholder.classList.remove('d-none');
+            existingImgNoInput.value = 0; // 0으로 유지
+        }
+	
+	
+		//uploadedImage.src = '#';
+		//uploadedImage.style.display = 'none'; // 이미지 숨기기
+		//posterPlaceholder.style.display = 'block'; // "포스터" 텍스트 다시 보이기
 	}
 });
+
+if (deleteImageBtn) {
+    deleteImageBtn.addEventListener('click', function() {
+        if (confirm('정말로 이 이미지를 삭제하시겠습니까?')) {
+            // 화면에서 이미지 제거 및 플레이스홀더 표시
+            posterImage.src = '#';
+            posterImage.classList.add('d-none');
+            posterPlaceholder.classList.remove('d-none');
+            this.classList.add('d-none'); // 삭제 버튼 숨기기
+
+            // input type="file" 초기화 (선택된 파일 없앰)
+            posterInput.value = ''; 
+
+            // hidden input[name="existingImgNo"]의 값을 -1로 설정하여 서버에 이미지 삭제를 알림
+            existingImgNoInput.value = -1; 
+        }
+    });
+}
+
+
 
 function findAddress(){
 new daum.Postcode({
@@ -98,7 +188,7 @@ new daum.Postcode({
 		//}
 
 		// 우편번호와 주소 정보를 해당 필드에 넣는다.
-		document.getElementById('postCode').value = data.zonecode;
+		document.getElementById('postcode').value = data.zonecode;
 		document.getElementById("address").value = roadAddr;
 		//document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
 		
