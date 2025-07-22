@@ -7,15 +7,17 @@
 <html>
 
 <head>
-<title>행사 - List</title>
+<title>행사 - Calendar</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 <c:set var="contextPath" value="${pageContext.request.contextPath}"
 	scope="application" />
-<link href="${contextPath }/resources/css/eventboard.css"
+<link href="${contextPath}/resources/css/eventboard.css"
 	rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="${contextPath}/resources/js/event/calendar.js"></script>
+
 
 
 <style>
@@ -164,6 +166,10 @@ thead.lavender-header th {
 		</div>
 
 
+		<div id="calendar">ㅁㄴㅇㄹ</div>
+
+
+
 		<div class="event-section">
 			<div class="events-grid">
 
@@ -267,54 +273,8 @@ thead.lavender-header th {
 			</div>
 		</div>
 
+		
 
-		<!-- 페이징 영역 -->
-		<nav aria-label="Page navigation">
-			<ul class="pagination justify-content-center">
-
-				<!-- 이전 버튼 -->
-				<c:choose>
-					<c:when test="${currentPage > 1}">
-						<li class="page-item"><a class="page-link"
-							href="${pageContext.request.contextPath}/noticeBoard/list?page=${currentPage - 1}">이전</a>
-						</li>
-					</c:when>
-					<c:otherwise>
-						<li class="page-item disabled"><span class="page-link">이전</span>
-						</li>
-					</c:otherwise>
-				</c:choose>
-
-				<!-- 페이지 번호 -->
-				<c:forEach var="i" begin="${startPage}" end="${endPage}">
-					<c:choose>
-						<c:when test="${i == currentPage}">
-							<li class="page-item active"><span class="page-link">${i}</span>
-							</li>
-						</c:when>
-						<c:otherwise>
-							<li class="page-item"><a class="page-link"
-								href="${pageContext.request.contextPath}/noticeBoard/list?page=${i}">${i}</a>
-							</li>
-						</c:otherwise>
-					</c:choose>
-				</c:forEach>
-
-				<!-- 다음 버튼 -->
-				<c:choose>
-					<c:when test="${currentPage < totalPage}">
-						<li class="page-item"><a class="page-link"
-							href="${pageContext.request.contextPath}/noticeBoard/list?page=${currentPage + 1}">다음</a>
-						</li>
-					</c:when>
-					<c:otherwise>
-						<li class="page-item disabled"><span class="page-link">다음</span>
-						</li>
-					</c:otherwise>
-				</c:choose>
-
-			</ul>
-		</nav>
 	</div>
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
@@ -323,14 +283,66 @@ thead.lavender-header th {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 	<script>
-	$(".event-card").on("mouseenter", function() {
-	    $(this).find(".EventItemHover-img").fadeIn(100);
-	    $(this).find(".event-info").fadeOut(300);
-	  })
-	  .on("mouseleave", function() {
-	    $(this).find(".EventItemHover-img").fadeOut(100);
-	    $(this).find(".event-info").fadeIn(300);
-	  });
+		document.addEventListener('DOMContentLoaded', function() {
+			var calendarEl = document.getElementById('calendar');
+
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				headerToolbar : {
+					left : 'prevYear,prev,next,nextYear today',
+					center : 'title',
+					right : 'dayGridMonth,dayGridWeek,dayGridDay'
+				},
+				initialDate : '2023-01-12',
+				navLinks : true, // can click day/week names to navigate views
+				editable : true,
+				dayMaxEvents : true, // allow "more" link when too many events
+				events : [ {
+					title : 'All Day Event',
+					start : '2023-01-01'
+				}, {
+					title : 'Long Event',
+					start : '2023-01-07',
+					end : '2023-01-10'
+				}, {
+					groupId : 999,
+					title : 'Repeating Event',
+					start : '2023-01-09T16:00:00'
+				}, {
+					groupId : 999,
+					title : 'Repeating Event',
+					start : '2023-01-16T16:00:00'
+				}, {
+					title : 'Conference',
+					start : '2023-01-11',
+					end : '2023-01-13'
+				}, {
+					title : 'Meeting',
+					start : '2023-01-12T10:30:00',
+					end : '2023-01-12T12:30:00'
+				}, {
+					title : 'Lunch',
+					start : '2023-01-12T12:00:00'
+				}, {
+					title : 'Meeting',
+					start : '2023-01-12T14:30:00'
+				}, {
+					title : 'Happy Hour',
+					start : '2023-01-12T17:30:00'
+				}, {
+					title : 'Dinner',
+					start : '2023-01-12T20:00:00'
+				}, {
+					title : 'Birthday Party',
+					start : '2023-01-13T07:00:00'
+				}, {
+					title : 'Click for Google',
+					url : 'http://google.com/',
+					start : '2023-01-28'
+				} ]
+			});
+
+			calendar.render();
+		});
 	</script>
 </body>
 

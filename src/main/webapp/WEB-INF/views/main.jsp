@@ -12,7 +12,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"
 	scope="application" />
 <link href="${contextPath }/resources/css/mainpage.css" rel="stylesheet">
-
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 
 <body>
@@ -40,25 +40,22 @@
 
 					<div class="carousel-inner" id="banner">
 						<div class="carousel-item active">
-							<svg aria-hidden="true" class="bd-placeholder-img "
-								preserveAspectRatio="xMidYMid slice"
-								xmlns="http://www.w3.org/2000/svg">
-						<rect width="100%" height="100%" fill="black"></rect></svg>
+							<img
+								src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
+								class="Banner-img" alt="">
 						</div>
 
 						<div class="carousel-item">
-							<svg aria-hidden="true" class="bd-placeholder-img "
-								preserveAspectRatio="xMidYMid slice"
-								xmlns="http://www.w3.org/2000/svg">
-						<rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+							<img
+								src="https://www.coex.co.kr/wp-content/uploads/2025/07/토스.jpg"
+								class="Banner-img" alt="">
 							<!-- 이게 기준 컬러 -->
 						</div>
 
 						<div class="carousel-item">
-							<svg aria-hidden="true" class="bd-placeholder-img "
-								preserveAspectRatio="xMidYMid slice"
-								xmlns="http://www.w3.org/2000/svg">
-						<rect width="100%" height="100%" fill="yellow"></rect></svg>
+							<img
+								src="https://www.coex.co.kr/wp-content/uploads/2025/07/홈페이지-일정게재-이미지.jpg"
+								class="Banner-img" alt="">
 						</div>
 					</div>
 
@@ -113,55 +110,77 @@
 
 				<div class="section-title">진행 중인 행사</div>
 				<div class="events-grid">
-					<!-- 카드 6개 -->
-					<!-- 					<div class="event-card"></div>
-					<div class="event-card"></div>
-					<div class="event-card"></div>
-					<div class="event-card"></div>
-					<div class="event-card"></div>
-					<div class="event-card"></div> -->
-
-					<div class="event-card">
-						<div class="tag">진행중</div>
-						<div class="event-name">여름 해변축제</div>
-						<div>2025.07.01 ~ 07.20</div>
-						<div>지역: 부산 해운대</div>
-						<div>주최: 부산시</div>
+					<div class="event-card" id="event-card">
+						<div class="event-info" id="event-info">
+							<div class="tag">진행중</div>
+							<div class="event-name">여름 해변축제</div>
+							<div>2025.07.01 ~ 07.20</div>
+							<div>지역: 부산 해운대</div>
+							<div>주최: 부산시</div>
+						</div>
+						<img
+							src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
+							class="EventItemHover-img" alt="">
 					</div>
-					<div class="event-card">
-						<div class="tag">진행중</div>
-						<div class="event-name">전통문화 박람회</div>
-						<div>2025.07.10 ~ 07.30</div>
-						<div>지역: 전주</div>
-						<div>주최: 문화재청</div>
+					<div class="event-card" id="event-card">
+						<div class="event-info" id="event-info">
+							<div class="tag">진행중</div>
+							<div class="event-name">전통문화 박람회</div>
+							<div>2025.07.10 ~ 07.30</div>
+							<div>지역: 전주</div>
+							<div>주최: 문화재청</div>
+						</div>
+						<img
+							src="https://www.coex.co.kr/wp-content/uploads/2025/07/토스.jpg"
+							class="EventItemHover-img" alt="">
 					</div>
-					<div class="event-card">
-						<div class="tag">진행중</div>
-						<div class="event-name">푸드 페스티벌</div>
-						<div>2025.07.12 ~ 07.18</div>
-						<div>지역: 서울광장</div>
-						<div>주최: 서울시</div>
+					<div class="event-card" id="event-card">
+						<div class="event-info" id="event-info">
+							<div class="tag">진행중</div>
+							<div class="event-name">푸드 페스티벌</div>
+							<div>2025.07.12 ~ 07.18</div>
+							<div>지역: 서울광장</div>
+							<div>주최: 서울시</div>
+						</div>
+						<img
+							src="https://www.coex.co.kr/wp-content/uploads/2025/07/홈페이지-일정게재-이미지.jpg"
+							class="EventItemHover-img" alt="">
 					</div>
-					<div class="event-card">
-						<div class="tag">진행중</div>
-						<div class="event-name">과학체험전</div>
-						<div>2025.07.14 ~ 07.22</div>
-						<div>지역: 대전</div>
-						<div>주최: 국립과학관</div>
+					<div class="event-card" id="event-card">
+						<div class="event-info" id="event-info">
+							<div class="tag">진행중</div>
+							<div class="event-name">과학체험전</div>
+							<div>2025.07.14 ~ 07.22</div>
+							<div>지역: 대전</div>
+							<div>주최: 국립과학관</div>
+						</div>
+						<img
+							src="https://www.coex.co.kr/wp-content/uploads/2025/04/웹배너-수시.png"
+							class="EventItemHover-img" alt="">
 					</div>
-					<div class="event-card">
-						<div class="tag">진행중</div>
-						<div class="event-name">밤하늘 별빛축제</div>
-						<div>2025.07.01 ~ 07.31</div>
-						<div>지역: 강원도</div>
-						<div>주최: 환경부</div>
+					<div class="event-card" id="event-card">
+						<div class="event-info" id="event-info">
+							<div class="tag">진행중</div>
+							<div class="event-name">밤하늘 별빛축제</div>
+							<div>2025.07.01 ~ 07.31</div>
+							<div>지역: 강원도</div>
+							<div>주최: 환경부</div>
+						</div>
+						<img
+							src="https://www.coex.co.kr/wp-content/uploads/2024/08/V.19배너_수정.png"
+							class="EventItemHover-img" alt="">
 					</div>
-					<div class="event-card">
-						<div class="tag">진행중</div>
-						<div class="event-name">K-POP 콘서트</div>
-						<div>2025.07.15 ~ 07.17</div>
-						<div>지역: 인천</div>
-						<div>주최: 방송국</div>
+					<div class="event-card" id="event-card">
+						<div class="event-info" id="event-info">
+							<div class="tag">진행중</div>
+							<div class="event-name">K-POP 콘서트</div>
+							<div>2025.07.15 ~ 07.17</div>
+							<div>지역: 인천</div>
+							<div>주최: 방송국</div>
+						</div>
+						<img
+							src="https://www.coex.co.kr/wp-content/uploads/2024/12/coex.png"
+							class="EventItemHover-img" alt="">
 					</div>
 
 				</div>
@@ -461,6 +480,25 @@
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
 		crossorigin="anonymous"></script>
+
+	<script>
+	$(".event-card")
+		.on("mouseenter", function() {
+			$(this).find(".EventItemHover-img").fadeOut(100);
+			$(this).find(".event-info").fadeIn(300);
+		})
+		.on("mouseleave", function() {
+			$(this).find(".EventItemHover-img").fadeIn(100);
+			$(this).find(".event-info").fadeOut(300);
+		})
+		.on("mousedown", function() {
+			$(this).css("background", "#f7f7f7");
+		})
+		.on("mouseup", function() {
+			$(this).css("background", "white");
+		});
+	</script>
+
 
 	<script>
 	function movePage(bno) {
