@@ -9,13 +9,16 @@ import javax.servlet.ServletContext;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Utils {
 
 	//파일 저장 함수
 	//파일을 저장하면서, 파일명을 수정하고 수정된 파일명을 반환
 	public static String saveFile(MultipartFile upfile, ServletContext application, String boardCode) {
 		// 첨부파일을 저장할 저장경로 획득
-		String webPath = "/resources/images/board/" + boardCode + "/";
+		String webPath = "/resources/img/" + boardCode + "/";
 		//getRealPath(경로)
 		// - 실제 서버의 파일 시스템 경로를 절대경로로 반환하는 메서드
 		// ex)C:/springWorkspace/spring-project/...
@@ -31,7 +34,11 @@ public class Utils {
 		String originName = upfile.getOriginalFilename(); //파일의 원본명
 		String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 		int random = (int)(Math.random() *90000 + 10000); // 5자리 랜덤값
-		String ext = originName.substring(originName.lastIndexOf("."));
+		//String ext = originName.substring(originName.lastIndexOf("."));
+		String ext = "";
+		if (originName.lastIndexOf(".") > 0) { // 확장자가 있는 경우에만
+		    ext = originName.substring(originName.lastIndexOf("."));
+		}
 		String changeName = currentTime + random + ext;
 		// 서버에 파일을 업로드
 		
@@ -49,6 +56,39 @@ public class Utils {
 		return webPath+changeName;
 		
 	}
+	
+	/**
+     * 서버의 물리 경로에서 파일을 삭제하는 함수
+     * @param fileNameToDelete 삭제할 파일의 변경된 이름 (changeName)
+     * @param application ServletContext 객체
+     * @param boardCode 파일이 저장된 서브 폴더명 (예: "eventPoster")
+     * @return 삭제 성공 여부 (true/false)
+     */
+    public static boolean deleteFile(String fileNameToDelete, ServletContext app, String boardCode) {
+        if (fileNameToDelete == null || fileNameToDelete.isEmpty()) {
+            return false;
+        }
+        
+        // 웹 접근 경로에서 실제 서버 물리 경로를 추출
+
+        // fileNameToDelete는 이미 webPath가 포함된 형태일 수 있으므로, 파일명만 추출해야 함.
+        // 예: fileNameToDelete가 "/resources/img/eventPoster/202301011234567890123.jpg" 라면
+        // "/resources/img/eventPoster/" 부분을 제외한 "202301011234567890123.jpg"만 필요.
+
+
+        // 파일이 저장된 상대 경로 (예: "/resources/img/A/")를 실제 경로에 추가
+        // filePath가 이미 /resources/img/... 형태이므로 그대로 사용합니다.
+
+		String serverFolderPath = app.getRealPath(fileNameToDelete);
+
+        File fileToDelete = new File(serverFolderPath);
+
+        if (fileToDelete.exists() && fileToDelete.isFile()) {
+            return fileToDelete.delete();
+        }
+        return false; // 파일이 없거나 디렉토리인 경우
+    }
+	
 	
 	/*
 	 * XSS(크로스 사이트 스크립트)공격을 방지하기 위한 메서드
