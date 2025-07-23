@@ -43,7 +43,7 @@
         <div class="board-header-section">
             <!-- Search Bar -->
             <div class="search-bar-area">
-                <form action="<c:url value="/promoBoard"/>" method="GET" class="search-form"> <!-- ⭐ width="700px" 제거 ⭐ -->
+                <form action="<c:url value="/promoBoard"/>" method="GET" class="search-form">
                     <div class="search-wrapper">
                         <input type="text" class="search-input" placeholder="search" aria-label="Search" name="searchKeyword" value="${param.searchKeyword}">
                         <button class="search-button" type="submit">
@@ -76,7 +76,8 @@
                                         </c:url>'">
                     <!-- Poster Image -->
                     <div class="poster">
-                        <img src="${contextPath}/resources/uploadFiles/${promo.posterPath}" alt="포스터 이미지" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
+                        <%-- ⭐⭐ promo.posterPath가 이미 /resources/images/ 를 포함하므로, 여기서는 contextPath만 붙입니다. ⭐⭐ --%>
+                        <img src="${contextPath}${promo.posterPath}" alt="포스터 이미지" />
                     </div>
                     <!-- Views Count -->
                     <div class="views-count">조회수 ${promo.views}</div>

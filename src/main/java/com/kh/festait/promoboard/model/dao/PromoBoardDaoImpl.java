@@ -24,7 +24,6 @@ public class PromoBoardDaoImpl implements PromoBoardDao {
 
     @Override
     public List<PromoBoardVo> selectPromoList(PageInfo pi, Map<String, Object> paramMap) {
-        // paramMap에 PageInfo 객체가 "pi" 키로 이미 포함되어 있으므로, paramMap만 전달합니다.
         return sqlSession.selectList("promoBoard.selectPromoList", paramMap);
     }
 
@@ -36,7 +35,7 @@ public class PromoBoardDaoImpl implements PromoBoardDao {
     @Override
     public List<PromoBoardVo> selectSearchPromo(Map<String, Object> paramMap, PageInfo pi) {
         // paramMap에 PageInfo 객체가 "pi" 키로 이미 포함되어 있으므로, paramMap만 전달합니다.
-        return sqlSession.selectList("promoBoard.selectSearchPromo", paramMap);
+        return sqlSession.selectList("promoBoard.selectSearchPromo", paramMap); // ⭐⭐ 이 메서드 호출이 올바른지 확인 ⭐⭐
     }
 
     @Override

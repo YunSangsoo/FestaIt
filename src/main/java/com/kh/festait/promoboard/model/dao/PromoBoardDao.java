@@ -11,7 +11,7 @@ public interface PromoBoardDao {
     int selectPromoCount();
     List<PromoBoardVo> selectPromoList(PageInfo pi, Map<String, Object> paramMap);
     int selectSearchPromoCount(Map<String, Object> paramMap);
-    List<PromoBoardVo> selectSearchPromo(Map<String, Object> paramMap, PageInfo pi);
+    List<PromoBoardVo> selectSearchPromo(Map<String, Object> paramMap, PageInfo pi); // ⭐⭐ 이 메서드 선언이 정확히 있는지 확인해주세요 ⭐⭐
     PromoBoardVo selectPromoDetail(int promoId);
     int increasePromoViews(int promoId);
     int insertPromo(PromoBoardVo promo);

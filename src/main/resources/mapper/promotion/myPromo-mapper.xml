@@ -50,58 +50,39 @@
 
     <!-- 2. 내 홍보 게시글 목록 조회 (페이징 및 검색 조건 추가) -->
     <select id="selectMyPromoList" parameterType="map" resultMap="myPromoResultMap">
-        SELECT
-            PROM_ID,
-            EVENT_ID,
-            PROM_TITLE,
-            PROM_DETAIL,
-            CREATE_DATE,
-            UPDATE_DATE,
-            VIEWS,
-            USER_NO,
-            NICKNAME,
-            USER_STATUS,
-            CHANGE_NAME,
-            WEBSITE,
-            STAT_CODE,
-            APP_ID
-        FROM (
-            SELECT
-                EP.PROM_ID,
-                EP.EVENT_ID,
-                EP.PROM_TITLE,
-                EP.PROM_DETAIL,
-                EP.CREATE_DATE,
-                EP.UPDATE_DATE,
-                EP.VIEWS,
-                U.USER_NO,
-                U.NICKNAME,
-                U.STATUS AS USER_STATUS,
-                IMG.CHANGE_NAME,
-                EA.WEBSITE,
-                EA.STAT_CODE,
-                EA.APP_ID,
-                ROWNUM RN
-            FROM EVENT_PROMOTION EP
-            LEFT JOIN EVENT E ON EP.EVENT_ID = E.EVENT_ID
-            LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
-            LEFT JOIN "USER" U ON EA.USER_NO = U.USER_NO
-            LEFT JOIN PROM_IMAGE PM ON EP.PROM_ID = PM.PROM_ID
-            LEFT JOIN IMAGE IMG ON PM.IMG_NO = IMG.IMG_NO
-            WHERE EA.USER_NO = #{userNo}
-            <if test="searchKeyword != null and searchKeyword != ''">
-                <choose>
-                    <when test="searchType == 'title'">
-                        AND EP.PROM_TITLE LIKE '%' || #{searchKeyword} || '%'
-                    </when>
-                    <when test="searchType == 'content'">
-                        AND EP.PROM_DETAIL LIKE '%' || #{searchKeyword} || '%'
-                    </when>
-                </choose>
-            </if>
-            ORDER BY EP.CREATE_DATE DESC
-        )
-        WHERE RN BETWEEN #{offset} + 1 AND #{offset} + #{limit}
-    </select>
+	    SELECT
+	        EP.PROM_ID,
+	        EP.EVENT_ID,
+	        EP.PROM_TITLE,
+	        EP.PROM_DETAIL,
+	        EP.CREATE_DATE,
+	        EP.UPDATE_DATE,
+	        EP.VIEWS,
+	        U.USER_NO,
+	        U.NICKNAME,
+	        U.STATUS AS USER_STATUS,
+	        IMG.CHANGE_NAME,
+	        EA.WEBSITE,
+	        EA.STAT_CODE,
+	        EA.APP_ID
+	    FROM EVENT_PROMOTION EP
+	    LEFT JOIN EVENT E ON EP.EVENT_ID = E.EVENT_ID
+	    LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
+	    LEFT JOIN "USER" U ON EA.USER_NO = U.USER_NO
+	    LEFT JOIN PROM_IMAGE PM ON EP.PROM_ID = PM.PROM_ID
+	    LEFT JOIN IMAGE IMG ON PM.IMG_NO = IMG.IMG_NO
+	    WHERE EA.USER_NO = #{userNo}
+    <if test="searchKeyword != null and searchKeyword != ''">
+        <choose>
+            <when test="searchType == 'title'">
+                AND EP.PROM_TITLE LIKE '%' || #{searchKeyword} || '%'
+            </when>
+            <when test="searchType == 'content'">
+                AND EP.PROM_DETAIL LIKE '%' || #{searchKeyword} || '%'
+            </when>
+        </choose>
+    </if>
+    ORDER BY EP.CREATE_DATE DESC
+</select>
 
 </mapper>

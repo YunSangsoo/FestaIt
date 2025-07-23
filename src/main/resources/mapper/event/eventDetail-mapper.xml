@@ -1,74 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="eventMapper">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="eventDetail">
 
-    <resultMap id="eventResultMap" type="com.kh.festait.eventdetail.model.vo.EventDetailVo">
-        <id property="appId" column="APP_ID"/> <!-- APP_ID는 EVENT_APPLICATION에서 가져옴 -->
+    <resultMap id="eventDetailResultMap" type="com.kh.festait.eventdetail.model.vo.EventDetailVo">
+        <id property="appId" column="APP_ID"/>
         <result property="userNo" column="USER_NO"/>
-        <result property="eventCode" column="EVENT_CODE"/> <!-- NVL로 EVENT.CATEGORY 또는 EA.EVENT_CODE 매핑 -->
-        <result property="statCode" column="STAT_CODE"/>
-        <result property="appTitle" column="APP_TITLE"/> <!-- NVL로 EVENT.EVENT_TITLE 또는 EA.APP_TITLE 매핑 -->
+        <result property="eventCode" column="EVENT_CODE"/>
+        <result property="appTitle" column="APP_TITLE"/>
         <result property="appSubTitle" column="APP_SUB_TITLE"/>
-        <result property="appDetail" column="APP_DETAIL"/> <!-- NVL로 EVENT.APP_DETAIL 또는 EA.APP_DETAIL 매핑 -->
-        <result property="location" column="LOCATION"/> <!-- NVL로 EVENT.LOCATION 또는 EA.LOCATION 매핑 -->
+        <result property="appDetail" column="APP_DETAIL"/>
+        <result property="location" column="LOCATION"/>
         <result property="locationDetail" column="LOCATION_DETAIL"/>
         <result property="postCode" column="POST_CODE"/>
         <result property="website" column="WEBSITE"/>
-        <result property="startDate" column="START_DATE"/> <!-- NVL로 EVENT.START_DATE 또는 EA.START_DATE 매핑 -->
-        <result property="endDate" column="END_DATE"/> <!-- NVL로 EVENT.END_DATE 또는 EA.END_DATE 매핑 -->
+        <result property="startDate" column="START_DATE"/>
+        <result property="endDate" column="END_DATE"/>
         <result property="startTime" column="START_TIME"/>
         <result property="endTime" column="END_TIME"/>
-        <result property="createDate" column="CREATE_DATE"/>
-        <result property="updateDate" column="UPDATE_DATE"/>
-        <result property="submittedDate" column="SUBMITTED_DATE"/>
-        <result property="approvedDate" column="APPROVED_DATE"/>
         <result property="appFee" column="APP_FEE"/>
         <result property="appItem" column="APP_ITEM"/>
         <result property="appHost" column="APP_HOST"/>
         <result property="appOrg" column="APP_ORG"/>
         <result property="appSponser" column="APP_SPONSER"/>
+
         <result property="managerName" column="MANAGER_NAME"/>
         <result property="email" column="EMAIL"/>
         <result property="tel" column="TEL"/>
         <result property="fax" column="FAX"/>
-        <result property="adminComment" column="ADMIN_COMMENT"/>
+
+        <result property="eventCategoryName" column="EVENT_CATEGORY_NAME"/>
+
+        <result property="bookmarked" column="IS_BOOKMARKED"/> <!-- ⭐⭐ 이 필드가 정확히 매핑되어야 합니다! ⭐⭐ -->
     </resultMap>
 
-    <select id="selectEventDetail" parameterType="_int" resultMap="eventResultMap"> <!-- ⭐️ parameterType int로 변경 -->
+    <select id="selectEventDetail" resultMap="eventDetailResultMap">
         SELECT
             EA.APP_ID,
             EA.USER_NO,
-            NVL(E.CATEGORY, EA.EVENT_CODE) AS EVENT_CODE,
-            EA.STAT_CODE,
-            NVL(E.EVENT_TITLE, EA.APP_TITLE) AS APP_TITLE,
+            EA.EVENT_CODE,
+            EA.APP_TITLE,
             EA.APP_SUB_TITLE,
-            NVL(E.APP_DETAIL, EA.APP_DETAIL) AS APP_DETAIL,
-            NVL(E.LOCATION, EA.LOCATION) AS LOCATION,
+            EA.APP_DETAIL,
+            EA.LOCATION,
             EA.LOCATION_DETAIL,
             EA.POST_CODE,
             EA.WEBSITE,
-            NVL(E.START_DATE, EA.START_DATE) AS START_DATE,
-            NVL(E.END_DATE, EA.END_DATE) AS END_DATE,
+            EA.START_DATE,
+            EA.END_DATE,
             EA.START_TIME,
             EA.END_TIME,
-            EA.CREATE_DATE,
-            EA.UPDATE_DATE,
-            EA.SUBMITTED_DATE,
-            EA.APPROVED_DATE,
             EA.APP_FEE,
             EA.APP_ITEM,
             EA.APP_HOST,
             EA.APP_ORG,
             EA.APP_SPONSER,
-            AM.MANAGER_NAME,
-            AM.EMAIL,
-            AM.TEL,
-            AM.FAX,
-            AM.ADMIN_COMMENT
-        FROM EVENT E                                     -- ⭐️ EVENT 테이블을 기준으로 시작
-        LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID -- EVENT_APPLICATION 조인
+            AM.MANAGER_NAME,    
+            AM.EMAIL,           
+            AM.TEL,             
+            AM.FAX,             
+            EC.EVENT_NAME AS EVENT_CATEGORY_NAME, 
+            CASE WHEN B.USER_NO IS NOT NULL THEN 1 ELSE 0 END AS IS_BOOKMARKED
+        FROM EVENT_APPLICATION EA
+        LEFT JOIN EVENT_CATEGORY EC ON EA.EVENT_CODE = EC.EVENT_CODE
         LEFT JOIN APP_MANAGER AM ON EA.APP_ID = AM.APP_ID
-        WHERE E.EVENT_ID = #{eventId}                    -- ⭐️ EVENT_ID를 기준으로 조회
+        LEFT JOIN EVENT E ON EA.APP_ID = E.APP_ID 
+        LEFT JOIN BOOKMARK B ON E.EVENT_ID = B.EVENT_ID AND B.USER_NO = #{userNo}
+        WHERE EA.APP_ID = #{appId}
     </select>
 
 </mapper>

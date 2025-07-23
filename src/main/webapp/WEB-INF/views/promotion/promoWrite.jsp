@@ -31,8 +31,8 @@
 
             <!-- Content Input -->
             <div class="form-group">
-                <label for="promoContent">내용</label>
-                <textarea id="promoContent" name="promoContent" class="form-control" rows="10" placeholder="게시글 내용을 입력하세요" required></textarea>
+                <label for="promoDetail">내용</label> <%-- ⭐⭐ label for도 promoDetail로 변경 ⭐⭐ --%>
+                <textarea id="promoDetail" name="promoDetail" class="form-control" rows="10" placeholder="게시글 내용을 입력하세요" required></textarea> <%-- ⭐⭐ name 속성 promoDetail로 변경 ⭐⭐ --%>
             </div>
 
             <!-- Poster Image Upload -->

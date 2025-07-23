@@ -8,8 +8,8 @@ public interface EventDetailDao {
 	
     /*
      * 행사 상세 정보 조회
-     * @param eventId 조회할 행사 ID (EVENT 테이블의 EVENT_ID)
+     * @param appid 조회할 행사 ID (EVENT 테이블의 EVENT_ID)
      * @return 조회된 행사 정보
      */
-    EventDetailVo selectEventDetail(int eventId);
+    EventDetailVo selectEventDetail(int appId);
 }

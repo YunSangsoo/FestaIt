@@ -23,9 +23,8 @@ public class PromoBoardServiceImpl implements PromoBoardService {
     @Override
     public PageInfo getPromoPageInfo(int currentPage) {
         int listCount = promoBoardDao.selectPromoCount();
-        log.info("총 게시글 수 (listCount): {}", listCount); // 총 게시글 수 로그 추가
-        // boardLimit를 12로 유지
-        return new PageInfo(listCount, currentPage, 10, 12); // pageLimit 10, boardLimit 12
+        log.info("총 게시글 수 (listCount): {}", listCount);
+        return new PageInfo(listCount, currentPage, 10, 12); // boardLimit 12 유지
     }
 
     @Override
@@ -39,9 +38,8 @@ public class PromoBoardServiceImpl implements PromoBoardService {
     @Override
     public PageInfo getSearchPromoPageInfo(int currentPage, Map<String, Object> paramMap) {
         int listCount = promoBoardDao.selectSearchPromoCount(paramMap);
-        log.info("검색된 총 게시글 수 (listCount): {}", listCount); // 검색된 총 게시글 수 로그 추가
-        // boardLimit를 12로 유지
-        return new PageInfo(listCount, currentPage, 10, 12);
+        log.info("검색된 총 게시글 수 (listCount): {}", listCount);
+        return new PageInfo(listCount, currentPage, 10, 12); // boardLimit 12 유지
     }
 
     @Override
@@ -78,25 +76,29 @@ public class PromoBoardServiceImpl implements PromoBoardService {
             return 0;
         }
 
-        // 1. EVENT_PROMOTION 테이블에 게시글 정보 삽입
-        log.info("EVENT_PROMOTION 삽입 전 promo 객체: {}", promo);
+        // 1. EVENT_PROMOTION 테이블에 게시글 정보 삽입 (내용 포함)
+        log.info("EVENT_PROMOTION 삽입 전 promo 객체 - promoId: {}, promoTitle: {}, promoDetail: {}",
+                 new Object[]{promo.getPromoId(), promo.getPromoTitle(), promo.getPromoDetail()});
         result = promoBoardDao.insertPromo(promo);
-        log.info("EVENT_PROMOTION 삽입 후 promo 객체 (PROM_ID 확인): {}", promo);
+        log.info("EVENT_PROMOTION 삽입 후 promo 객체 (PROM_ID 확인) - promoId: {}, promoTitle: {}, promoDetail: {}",
+                 new Object[]{promo.getPromoId(), promo.getPromoTitle(), promo.getPromoDetail()});
 
 
-        // 2. 이미지 정보 삽입 (PROM_IMAGE, IMAGE 테이블)
+        // 2. 이미지 정보 삽입 (IMAGE, PROM_IMAGE 테이블)
         if (result > 0 && promo.getPosterPath() != null && !promo.getPosterPath().isEmpty()) {
             log.info("이미지 삽입 시작 - posterPath: {}, originalFilename: {}", promo.getPosterPath(), promo.getOriginalFilename());
 
             // IMAGE 테이블에 이미지 정보 삽입 (imgNo가 promo 객체에 채워짐)
-            log.info("IMAGE 삽입 전 promo 객체 (imgNo는 0일 것): {}", promo);
-            int imageResult = promoBoardDao.insertImage(promo);
+            log.info("IMAGE 삽입 전 promo 객체 (imgNo는 0일 것) - posterPath: {}, originalFilename: {}, imgNo: {}",
+                     new Object[]{promo.getPosterPath(), promo.getOriginalFilename(), promo.getImgNo()});
+            int imageResult = promoBoardDao.insertImage(promo); // IMAGE 테이블에 삽입
             log.info("IMAGE 삽입 후 promo 객체 (imgNo 확인): {}", promo);
 
             if (imageResult > 0) {
                 // PROM_IMAGE 테이블에 PROM_ID와 IMG_NO 연결 정보 삽입
-                log.info("PROM_IMAGE 삽입 전 promo 객체 (promImgNo는 0일 것): {}", promo);
-                int promImageResult = promoBoardDao.insertPromImage(promo);
+                log.info("PROM_IMAGE 삽입 전 promo 객체 (promImgNo는 0일 것) - promoId: {}, imgNo: {}, promImgNo: {}",
+                         new Object[]{promo.getPromoId(), promo.getImgNo(), promo.getPromImgNo()});
+                int promImageResult = promoBoardDao.insertPromImage(promo); // PROM_IMAGE 테이블에 삽입
                 log.info("PROM_IMAGE 삽입 후 promo 객체 (promImgNo 확인): {}", promo);
 
                 if (promImageResult == 0) {
@@ -110,6 +112,7 @@ public class PromoBoardServiceImpl implements PromoBoardService {
         } else {
             log.info("포스터 이미지가 없거나 경로가 비어있으므로 이미지 관련 DB 작업 건너뜀. posterPath: {}", promo.getPosterPath());
         }
+
 
         // 3. PROMOTION_PAGE_URL 정보 업데이트 (EVENT_APPLICATION 테이블)
         if (promo.getPromotionPageUrl() != null && !promo.getPromotionPageUrl().isEmpty()) {
@@ -136,8 +139,9 @@ public class PromoBoardServiceImpl implements PromoBoardService {
     public int updatePromoWithImageAndUrl(PromoBoardVo promo) {
         int result = 0;
 
-        // 1. EVENT_PROMOTION 테이블의 기본 정보 업데이트
-        log.info("EVENT_PROMOTION 업데이트 전 promo 객체: {}", promo);
+        // 1. EVENT_PROMOTION 테이블의 기본 정보 업데이트 (내용 포함)
+        log.info("EVENT_PROMOTION 업데이트 전 promo 객체 - promoId: {}, promoTitle: {}, promoDetail: {}, posterPath: {}, originalFilename: {}",
+                 new Object[]{promo.getPromoId(), promo.getPromoTitle(), promo.getPromoDetail(), promo.getPosterPath(), promo.getOriginalFilename()});
         result = promoBoardDao.updatePromo(promo);
         log.info("EVENT_PROMOTION 업데이트 결과: {}", result);
 

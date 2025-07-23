@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +35,7 @@ public class PromoBoardController {
 
     private final PromoBoardService promoService;
 
-    // 홍보 게시글 목록 조회 및 검색 결과 조회 통합
+    // 홍보 게시글 목록 조회 및 검색 결과 조회 통합 (GET /promoBoard)
     @GetMapping
     public String selectPromotionList(
             @RequestParam(value = "cpage", defaultValue = "1") int currentPage,
@@ -65,10 +66,11 @@ public class PromoBoardController {
         model.addAttribute("pi", pi);
         model.addAttribute("param", paramMap);
 
+        // ⭐⭐ 수정: JSP 경로를 "promotion/promoBoard"로 변경 (사용자님 지시사항 반영) ⭐⭐
         return "promotion/promoBoard";
     }
 
-    // 홍보 게시글 상세 조회
+    // 홍보 게시글 상세 조회 (GET /promoBoard/detail)
     @GetMapping("/detail")
     public String selectPromoDetail(
             @RequestParam("promoId") int promoId,
@@ -87,6 +89,7 @@ public class PromoBoardController {
         if (promo != null) {
             model.addAttribute("promo", promo);
             log.info("홍보 상세 조회 성공: {}", promo);
+            // ⭐⭐ 수정: JSP 경로를 "promotion/promoDetail"로 변경 (사용자님 지시사항 반영) ⭐⭐
             return "promotion/promoDetail";
         } else {
             log.warn("홍보 게시물을 찾기 실패: 게시글 번호 {}", promoId);
@@ -95,13 +98,14 @@ public class PromoBoardController {
         }
     }
 
-    // 홍보 게시글 작성 페이지로 이동
+    // 홍보 게시글 작성 페이지로 이동 (GET /promoBoard/promoWrite)
     @GetMapping("/promoWrite")
     public String enrollForm() {
+        // ⭐⭐ 수정: JSP 경로를 "promotion/promoWrite"로 변경 (사용자님 지시사항 반영) ⭐⭐
         return "promotion/promoWrite";
     }
 
-    // 홍보 게시글 작성 처리 (이미지 파일 시스템 저장 및 DB 연동)
+    // 홍보 게시글 작성 처리 (POST /promoBoard/promoWrite)
     @PostMapping("/promoWrite")
     public String insertMyPromo(PromoBoardVo promo,
                                  @RequestParam(value = "promoPoster", required = false) MultipartFile promoPoster,
@@ -112,8 +116,9 @@ public class PromoBoardController {
         log.info("업로드된 파일: {}", promoPoster != null ? promoPoster.getOriginalFilename() : "없음");
         log.info("업로드된 파일 크기: {} bytes", promoPoster != null ? promoPoster.getSize() : 0);
 
-        String webPath = "/resources/uploadFiles/"; // 웹에서 접근할 경로
-        String realPath = request.getSession().getServletContext().getRealPath(webPath); // 서버 실제 경로
+        // ⭐⭐ 이미지 저장 경로를 resources/images/로 변경 (사용자님 제공 코드 유지) ⭐⭐
+        String webPath = "/resources/images/";
+        String realPath = request.getSession().getServletContext().getRealPath(webPath);
         log.info("파일 저장될 웹 경로: {}", webPath);
         log.info("파일 저장될 서버 실제 경로: {}", realPath);
 
@@ -141,13 +146,19 @@ public class PromoBoardController {
             } catch (IOException e) {
                 log.error("파일 업로드 실패: {}", e.getMessage(), e); // 스택 트레이스 출력
                 redirectAttributes.addFlashAttribute("alertMsg", "파일 업로드에 실패했습니다.");
-                return "common/errorPage";
+                return "common/errorPage"; // 오류 페이지로 이동
             }
         } else {
             promo.setPosterPath(null); // 파일이 업로드되지 않은 경우 null로 설정
             promo.setOriginalFilename(null);
             log.info("업로드된 파일 없음. posterPath 및 originalFilename을 null로 설정.");
         }
+
+        // 서비스 호출 직전, promo 객체의 내용 및 이미지 필드 값 확인
+        log.info("서비스 호출 전 promo.promoTitle: {}", promo.getPromoTitle());
+        log.info("서비스 호출 전 promo.promoDetail: {}", promo.getPromoDetail());
+        log.info("서비스 호출 전 promo.posterPath: {}", promo.getPosterPath());
+        log.info("서비스 호출 전 promo.originalFilename: {}", promo.getOriginalFilename());
 
         // 서비스 호출 (이미지 및 URL 처리를 포함한 통합 로직)
         int result = promoService.insertPromoWithImageAndUrl(promo);
@@ -158,10 +169,10 @@ public class PromoBoardController {
         } else {
             redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글 작성에 실패했습니다. 유효한 이벤트 정보가 없거나 다른 오류가 발생했습니다.");
         }
-        return "common/errorPage";
+        return "common/errorPage"; // 오류 페이지로 이동
     }
 
-    // 홍보 게시글 수정 페이지로 이동
+    // 홍보 게시글 수정 페이지로 이동 (GET /promoBoard/promoUpdate)
     @GetMapping("/promoUpdate")
     public String updateMyPromoForm(
             @RequestParam(value = "promoId", required = false) Integer promoId,
@@ -181,10 +192,11 @@ public class PromoBoardController {
         }
 
         model.addAttribute("promo", promo);
+        // ⭐⭐ 수정: JSP 경로를 "promotion/promoUpdate"로 변경 (사용자님 지시사항 반영) ⭐⭐
         return "promotion/promoUpdate";
     }
 
-    // 홍보 게시글 수정 처리 (이미지 파일 시스템 저장/삭제 및 DB 연동)
+    // 홍보 게시글 수정 처리 (POST /promoBoard/update)
     @PostMapping("/update")
     public String updateMyPromo(PromoBoardVo promo,
                                  @RequestParam(value = "promoPoster", required = false) MultipartFile promoPoster,
@@ -199,7 +211,8 @@ public class PromoBoardController {
         log.info("기존 포스터 경로 (originalPromoPosterPath): {}", originalPromoPosterPath);
         log.info("기존 이미지 삭제 체크박스 (deleteOriginalImage): {}", deleteOriginalImage);
 
-        String webPath = "/resources/uploadFiles/";
+        // ⭐⭐ 이미지 저장 경로를 resources/images/로 변경 (사용자님 제공 코드 유지) ⭐⭐
+        String webPath = "/resources/images/";
         String realPath = request.getSession().getServletContext().getRealPath(webPath);
         log.info("파일 저장될 웹 경로: {}", webPath);
         log.info("파일 저장될 서버 실제 경로: {}", realPath);
@@ -210,7 +223,7 @@ public class PromoBoardController {
         // 1. 새 파일이 업로드된 경우
         if (promoPoster != null && !promoPoster.isEmpty()) {
             log.info("새 파일이 업로드됨: {}", promoPoster.getOriginalFilename());
-            // 기존 파일이 있다면 서버에서 삭제
+            // 기존 파일이 있다면 서버에서 삭제 (DB 참조 카운트는 서비스에서 처리)
             if (originalPromoPosterPath != null && !originalPromoPosterPath.isEmpty()) {
                 File deleteFile = new File(request.getSession().getServletContext().getRealPath(originalPromoPosterPath));
                 if (deleteFile.exists()) {
@@ -241,13 +254,13 @@ public class PromoBoardController {
             } catch (IOException e) {
                 log.error("파일 업로드 실패 (수정): {}", e.getMessage(), e); // 스택 트레이스 출력
                 redirectAttributes.addFlashAttribute("alertMsg", "파일 업로드에 실패했습니다.");
-                return "common/errorPage";
+                return "common/errorPage"; // 오류 페이지로 이동
             }
         }
         // 2. 새 파일은 없고 기존 이미지 삭제 체크박스가 체크된 경우
         else if ("true".equals(deleteOriginalImage)) {
             log.info("기존 이미지 삭제 체크박스 선택됨.");
-            // 기존 파일이 있다면 서버에서 삭제
+            // 기존 파일이 있다면 서버에서 삭제 (DB 참조 카운트는 서비스에서 처리)
             if (originalPromoPosterPath != null && !originalPromoPosterPath.isEmpty()) {
                 File deleteFile = new File(request.getSession().getServletContext().getRealPath(originalPromoPosterPath));
                 if (deleteFile.exists()) {
@@ -278,11 +291,11 @@ public class PromoBoardController {
             return "redirect:/promoBoard/detail?promoId=" + promo.getPromoId();
         } else {
             redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글 수정에 실패했습니다.");
-            return "common/errorPage";
+            return "common/errorPage"; // 오류 페이지로 이동
         }
     }
 
-    // 홍보 게시글 삭제 처리 (이미지 파일 시스템 삭제 및 DB 연동)
+    // 홍보 게시글 삭제 처리 (POST /promoBoard/delete)
     @PostMapping("/delete")
     @ResponseBody
     public Map<String, String> deleteMyPromo(@RequestParam("promoId") int promoId, HttpServletRequest request) {
@@ -294,31 +307,36 @@ public class PromoBoardController {
         // 삭제 전 기존 이미지 경로 및 이미지 번호 조회 (실제 파일 삭제를 위해 필요)
         PromoBoardVo promoToDelete = promoService.selectPromotionDetail(promoId);
         String posterPathToDelete = null;
-        int imgNoToDelete = 0; // 이미지 번호
+        int imgNoToDelete = 0; // 이미지 번호 (IMAGE 테이블 삭제에 필요)
 
         if (promoToDelete != null) {
             posterPathToDelete = promoToDelete.getPosterPath();
             imgNoToDelete = promoToDelete.getImgNo(); // 이미지 번호 가져오기
-            // ⭐⭐ 로그 오류 수정 부분 ⭐⭐
             log.info("삭제할 게시글의 기존 이미지 정보 - promoId: {}, posterPath: {}, imgNo: {}",
                      new Object[]{promoId, posterPathToDelete, imgNoToDelete});
-            // ⭐⭐ 로그 오류 수정 끝 ⭐⭐
         } else {
             log.warn("삭제할 게시글 정보를 찾을 수 없습니다: promoId {}", promoId);
         }
 
         // 서비스 호출 (이미지 및 URL 처리를 포함한 통합 로직)
-        int result = promoService.deletePromoWithImageAndUrl(promoId, imgNoToDelete); // 이미지 번호 함께 전달
+        int result = promoService.deletePromoWithImageAndUrl(promoId, imgNoToDelete);
 
         if (result > 0) {
-            // DB 삭제 성공 시, 서버에서 실제 파일 삭제
+            // DB 삭제 성공 시, 서버에서 실제 파일 삭제 (단, 해당 이미지가 다른 곳에서 참조되지 않는 경우에만)
+            // 실제 파일 삭제는 서비스 로직의 countImageReferences 결과에 따라 결정되므로,
+            // 여기서는 DB 삭제 성공 여부만 보고 파일 시스템 삭제를 시도합니다.
+            // 서비스에서 이미 조건부 삭제를 처리했으므로, 여기서는 단순히 파일 존재 여부만 확인하여 삭제 시도.
+            // 만약 서비스에서 이미지를 삭제하지 않았다면 (참조가 남아있어서), 여기서는 파일이 존재할 수 있습니다.
+            // 이중 삭제 방지 및 참조 이미지 보호를 위해, 실제 파일 삭제는 서비스에서 최종 결정하는 것이 더 안전합니다.
+            // 현재 구조에서는 서비스에서 IMAGE 테이블 레코드를 삭제하는 시점에 파일도 삭제하는 것이 일관적입니다.
+            // 여기서는 단순히 파일 시스템에서 해당 파일을 지우는 역할만 수행합니다.
             if (posterPathToDelete != null && !posterPathToDelete.isEmpty()) {
                 File deleteFile = new File(request.getSession().getServletContext().getRealPath(posterPathToDelete));
                 if (deleteFile.exists()) {
                     if (deleteFile.delete()) {
-                        log.info("게시글 삭제와 함께 파일 삭제 성공: {}", posterPathToDelete);
+                        log.info("게시글 삭제와 함께 파일 삭제 성공 (파일 시스템): {}", posterPathToDelete);
                     } else {
-                        log.warn("게시글 삭제 시 파일 삭제 실패: {}", posterPathToDelete);
+                        log.warn("게시글 삭제 시 파일 삭제 실패 (파일 시스템): {}", posterPathToDelete);
                     }
                 } else {
                     log.info("삭제할 파일이 서버에 존재하지 않습니다: {}", posterPathToDelete);

@@ -22,12 +22,12 @@ public interface PromoBoardService {
     // 조회수 증가
     int increasePromoViews(int promoId);
 
-    // ⭐ 새로 추가: 홍보 게시글 작성 (이미지 및 URL 처리 포함) ⭐
+    // 홍보 게시글 작성 (이미지 및 URL 처리 포함)
     int insertPromoWithImageAndUrl(PromoBoardVo promo);
 
-    // ⭐ 새로 추가: 홍보 게시글 수정 (이미지 및 URL 처리 포함) ⭐
+    // 홍보 게시글 수정 (이미지 및 URL 처리 포함)
     int updatePromoWithImageAndUrl(PromoBoardVo promo);
 
-    // ⭐ 새로 추가: 홍보 게시글 삭제 (이미지 및 URL 처리 포함) ⭐
-    int deletePromoWithImageAndUrl(int promoId, int imgNoToDelete); // 이미지 번호 함께 전달
+    // 홍보 게시글 삭제 (이미지 및 URL 처리 포함)
+    int deletePromoWithImageAndUrl(int promoId, int imgNoToDelete);
 }

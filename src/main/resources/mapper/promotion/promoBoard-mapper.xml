@@ -11,17 +11,22 @@
         <result property="updateDate" column="UPDATE_DATE"/>
         <result property="views" column="VIEWS"/>
         <result property="posterPath" column="POSTER_PATH"/>
-        <result property="originalFilename" column="ORIGIN_NAME"/> <!-- IMAGE 테이블의 ORIGIN_NAME 매핑 -->
-        <result property="imgNo" column="IMG_NO"/>                 <!-- IMAGE 테이블의 IMG_NO 매핑 -->
-        <result property="promImgNo" column="PROM_IMG_NO"/>        <!-- PROM_IMAGE 테이블의 PROM_IMG_NO 매핑 -->
+        <result property="originalFilename" column="ORIGINAL_FILENAME"/>
+        <result property="imgNo" column="IMG_NO"/>
+        <result property="promImgNo" column="PROM_IMG_NO"/>
         <result property="promotionPageUrl" column="PROMOTION_PAGE_URL"/>
         <result property="isPromoted" column="IS_PROMOTED"/>
         <result property="appId" column="APP_ID"/>
         <result property="promoWriter" column="PROMO_WRITER"/>
         <result property="startDate" column="START_DATE"/>
         <result property="endDate" column="END_DATE"/>
-        <!-- userNo 필드도 추가되어야 할 수 있습니다. PromoBoardVo에 userNo가 있다면 여기에 매핑 필요 -->
-        <!-- <result property="userNo" column="USER_NO"/> -->
+        <result property="eventId" column="EVENT_ID"/>
+    </resultMap>
+
+    <!-- EVENT_ID, APP_ID만 매핑하는 별도 resultMap -->
+    <resultMap id="eventAppIdResultMap" type="com.kh.festait.promoboard.model.vo.PromoBoardVo">
+        <result property="eventId" column="EVENT_ID" />
+        <result property="appId" column="APP_ID" />
     </resultMap>
 
     <!-- 전체 홍보 게시글 수 조회 -->
@@ -30,17 +35,18 @@
     </select>
 
     <!-- 홍보 게시글 목록 조회 (페이징 포함) -->
-    <!-- ⭐⭐ RowBounds 대신 SQL 쿼리에서 OFFSET/FETCH NEXT 직접 사용하도록 수정 ⭐⭐ -->
     <select id="selectPromoList" resultMap="promoBoardResultMap">
         SELECT
             EP.PROM_ID, EP.PROM_TITLE, EP.PROM_DETAIL, EP.CREATE_DATE, EP.UPDATE_DATE, EP.VIEWS,
             I.CHANGE_NAME AS POSTER_PATH,
+            I.ORIGIN_NAME AS ORIGINAL_FILENAME,
             EA.WEBSITE AS PROMOTION_PAGE_URL,
             AS2.STAT_CODE AS IS_PROMOTED,
             EA.APP_ID,
             U.NICKNAME AS PROMO_WRITER,
             E.START_DATE AS START_DATE,
-            E.END_DATE AS END_DATE
+            E.END_DATE AS END_DATE,
+            EP.EVENT_ID
         FROM EVENT_PROMOTION EP
         JOIN EVENT E ON EP.EVENT_ID = E.EVENT_ID
         LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
@@ -62,17 +68,18 @@
     </select>
 
     <!-- 검색 조건에 따른 홍보 게시글 목록 조회 (페이징 포함) -->
-    <!-- ⭐⭐ RowBounds 대신 SQL 쿼리에서 OFFSET/FETCH NEXT 직접 사용하도록 수정 ⭐⭐ -->
     <select id="selectSearchPromo" resultMap="promoBoardResultMap">
         SELECT
             EP.PROM_ID, EP.PROM_TITLE, EP.PROM_DETAIL, EP.CREATE_DATE, EP.UPDATE_DATE, EP.VIEWS,
             I.CHANGE_NAME AS POSTER_PATH,
+            I.ORIGIN_NAME AS ORIGINAL_FILENAME,
             EA.WEBSITE AS PROMOTION_PAGE_URL,
             AS2.STAT_CODE AS IS_PROMOTED,
             EA.APP_ID,
             U.NICKNAME AS PROMO_WRITER,
             E.START_DATE AS START_DATE,
-            E.END_DATE AS END_DATE
+            E.END_DATE AS END_DATE,
+            EP.EVENT_ID
         FROM EVENT_PROMOTION EP
         JOIN EVENT E ON EP.EVENT_ID = E.EVENT_ID
         LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
@@ -145,13 +152,12 @@
         )
     </insert>
 
-    <!-- EVENT_APPLICATION 테이블 WEBSITE 컬럼 업데이트 (PROMOTION_PAGE_URL용) -->
+    <!-- EVENT_APPLICATION 테이블 WEBSITE 컬럼 업데이트 -->
     <update id="updateEventApplicationWebsite" parameterType="com.kh.festait.promoboard.model.vo.PromoBoardVo">
         UPDATE EVENT_APPLICATION
         SET WEBSITE = #{promotionPageUrl}
         WHERE APP_ID = #{appId}
     </update>
-
 
     <!-- 특정 프로모 게시글 상세 정보 조회 -->
     <select id="selectPromoDetail" resultMap="promoBoardResultMap">
@@ -171,7 +177,8 @@
             EA.APP_ID,
             U.NICKNAME AS PROMO_WRITER,
             E.START_DATE AS START_DATE,
-            E.END_DATE AS END_DATE
+            E.END_DATE AS END_DATE,
+            EP.EVENT_ID
         FROM EVENT_PROMOTION EP
         JOIN EVENT E ON EP.EVENT_ID = E.EVENT_ID
         LEFT JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
@@ -219,21 +226,21 @@
         DELETE FROM IMAGE WHERE IMG_NO = #{imgNo}
     </delete>
 
-    <!-- 홍보 게시글 삭제 (하드 삭제로 변경) -->
+    <!-- 홍보 게시글 삭제 (하드 삭제) -->
     <delete id="deletePromo" parameterType="_int">
         DELETE FROM EVENT_PROMOTION
         WHERE PROM_ID = #{promoId}
     </delete>
 
-    <!-- ⭐ 새로 추가: 이벤트 제목으로 EVENT_ID와 APP_ID 조회 ⭐ -->
-    <select id="selectEventIdAndAppIdByEventTitle" parameterType="string" resultMap="promoBoardResultMap">
+    <!-- 이벤트 제목으로 EVENT_ID와 APP_ID 조회 (resultMap 추가 반영) -->
+    <select id="selectEventIdAndAppIdByEventTitle" parameterType="string" resultMap="eventAppIdResultMap">
         SELECT
             E.EVENT_ID,
             EA.APP_ID
         FROM EVENT E
         JOIN EVENT_APPLICATION EA ON E.APP_ID = EA.APP_ID
         WHERE E.EVENT_TITLE = #{eventTitle}
-        AND ROWNUM = 1 <!-- 중복 제목 방지, 첫 번째 결과만 가져옴 -->
+        AND ROWNUM = 1
     </select>
 
 </mapper>

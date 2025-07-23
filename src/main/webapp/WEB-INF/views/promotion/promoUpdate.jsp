@@ -70,7 +70,8 @@
             <div class="image-preview" id="imagePreview">
                 <c:choose>
                     <c:when test="${not empty promo.posterPath}">
-                        <img src="${contextPath}/resources/uploadFiles/${promo.posterPath}" alt="Existing Image">
+                        <%-- ⭐⭐ promo.posterPath가 이미 /resources/images/ 를 포함하므로, 여기서는 contextPath만 붙입니다. ⭐⭐ --%>
+                        <img src="${contextPath}${promo.posterPath}" alt="Existing Image" onerror="this.onerror=null;this.src='https://placehold.co/600x600/e0e0e0/ffffff?text=No+Image';">
                     </c:when>
                     <c:otherwise>
                         <span class="no-image-text">이미지 미리보기</span>
@@ -92,9 +93,10 @@
 
             <div id="adminButtons" class="btn-group-right">
                 <button type="button" class="btn btn-primary" onclick="enableEdit()">수정</button>
-                <form action="${contextPath}/promoBoard/delete" method="post" style="display:inline-block;"> <%-- 삭제 폼 인라인 블록으로 --%>
+                <form action="${contextPath}/promoBoard/delete" method="post" style="display:inline-block;">
                     <input type="hidden" name="promoId" value="${promo.promoId}" />
-                    <button type="button" class="btn btn-danger" id="deleteButton">삭제</button> 
+                    <input type="hidden" name="appId" value="${promo.appId}" />
+                    <button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
                 </form>
             </div>
 
@@ -113,6 +115,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <!-- Custom JS for this page -->
 <script src="${contextPath}/resources/js/promoUpdate.js"></script>
-<script src="${contextPath}/resources/js/commonModal.js"></script> 
+<script src="${contextPath}/resources/js/commonModal.js"></script>
 </body>
 </html>

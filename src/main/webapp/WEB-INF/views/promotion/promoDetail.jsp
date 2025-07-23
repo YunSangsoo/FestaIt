@@ -29,6 +29,7 @@
     <div class="top-spacer"></div>
 
     <div class="container bg-white p-4 shadow-sm rounded">
+    
         <h2 class="mb-4 text-center">${promo.promoTitle}</h2>
         <hr>
 
@@ -56,7 +57,8 @@
         <div class="mb-4 image-preview-container">
             <c:choose>
                 <c:when test="${not empty promo.posterPath}">
-                    <img src="${contextPath}/resources/uploadFiles/${promo.posterPath}" 
+                    <%-- ⭐⭐ promo.posterPath가 이미 /resources/images/ 를 포함하므로, 여기서는 contextPath만 붙입니다. ⭐⭐ --%>
+                    <img src="${contextPath}${promo.posterPath}" 
                          alt="홍보 포스터" 
                          class="rounded shadow-sm"
                          onerror="this.onerror=null;this.src='https://placehold.co/600x600/e0e0e0/ffffff?text=No+Image';">
@@ -68,6 +70,7 @@
         </div>
 
         <div class="mb-4 promo-detail-content">
+            <%-- ⭐⭐ promoDetail은 이미 로그에서 정상적으로 확인되었으므로, p 태그 안에 그대로 출력합니다. ⭐⭐ --%>
             <p>${promo.promoDetail}</p>
         </div>
 
