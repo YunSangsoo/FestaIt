@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="eventMapper">
+
+<!-- 		<select id="selectList" parameterType="map" resultType="board">
+		SELECT
+			BOARD_NO,
+			BOARD_TITLE,
+			USER_NAME AS BOARD_WRITER,
+			COUNT,
+			CREATE_DATE
+		FROM BOARD B
+		LEFT JOIN MEMBER M ON BOARD_WRITER = USER_NO
+		WHERE
+		B.STATUS='Y' AND BOARD_CD = #{boardCode} -->
+
+<!-- 이거 검색할 때 써야 함===================================================== -->
+<!-- 		<if test="keyword != null and keyword != ''">
+			AND
+			<choose>
+				<when test="condition.equals('title')">
+					BOARD_TITLE LIKE '%' || #{keyword} || '%'
+				</when>
+				<when test="condition.equals('writer')">
+					USER_NAME LIKE '%' || #{keyword} || '%'
+				</when>
+				<when test="condition.equals('content')">
+					BOARD_CONTENT LIKE '%' || #{keyword} || '%'
+				</when>
+				<when test="condition.equals('titleAndContent')">
+					(BOARD_TITLE LIKE '%' || #{keyword} || '%' OR
+					BOARD_CONTENT LIKE '%' || #{keyword} || '%')
+				</when>
+
+			</choose>
+		</if>
+		ORDER BY BOARD_NO DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS
+		ONLY
+
+	</select> -->
+	
+	<!-- <select id="selectEventList" parameterType="map" resultType="EventBoard"> -->
+	
+<!-- 	<select id="selectEventList" parameterType="map" resultType="EventBoard"> -->
+	<select id="selectEventList" resultMap="eventBoardMap">
+		SELECT * FROM (
+		    SELECT ROWNUM RNUM, N.* FROM (
+		    	SELECT
+		            APP_ID, 
+		            APP_TITLE, 
+		            APP_SUB_TITLE,
+		            EVENT_CODE,
+		            EVENT_NAME,
+		            STAT_CODE,
+		            SUBSTR(LOCATION, 1, INSTR(LOCATION, ' ') - 1) AS REGION,
+		            START_DATE, 
+		            END_DATE,
+		            APP_ORG
+		        FROM EVENT_APPLICATION
+		        JOIN EVENT_CATEGORY USING(EVENT_CODE)
+		        ORDER BY APP_ID DESC
+		    ) N
+		    WHERE ROWNUM &lt;= #{endRow}
+       	)
+      	 WHERE RNUM &gt; #{startRow}
+	</select>
+		        <!-- JOIN EVENT_CATEGORY USING(EVENT_CODE)
+		        WHERE STAT_CODE = 'A' 로그인 회원가입 추가 후 수정========================== -->
+
+	<resultMap id="eventBoardMap" type="EventBoard">
+        <id property="appId" column="APP_ID"/>
+        <result property="appTitle" column="APP_TITLE"/>
+        <result property="appSubTitle" column="APP_SUB_TITLE"/>
+        <result property="eventCode" column="EVENT_CODE"/>
+        <result property="eventName" column="EVENT_NAME"/>
+        <result property="statCode" column="STAT_CODE"/>
+        <result property="region" column="REGION"/>
+        <result property="startDate" column="START_DATE"/>
+        <result property="endDate" column="END_DATE"/>
+        <result property="appOrg" column="APP_ORG"/>
+    </resultMap>
+        <!-- appSubTitle 아래 행 <result property="userNo" column="USER_NO"/> --> <!-- 로그인 후========================= -->
+
+	<select id="getEventCount" resultType="int"> 
+			SELECT COUNT(*)
+			FROM (
+		    	SELECT
+		            APP_ID, 
+		            APP_TITLE, 
+		            APP_SUB_TITLE,
+		            EVENT_CODE,
+		            EVENT_NAME,
+		            STAT_CODE,
+		            SUBSTR(LOCATION, 1, INSTR(LOCATION, ' ') - 1) AS REGION,
+		            START_DATE, 
+		            END_DATE,
+		            APP_ORG
+		        FROM EVENT_APPLICATION
+		        JOIN EVENT_CATEGORY USING(EVENT_CODE)
+		        ORDER BY APP_ID DESC
+		    )
+	</select>
+	<!--  이걸로 해야 함!!!!!!!!!! 현재는 임시 코드
+	SELECT COUNT(*) 
+			FROM EVENT_APPLICATION
+			WHERE STAT_CODE = 'A'
+	 -->
+	
+
+	<!-- 
+		
+		 상세 조회 
+		 
+		 <select id="selectNoticeById" parameterType="int" resultType="com.kh.festait.noticeboard.model.vo.NoticeBoard"> 
+		SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE, HIGHLIGHT
+		FROM NOTICE 
+		WHERE NOTICE_ID = #{noticeId} 
+		</select> -->
+
+</mapper>

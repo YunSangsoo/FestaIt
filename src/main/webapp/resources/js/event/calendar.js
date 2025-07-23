@@ -5340,25 +5340,7 @@ var FullCalendar = (function (exports) {
     function buildNavLinkAttrs(context, dateMarker, viewType = 'day', isTabbable = true) {
         const { dateEnv, options, calendarApi } = context;
         let dateStr = dateEnv.format(dateMarker, viewType === 'week' ? WEEK_FORMAT : DAY_FORMAT);
-        if (options.navLinks) {
-            let zonedDate = dateEnv.toDate(dateMarker);
-            const handleInteraction = (ev) => {
-                let customAction = viewType === 'day' ? options.navLinkDayClick :
-                    viewType === 'week' ? options.navLinkWeekClick : null;
-                if (typeof customAction === 'function') {
-                    customAction.call(calendarApi, dateEnv.toDate(dateMarker), ev);
-                }
-                else {
-                    if (typeof customAction === 'string') {
-                        viewType = customAction;
-                    }
-                    calendarApi.zoomTo(dateMarker, viewType);
-                }
-            };
-            return Object.assign({ title: formatWithOrdinals(options.navLinkHint, [dateStr, zonedDate], dateStr), 'data-navlink': '' }, (isTabbable
-                ? createAriaClickAttrs(handleInteraction)
-                : { onClick: handleInteraction }));
-        }
+        
         return { 'aria-label': dateStr };
     }
 
@@ -6081,7 +6063,7 @@ var FullCalendar = (function (exports) {
                     ...getDayClassNames(dateMeta, theme),
                     ...(props.extraClassNames || []),
                 ], elAttrs: Object.assign({ role: 'columnheader', colSpan: props.colSpan }, props.extraDataAttrs), renderProps: renderProps, generatorName: "dayHeaderContent", customGenerator: options.dayHeaderContent, defaultGenerator: renderInner$1, classNameGenerator: options.dayHeaderClassNames, didMount: options.dayHeaderDidMount, willUnmount: options.dayHeaderWillUnmount }, (InnerContent) => (y("div", { className: "fc-scrollgrid-sync-inner" },
-                y(InnerContent, { elTag: "a", elClasses: [
+                y(InnerContent, { elTag: "div", elClasses: [
                         'fc-col-header-cell-cushion',
                         props.isSticky && 'fc-sticky',
                     ], elAttrs: {
@@ -9413,32 +9395,32 @@ var FullCalendar = (function (exports) {
     Detects when the user clicks on an event within a DateComponent
     */
     class EventClicking extends Interaction {
-        constructor(settings) {
-            super(settings);
-            this.handleSegClick = (ev, segEl) => {
-                let { component } = this;
-                let { context } = component;
-                let seg = getElSeg(segEl);
-                if (seg && // might be the <div> surrounding the more link
-                    component.isValidSegDownEl(ev.target)) {
-                    // our way to simulate a link click for elements that can't be <a> tags
-                    // grab before trigger fired in case trigger trashes DOM thru rerendering
-                    let hasUrlContainer = elementClosest(ev.target, '.fc-event-forced-url');
-                    let url = hasUrlContainer ? hasUrlContainer.querySelector('a[href]').href : '';
-                    context.emitter.trigger('eventClick', {
-                        el: segEl,
-                        event: new EventImpl(component.context, seg.eventRange.def, seg.eventRange.instance),
-                        jsEvent: ev,
-                        view: context.viewApi,
-                    });
-                    if (url && !ev.defaultPrevented) {
-                        window.location.href = url;
-                    }
-                }
-            };
-            this.destroy = listenBySelector(settings.el, 'click', '.fc-event', // on both fg and bg events
-            this.handleSegClick);
-        }
+        // constructor(settings) {
+        //     super(settings);
+        //     this.handleSegClick = (ev, segEl) => {
+        //         let { component } = this;
+        //         let { context } = component;
+        //         let seg = getElSeg(segEl);
+        //         if (seg && // might be the <div> surrounding the more link
+        //             component.isValidSegDownEl(ev.target)) {
+        //             // our way to simulate a link click for elements that can't be <a> tags
+        //             // grab before trigger fired in case trigger trashes DOM thru rerendering
+        //             let hasUrlContainer = elementClosest(ev.target, '.fc-event-forced-url');
+        //             let url = hasUrlContainer ? hasUrlContainer.querySelector('a[href]').href : '';
+        //             context.emitter.trigger('eventClick', {
+        //                 el: segEl,
+        //                 event: new EventImpl(component.context, seg.eventRange.def, seg.eventRange.instance),
+        //                 jsEvent: ev,
+        //                 view: context.viewApi,
+        //             });
+        //             if (url && !ev.defaultPrevented) {
+        //                 window.location.href = url;
+        //             }
+        //         }
+        //     };
+        //     this.destroy = listenBySelector(settings.el, 'click', '.fc-event', // on both fg and bg events
+        //     this.handleSegClick);
+        // }
     }
 
     /*
@@ -12077,7 +12059,7 @@ var FullCalendar = (function (exports) {
                 props.showWeekNumber && (y(WeekNumberContainer, { elTag: "a", elClasses: ['fc-daygrid-week-number'], elAttrs: buildNavLinkAttrs(context, date, 'week'), date: date, defaultFormat: DEFAULT_WEEK_NUM_FORMAT$1 })),
                 !renderProps.isDisabled &&
                     (props.showDayNumber || hasCustomDayCellContent(options) || props.forceDayTop) ? (y("div", { className: "fc-daygrid-day-top" },
-                    y(InnerContent, { elTag: "a", elClasses: [
+                    y(InnerContent, { elTag: "div", elClasses: [
                             'fc-daygrid-day-number',
                             isMonthStart && 'fc-daygrid-month-start',
                         ], elAttrs: Object.assign(Object.assign({}, buildNavLinkAttrs(context, date)), { id: state.dayNumberId }) }))) : props.showDayNumber ? (
@@ -12835,7 +12817,7 @@ var FullCalendar = (function (exports) {
         return { start, end };
     }
 
-    var css_248z$3 = ":root{--fc-daygrid-event-dot-width:8px}.fc-daygrid-day-events:after,.fc-daygrid-day-events:before,.fc-daygrid-day-frame:after,.fc-daygrid-day-frame:before,.fc-daygrid-event-harness:after,.fc-daygrid-event-harness:before{clear:both;content:\"\";display:table}.fc .fc-daygrid-body{position:relative;z-index:1}.fc .fc-daygrid-day.fc-day-today{background-color:var(--fc-today-bg-color)}.fc .fc-daygrid-day-frame{min-height:100%;position:relative}.fc .fc-daygrid-day-top{display:flex;flex-direction:row-reverse}.fc .fc-day-other .fc-daygrid-day-top{opacity:.3}.fc .fc-daygrid-day-number{padding:4px;position:relative;z-index:4}.fc .fc-daygrid-month-start{font-size:1.1em;font-weight:700}.fc .fc-daygrid-day-events{margin-top:1px}.fc .fc-daygrid-body-balanced .fc-daygrid-day-events{left:0;position:absolute;right:0}.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{min-height:2em;position:relative}.fc .fc-daygrid-body-natural .fc-daygrid-day-events{margin-bottom:1em}.fc .fc-daygrid-event-harness{position:relative}.fc .fc-daygrid-event-harness-abs{left:0;position:absolute;right:0;top:0}.fc .fc-daygrid-bg-harness{bottom:0;position:absolute;top:0}.fc .fc-daygrid-day-bg .fc-non-business{z-index:1}.fc .fc-daygrid-day-bg .fc-bg-event{z-index:2}.fc .fc-daygrid-day-bg .fc-highlight{z-index:3}.fc .fc-daygrid-event{margin-top:1px;z-index:6}.fc .fc-daygrid-event.fc-event-mirror{z-index:7}.fc .fc-daygrid-day-bottom{font-size:.85em;margin:0 2px}.fc .fc-daygrid-day-bottom:after,.fc .fc-daygrid-day-bottom:before{clear:both;content:\"\";display:table}.fc .fc-daygrid-more-link{border-radius:3px;cursor:pointer;line-height:1;margin-top:1px;max-width:100%;overflow:hidden;padding:2px;position:relative;white-space:nowrap;z-index:4}.fc .fc-daygrid-more-link:hover{background-color:rgba(0,0,0,.1)}.fc .fc-daygrid-week-number{background-color:var(--fc-neutral-bg-color);color:var(--fc-neutral-text-color);min-width:1.5em;padding:2px;position:absolute;text-align:center;top:0;z-index:5}.fc .fc-more-popover .fc-popover-body{min-width:220px;padding:10px}.fc-direction-ltr .fc-daygrid-event.fc-event-start,.fc-direction-rtl .fc-daygrid-event.fc-event-end{margin-left:2px}.fc-direction-ltr .fc-daygrid-event.fc-event-end,.fc-direction-rtl .fc-daygrid-event.fc-event-start{margin-right:2px}.fc-direction-ltr .fc-daygrid-more-link{float:left}.fc-direction-ltr .fc-daygrid-week-number{border-radius:0 0 3px 0;left:0}.fc-direction-rtl .fc-daygrid-more-link{float:right}.fc-direction-rtl .fc-daygrid-week-number{border-radius:0 0 0 3px;right:0}.fc-liquid-hack .fc-daygrid-day-frame{position:static}.fc-daygrid-event{border-radius:3px;font-size:var(--fc-small-font-size);position:relative;white-space:nowrap}.fc-daygrid-block-event .fc-event-time{font-weight:700}.fc-daygrid-block-event .fc-event-time,.fc-daygrid-block-event .fc-event-title{padding:1px}.fc-daygrid-dot-event{align-items:center;display:flex;padding:2px 0}.fc-daygrid-dot-event .fc-event-title{flex-grow:1;flex-shrink:1;font-weight:700;min-width:0;overflow:hidden}.fc-daygrid-dot-event.fc-event-mirror,.fc-daygrid-dot-event:hover{background:rgba(0,0,0,.1)}.fc-daygrid-dot-event.fc-event-selected:before{bottom:-10px;top:-10px}.fc-daygrid-event-dot{border:calc(var(--fc-daygrid-event-dot-width)/2) solid var(--fc-event-border-color);border-radius:calc(var(--fc-daygrid-event-dot-width)/2);box-sizing:content-box;height:0;margin:0 4px;width:0}.fc-direction-ltr .fc-daygrid-event .fc-event-time{margin-right:3px}.fc-direction-rtl .fc-daygrid-event .fc-event-time{margin-left:3px}";
+    var css_248z$3 = ":root{--fc-daygrid-event-dot-width:8px}.fc-daygrid-day-events:after,.fc-daygrid-day-events:before,.fc-daygrid-day-frame:after,.fc-daygrid-day-frame:before,.fc-daygrid-event-harness:after,.fc-daygrid-event-harness:before{clear:both;content:\"\";display:table}.fc .fc-daygrid-body{position:relative;z-index:1}.fc .fc-daygrid-day.fc-day-today{background-color:var(--fc-today-bg-color)}.fc .fc-daygrid-day-frame{min-height:100%;position:relative}.fc .fc-daygrid-day-top{display:flex}.fc .fc-day-other .fc-daygrid-day-top{opacity:.3}.fc .fc-daygrid-day-number{padding:4px;position:relative;z-index:4}.fc .fc-daygrid-month-start{font-size:1.1em;font-weight:700}.fc .fc-daygrid-day-events{margin-top:1px}.fc .fc-daygrid-body-balanced .fc-daygrid-day-events{left:0;position:absolute;right:0}.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{min-height:2em;position:relative}.fc .fc-daygrid-body-natural .fc-daygrid-day-events{margin-bottom:1em}.fc .fc-daygrid-event-harness{position:relative}.fc .fc-daygrid-event-harness-abs{left:0;position:absolute;right:0;top:0}.fc .fc-daygrid-bg-harness{bottom:0;position:absolute;top:0}.fc .fc-daygrid-day-bg .fc-non-business{z-index:1}.fc .fc-daygrid-day-bg .fc-bg-event{z-index:2}.fc .fc-daygrid-day-bg .fc-highlight{z-index:3}.fc .fc-daygrid-event{margin-top:1px;z-index:6}.fc .fc-daygrid-event.fc-event-mirror{z-index:7}.fc .fc-daygrid-day-bottom{font-size:.85em;margin:0 2px}.fc .fc-daygrid-day-bottom:after,.fc .fc-daygrid-day-bottom:before{clear:both;content:\"\";display:table}.fc .fc-daygrid-more-link{border-radius:3px;cursor:pointer;line-height:1;margin-top:1px;max-width:100%;overflow:hidden;padding:2px;position:relative;white-space:nowrap;z-index:4}.fc .fc-daygrid-more-link:hover{background-color:rgba(0,0,0,.1)}.fc .fc-daygrid-week-number{background-color:var(--fc-neutral-bg-color);color:var(--fc-neutral-text-color);min-width:1.5em;padding:2px;position:absolute;text-align:center;top:0;z-index:5}.fc .fc-more-popover .fc-popover-body{min-width:220px;padding:10px}.fc-direction-ltr .fc-daygrid-event.fc-event-start,.fc-direction-rtl .fc-daygrid-event.fc-event-end{margin-left:2px}.fc-direction-ltr .fc-daygrid-event.fc-event-end,.fc-direction-rtl .fc-daygrid-event.fc-event-start{margin-right:2px}.fc-direction-ltr .fc-daygrid-more-link{float:left}.fc-direction-ltr .fc-daygrid-week-number{border-radius:0 0 3px 0;left:0}.fc-direction-rtl .fc-daygrid-more-link{float:right}.fc-direction-rtl .fc-daygrid-week-number{border-radius:0 0 0 3px;right:0}.fc-liquid-hack .fc-daygrid-day-frame{position:static}.fc-daygrid-event{border-radius:3px;font-size:var(--fc-small-font-size);position:relative;white-space:nowrap}.fc-daygrid-block-event .fc-event-time{font-weight:700}.fc-daygrid-block-event .fc-event-time,.fc-daygrid-block-event .fc-event-title{padding:1px}.fc-daygrid-dot-event{align-items:center;display:flex;padding:2px 0}.fc-daygrid-dot-event .fc-event-title{flex-grow:1;flex-shrink:1;font-weight:700;min-width:0;overflow:hidden}.fc-daygrid-dot-event.fc-event-mirror,.fc-daygrid-dot-event:hover{background:rgba(0,0,0,.1)}.fc-daygrid-dot-event.fc-event-selected:before{bottom:-10px;top:-10px}.fc-daygrid-event-dot{border:calc(var(--fc-daygrid-event-dot-width)/2) solid var(--fc-event-border-color);border-radius:calc(var(--fc-daygrid-event-dot-width)/2);box-sizing:content-box;height:0;margin:0 4px;width:0}.fc-direction-ltr .fc-daygrid-event .fc-event-time{margin-right:3px}.fc-direction-rtl .fc-daygrid-event .fc-event-time{margin-left:3px}";
     injectStyles(css_248z$3);
 
     var index$3 = createPlugin({

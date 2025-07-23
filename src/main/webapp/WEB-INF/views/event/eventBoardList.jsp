@@ -83,18 +83,14 @@ thead.lavender-header th {
 				</div>
 				<div class="flex-area stretch">
 					<div>기간 선택창(행사 신청서에서 가져오기)</div>
-					<%--  <div class="col-3">
-            	<form:input type="text" path="startDate" class="form-control" id="startDate" placeholder="행사 시작일" value="" required="required"/>
-            </div>
-            
-            <div class="col-3">
-            	<form:input type="text" path="endDate" class="form-control" id="endDate" placeholder="행사 종료일" value="" required="required"/>
-            </div>
-            <div class="w-100"></div>
-          <hr class="my-3 mx-3">
-				</div>
 
-			 --%>
+					<%-- 					<form:input type="text" path="startDate" class="form-control"
+						id="startDate" placeholder="행사 시작일" value="" required="required" />
+					<form:input type="text" path="endDate" class="form-control"
+						id="endDate" placeholder="행사 종료일" value="" required="required" /> --%>
+
+
+					--%>
 				</div>
 			</div>
 
@@ -105,15 +101,15 @@ thead.lavender-header th {
 					<div class="search-option">검색어</div>
 
 					<select name="region">
-						<option disabled selected>전국</option>
-						<option>서울시</option>
-						<option>인천시</option>
-						<option>경기도</option>
-						<option>강원도</option>
-						<option>충청도</option>
-						<option>전라도</option>
-						<option>경상도</option>
-						<option>제주도</option>
+						<option value="" disabled selected>전국</option>
+						<option value="seoul">서울시</option>
+						<option value="incheon">인천시</option>
+						<option value="gyeonggi">경기도</option>
+						<option value="gangwon">강원도</option>
+						<option value="chungcheong">충청도</option>
+						<option value="jeonla">전라도</option>
+						<option value="gyeongsang">경상도</option>
+						<option value="jeju">제주도</option>
 					</select> <input type="search" class="form-search">
 				</div>
 				<div class="flex-area stretch">
@@ -150,25 +146,69 @@ thead.lavender-header th {
 
 		<div class="flex-area result-inform">
 			<div class="flex-area view-format flex-center">
-				<div class="total-num">총 "${totalNo}"건</div>
+				<div class="total-num">총 ${totalCount}건</div>
 				<a href="${pageContext.request.contextPath}/myEventApp"
 					class="btn lavender-btn">행사 신청 현황</a>
 				<!-- 경로 수정 필요 -->
 			</div>
 
 			<div class="flex-area view-format">
-				<div class="list-view">리스트형</div>
+				<a class="view-button list"
+					href="${pageContext.request.contextPath}/eventBoard/list/#;">리스트형</a>
 				<div class="v-line"></div>
-				<div class="calendar-view">캘린더형</div>
+				<a class="view-button calendar"
+					href="${pageContext.request.contextPath}/eventBoard/calendar">캘린더형</a>
 			</div>
 		</div>
 
 
+
+
+
+
+
+
 		<div class="event-section">
 			<div class="events-grid">
+				<c:choose>
+					<c:when test="${not empty eventList}">
+						<c:forEach var="event" items="${eventList}">
+							<div class="event-card" id="event-card">
+								<a
+									href="${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}"
+									class="text-decoration-none text-dark">
+									<div class="event-info" id="event-info">
+										<div class="tag">${event.eventName}</div>
+										<div class="event-name">${event.appTitle}</div>
+										<div class="date">
+											<fmt:formatDate value="${notice.createDate}"
+												pattern="yyyy.MM.dd" />
+											-
+											<fmt:formatDate value="${notice.createDate}"
+												pattern="yyyy.MM.dd" />
+										</div>
+										<div>지역: ${event.region}</div>
+										<div>주최: ${event.appOrg}</div>
+									</div> <img
+									src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
+									class="EventItemHover-img" alt="">
+
+								</a>
+							</div>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div>등록된 행사 게시물이 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
+
+
+
+
 
 				<div class="event-card" id="event-card">
 					<div class="event-info" id="event-info">
+
 						<div class="tag">진행중</div>
 						<div class="event-name">여름 해변축제</div>
 						<div>2025.07.01 ~ 07.20</div>
@@ -323,14 +363,13 @@ thead.lavender-header th {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 	<script>
-	$(".event-card").on("mouseenter", function() {
-	    $(this).find(".EventItemHover-img").fadeIn(100);
-	    $(this).find(".event-info").fadeOut(300);
-	  })
-	  .on("mouseleave", function() {
-	    $(this).find(".EventItemHover-img").fadeOut(100);
-	    $(this).find(".event-info").fadeIn(300);
-	  });
+		$(".event-card").on("mouseenter", function() {
+			$(this).find(".EventItemHover-img").fadeIn(100);
+			$(this).find(".event-info").fadeOut(300);
+		}).on("mouseleave", function() {
+			$(this).find(".EventItemHover-img").fadeOut(100);
+			$(this).find(".event-info").fadeIn(300);
+		});
 	</script>
 </body>
 

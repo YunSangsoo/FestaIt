@@ -164,6 +164,14 @@ input[type="checkbox"]{
 	gap: 10px;
 }
 
+.view-button {
+	text-decoration: none;
+	color: gray
+}
+
+
+
+
 /* 섹션 제목 */
 .section-title, .review-title, .today-title, .notice-title {
 	font-size: 20px;
@@ -190,7 +198,7 @@ input[type="checkbox"]{
 }
 
 /* 카드 상단 태그 */
-.event-card .tag {
+/* .event-card .tag {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -199,6 +207,18 @@ input[type="checkbox"]{
 	font-size: 12px;
 	padding: 2px 6px;
 	border-radius: 4px;
+} */
+
+.event-card .tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #EA870E;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 10;
 }
 
 .event-info {
@@ -218,7 +238,7 @@ input[type="checkbox"]{
 .EventItemHover-img {
 	width: 100%;
 	height: 100%;
-	border-radius: 4px;
+	border-radius: 7px;
 	display: none;
 	position: relative;
 }
@@ -247,3 +267,14 @@ input[type="checkbox"]{
 }
 
  */
+ 
+.fc-col-header-cell-cushion {
+ color: black;
+}
+ 
+.fc-day-sun>*>.fc-col-header-cell-cushion {
+ color: red;
+}
+.fc-day-sat>*>.fc-col-header-cell-cushion {
+ color: blue;
+}

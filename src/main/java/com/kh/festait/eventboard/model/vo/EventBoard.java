@@ -2,18 +2,36 @@ package com.kh.festait.eventboard.model.vo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.kh.festait.common.model.vo.Image;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
 public class EventBoard {
-	private int noticeId;
-    private String noticeTitle;
-    private String noticeDetail;
-    private Date createDate;
-    private Date updateDate;
-    private String highlight;
+	private int appId;
+	private int userNo;
+	private String eventCode;
+	private String eventName;
+	private String statCode;
+	private String appTitle;
+	private String appSubTitle;
+	private String region;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date startDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date endDate;
+	private String startTime;
+	private String endTime;
+
+	private String appOrg;
+	
+	private Image posterImage;
 
 
 }

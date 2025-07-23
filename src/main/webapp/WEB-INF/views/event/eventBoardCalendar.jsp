@@ -155,13 +155,12 @@ thead.lavender-header th {
 				<div class="total-num">총 "${totalNo}"건</div>
 				<a href="${pageContext.request.contextPath}/myEventApp"
 					class="btn lavender-btn">행사 신청 현황</a>
-				<!-- 경로 수정 필요 -->
 			</div>
 
 			<div class="flex-area view-format">
-				<div class="list-view">리스트형</div>
+				<a class="view-button list" href="${pageContext.request.contextPath}/eventBoard/list">리스트형</a>
 				<div class="v-line"></div>
-				<div class="calendar-view">캘린더형</div>
+				<a class="view-button calendar" href="${pageContext.request.contextPath}/eventBoard/calendar/#;">캘린더형</a>
 			</div>
 		</div>
 
@@ -256,6 +255,7 @@ thead.lavender-header th {
 			calendar.render();
 		});
 	</script>
+
 </body>
 
 </html>
