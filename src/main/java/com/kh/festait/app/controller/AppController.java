@@ -1,4 +1,7 @@
 package com.kh.festait.app.controller;
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.kh.festait.app.model.vo.AppManager;
 import com.kh.festait.app.model.vo.EventApplication;
 import com.kh.festait.app.service.AppService;
+import com.kh.festait.common.Pagination;
 import com.kh.festait.common.Utils;
 import com.kh.festait.common.model.vo.Image;
+import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.common.service.ImageService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,15 +36,19 @@ public class AppController {
 	
 	@Autowired
 	private final AppService appService;
-	
 	@Autowired
 	private final ImageService imgService;
-	
 	@Autowired
 	private final ServletContext app;
 	
+	/*
+	 * 신청서의 BoardCode는 A이다.
+	 * 이미지는 모두 한 테이블에 저장되기 때문에,
+	 * 어느 페이지에서 사용된 이미지인지 분류하기 위해 사용
+	 */
 	private String boardCode = "A";
-
+    
+	//신청서 신규 작성 페이지 GetMapping
 	@GetMapping("/appWrite")
 	public String appWrite(Model model) {
 		EventApplication evApp = new EventApplication();
@@ -48,6 +57,7 @@ public class AppController {
 		return "app/eventApplicationForm";
 	}
 	
+	//신청서 수정 페이지 GetMapping
 	@GetMapping("/appEdit/{appId}")
 	public String loadApplying(@PathVariable("appId") int appId, Model model,RedirectAttributes ra) {
 		EventApplication eventApplication = appService.getEvAppById(appId);
@@ -56,8 +66,10 @@ public class AppController {
 		log.debug("evApp: {}", eventApplication);
 		log.debug("appManager : {}", eventApplication.getAppManager());
 		log.debug("image : {}", eventApplication.getPosterImage());
+		log.debug("evCode : {}", eventApplication.getEventCode());
 		
 		if(eventApplication!=null) {
+			
 			if(eventApplication.getAppDetail()!=null)
 				eventApplication.setAppDetail(Utils.newLineClear(eventApplication.getAppDetail()));
 			model.addAttribute("eventApplication",eventApplication);
@@ -67,6 +79,11 @@ public class AppController {
 		return "app/eventApplicationForm";
 	}
 	
+	/*행사 신청서 임시저장, 제출 시 수행되는 postMapping 메소드
+	 * 행사 신청서 테이블에는 해당 행사신청서의 상태를 나타내는 코드 컬럼(statCode)이 있으며,
+	 * 임시 저장시에는 아직 작성중(P)인 상태, 제출시에는 제출완료(S)인 상태로 구분한다.
+	 * 이외에도, 관리자가 처리하는 과정에서 승인(A), 반려(R) 등이 있음 
+	 */
 	@PostMapping("/appSave")
 	public String applyingForm(
 			@ModelAttribute("eventApplication") /*@Valid*/  EventApplication eventApplication,
@@ -80,13 +97,14 @@ public class AppController {
 			@RequestParam(value="existingImgNo", required=false, defaultValue="0") int existingImgNo // JSP에서 hidden 필드로 전달된 기존 이미지 번호
 			) {
 		
-		
-
+		//사용자가 업로드한 새로운 이미지 파일이 들어갈 객체
 		Image posterImage = null;
-		String newChangeName = null;
 		
 		// 1. 새로운 파일이 업로드된 경우
         if (upfile != null && !upfile.isEmpty()) {
+        	//파일 저장시 저장 경로 포함 파일명
+    		String newChangeName = null;
+    		
             // Utils.saveFile 함수를 사용하여 파일 저장 및 변경된 파일명(웹 접근 경로 포함) 얻기
             newChangeName = Utils.saveFile(upfile, app, boardCode); // "eventPoster"는 예시
             
@@ -127,8 +145,11 @@ public class AppController {
 		if("save".equals(action))
 			eventApplication.setStatCode("P");
 		//S = 제출 완료
-		else
+		else {
 			eventApplication.setStatCode("S");
+			eventApplication.setSubmittedDate(new Date());
+			log.debug("submitDate : {}" , eventApplication.getSubmittedDate());
+		}
 		log.debug("evApp : {}" , eventApplication);
 
 		int result = appService.saveOrUpdateApplication(eventApplication);
@@ -140,6 +161,28 @@ public class AppController {
 		if("save".equals(action)) {
 			return "redirect:/myEventApp/appEdit/" + eventApplication.getAppId();
 		}else
-			return "redirect:/myEventApp/appEdit/" + eventApplication.getAppId();
+			return "redirect:/myEventApp";
+	}
+	
+	@GetMapping("")
+	public String appList(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
+		
+		int totalCount = appService.selectAppListCount();
+		int limit = 10; // 한 페이지 하단에 보여질 페이지 목록 수
+        int pageBlock = 10; // 한 페이지에 보여질 게시글 수
+        
+        //com.kh.festait.common에 Pagination 클래스를, com.kh.festait.common.model.vo에 pageInfo VO를 생성해뒀습니다.
+        PageInfo pi = Pagination.getPageInfo(totalCount, page, limit, pageBlock);
+        
+        List<EventApplication> list = appService.selectAppList(pi);
+        
+        model.addAttribute("list", list);
+        model.addAttribute("pi", pi);
+        
+        log.debug("총 게시글 수: {}", totalCount);
+        log.debug("페이징 정보: {}", pi);
+        log.debug("조회된 게시글 목록: {}", list.size());
+		
+		return "app/eventApplicationList";
 	}
 }

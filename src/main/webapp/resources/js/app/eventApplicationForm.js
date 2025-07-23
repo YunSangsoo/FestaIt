@@ -92,6 +92,41 @@ $('#endDate').datepicker({
 }
 });
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    const homepageLinkInput = document.getElementById('homepageLink');
+    const visitHomepageBtn = document.getElementById('visitHomepageBtn');
+
+    // 페이지 로드 시 초기 상태 설정 및 버튼 활성화/비활성화 제어
+    function updateHomepageButtonVisibility() {
+        if (homepageLinkInput.value.trim() !== '') {
+            visitHomepageBtn.style.display = 'block'; // 값이 있으면 버튼 보이기
+            visitHomepageBtn.disabled = false;       // 버튼 활성화
+        } else {
+            visitHomepageBtn.style.display = 'none'; // 값이 없으면 버튼 숨기기
+            visitHomepageBtn.disabled = true;        // 버튼 비활성화
+        }
+    }
+
+    // 입력 필드 값이 변경될 때마다 버튼 가시성 및 활성화 상태 업데이트
+    homepageLinkInput.addEventListener('input', updateHomepageButtonVisibility);
+
+    // 버튼 클릭 시 해당 링크로 이동
+    visitHomepageBtn.addEventListener('click', function() {
+        let url = homepageLinkInput.value.trim();
+        if (url) {
+            // URL이 'http://' 또는 'https://'로 시작하지 않으면 추가
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'http://' + url;
+            }
+            window.open(url, '_blank'); // 새 탭에서 열기
+        }
+    });
+
+    // 페이지 로드 시 한 번 실행하여 초기 상태 설정
+    updateHomepageButtonVisibility();
+});
+
 const posterInput = document.querySelector('.input-poster');
 const existingImgNoInput = document.getElementById('existingImgNo'); // 추가: hidden input
 const deleteImageBtn = document.querySelector('.delete-image-btn'); // 삭제 버튼
