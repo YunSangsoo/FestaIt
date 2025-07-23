@@ -1,6 +1,8 @@
 package com.kh.festait.app.model.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,16 @@ public class AppDaoImpl implements AppDao {
 	@Override
 	public int insertBoardImgList(List<Image> imgList) {
 		return session.insert("app.insertBoardImg",imgList);
+	}
+
+	@Override
+	public List<EventApplication> selectAppList(Map<String, Object> paramMap) {
+		return session.selectList("app.selectAppList",paramMap);
+	}
+
+	@Override
+	public int selectAppListCount() {
+		return session.selectOne("app.selectAppListCount");
 	}
 
 }

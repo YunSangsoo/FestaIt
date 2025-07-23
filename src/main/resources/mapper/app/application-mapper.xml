@@ -20,6 +20,7 @@
 		END_DATE,
 		START_TIME,
 		END_TIME,
+		SUBMITTED_DATE,
 		APP_FEE,
 		APP_ITEM,
 		APP_HOST,
@@ -39,6 +40,7 @@
 		#{endDate},
 		#{startTime},
 		#{endTime},
+		SYSDATE,
 		#{appFee},
 		#{appItem},
 		#{appHost},
@@ -90,6 +92,7 @@
         <result property="startTime" column="START_TIME"/>
         <result property="endTime" column="END_TIME"/>
         <result property="createDate" column="CREATE_DATE"/>
+        <result property="submittedDate" column="SUBMITTED_DATE"/>
         <result property="appFee" column="APP_FEE"/>
         <result property="appItem" column="APP_ITEM"/>
         <result property="appHost" column="APP_HOST"/>
@@ -121,6 +124,7 @@
 		END_DATE = #{endDate},
 		START_TIME = #{startTime},
 		END_TIME = #{endTime},
+		SUBMITTED_DATE = SYSDATE,
 		APP_FEE = #{appFee},
 		APP_ITEM = #{appItem},
 		APP_HOST = #{appHost},
@@ -149,5 +153,25 @@
 			</foreach>
 		) C
 	</insert>
+	
+	
+	
+	<select id="selectAppListCount" resultType="int">
+    	SELECT COUNT(*) FROM NOTICE
+	</select>
+	
+	
+	<select id="selectAppList" resultMap="eventApplicationMap">
+		SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
+    	FROM (
+	    	SELECT EA.*, ROWNUM RNUM
+		    FROM (
+		        SELECT * FROM EVENT_APPLICATION
+		        ORDER BY CREATE_DATE DESC
+	    	) EA
+    	) A LEFT JOIN APP_MANAGER B
+    	ON A.APP_ID = B.APP_ID
+        WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
+    </select>
 	
 </mapper>
