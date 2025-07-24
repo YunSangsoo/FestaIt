@@ -1,6 +1,9 @@
 package com.kh.festait.app.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -9,12 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.festait.app.model.dao.AppDao;
-import com.kh.festait.app.model.dao.AppDaoImpl;
 import com.kh.festait.app.model.vo.AppManager;
 import com.kh.festait.app.model.vo.EventApplication;
 import com.kh.festait.common.Utils;
 import com.kh.festait.common.model.dao.ImageDao;
 import com.kh.festait.common.model.vo.Image;
+import com.kh.festait.common.model.vo.PageInfo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -132,5 +135,22 @@ public class AppServiceImple implements AppService {
 
 		return result;
 	}
+	
+	@Override
+    public int selectAppListCount() {
+        return appDao.selectAppListCount();
+    }
+	
+	@Override
+    public List<EventApplication> selectAppList(PageInfo pi) {
+        // offset: 몇 개의 게시글을 건너뛸 것인가
+        // limit: 몇 개의 게시글을 조회할 것인가 (boardLimit과 동일)
+
+		Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("offset", pi.getOffset()); // PageInfo에서 계산된 offset 사용
+        paramMap.put("limit", pi.getLimit());   // PageInfo에서 계산된 limit 사용 (boardLimit과 동일)
+
+        return appDao.selectAppList(paramMap);
+    }
 
 }

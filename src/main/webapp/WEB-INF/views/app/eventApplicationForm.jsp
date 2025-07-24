@@ -32,13 +32,22 @@
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
-	<main class="container">
 	
-        <form:form modelAttribute="eventApplication" action="${pageContext.request.contextPath}/myEventApp/appSave" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+	<c:set var="requestUri" value="${requestScope['javax.servlet.forward.request_uri']}" />
+    <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+    <c:set var="isViewMode" value="${fn:startsWith(requestUri, contextPath.concat('/eventApp/'))}" />
+	<c:set var="formActionUrl" value="${contextPath}/myEventApp/appSave" />
+    <c:if test="${isViewMode}">
+        <c:set var="formActionUrl" value="${contextPath}/eventApp/approve" /> <%-- 수정 기능이 있다면 이 URL로 POST --%>
+    </c:if>
+	
+	
+	<main class="container shadow p-3 mb-5 rounded">
+        <form:form modelAttribute="eventApplication" action="${formActionUrl }" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
         <form:hidden path="appId"/>
         <input type="hidden" name="existingImgNo" id="existingImgNo" 
                value="${empty eventApplication.posterImage.imgNo ? 0 : eventApplication.posterImage.imgNo }" />
-        <c:if test="${eventApplication.statCode == 'S'}">  <%-- 조건 변경: 'S'와 같을 때 --%>
+        <c:if test="${eventApplication.statCode == 'S' || isViewMode}">  <%-- 조건 변경: 'S'와 같을 때 --%>
         	<fieldset disabled>
     	</c:if>
         
@@ -65,7 +74,11 @@
 					
 					<div class="homepage-link-section mt-4">
 					    <label for="homepageLink" class="form-label">행사 홈페이지</label>
-					    <form:input path="website" type="text" class="form-control" id="homepageLink" placeholder="사이트 주소"/>
+					    
+		  				<div class="input-group">
+						    <form:input path="website" type="text" class="form-control" id="homepageLink" placeholder="사이트 주소"/>
+						    <button type="button" class="btn input-group-text btn-success" id="visitHomepageBtn" style="display: none;" disabled>링크</button>
+						</div>
 					</div>
 			
 				</div>
@@ -77,42 +90,37 @@
 		<div class="col-7 order-md-last">
         
           <div class="row g-3">
-          	
-			<div class="col-md-3">
-			
-              <form:select path="eventCode" class="form-select text-center" id="category" required="required">
-                <option value="" disabled
-	                <c:choose>
-			            <c:when test="${empty eventApplication.eventCode}">
-			                selected
-			            </c:when>
-			        </c:choose>
-                >행사 종류</option>
+			<div class="form-floating col-4">
+              <form:select path="eventCode" class="form-select text-center fs-5 h-100" id="category" required="required">
+                <option selected>행사 종류</option>
                 <option value="L">지역축제</option>
                 <option value="F">박람회</option>
                 <option value="E">전시회</option>
                 <option value="O">기타</option>
               </form:select>
-              <div class="invalid-feedback">
-              	행사 종류를 선택해주세요.
-              </div>
+  			<label for="category" class="mx-1">행사 종류</label>
             </div>
             <div class="w-100"></div>
           <hr class="my-3 mx-3">
           
-          
-            <div class="col-sm-10">
+          	<div class=" col-sm-10">
+            <div class="form-floating">
               <form:input type="text" path="appSubTitle" class="form-control" id="middle-title" placeholder="행사 소제목 입력" value="" required="required"/>
+              <label for="middle-title">행사 소제목</label>
               <div class="invalid-feedback">
               	행사 소제목을 입력해주세요.
               </div>
             </div>
+            </div>
 
             <div class="col-sm-10">
-              <form:input type="text" path="appTitle" class="form-control fs-2" id="title" placeholder="행사 제목 입력" value="" required="required"/>
+            <div class="form-floating">
+              <form:input type="text" path="appTitle" class="form-control" id="title" placeholder="행사 제목 입력" value="" required="required"/>
+              <label for="title">행사 제목</label>
               <div class="invalid-feedback">
               	행사 제목을 입력해주세요.
               </div>
+            </div>
             </div>
 
             <div class="col-3">
@@ -129,6 +137,7 @@
           	<div class="col-6 row">
           	<p class="form-label col-12"> 관람 시간 </p>
           		<div class="col-10 my-3">
+          		<!-- placeholder="관람 시작 시간"-->
           			<form:input type="text" path="startTime" class="form-control" id="startTime" placeholder="관람 시작 시간" value="" required="required"/>
           		</div>
           		<div class="col-10 my-3">
@@ -139,7 +148,7 @@
           	<div class="col-6 row order-md-last">
           	
           		<p class="form-label col-9"> 행사 장소 </p>
-          		<button type="button" onclick="findAddress()" class="col-3 fs-6 btn-sm" id="findAddressBtn">검색</button>
+          		<button type="button" onclick="findAddress()" class="btn btn-outline-secondary col-3 fs-6 btn-sm" id="findAddressBtn">검색</button>
           		<div class="col-5 my-1">
           			<form:input type="text" path="postCode" class="form-control" readonly="true" id="postcode" placeholder="우편 번호" value="" required="required"/>
           		</div>
@@ -155,9 +164,9 @@
           
           <hr class="my-3 mx-3">
           	<div class="col-12 mb-2">
-			  <div class="form-group">
+			  <div class="form-floating">
+			    <form:textarea class="form-control overflow-y-auto" path="appDetail" id="app_detail" style="height: 200px" placeholder="행사의 내용을 입력해주세요." required="required"></form:textarea>
 			    <label for="app_detail">행사 소개</label>
-			    <form:textarea class="form-control" path="appDetail" id="app_detail" rows="8" required="required"></form:textarea>
 			  </div>
 		  </div>
 		  
@@ -239,7 +248,7 @@
 			          <button class="w-10 btn btn-primary btn-lg" name="action" type="submit" value="submit">행사 신청</button> 
 			    </div>
 		    </div>
-	    <c:if test="${eventApplication.statCode == 'S'}">  <%-- 조건 변경: 'S'와 같을 때 --%>
+	    <c:if test="${eventApplication.statCode == 'S' || isViewMode}">  <%-- 조건 변경: 'S'와 같을 때 --%>
 	    	</fieldset>
 	    </c:if>
 	</form:form>
@@ -251,6 +260,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	
 	
 	<script>
 		
