@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.kh.festait.common.model.vo.Image;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +22,7 @@ public class EventApplication {
 	private String appDetail;
 	private String location;
 	private String locationDetail;
-	private String postcode;
+	private String postCode;
 	private String website;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -44,6 +46,6 @@ public class EventApplication {
 	
 	private AppManager appManager;
 	
-	private String imgsource;
+	private Image posterImage;
 	
 }
