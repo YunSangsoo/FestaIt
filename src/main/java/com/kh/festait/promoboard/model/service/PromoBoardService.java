@@ -29,5 +29,6 @@ public interface PromoBoardService {
     int updatePromoWithImageAndUrl(PromoBoardVo promo);
 
     // 홍보 게시글 삭제 (이미지 및 URL 처리 포함)
-    int deletePromoWithImageAndUrl(int promoId, int imgNoToDelete);
+    // imgNoToDelete 매개변수는 더 이상 필요 없으므로 제거합니다.
+    int deletePromoWithImageAndUrl(int promoId); // ★★★ 이 줄을 수정합니다 ★★★
 }

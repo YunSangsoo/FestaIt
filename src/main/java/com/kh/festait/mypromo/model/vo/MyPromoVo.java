@@ -1,6 +1,6 @@
 package com.kh.festait.mypromo.model.vo;
 
-import java.util.Date; // java.util.Date 사용
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,38 +17,43 @@ import lombok.ToString;
 @ToString
 @Builder
 public class MyPromoVo {
-    // PROM_ID
+    // PROM_ID (홍보 식별 번호)
     private int promoId;
-    // EVENT_ID
-    private int eventId;
+    
+    // APP_ID (행사 신청서 식별 번호)
+    private int appId;
 
-    // PROM_TITLE
+    // PROM_TITLE (홍보 제목)
     private String promoTitle;
-    // PROM_DETAIL
+    
+    // PROM_DETAIL (홍보 내용)
     private String promoDetail;
-    // CREATE_DATE
+    
+    // CREATE_DATE (작성일)
     private Date createDate;
-    // UPDATE_DATE
+    
+    // UPDATE_DATE (수정일)
     private Date updateDate;
-    // VIEWS
+    
+    // 조회수
     private int views;
 
-    // --- 조인을 통해 가져오는 파생 정보 (다른 테이블과 연관) ---
-    // 현재 DB 스키마에서 EVENT_PROMOTION -> EVENT -> EVENT_APPLICATION -> USER 조인 경로를 통해 가져오기
-    
+    // --- 조인한 정보 ---
     // 행사 신청자 USER_NO
     private int userNo;
+    
     // 행사 신청자 닉네임
     private String promoWriter;
-    // 행사 신청자 계정 상태
+    
+    // 행사 신청자 계정 상태 (USER.STATUS)
     private String promoStatus;
 
-    // 포스터 이미지 경로
+    // 포스터 이미지 경로 (IMAGE.CHANGE_NAME or ORIGIN_NAME)
     private String posterPath;
-    // 행사 웹사이트 URL
+
+    // 행사 웹사이트 URL (EVENT_APPLICATION.WEBSITE)
     private String promotionPageUrl;
-    // 행사 신청 상태 코드
+
+    // 행사 신청 상태 코드 (APP_STATUS.STAT_CODE 등)
     private String isPromoted;
-    // 행사 신청 ID
-    private int appId;
 }

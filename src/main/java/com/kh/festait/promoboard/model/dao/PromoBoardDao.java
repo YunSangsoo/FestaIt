@@ -11,16 +11,17 @@ public interface PromoBoardDao {
     int selectPromoCount();
     List<PromoBoardVo> selectPromoList(PageInfo pi, Map<String, Object> paramMap);
     int selectSearchPromoCount(Map<String, Object> paramMap);
-    List<PromoBoardVo> selectSearchPromo(Map<String, Object> paramMap, PageInfo pi); // ⭐⭐ 이 메서드 선언이 정확히 있는지 확인해주세요 ⭐⭐
+    List<PromoBoardVo> selectSearchPromo(Map<String, Object> paramMap, PageInfo pi);
     PromoBoardVo selectPromoDetail(int promoId);
     int increasePromoViews(int promoId);
     int insertPromo(PromoBoardVo promo);
-    int insertImage(PromoBoardVo promo);
-    int insertPromImage(PromoBoardVo promo);
+    int insertImage(PromoBoardVo promo); // 이 메서드를 사용하세요.
+    // int insertPromImage(PromoBoardVo promo); // ★★★ 이 줄은 이미 없어야 함 (확인) ★★★
     int updateEventApplicationWebsite(PromoBoardVo promo);
     int updatePromo(PromoBoardVo promo);
     int updateImage(PromoBoardVo promo);
-    int deletePromImageByPromoId(int promoId);
+    // int deletePromImageByPromoId(int promoId); // ★★★ 이 줄을 삭제하세요 ★★★
+    int deleteImageByPromoId(int promoId); // ★★★ 이 줄을 추가하세요 ★★★
     int deleteImageByImgNo(int imgNo);
     int deletePromo(int promoId);
     

@@ -35,7 +35,7 @@ public class PromoBoardDaoImpl implements PromoBoardDao {
     @Override
     public List<PromoBoardVo> selectSearchPromo(Map<String, Object> paramMap, PageInfo pi) {
         // paramMap에 PageInfo 객체가 "pi" 키로 이미 포함되어 있으므로, paramMap만 전달합니다.
-        return sqlSession.selectList("promoBoard.selectSearchPromo", paramMap); // ⭐⭐ 이 메서드 호출이 올바른지 확인 ⭐⭐
+        return sqlSession.selectList("promoBoard.selectSearchPromo", paramMap);
     }
 
     @Override
@@ -59,11 +59,6 @@ public class PromoBoardDaoImpl implements PromoBoardDao {
     }
 
     @Override
-    public int insertPromImage(PromoBoardVo promo) {
-        return sqlSession.insert("promoBoard.insertPromImage", promo);
-    }
-
-    @Override
     public int updateEventApplicationWebsite(PromoBoardVo promo) {
         return sqlSession.update("promoBoard.updateEventApplicationWebsite", promo);
     }
@@ -78,9 +73,10 @@ public class PromoBoardDaoImpl implements PromoBoardDao {
         return sqlSession.update("promoBoard.updateImage", promo);
     }
 
+
     @Override
-    public int deletePromImageByPromoId(int promoId) {
-        return sqlSession.delete("promoBoard.deletePromImageByPromoId", promoId);
+    public int deleteImageByPromoId(int promoId) { // ★★★ 이 메서드를 추가하세요 ★★★
+        return sqlSession.delete("promoBoard.deleteImageByPromoId", promoId);
     }
 
     @Override

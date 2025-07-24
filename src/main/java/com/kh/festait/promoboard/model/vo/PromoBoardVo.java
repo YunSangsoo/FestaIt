@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-// 홍보 게시물 정보 VO (Value Object)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,48 +16,29 @@ import lombok.ToString;
 @ToString
 @Builder
 public class PromoBoardVo {
-    // 게시물 번호 (PROM_ID)
-    private int promoId;
-    // 행사 번호 (EVENT_ID)
-    private int eventId;
+    // EVENT_PROMOTION 테이블
+    private int promoId;           // PROM_ID (홍보 식별 번호)
+    private int appId;             // APP_ID (행사 신청서 식별 번호)
+    private String promoTitle;     // PROM_TITLE (홍보 제목)
+    private String promoDetail;    // PROM_DETAIL (홍보 내용)
+    private Date createDate;       // CREATE_DATE (홍보 작성일)
+    private Date updateDate;       // UPDATE_DATE (홍보 수정일)
+    private int views;             // VIEWS (조회수)
 
-    // 제목 (PROM_TITLE)
-    private String promoTitle;
-    // 내용 (PROM_DETAIL)
-    private String promoDetail;
-    // 작성일 (CREATE_DATE)
-    private Date createDate;
-    // 수정일 (UPDATE_DATE)
-    private Date updateDate;
-    // 조회수 (VIEWS)
-    private int views;
+    // USER 테이블 (작성자 정보)
+    private String promoWriter;    // NICKNAME (작성자 닉네임)
 
-    // --- 조인을 통해 가져오는 파생 정보 ---
-    // 작성자 (USER 테이블 NICKNAME)
-    private String promoWriter;
+    // PROM_IMAGE + IMAGE 테이블 (이미지 정보)
+    private int promImgNo;         // PROM_IMG_NO (PROM_IMAGE 기본키)
+    private long imgNo;             // IMG_NO (IMAGE 기본키)
+    private String posterPath;     // CHANGE_NAME (파일명)
+    private String originalFilename;// ORIGIN_NAME (원본 파일명)
 
-    // 포스터 이미지 경로 (IMAGE.CHANGE_NAME) - 실제 파일명 (웹 경로 포함)
-    private String posterPath;
-    // ⭐ 추가: 이미지 원본 파일명 (IMAGE.ORIGIN_NAME) ⭐
-    private String originalFilename;
-    // ⭐ 추가: 이미지 번호 (IMAGE.IMG_NO) ⭐
-    private int imgNo;
-    // ⭐⭐ 새로 추가: PROM_IMAGE 테이블의 기본 키 (PROM_IMG_NO) ⭐⭐
-    private int promImgNo;
+    // EVENT_APPLICATION 테이블 (행사 신청서 정보)
+    private String promotionPageUrl; // WEBSITE (행사 사이트 URL)
+    private String isPromoted;     // STAT_CODE (신청서 상태 코드)
 
-    // 포스터 클릭 시 이동할 URL (EVENT_APPLICATION.WEBSITE)
-    private String promotionPageUrl;
-    // 포스터 클릭 기능 활성화 여부 ('Y' 또는 'N')
-    private String isPromoted;
-
-    // APP_ID (연관된 행사 신청 ID) - EVENT_APPLICATION 테이블과 연동 시 필요
-    private int appId;
-
-    // ⭐ 추가: 이벤트 시작일 (EVENT 테이블에서 가져옴)
-    private Date startDate;
-    // ⭐ 추가: 이벤트 종료일 (EVENT 테이블에서 가져옴)
-    private Date endDate;
-    
-    // userNo는 현재 Controller/Service에서 사용되지 않지만, 필요시 추가 가능
-    // private int userNo; 
+    // EVENT_APPLICATION 테이블의 행사 기간
+    private Date startDate;        // START_DATE (행사 시작일)
+    private Date endDate;          // END_DATE (행사 종료일)
 }

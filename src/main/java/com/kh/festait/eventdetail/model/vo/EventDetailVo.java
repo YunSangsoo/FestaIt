@@ -36,13 +36,13 @@ public class EventDetailVo {
     private String appItem; // APP_ITEM (품목명)
     private String appHost; // APP_HOST (주최명)
     private String appOrg; // APP_ORG (주관처명)
-    private String appSponser; // APP_SPONSER (후원사명)
+    private String appSponser; // APP_SPONSER (후원사명) --- 일단 Sponser로 진행(추후 Sponsor)
 
     // ⭐⭐ APP_MANAGER 테이블에서 조인하여 가져올 필드 ⭐⭐
     private String managerName; // MANAGER_NAME (행사 담당자)
     private String email; // EMAIL (담당자 이메일)
     private String tel; // TEL (담당자 전화번호)
-    private String fax; // TEL (담당자 FAX)
+    private String fax; // fax (담당자 FAX)
 
     // ⭐⭐ EVENT_CATEGORY 테이블에서 조인하여 가져올 필드 ⭐⭐
     private String eventCategoryName; // EVENT_CATEGORY_NAME (EVENT_CATEGORY.EVENT_NAME에 해당)

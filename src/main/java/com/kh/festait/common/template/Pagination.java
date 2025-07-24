@@ -7,9 +7,9 @@ public class Pagination {
 	public static PageInfo getPageInfo(int listCount, int currentPage, int pageLimit, int boardLimit) {
 		
 		PageInfo pi= new PageInfo();
+		pi.setTotalCount(listCount);     // listCount → totalCount
+		pi.setPageBlock(pageLimit);      // pageLimit → pageBlock
 		pi.setBoardLimit(boardLimit);
-		pi.setPageLimit(pageLimit);
-		pi.setListCount(listCount);
 		pi.setCurrentPage(currentPage);
 		
 		// 1. 최대 페이지 개수
@@ -27,7 +27,7 @@ public class Pagination {
 		
 		pi.setStartPage(startPage);
 		pi.setEndPage(endPage);
-		pi.setMaxPage(maxPage);
+		pi.setTotalPage(maxPage);
 		
 		
 		return pi;

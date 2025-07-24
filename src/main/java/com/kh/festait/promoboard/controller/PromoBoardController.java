@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession; // 사용되지 않아도 임포트가 있어 일단 유지합니다.
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,7 +66,6 @@ public class PromoBoardController {
         model.addAttribute("pi", pi);
         model.addAttribute("param", paramMap);
 
-        // ⭐⭐ 수정: JSP 경로를 "promotion/promoBoard"로 변경 (사용자님 지시사항 반영) ⭐⭐
         return "promotion/promoBoard";
     }
 
@@ -89,7 +88,6 @@ public class PromoBoardController {
         if (promo != null) {
             model.addAttribute("promo", promo);
             log.info("홍보 상세 조회 성공: {}", promo);
-            // ⭐⭐ 수정: JSP 경로를 "promotion/promoDetail"로 변경 (사용자님 지시사항 반영) ⭐⭐
             return "promotion/promoDetail";
         } else {
             log.warn("홍보 게시물을 찾기 실패: 게시글 번호 {}", promoId);
@@ -100,14 +98,27 @@ public class PromoBoardController {
 
     // 홍보 게시글 작성 페이지로 이동 (GET /promoBoard/promoWrite)
     @GetMapping("/promoWrite")
-    public String enrollForm() {
-        // ⭐⭐ 수정: JSP 경로를 "promotion/promoWrite"로 변경 (사용자님 지시사항 반영) ⭐⭐
+    public String enrollForm(
+            @RequestParam(value = "appId", required = false) Integer appId, // URL 쿼리 파라미터로 appId를 받음
+            Model model) {
+
+        if (appId != null && appId > 0) {
+            model.addAttribute("selectedEventAppId", appId); // JSP로 appId를 전달
+            log.info("홍보 게시글 작성 페이지로 이동 - 전달된 APP_ID: {}", appId);
+        } else {
+            // ⭐ 중요: 유효한 appId가 없을 경우 처리 ⭐
+            // 여기서는 임시로 고정된 기본값 1을 넣어주는 예시입니다.
+            // 실제 프로젝트에서는 유효한 이벤트 ID를 선택하도록 유도하거나,
+            // 기본 이벤트 ID를 설정하는 등의 비즈니스 로직이 필요합니다.
+            log.warn("홍보 게시글 작성 페이지로 이동 - 유효한 APP_ID가 전달되지 않았습니다. 기본 APP_ID 1로 설정합니다.");
+            model.addAttribute("selectedEventAppId", 1); // 임시로 기본 APP_ID를 1로 설정
+        }
         return "promotion/promoWrite";
     }
 
     // 홍보 게시글 작성 처리 (POST /promoBoard/promoWrite)
     @PostMapping("/promoWrite")
-    public String insertMyPromo(PromoBoardVo promo,
+    public String insertMyPromo(PromoBoardVo promo, // promo.appId는 폼에서 자동으로 바인딩됨 (Hidden 필드)
                                  @RequestParam(value = "promoPoster", required = false) MultipartFile promoPoster,
                                  HttpServletRequest request,
                                  RedirectAttributes redirectAttributes) {
@@ -115,8 +126,11 @@ public class PromoBoardController {
         log.info("홍보 게시글 작성 요청: {}", promo);
         log.info("업로드된 파일: {}", promoPoster != null ? promoPoster.getOriginalFilename() : "없음");
         log.info("업로드된 파일 크기: {} bytes", promoPoster != null ? promoPoster.getSize() : 0);
+        
+        // ⭐ 추가: promo 객체에 바인딩된 appId 값 로그 확인 ⭐
+        // 이 로그를 통해 promoWrite.jsp에서 Hidden 필드로 전달된 appId가 컨트롤러에서 제대로 바인딩되었는지 확인합니다.
+        log.info("Controller - insertMyPromo 호출 시 promo.getAppId(): {}", promo.getAppId());
 
-        // ⭐⭐ 이미지 저장 경로를 resources/images/로 변경 (사용자님 제공 코드 유지) ⭐⭐
         String webPath = "/resources/images/";
         String realPath = request.getSession().getServletContext().getRealPath(webPath);
         log.info("파일 저장될 웹 경로: {}", webPath);
@@ -161,12 +175,14 @@ public class PromoBoardController {
         log.info("서비스 호출 전 promo.originalFilename: {}", promo.getOriginalFilename());
 
         // 서비스 호출 (이미지 및 URL 처리를 포함한 통합 로직)
+        // promo.appId는 @ModelAttribute에 의해 이미 설정되어 서비스로 전달됩니다.
         int result = promoService.insertPromoWithImageAndUrl(promo);
 
         if (result > 0) {
             redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글이 성공적으로 작성되었습니다.");
             return "redirect:/promoBoard";
         } else {
+            // Service에서 0을 반환했을 때의 오류 메시지 (APP_ID 유효성 검사 실패 등)
             redirectAttributes.addFlashAttribute("alertMsg", "홍보 게시글 작성에 실패했습니다. 유효한 이벤트 정보가 없거나 다른 오류가 발생했습니다.");
         }
         return "common/errorPage"; // 오류 페이지로 이동
@@ -192,7 +208,6 @@ public class PromoBoardController {
         }
 
         model.addAttribute("promo", promo);
-        // ⭐⭐ 수정: JSP 경로를 "promotion/promoUpdate"로 변경 (사용자님 지시사항 반영) ⭐⭐
         return "promotion/promoUpdate";
     }
 
@@ -211,7 +226,6 @@ public class PromoBoardController {
         log.info("기존 포스터 경로 (originalPromoPosterPath): {}", originalPromoPosterPath);
         log.info("기존 이미지 삭제 체크박스 (deleteOriginalImage): {}", deleteOriginalImage);
 
-        // ⭐⭐ 이미지 저장 경로를 resources/images/로 변경 (사용자님 제공 코드 유지) ⭐⭐
         String webPath = "/resources/images/";
         String realPath = request.getSession().getServletContext().getRealPath(webPath);
         log.info("파일 저장될 웹 경로: {}", webPath);
@@ -301,35 +315,32 @@ public class PromoBoardController {
     public Map<String, String> deleteMyPromo(@RequestParam("promoId") int promoId, HttpServletRequest request) {
 
         Map<String, String> response = new HashMap<>();
-        Map<String, Object> params = new HashMap<>();
-        params.put("promoId", promoId);
+        // Map<String, Object> params = new HashMap<>(); // 사용되지 않으므로 제거 가능.
+        // params.put("promoId", promoId); // 사용되지 않으므로 제거 가능.
 
         // 삭제 전 기존 이미지 경로 및 이미지 번호 조회 (실제 파일 삭제를 위해 필요)
         PromoBoardVo promoToDelete = promoService.selectPromotionDetail(promoId);
         String posterPathToDelete = null;
-        int imgNoToDelete = 0; // 이미지 번호 (IMAGE 테이블 삭제에 필요)
+        // int imgNoToDelete = 0; // 이 변수는 이제 서비스 계층으로 전달되지 않으므로 필요하지 않습니다.
 
         if (promoToDelete != null) {
             posterPathToDelete = promoToDelete.getPosterPath();
-            imgNoToDelete = promoToDelete.getImgNo(); // 이미지 번호 가져오기
-            log.info("삭제할 게시글의 기존 이미지 정보 - promoId: {}, posterPath: {}, imgNo: {}",
-                     new Object[]{promoId, posterPathToDelete, imgNoToDelete});
+            // imgNoToDelete = promoToDelete.getImgNo(); // 서비스 메서드 시그니처 변경으로 더 이상 필요 없음
+            log.info("삭제할 게시글의 기존 이미지 정보 - promoId: {}, posterPath: {}",
+                     new Object[]{promoId, posterPathToDelete});
         } else {
             log.warn("삭제할 게시글 정보를 찾을 수 없습니다: promoId {}", promoId);
         }
 
         // 서비스 호출 (이미지 및 URL 처리를 포함한 통합 로직)
-        int result = promoService.deletePromoWithImageAndUrl(promoId, imgNoToDelete);
+        // 서비스 메서드 시그니처가 (int promoId)로 변경되었으므로, promoId만 전달합니다.
+        int result = promoService.deletePromoWithImageAndUrl(promoId); // ★★★ 이 줄을 수정했습니다 ★★★
 
         if (result > 0) {
             // DB 삭제 성공 시, 서버에서 실제 파일 삭제 (단, 해당 이미지가 다른 곳에서 참조되지 않는 경우에만)
-            // 실제 파일 삭제는 서비스 로직의 countImageReferences 결과에 따라 결정되므로,
-            // 여기서는 DB 삭제 성공 여부만 보고 파일 시스템 삭제를 시도합니다.
-            // 서비스에서 이미 조건부 삭제를 처리했으므로, 여기서는 단순히 파일 존재 여부만 확인하여 삭제 시도.
-            // 만약 서비스에서 이미지를 삭제하지 않았다면 (참조가 남아있어서), 여기서는 파일이 존재할 수 있습니다.
-            // 이중 삭제 방지 및 참조 이미지 보호를 위해, 실제 파일 삭제는 서비스에서 최종 결정하는 것이 더 안전합니다.
-            // 현재 구조에서는 서비스에서 IMAGE 테이블 레코드를 삭제하는 시점에 파일도 삭제하는 것이 일관적입니다.
-            // 여기서는 단순히 파일 시스템에서 해당 파일을 지우는 역할만 수행합니다.
+            // 서비스에서 이미 DB의 IMAGE 레코드를 삭제하고 있으므로,
+            // 이제 컨트롤러에서는 해당 파일이 실제로 서버에 존재한다면 삭제하는 로직만 수행하면 됩니다.
+            // (서비스에서 참조 이미지 보호 로직을 처리했기 때문에, 여기에선 단순 삭제 시도)
             if (posterPathToDelete != null && !posterPathToDelete.isEmpty()) {
                 File deleteFile = new File(request.getSession().getServletContext().getRealPath(posterPathToDelete));
                 if (deleteFile.exists()) {
@@ -351,3 +362,4 @@ public class PromoBoardController {
         return response;
     }
 }
+
