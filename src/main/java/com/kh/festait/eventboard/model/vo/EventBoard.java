@@ -20,6 +20,7 @@ public class EventBoard {
 	private String appTitle;
 	private String appSubTitle;
 	private String region;
+	private String location;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date startDate;
@@ -32,6 +33,8 @@ public class EventBoard {
 	private String appOrg;
 	
 	private Image posterImage;
-
-
+	
+	
+	
+	
 }

@@ -14,6 +14,6 @@ public interface EventBoardDao {
 
 	List<EventBoard> selectEventList(Map<String, Object> paramMap);
 
-	int getEventCount();
+	int selectEventCount(Map<String, Object> paramMap);
 
 }

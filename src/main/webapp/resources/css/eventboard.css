@@ -52,6 +52,11 @@ a {
 	align-items: stretch;
 }
 
+.small-btn {
+	height: 30px !important;
+	padding: 0px 10px !important;
+}
+
 /* 검색 섹션 */
 .search-section {
 	background-color: white;
@@ -59,11 +64,11 @@ a {
 	border-radius: 8px;
 	padding: 10px 25px;
 	display: flex;
-	/* justify-content:center; */
 	align-self: center;
 	gap: 20px;
 	width: 100%;
 	margin: 30px 0px;
+	/* flex-wrap: wrap; */
 }
 
 .search-grid {
@@ -136,11 +141,28 @@ a {
 .flex-area.stretch {
 	display: flex;
 	width: 100%;
+	flex-shrink: 1;
 }
 
 .form-search {
 	flex-grow: 1;
 }
+
+.ui-datepicker {
+    z-index: 1060 !important;
+}
+
+/* Bootstrap 폼 컨트롤과 jQuery UI Datepicker 아이콘 간격 조절 (선택 사항) */
+.form-control.hasDatepicker + .ui-datepicker-trigger {
+    margin-left: 5px;
+}
+/* 
+.date-btn.selected {
+  background-color: #0d6efd;
+  color: #fff;
+} */
+
+
 
 input[type="checkbox"]{
 	width: 20px;
@@ -197,18 +219,6 @@ input[type="checkbox"]{
 	aspect-ratio: 1/1; /* 정사각형 비율 */
 }
 
-/* 카드 상단 태그 */
-/* .event-card .tag {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background-color: #ea870e;
-	color: white;
-	font-size: 12px;
-	padding: 2px 6px;
-	border-radius: 4px;
-} */
-
 .event-card .tag {
     position: absolute;
     top: 10px;
@@ -218,7 +228,6 @@ input[type="checkbox"]{
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 12px;
-    z-index: 10;
 }
 
 .event-info {

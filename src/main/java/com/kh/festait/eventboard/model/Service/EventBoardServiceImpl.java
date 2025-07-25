@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.eventboard.model.dao.EventBoardDao;
 import com.kh.festait.eventboard.model.vo.EventBoard;
 
@@ -21,8 +22,8 @@ public class EventBoardServiceImpl implements EventBoardService {
 
 	
 	@Override
-	public int getEventCount() {
-		return eventBoardDao.getEventCount();
+	public int selectEventCount(Map<String, Object> paramMap) {
+		return eventBoardDao.selectEventCount(paramMap);
 	}
 
 	@Override
@@ -32,10 +33,7 @@ public class EventBoardServiceImpl implements EventBoardService {
 	}
 
 	@Override
-	public List<EventBoard> selectEventList(int offset, int limit) {
-		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("startRow", offset);
-		paramMap.put("endRow", offset + limit);
+	public List<EventBoard> selectEventList(PageInfo pi, Map<String, Object> paramMap) {
 		
 		return eventBoardDao.selectEventList(paramMap);
 	}

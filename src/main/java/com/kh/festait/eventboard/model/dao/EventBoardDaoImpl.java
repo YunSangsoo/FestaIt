@@ -26,15 +26,12 @@ public class EventBoardDaoImpl implements EventBoardDao{
 
 	@Override
 	public List<EventBoard> selectEventList(Map<String, Object> paramMap) {
-		int result = sqlSession.selectList("eventMapper.selectEventList").size();
-		log.debug("행사 수 확인 중: {}",result);
-		
 		return sqlSession.selectList("eventMapper.selectEventList", paramMap);
 	}
 
 	@Override
-	public int getEventCount() {
-		return sqlSession.selectOne("eventMapper.getEventCount");
+	public int selectEventCount(Map<String, Object> paramMap) {
+		return sqlSession.selectOne("eventMapper.selectEventCount", paramMap);
 	}
 //	@Override
 //	public EventBoard selectEventById(int noticeId) {
