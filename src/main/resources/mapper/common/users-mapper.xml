@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="users">
+
+    <select id="selectUserAuthorities" resultType="string">
+        SELECT
+            ROLE_NAME
+        FROM
+            AUTHORITIES
+        WHERE
+            USER_NO = #{userNo}
+    </select>
+    
+    <select id="loginUsers" resultType="com.kh.spring.users.model.vo.UsersVo">
+        SELECT * FROM USERS WHERE USER_ID = #{userId} AND USER_PWD = #{userPwd}
+    </select>
+    
+    <insert id="insertUsers" parameterType="com.kh.spring.users.model.vo.UsersVo"> INSERT INTO USERS (USER_NO, USER_ID, USER_NAME, USER_PWD, EMAIL, NICKNAME, BIRTH, ADDR, PHONE, GENDER, ENROLL_DATE, STATUS)
+        VALUES (SEQ_USER_NO.NEXTVAL, #{userId}, #{userName}, #{userPwd}, #{email}, #{nickname}, #{birth}, #{addr}, #{phone}, #{gender}, SYSDATE, 'T')
+    </insert>
+
+    <update id="updateUsers" parameterType="com.kh.spring.users.model.vo.UsersVo"> UPDATE USERS SET
+            USER_NAME = #{userName},
+            EMAIL = #{email},
+            NICKNAME = #{nickname},
+            BIRTH = #{birth},
+            ADDR = #{addr},
+            PHONE = #{phone},
+            GENDER = #{gender},
+            UPDATE_DATE = SYSDATE,
+            USER_PWD = #{userPwd}
+        WHERE USER_NO = #{userNo}
+    </update>
+
+    <select id="idCheck" resultType="_int">
+        SELECT COUNT(*) FROM USERS WHERE USER_ID = #{userId}
+    </select>
+    
+    <update id="updateUsersChangePwd">
+        UPDATE USERS SET USER_PWD = 'new_password' WHERE USER_ID = 'user_id_to_update'
+        </update>
+    
+    <select id="selectOne" resultType="hashmap">
+        SELECT * FROM USERS WHERE USER_ID = #{userId}
+    </select>
+
+</mapper>

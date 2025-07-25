@@ -9,10 +9,10 @@
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>11</java-version>
-		<org.springframework-version>5.3.20</org.springframework-version>
+		<org.springframework-version>5.3.29</org.springframework-version>
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
-		<org.springsecurity-version>5.7.14</org.springsecurity-version>
+		<org.springsecurity-version>5.8.12</org.springsecurity-version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->

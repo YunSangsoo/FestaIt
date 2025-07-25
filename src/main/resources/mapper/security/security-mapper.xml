@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="security">
+
+    <resultMap id="usersVoResultMap" type="com.kh.spring.users.model.vo.UsersVo">
+        <id property="userNo" column="USER_NO"/>
+        <result property="compId" column="COMP_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="userPwd" column="USER_PWD"/>
+        <result property="email" column="EMAIL"/>
+        <result property="nickname" column="NICKNAME"/>
+        <result property="birth" column="BIRTH"/>
+        <result property="addr" column="ADDR"/>
+        <result property="phone" column="PHONE"/>
+        <result property="gender" column="GENDER"/>
+        <result property="enrollDate" column="ENROLL_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="status" column="STATUS"/>
+        <result property="lastLoginAt" column="LAST_LOGIN_AT"/>
+        
+        <collection property="authorities" ofType="string" select="users.selectUserAuthorities" column="USER_NO" />
+    </resultMap>
+
+    <select id="loadUserByUsername" resultMap="usersVoResultMap">
+        SELECT
+            USER_NO,
+            COMP_ID,
+            USER_ID,
+            USER_NAME,
+            USER_PWD,
+            EMAIL,
+            NICKNAME,
+            BIRTH,
+            ADDR,
+            PHONE,
+            GENDER,
+            ENROLL_DATE,
+            UPDATE_DATE,
+            STATUS,
+            LAST_LOGIN_AT
+        FROM
+            USERS
+        WHERE
+            USER_ID = #{userId}
+    </select>
+
+</mapper>
+
+
+
+
+

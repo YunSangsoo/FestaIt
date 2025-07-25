@@ -10,7 +10,7 @@
     <title>홍보 게시판</title>
     <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="${contextPath}/resources/css/promoBoard.css">
@@ -44,10 +44,22 @@
                 </form>
             </div>
             <div class="register-button-area">
-                <button type="button" class="register-promo-btn" id="registerPromoButton">
-                    등록하기
-                </button>
-            </div>
+                <c:if test="${not empty loginUser}">
+                    <%-- 로그인된 사용자 정보가 있을 경우 --%>
+                    <c:set var="hasManagerRole" value="false" />
+                    <c:forEach var="authority" items="${loginUser.authorities}">
+                        <c:if test="${authority eq 'ROLE_MANAGER'}">
+                            <c:set var="hasManagerRole" value="true" />
+                        </c:if>
+                    </c:forEach>
+
+                    <c:if test="${hasManagerRole}">
+                        <button type="button" class="register-promo-btn" id="registerPromoButton">
+                            등록하기
+                        </button>
+                    </c:if>
+                </c:if>
+                </div>
         </div>
 
         <hr class="section-divider">
@@ -124,15 +136,18 @@
             </nav>
         </div>
 
-    </div> <jsp:include page="/WEB-INF/views/common/footer.jsp" />
-    <jsp:include page="/WEB-INF/views/common/modal.jsp" /> 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </div> 
+    <jsp:include page="/WEB-INF/views/common/footer.jsp" />
+    <jsp:include page="/WEB-INF/views/common/modal.jsp" />    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="${contextPath}/resources/js/promoBoard.js"></script>
-    <script src="${contextPath}/resources/js/commonModal.js"></script> <script>
+    <script src="${contextPath}/resources/js/commonModal.js"></script> 
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Get "Register" button element
             const registerPromoButton = document.getElementById('registerPromoButton');
 
+            // 버튼이 존재할 때만 클릭 이벤트 리스너를 추가
             if (registerPromoButton) {
                 registerPromoButton.addEventListener('click', async function() {
                     // Call showCommonModal function (returns Promise)

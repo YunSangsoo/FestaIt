@@ -21,7 +21,7 @@
         <property name="dataSource" ref="dataSource" />
         <property name="configLocation" value="classpath:mybatis-config.xml" />
         <property name="mapperLocations" value="classpath:mapper/**/*.xml" />
-        <property name="typeAliasesPackage" value="com.kh.festait.mypromo.model.vo, com.kh.festait.member.model.vo, com.kh.festait.eventdetail.model.vo, com.kh.festait.common.model.vo" />
+        <property name="typeAliasesPackage" value="com.kh.festait.mypromo.model.vo, com.kh.festait.member.model.vo, com.kh.festait.eventdetail.model.vo, com.kh.festait.common.model.vo, com.kh.spring.users.model.vo" />
     </bean>
 
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
