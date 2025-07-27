@@ -60,7 +60,7 @@ public class AppServiceImple implements AppService {
 		eventApplication.setAppItem(Utils.XSSHandling(eventApplication.getAppItem()));
 		eventApplication.setAppHost(Utils.XSSHandling(eventApplication.getAppHost()));
 		eventApplication.setAppOrg(Utils.XSSHandling(eventApplication.getAppOrg()));
-		eventApplication.setAppSponser(Utils.XSSHandling(eventApplication.getAppSponser()));
+		eventApplication.setAppSponsor(Utils.XSSHandling(eventApplication.getAppSponsor()));
 		
 		AppManager inputManager = eventApplication.getAppManager(); 
 		
