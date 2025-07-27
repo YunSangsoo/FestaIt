@@ -36,31 +36,9 @@
         form.classList.add('was-validated');
       }, false);
     });
+    
+    
 })();
-
-
-
-
-
-//(() => {
-//  'use strict'
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  //const forms = document.querySelectorAll('.needs-validation')
-  // Loop over them and prevent submission
-//  Array.from(forms).forEach(form => {
-//    form.addEventListener('submit', event => {
-//      if (!form.checkValidity()) {
-//        event.preventDefault()
-//        event.stopPropagation()
-//      }
-
-//      form.classList.add('was-validated')
-//    }, false);
-//  })
-//})();
-
-
 
 $('#startDate').datepicker({
 	dateFormat: 'yy-mm-dd', // 날짜 형식: YYYY-MM-DD
@@ -236,3 +214,23 @@ new daum.Postcode({
 	}
 }).open();
 }
+
+//$('#test').on('click', async event =>{
+//
+//            const result = await window.showCommonModal(
+//                "선택 확인",
+//               "이 내용을 임시 저장하시겠습니까?", // 이미지에서 보였던 "선택 확인"은 제목, 내용은 예시
+//                {
+//                    confirmButtonText: "예",
+//                    cancelButtonText: "아니오"
+//                }
+//            );
+//
+//            if (result) {
+//                console.log("임시 저장을 진행합니다.");
+//                // 실제 폼 제출 또는 저장 로직
+//                // saveFormButton.form.submit(); // 폼을 수동으로 제출할 경우
+//            } else {
+//                console.log("임시 저장을 취소했습니다.");
+//            }
+//});

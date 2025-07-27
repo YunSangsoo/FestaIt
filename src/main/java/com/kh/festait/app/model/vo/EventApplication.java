@@ -41,7 +41,7 @@ public class EventApplication {
 	private String appItem;
 	private String appHost;
 	private String appOrg;
-	private String appSponser;
+	private String appSponsor;
 	private String adminComment;
 	
 	private AppManager appManager;

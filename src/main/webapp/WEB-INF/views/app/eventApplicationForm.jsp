@@ -80,7 +80,17 @@
 						    <button type="button" class="btn input-group-text btn-success" id="visitHomepageBtn" style="display: none;" disabled>링크</button>
 						</div>
 					</div>
-			
+					
+					
+	    		<c:if test="${eventApplication.statCode == 'S' || isViewMode}">  <%-- 조건 변경: 'S'와 같을 때 --%>
+					<div class="col-12 my-2">
+					  <div class="form-floating">
+					    <form:textarea class="form-control overflow-y-auto" path="adminComment" id="admin-comment" style="height: 600px" placeholder="비고 작성" required="required"></form:textarea>
+					    <label for="admin-comment">Comment</label>
+					  </div>
+				  	</div>
+				  	
+				  	</c:if>
 				</div>
 			
 		</div>
@@ -92,7 +102,7 @@
           <div class="row g-3">
 			<div class="form-floating col-4">
               <form:select path="eventCode" class="form-select text-center fs-5 h-100" id="category" required="required">
-                <option selected>행사 종류</option>
+                <option value="">행사 종류</option>
                 <option value="L">지역축제</option>
                 <option value="F">박람회</option>
                 <option value="E">전시회</option>
@@ -198,7 +208,7 @@
 		  <div class="col-12">
 		  	<div class="input-group">
 		  		<span class="input-group-text">후원사명</span>
-          		<form:input type="text" path="appSponser" class="form-control" id="app_sponser" placeholder="" value=""/>
+          		<form:input type="text" path="appSponsor" class="form-control" id="app_sponsor" placeholder="" value=""/>
 		  	</div>
 		  </div>
           <hr class="my-3 mx-3">
@@ -242,7 +252,7 @@
 	</div>
 			<div class="row">
 				<div class="d-grid col-3 mx-auto">
-			          <button class="w-10 btn btn-primary btn-lg" name="action" type="submit" formaction="${pageContext.request.contextPath}/myEventApp/appSave" value="save" formnovalidate="formnovalidate">임시 저장</button> 
+			          <button class="w-10 btn btn-primary btn-lg" name="action" type="submit" formaction="${pageContext.request.contextPath}/myEventApp/appSave" value="save" formnovalidate="formnovalidate" id="saveForm">임시 저장</button> 
 			    </div>
 				<div class="d-grid col-3 mx-auto">
 			          <button class="w-10 btn btn-primary btn-lg" name="action" type="submit" value="submit">행사 신청</button> 
@@ -254,8 +264,9 @@
 	</form:form>
 	</main>
 	
+	<button class="btn btn-primary" id="test" data-bs-toggle="modal" data-bs-target="#commonModal">테스트</button>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
-	
+	<jsp:include page="/WEB-INF/views/common/modal.jsp" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
@@ -268,6 +279,9 @@
     	const initialPosterSrc = "${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}";
     	const initialExistingImgNo = "${empty eventApplication.posterImage.imgNo ? 0 : eventApplication.posterImage.imgNo }";
 	</script>
+	
+    
+    <script src="<%= request.getContextPath() %>/resources/js/commonModal.js"></script>
 	<script src="<%= request.getContextPath() %>/resources/js/app/eventApplicationForm.js"></script>
 </body>
 </html>
