@@ -163,6 +163,11 @@
     	SELECT COUNT(*) FROM EVENT_APPLICATION
 	</select>
 	
+	<select id="selectAppAllListCount" resultType="int">
+    	SELECT COUNT(*) FROM EVENT_APPLICATION
+        WHERE STAT_CODE != 'P'
+	</select>
+	
 	
 	<select id="selectAppList" resultMap="eventApplicationMap">
 		SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
@@ -177,18 +182,43 @@
         WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
     </select>
     
+   	<select id="selectAppAllList" resultMap="eventApplicationMap">
+		SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
+    	FROM (
+	    	SELECT EA.*, ROWNUM RNUM
+		    FROM (
+		        SELECT * FROM EVENT_APPLICATION
+		        WHERE STAT_CODE != 'P'
+		        ORDER BY CREATE_DATE DESC
+	    	) EA
+    	) A LEFT JOIN APP_MANAGER B
+    	ON A.APP_ID = B.APP_ID
+        WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
+    </select>
+    
     
     <update id="approvingApp">
-    	UPDATE EVENT_APPLICAITON SET
+    	UPDATE EVENT_APPLICATION SET
     	STAT_CODE = 'A'
-    	WHERE APP_ID = #{appId};
+    	WHERE APP_ID = #{appId}
     </update>
     
     <update id="rejectingApp" parameterType="map">
-    	UPDATE EVENT_APPLICAITON SET
+    	UPDATE EVENT_APPLICATION SET
     	STAT_CODE = 'R',
     	ADMIN_COMMENT = #{adminComment}
-    	WHERE APP_ID = #{appId};
+    	WHERE APP_ID = #{appId}
     </update>
+    
+    <delete id="deleteAppMager">
+		DELETE FROM APP_MANAGER
+	    WHERE APP_ID = #{appId}
+    </delete>
+    
+    
+    <delete id="deleteApplication">
+		DELETE FROM EVENT_APPLICATION
+	    WHERE APP_ID = #{appId}
+    </delete>
 	
 </mapper>

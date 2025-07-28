@@ -19,4 +19,10 @@ public interface AppService {
 	int approvingApp(String appId);
 
 	int rejectingApp(Map<String, String> setMap);
+
+	List<EventApplication> selectAppAllList(PageInfo pi);
+
+	int selectAppAllListCount();
+
+	int deleteApplication(EventApplication eventApplication);
 }

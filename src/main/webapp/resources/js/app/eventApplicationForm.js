@@ -85,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
             visitHomepageBtn.disabled = true;        // 버튼 비활성화
         }
     }
-
     // 입력 필드 값이 변경될 때마다 버튼 가시성 및 활성화 상태 업데이트
     homepageLinkInput.addEventListener('input', updateHomepageButtonVisibility);
 
@@ -103,6 +102,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 페이지 로드 시 한 번 실행하여 초기 상태 설정
     updateHomepageButtonVisibility();
+    
+    
+    if(isViewMode){
+    	const dSetElements = document.querySelectorAll('.dSet');
+	    dSetElements.forEach(element => {
+	        // element.disabled = true;
+	        // 이 방법은 <input>, <select>, <textarea>, <button>, <fieldset> 같은 폼 요소에 직접적으로 적용됩니다.
+	        // 다른 일반적인 HTML 태그(예: div, span)에는 semantic하게 'disabled'가 적용되지 않지만,
+	        // 속성 자체는 설정됩니다.
+	
+	        // 더 범용적으로 HTML 속성을 설정하려면 setAttribute를 사용할 수 있습니다.
+	        // 하지만 폼 컨트롤의 'disabled' 상태 변경에는 .disabled = true/false 가 더 일반적이고 권장됩니다.
+	        element.setAttribute('disabled', 'true'); // HTML 속성으로 'disabled="true"' 추가
+	    });
+    }
+    const categorySelect = document.getElementById('category');
+        if (categorySelect && initialEventCode) {
+            // 할당하기 전에 혹시 모를 공백 제거
+            categorySelect.value = initialEventCode.trim();
+        }
 });
 
 const posterInput = document.querySelector('.input-poster');

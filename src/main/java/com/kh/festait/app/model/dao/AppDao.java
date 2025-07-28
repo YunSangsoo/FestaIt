@@ -28,4 +28,12 @@ public interface AppDao {
 
 	int rejectingApp(Map<String, String> setMap);
 
+	List<EventApplication> selectAppAllList(Map<String, Object> paramMap);
+
+	int selectAppAllListCount();
+
+	int deleteAppMager(int i);
+
+	int deleteApplication(int i);
+
 }
