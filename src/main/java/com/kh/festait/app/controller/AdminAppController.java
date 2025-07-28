@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.festait.app.model.vo.EventApplication;
@@ -54,14 +55,14 @@ public class AdminAppController {
 	@GetMapping("")
 	public String appList(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
 		
-		int totalCount = appService.selectAppListCount();
+		int totalCount = appService.selectAppAllListCount();
 		int limit = 10; // 한 페이지 하단에 보여질 페이지 목록 수
         int pageBlock = 10; // 한 페이지에 보여질 게시글 수
         
         //com.kh.festait.common에 Pagination 클래스를, com.kh.festait.common.model.vo에 pageInfo VO를 생성해뒀습니다.
         PageInfo pi = Pagination.getPageInfo(totalCount, page, limit, pageBlock);
         
-        List<EventApplication> list = appService.selectAppList(pi);
+        List<EventApplication> list = appService.selectAppAllList(pi);
         
         model.addAttribute("list", list);
         model.addAttribute("pi", pi);
@@ -98,11 +99,12 @@ public class AdminAppController {
 	@PostMapping("appApprove")
 	public String approvingApp(
 			@RequestParam("action") String action,
-			@PathVariable("appId") String appId,
-			@PathVariable("AdminComment") String adminComment,
+			@RequestParam(value="appId",required=true) String appId,
+			@RequestParam("adminComment") String adminComment,
 			 Model model,RedirectAttributes ra
 			) {
 		int result = 0;
+		log.info("admin Comment : {}",adminComment);
 		if(action.equals("A")) {
 			result = appService.approvingApp(appId);
 		}else {
@@ -111,7 +113,7 @@ public class AdminAppController {
 			setMap.put("adminComment", adminComment);
 			result = appService.rejectingApp(setMap);
 		}
-		return "";
+		return "redirect:/eventApp";
 	}
 	
 	
