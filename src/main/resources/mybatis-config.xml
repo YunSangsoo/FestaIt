@@ -12,7 +12,7 @@
 		<!-- 
 		 <typeAlias type="org.springframework.security.core.authority.SimpleGrantedAuthority"/>		
 		 -->
-		<package name="com.kh.festait.config"/>
+		<package name="com.kh.festait"/>
 	</typeAliases>
 
 </configuration>
