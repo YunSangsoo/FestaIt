@@ -1,0 +1,157 @@
+html{
+    height: 100%;
+}
+
+body {
+    text-align: center;
+    height: 100%;
+    background-color: #f5f6f7;
+
+}
+
+#content{
+    position: absolute;
+    left: 0%;
+    transform: translate(-50%);
+    
+}
+
+h3 {
+    margin: 19px 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.box{
+    width: 250px;
+    height: 51px;
+    border:  solid 1px #dadada;
+    padding: 10px 14px 10px 14px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+
+
+.box2{
+    
+    width: 400px;
+    height: 51px;
+    border:  solid 1px #dadada;
+    padding: 10px 14px 10px 14px;
+    box-sizing: border-box;
+    background: #fff;
+    
+}
+
+
+.but{
+    width: 98px;
+    height: 50px;
+    color: #fff;
+    background-color: #6A1B9A;
+    border-radius: 2px;
+    border-color: rgb(63, 63, 63);
+    cursor : pointer;
+    border: none;
+
+}
+
+.but2{
+    width: 98px;
+    height: 50px;
+    color: #000000;
+    background-color: rgb(216, 216, 216);
+    border-color: rgb(68, 68, 68);
+}
+
+.box3{
+    
+    width: 240px;
+    height: 51px;
+    border:  solid 1px #dadada;
+    padding: 10px 14px 10px 14px;
+    box-sizing: border-box;
+    background: #fff;
+    
+}
+
+.btn_join{ /*회원가입버튼*/
+    width: 450px;
+    height: 50px;
+    background-color: #6A1B9A;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+   
+}
+
+.box4{
+    
+    width: 500px;
+    height: 51px;
+    border:  solid 1px #dadada;
+    padding: 10px 14px 10px 14px;
+    box-sizing: border-box;
+    background: #fff;
+    
+}
+
+.back{ /*뒤로가기*/
+    width: 70px;
+    cursor: pointer;
+    background-color: #6A1B9A;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    float: left;
+    height: 25px;
+}
+
+small { /*비밀번호, 아이디 에러 메세지*/
+    visibility: hidden;
+    padding: 0px 0px 2px 10px;
+}
+
+
+input + .errMsg { /*비밀번호, 아이디 에러 메세지*/
+    font-size: 15px;
+    visibility: visible;
+    display: block;
+}
+
+.form-row {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+
+}
+
+.my-add{
+    width: 200px;
+    height: 51px;
+    border:  solid 1px #dadada;
+    padding: 10px 14px 10px 14px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+#timer {
+  display: none;
+  margin-top: 10px;
+  color: red;
+  font-weight: bold;
+  font-size: 14px;
+}

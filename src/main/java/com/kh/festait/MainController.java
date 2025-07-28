@@ -25,4 +25,16 @@ public class MainController {
 	public String test() {
 		return "/test/main";
 	}
+	
+	@GetMapping("/login")
+	public String login() {
+		return "/user/login";
+	}
+	
+	@GetMapping("/join")
+	public String join() {
+		return "/user/join";
+	}
 }
+
+

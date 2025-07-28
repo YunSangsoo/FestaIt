@@ -1,0 +1,305 @@
+body{
+    height: 100%;    
+    
+}
+.hadename{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mypagehead{
+    margin: 0 auto;
+    background-color: rgb(255, 255, 255);
+    width: 1300px;
+    height: 420px;
+    border: solid 1px; 
+    border-color: rgb(175, 175, 175); 
+    border-radius: 3px;
+    margin-top: 10px;
+    
+}
+
+.profile{ /*프로필 사진*/
+    background-color: rgb(197, 197, 197);
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    margin-left: 50px;
+    margin-top: 50px;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid;
+    background-position: center;
+    background-size: cover;
+    background-image: url(re/기본.png);
+}
+
+.secondname{
+    margin-left: 300px;
+    margin-top: -190px;
+    font-size: 30px;
+}
+
+.idName{
+    margin-left: 600px;
+    font-size: 30px;
+    margin-top: -74px;
+}
+
+.joinDate{
+    margin-left: 1100px;
+    font-size: 15px;
+    margin-top: -60px;
+    margin-bottom: 1
+}
+
+.line{
+    width: 900px;
+    margin-left: 300px;
+}
+
+.grade{
+    font-size: 25px;
+    text-align: right;
+    margin-right: 20px;
+    margin-bottom: -40px;
+}
+
+h3 {
+    margin: 19px 0 8px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+
+
+.p1{
+    margin-left: 350px;
+    font-size: 25px;
+}
+
+.btn1{
+    width: 200px;
+    height: 50px;
+    float: right;
+    margin-right: 20px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+}
+
+.p2{
+    margin-left: 450px;
+    font-size: 25px;
+}
+
+.phone{
+    margin-left: 300px;
+    font-size: 23px;
+}
+
+.email{
+    margin-left: 300px;
+    font-size: 23px;
+}
+
+.adress{
+    margin-left: 300px;
+    font-size: 23px;
+}
+
+.changepw{
+    width: 150px;
+    height: 40px;
+    float: right;
+    margin-right: 10px;
+    margin-top: 30px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.changenick{
+    width: 150px;
+    height: 40px;
+    float: right;
+    margin-right: 10px;
+    margin-top: 30px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.mypagebody{
+    margin: 0 auto;
+    background-color: rgb(255, 255, 255);
+    width: 1300px;
+    height: 420px;
+    border: solid 1px; 
+    border-color: rgb(175, 175, 175); 
+    border-radius: 3px;
+    display: flex;
+}
+
+.a1{
+    width: 50%;
+    height: 100%;
+    
+}
+
+.title{
+    text-align: center;
+}
+
+.outbtn{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 50px;
+    width: 200px;
+    color: gray;
+    border: solid 1px gray;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.a2{
+    overflow: hidden;
+    overflow-y: scroll;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+    height: 300px;
+    
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.a2::-webkit-scrollbar{
+    width: 10px;
+}
+
+.a2::-webkit-scrollbar-thumb{
+    width: 10px;
+    background-color: rgb(180, 180, 180);
+    border-radius: 5px;
+    height: 50%;
+}
+
+.conname{
+    font-size: 19px;
+    margin-left: 20px;
+}
+
+.titlename{
+    background-color: rgb(255, 255, 255);
+}
+/*모달창 css1*/
+#modalOpenButton, #modalCloseButton {
+  cursor: pointer;
+}
+
+#modalContainer {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#modalContent {
+    position: absolute;
+    background-color: #fff;
+    width: 300px;
+    width: 700px;
+    padding: 15px;
+}
+
+#modalContainer.hidden {
+    display: none;
+}
+
+.change-box__input2{
+    width: 400px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.nickchange{
+    text-align: center;
+}
+
+.commit{
+    width: 400px;
+    height: 40px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modalCloseButton{
+    width: 100px;
+    height: 40px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+
+
+small { /*비밀번호, 아이디 에러 메세지*/
+    visibility: hidden;
+    padding: 0px 0px 2px 10px;
+}
+
+
+.errMsg { /*비밀번호, 아이디 에러 메세지*/
+    font-size: 15px;
+    visibility: visible;
+    display: block;
+}
+
+/*모달창 css2*/
+#modalOpenButton, #modalCloseButton {
+  cursor: pointer;
+}
+
+#modalContainer2 {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#modalContent2 {
+    position: absolute;
+    background-color: #fff;
+    width: 300px;
+    width: 700px;
+    padding: 15px;
+}
+
+#modalContainer2.hidden {
+    display: none;
+}
+
+
+
