@@ -11,12 +11,12 @@
 	
 	<!-- 1단계 DB연결 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@13.125.133.207:1521/XEPDB1" />
-		<property name="username" value="FESTA_DB" />
-		<property name="password" value="1234" />
+		<property name="driverClassName" value="${datasource.driver}" />
+		<property name="url" value="${datasource.url}" />
+		<property name="username" value="${datasource.username}" />
+		<property name="password" value="${datasource.password}" />
 	</bean>
-			
+	
 	<!-- 2단계) MyBatis Spring을 활용하여 SqlSessionFactory생성 -->
 	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
 		<!-- mybatis설정파일 위치 지정 -->
@@ -24,10 +24,6 @@
 		<property name="dataSource" ref="dataSource"/>
 		<property name="mapperLocations" value="classpath:mapper/**/*.xml"></property>
     
-		<!-- 아래는 추가한거
-		 -->
-		<property name="typeAliasesPackage" value="com.kh.festait.member.model.vo,com.kh.festait.user.model.vo" />
-				
 	</bean>
 	
 	<!-- 3단계) SqlSessionTemplate을 제공하는 bean등록 -->
