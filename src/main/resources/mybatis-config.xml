@@ -9,8 +9,10 @@
 	
 	<typeAliases>
 		<!-- Member -> member -->
-		<typeAlias type="org.springframework.security.core.authority.SimpleGrantedAuthority"/>
-		<package name="com.kh.festait"/>
+		<!-- 
+		 <typeAlias type="org.springframework.security.core.authority.SimpleGrantedAuthority"/>		
+		 -->
+		<package name="com.kh.festait.config"/>
 	</typeAliases>
 
 </configuration>

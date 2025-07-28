@@ -82,6 +82,7 @@
 				<ul class="navbar-nav mx-auto flex-row align-items-center">
 					<c:choose>
 						
+						
 						<c:when test="${not empty sessionScope.loginUser and sessionScope.loginUser.role == 'ROLE_ADMIN'}">
 							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/eventBoard/list">행사</a></li>
 							<li class="nav-item separator">|</li>
@@ -122,13 +123,13 @@
 				<div class="d-flex align-items-center gap-2">
 					<c:choose>
 						<c:when test="${not empty sessionScope.loginUser}">
-							<a href="/mypage" class="btn btn-outline-light me-2">${sessionScope.loginUser.username}님
-								마이페이지</a>
-							<a href="/logout" class="btn btn-warning">로그아웃</a>
+							<a href="/user/myPage" class="btn btn-outline-light me-2">
+							   ${sessionScope.loginUser.userName}님 마이페이지</a>
+							<a href="/user/logout" class="btn btn-warning">로그아웃</a>
 						</c:when>
 						<c:otherwise>
-							<a href="/login" class="btn btn-outline-light">로그인</a>
-							<a href="/signup" class="btn btn-warning">회원가입</a>
+							<a href="/festait/login" class="btn btn-outline-light">로그인</a>
+							<a href="/festait/join" class="btn btn-warning">회원가입</a>
 						</c:otherwise>
 					</c:choose>
 				</div>
