@@ -23,6 +23,7 @@
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
 		<property name="dataSource" ref="dataSource"/>
 		<property name="mapperLocations" value="classpath:mapper/**/*.xml"></property>
+    
 		<!-- 아래는 추가한거
 		 -->
 		<property name="typeAliasesPackage" value="com.kh.festait.member.model.vo,com.kh.festait.user.model.vo" />

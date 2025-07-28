@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="app">
+	
+	<insert id="insertApplication" useGeneratedKeys="true" keyProperty="appId" keyColumn="APP_ID">
+		INSERT INTO EVENT_APPLICATION (
+		EVENT_CODE,
+		STAT_CODE,
+		APP_TITLE,
+		APP_SUB_TITLE,
+		APP_DETAIL,
+		LOCATION,
+		LOCATION_DETAIL,
+		POST_CODE,
+		WEBSITE,
+		START_DATE,
+		END_DATE,
+		START_TIME,
+		END_TIME,
+		SUBMITTED_DATE,
+		APP_FEE,
+		APP_ITEM,
+		APP_HOST,
+		APP_ORG,
+		APP_SPONSOR
+	) VALUES (
+		#{eventCode},
+		#{statCode},
+		#{appTitle},
+		#{appSubTitle},
+		#{appDetail},
+		#{location},
+		#{locationDetail},
+		#{postCode},
+		#{website},
+		#{startDate},
+		#{endDate},
+		#{startTime},
+		#{endTime},
+		SYSDATE,
+		#{appFee},
+		#{appItem},
+		#{appHost},
+		#{appOrg},
+		#{appSponsor}
+	)
+	</insert>
+	
+	<insert id="insertAppManager">
+        INSERT INTO APP_MANAGER (
+            APP_ID,
+            MANAGER_NAME,
+            EMAIL,
+            TEL,
+            FAX
+        ) VALUES (
+            #{appId},
+            #{appManager.managerName},
+            #{appManager.email},
+            #{appManager.tel},
+            #{appManager.fax}
+        )
+    </insert>
+    
+    
+    
+    <select id="getEvAppById" resultMap="eventApplicationMap">
+    	SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
+    	FROM EVENT_APPLICATION A LEFT JOIN APP_MANAGER B
+    	ON A.APP_ID = B.APP_ID
+    	WHERE A.APP_ID = #{appId}
+    </select>
+    
+    
+    <resultMap id="eventApplicationMap" type="com.kh.festait.app.model.vo.EventApplication">
+        <id property="appId" column="APP_ID"/>
+        <result property="userNo" column="USER_NO"/>
+        <result property="eventCode" column="EVENT_CODE"/>
+        <result property="statCode" column="STAT_CODE"/>
+        <result property="appTitle" column="APP_TITLE"/>
+        <result property="appSubTitle" column="APP_SUB_TITLE"/>
+        <result property="appDetail" column="APP_DETAIL"/>
+        <result property="location" column="LOCATION"/>
+        <result property="locationDetail" column="LOCATION_DETAIL"/>
+        <result property="postCode" column="POST_CODE"/>
+        <result property="website" column="WEBSITE"/>
+        <result property="startDate" column="START_DATE"/>
+        <result property="endDate" column="END_DATE"/>
+        <result property="startTime" column="START_TIME"/>
+        <result property="endTime" column="END_TIME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="submittedDate" column="SUBMITTED_DATE"/>
+        <result property="appFee" column="APP_FEE"/>
+        <result property="appItem" column="APP_ITEM"/>
+        <result property="appHost" column="APP_HOST"/>
+        <result property="appOrg" column="APP_ORG"/>
+        <result property="appSponsor" column="APP_SPONSOR"/>
+        <result property="adminComment" column="ADMIN_COMMENT"/>
+
+        <association property="appManager" javaType="com.kh.festait.app.model.vo.AppManager">
+            <id property="appId" column="APP_ID"/>
+            <result property="managerName" column="MANAGER_NAME"/>
+            <result property="email" column="EMAIL"/>
+            <result property="tel" column="TEL"/>
+            <result property="fax" column="FAX"/>
+        </association>
+    </resultMap>
+	
+	<update id="updateApplication">
+		UPDATE EVENT_APPLICATION SET
+		EVENT_CODE = #{eventCode},
+		STAT_CODE = #{statCode},
+		APP_TITLE = #{appTitle},
+		APP_SUB_TITLE = #{appSubTitle},
+		APP_DETAIL = #{appDetail},
+		LOCATION = #{location},
+		LOCATION_DETAIL = #{locationDetail},
+		POST_CODE = #{postCode},
+		WEBSITE = #{website},
+		START_DATE = #{startDate},
+		END_DATE = #{endDate},
+		START_TIME = #{startTime},
+		END_TIME = #{endTime},
+		UPDATE_DATE = SYSDATE,
+		<if test="statCode.equals('S')">
+			SUBMITTED_DATE = SYSDATE,
+		</if>
+		APP_FEE = #{appFee},
+		APP_ITEM = #{appItem},
+		APP_HOST = #{appHost},
+		APP_ORG = #{appOrg},
+		APP_SPONSOR = #{appSponsor}
+		WHERE APP_ID = #{appId}
+	</update>
+	
+	<update id="updateAppManager">
+		UPDATE APP_MANAGER SET
+        MANAGER_NAME = #{appManager.managerName},
+        EMAIL = #{appManager.email},
+        TEL = #{appManager.tel},
+        FAX = #{appManager.fax}
+		WHERE APP_ID = #{appManager.appId}
+	</update>
+	
+	
+	<insert id="insertBoardImgList">
+		INSERT INTO IMAGE(IMG_TYPE, ORIGIN_NAME, CHANGE_NAME, REF_BNO, IMG_ORDER)
+		FROM (
+			<foreach collection="list" item="Img" separator="UNION ALL">
+				SELECT
+					#{Img.imgType},#{Img.originName}, #{Img.changeName}, #{Img.refNo}, #{Img.imgOrder}
+				FROM DUAL
+			</foreach>
+		) C
+	</insert>
+	
+	
+	
+	<select id="selectAppListCount" resultType="int">
+    	SELECT COUNT(*) FROM EVENT_APPLICATION
+	</select>
+	
+	<select id="selectAppAllListCount" resultType="int">
+    	SELECT COUNT(*) FROM EVENT_APPLICATION
+        WHERE STAT_CODE != 'P'
+	</select>
+	
+	
+	<select id="selectAppList" resultMap="eventApplicationMap">
+		SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
+    	FROM (
+	    	SELECT EA.*, ROWNUM RNUM
+		    FROM (
+		        SELECT * FROM EVENT_APPLICATION
+		        ORDER BY CREATE_DATE DESC
+	    	) EA
+    	) A LEFT JOIN APP_MANAGER B
+    	ON A.APP_ID = B.APP_ID
+        WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
+    </select>
+    
+   	<select id="selectAppAllList" resultMap="eventApplicationMap">
+		SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
+    	FROM (
+	    	SELECT EA.*, ROWNUM RNUM
+		    FROM (
+		        SELECT * FROM EVENT_APPLICATION
+		        WHERE STAT_CODE != 'P'
+		        ORDER BY CREATE_DATE DESC
+	    	) EA
+    	) A LEFT JOIN APP_MANAGER B
+    	ON A.APP_ID = B.APP_ID
+        WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
+    </select>
+    
+    
+    <update id="approvingApp">
+    	UPDATE EVENT_APPLICATION SET
+    	STAT_CODE = 'A'
+    	WHERE APP_ID = #{appId}
+    </update>
+    
+    <update id="rejectingApp" parameterType="map">
+    	UPDATE EVENT_APPLICATION SET
+    	STAT_CODE = 'R',
+    	ADMIN_COMMENT = #{adminComment}
+    	WHERE APP_ID = #{appId}
+    </update>
+    
+    <delete id="deleteAppMager">
+		DELETE FROM APP_MANAGER
+	    WHERE APP_ID = #{appId}
+    </delete>
+    
+    
+    <delete id="deleteApplication">
+		DELETE FROM EVENT_APPLICATION
+	    WHERE APP_ID = #{appId}
+    </delete>
+	
+</mapper>

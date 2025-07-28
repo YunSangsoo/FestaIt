@@ -7,11 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>헤더</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 .navbar {
 	background-color: #6A1B9A;
@@ -70,7 +67,7 @@
 	<!-- 헤더 시작 -->
 	<nav class="navbar navbar-expand-lg navbar-dark">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="/">Festa-it</a>
+			<a class="navbar-brand" href="/festait">Festa-it</a>
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false"
@@ -87,37 +84,37 @@
 						
 						
 						<c:when test="${not empty sessionScope.loginUser and sessionScope.loginUser.role == 'ROLE_ADMIN'}">
-							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/eventBoard/list">행사</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promoBoard">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/faqBoard">FAQ</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">리뷰</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/reviewBoard">리뷰</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">회원</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/memberBoard">회원</a></li>
 						</c:when>
 						
 						<c:when test="${not empty sessionScope.loginUser}">
-							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/eventBoard/list">행사</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promoBoard">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/faqBoard">FAQ</a></li>
 						</c:when>
 						
 						<c:otherwise>
-							<li class="nav-item"><a class="nav-link" href="#">행사</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/eventBoard/list">행사</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">홍보</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/promoBoard">홍보</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">공지</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 							<li class="nav-item separator">|</li>
-							<li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+							<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/faqBoard">FAQ</a></li>
 						</c:otherwise>
 					</c:choose>
 				</ul>
