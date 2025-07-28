@@ -27,7 +27,7 @@
             <div id="tab1" data-tab-content class="items active">
                 <div class="container">
                     <h2 style="font-family: Georgia, 'Times New Roman', Times, serif; font-size: 40px; color: #6A1B9A;" >Login</h2>
-                    <form method="post" action="/user/login/" id="login-form1">
+                    <form method="post" action="${pageContext.request.contextPath}/user/login/" id="login-form1">
                         <div class="login_input">
                             <input type="text" name="userId" placeholder="아이디를 입력해주세요." required />
                             <input type="password" name="userPwd" required placeholder=" 비밀번호를 입력해주세요." maxlength="15" />
@@ -45,7 +45,7 @@
                 <div class="container">
                     <h2 style="font-family: Georgia, 'Times New Roman', Times, serif; font-size: 40px; color: #6A1B9A;">Official</h2>
                     <h2 style="font-family: Georgia, 'Times New Roman', Times, serif; font-size: 40px; color: #6A1B9A;">Login</h2>
-                    <form method="post" action="login_proc.php" id="login-form1">
+                    <form method="post" action="${pageContext.request.contextPath}/login" id="login-form1">
                         <div class="login_input">
                             <input type="text" name="id" placeholder=" ID" required />
                             <input type="password" name="passwd" required placeholder=" PASSWORD" maxlength="15" />
@@ -63,7 +63,7 @@
     </div>
 
 
-<script src="/resources/js/index.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/index.js"></script>
 </body>
 
 </html>

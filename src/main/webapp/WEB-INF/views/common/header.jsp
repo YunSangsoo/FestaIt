@@ -123,9 +123,9 @@
 				<div class="d-flex align-items-center gap-2">
 					<c:choose>
 						<c:when test="${not empty sessionScope.loginUser}">
-							<a href="/user/myPage" class="btn btn-outline-light me-2">
+							<a href="${pageContext.request.contextPath}/user/myPage" class="btn btn-outline-light me-2">
 							   ${sessionScope.loginUser.userName}님 마이페이지</a>
-							<a href="/user/logout" class="btn btn-warning">로그아웃</a>
+							<a href="${pageContext.request.contextPath}/user/logout" class="btn btn-warning">로그아웃</a>
 						</c:when>
 						<c:otherwise>
 							<a href="/festait/login" class="btn btn-outline-light">로그인</a>

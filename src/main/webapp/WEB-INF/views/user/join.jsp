@@ -7,9 +7,13 @@
 <link href="${pageContext.request.contextPath}/resources/css/join.css"
 	rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
+
 <title>Insert title here</title>
 </head>
 <body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 	<div class="main">
 		<button class="back" onclick="history.back()">뒤로가기</button>
 		<br> <br>
@@ -59,9 +63,8 @@
 						minlength="2" type="text" id="name" name="name" required/>
 				</div>
 				<div id="birthDiv" class="form-group">
-					<label for="birth" id="birthLabel">생년월일</label> <input name="userBrth" class="box3"
-					oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-					maxlength="6"	type="text" id="birth" name="birth" required placeholder="ex. 990101" />
+					<label for="birth" id="birthLabel">생년월일</label> 					
+					<input class="box3" type="date" id="date" name="birth" required/>
 				</div>
 			</div>
 			
