@@ -8,18 +8,22 @@
 
 <head>
 <title>행사 - Calendar</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<c:set var="contextPath" value="${pageContext.request.contextPath}" scope="application" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<c:set var="contextPath" value="${pageContext.request.contextPath}"
+	scope="application" />
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="${contextPath}/resources/js/event/calendar.js"></script>
-<link href="${contextPath}/resources/css/eventboard.css" rel="stylesheet">
-	
-	
-<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-	
-	
-	
+<link href="${contextPath}/resources/css/eventboard.css"
+	rel="stylesheet">
+
+
+<link rel="stylesheet"
+	href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
+
+
+
 
 <style>
 /* 공지 작성 버튼 스타일 */
@@ -64,7 +68,7 @@ thead.lavender-header th {
 <body>
 
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
-	
+
 	<c:if test="${not empty param}">
 		<c:set var="searchParam"
 			value="&eventCode=${param.eventCode}&region=${param.region}&keyword=${param.keyword}&startDate=${param.startDate}&endDate=${param.endDate}" />
@@ -94,11 +98,13 @@ thead.lavender-header th {
 							data-period="180">6개월</button>
 					</div>
 					<div class="flex-area stretch dateInput">
-						<form:input type="text" path="startDate" class="form-control dateInput"
-							id="startDate" placeholder="행사 시작일" value="${param.startDate}"/>
+						<form:input type="text" path="startDate"
+							class="form-control dateInput" id="startDate"
+							placeholder="행사 시작일" value="${param.startDate}" />
 						<div>-</div>
-						<form:input type="text" path="endDate" class="form-control dateInput"
-							id="endDate" placeholder="행사 종료일" value="${param.endDate}" />
+						<form:input type="text" path="endDate"
+							class="form-control dateInput" id="endDate" placeholder="행사 종료일"
+							value="${param.endDate}" />
 					</div>
 				</div>
 
@@ -190,135 +196,35 @@ thead.lavender-header th {
 
 		<div id="calendar"></div>
 
+		<div class="event-hover-thumbcard">
+			<a
+				href="${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}"
+				class="text-decoration-none text-dark">
+				<div class="event-info" id="event-info">
+					<div class="rel">
+						<div class="tag">${event.eventName}카테고리</div>
+						<img
+							src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
+							class="thumbcard-img" alt="">
+					</div>
+
+					<div class="event-name">${event.appTitle}행사이름</div>
+					<div class="event-org">[${event.appOrg}주최]</div>
+					<div class="date">
+						<fmt:formatDate value="${event.startDate}" pattern="yyyy.MM.dd" />
+						<div>-</div>
+						<fmt:formatDate value="${event.endDate}" pattern="yyyy.MM.dd" />
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+
 
 	</div>
 
-<!-- 백업 코드 -->
-<!-- 	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			var calendarEl = document.getElementById('calendar');
-			var today=new Date();
-
-			var calendar = new FullCalendar.Calendar(calendarEl, {
-				headerToolbar : {
-					left : 'prevYear,prev,next,nextYear',
-					center : 'title',
-					right : 'dayGridMonth,dayGridWeek'
-				},
-				initialDate : today,
-				navLinks : true, // can click day/week names to navigate views
-				editable : true,
-				dayMaxEvents : true, // allow "more" link when too many events
-				events : [ {
-					title : 'All Day Event',
-					start : today
-				}, {
-					title : 'Long Event',
-					start : '2025-07-07',
-					end : '2025-07-09'
-				}, {
-					title : 'Long Event',
-					start : '2025-07-08',
-					end : '2025-07-11'
-				}, {
-					title : 'Long Event',
-					start : '2025-07-10',
-					end : '2025-07-14'
-				}, {
-					groupId : 999,
-					title : 'Repeating Event',
-					start : '2025-07-10'
-				}, {
-					groupId : 999,
-					title : 'Repeating Event',
-					start : '2025-07-10'
-				}, {
-					groupId : 999,
-					title : 'Repeating Event',
-					start : '2025-07-10'
-				}, {
-					groupId : 999,
-					title : 'Repeating Event',
-					start : '2025-07-10'
-				}, {
-					groupId : 999,
-					title : 'Repeating Event',
-					start : today
-				}, {
-					title : 'Click for Google',
-					url : 'http://google.com/',
-					start : today
-				}, {
-					title : 'Click for Google',
-					url : 'http://google.com/',
-					start : today
-				}, {
-					title : 'Click for Google',
-					url : 'http://google.com/',
-					start : today
-				}, {
-					title : 'Click for Google',
-					url : 'http://google.com/',
-					start : today
-				}, {
-					title : 'Click for Google',
-					url : 'http://google.com/',
-					start : today
-				}, {
-					title : 'Click for Google',
-					url : 'http://google.com/',
-					start : today
-				} ]
-			});
-
-			calendar.render();
-		});
-	</script> -->
-
-
-
-
-	<script>
-	
-	
-	
-		document.addEventListener('DOMContentLoaded', function() {
-			var calendarEl = document.getElementById('calendar');
-			var today=new Date();
-			
-			  const eventList = [
-				    <c:forEach var="event" items="${eventList}" varStatus="status">
-				      {
-				        title: '${event.appTitle}', // 제목
-				        start: '<fmt:formatDate value="${event.startDate}" pattern="yyyy-MM-dd" />',
-				        end: '<fmt:formatDate value="${event.endDate}" pattern="yyyy-MM-dd" />',
-				        url: '${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}'
-				      }<c:if test="${!status.last}">,</c:if>
-				    </c:forEach>
-				  ];
-
-			var calendar = new FullCalendar.Calendar(calendarEl, {
-				headerToolbar : {
-					left : 'prevYear,prev,next,nextYear',
-					center : 'title',
-					right : 'dayGridMonth,dayGridWeek'
-				},
-				initialDate : today,
-				navLinks : true, // can click day/week names to navigate views
-				editable : true,
-				dayMaxEvents : true, // allow "more" link when too many events
-				events : eventList
-			});
-
-			calendar.render();
-		});
-	</script>
-	
-	
-	
-
-<!-- 참고용으로 추가 -->
-<!-- <script>
+	<!-- 백업 코드 -->
+	<!-- 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			var calendarEl = document.getElementById('calendar');
 			var today=new Date();
@@ -360,10 +266,44 @@ thead.lavender-header th {
 	</script> -->
 
 
+	<script>
 
+		document.addEventListener('DOMContentLoaded', function() {
+			var calendarEl = document.getElementById('calendar');
+			var today=new Date();
+			
+			  const eventList = [
+				    <c:forEach var="event" items="${eventList}" varStatus="status">
+				      {
+				        title: '${event.appTitle}', // 제목
+				        start: '<fmt:formatDate value="${event.startDate}" pattern="yyyy-MM-dd" />',
+				        end: '<fmt:formatDate value="${event.endDate}" pattern="yyyy-MM-dd 00:01:00" />',
+				        url: '${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}'
+				      }<c:if test="${!status.last}">,</c:if>
+				    </c:forEach>
+				  ];
 
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				headerToolbar : {
+					left : 'prevYear,prev,next,nextYear',
+					center : 'title',
+					right : 'dayGridMonth,dayGridWeek'
+				},
+				initialDate : today,
+				navLinks : true, // can click day/week names to navigate views
+				editable : true,
+				dayMaxEvents : true, // allow "more" link when too many events
+				events : eventList
+			});
 
+			calendar.render();
+		});
+	</script>
 
+	<script>
+	// 행사 카드 호버 이벤트
+		
+	</script>
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 

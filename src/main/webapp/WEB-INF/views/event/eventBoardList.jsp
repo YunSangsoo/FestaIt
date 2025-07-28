@@ -14,7 +14,6 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" scope="application" />
 
 <link href="${contextPath }/resources/css/eventboard.css" rel="stylesheet">
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
 
 <style>
@@ -176,10 +175,10 @@ thead.lavender-header th {
 
 			<div class="flex-area view-format">
 				<a class="view-button list"
-					href="${pageContext.request.contextPath}/eventBoard/list/#;">리스트형</a>
+					href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage}${searchParam}#;">리스트형</a>
 				<div class="v-line"></div>
 				<a class="view-button calendar"
-					href="${pageContext.request.contextPath}/eventBoard/calendar">캘린더형</a>
+					href="${pageContext.request.contextPath}/eventBoard/calendar?${searchParam}">캘린더형</a>
 			</div>
 		</div>
 
@@ -222,52 +221,60 @@ thead.lavender-header th {
 
 
 		<!-- 페이징 영역 -->
+		
 		<nav aria-label="Page navigation">
-			<ul class="pagination justify-content-center">
+    	<ul class="pagination justify-content-center">
 
-				<!-- 이전 버튼 -->
-				<c:choose>
-					<c:when test="${pi.currentPage > 1}">
-						<li class="page-item"><a class="page-link"
-							href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage - 1}${searchParam}">이전</a>
-						</li>
-					</c:when>
-					<c:otherwise>
-						<li class="page-item disabled"><span class="page-link">이전</span>
-						</li>
-					</c:otherwise>
-				</c:choose>
+        	<!-- 이전 버튼 -->
+        	<c:choose>
+            	<c:when test="${pi.currentPage > 1}">
+                	<li class="page-item">
+                    	<a class="page-link" href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage - 1}${searchParam}">이전</a>
+                	</li>
+            	</c:when>
+            	<c:otherwise>
+                	<li class="page-item disabled">
+                    	<span class="page-link">이전</span>
+                	</li>
+            	</c:otherwise>
+        	</c:choose>
 
-				<!-- 페이지 번호 -->
-				<c:forEach var="i" begin="${pi.startPage}" end="${pi.endPage}">
-					<c:choose>
-						<c:when test="${i == pi.currentPage}">
-							<li class="page-item active"><span class="page-link">${i}</span>
-							</li>
-						</c:when>
-						<c:otherwise>
-							<li class="page-item"><a class="page-link"
-								href="${pageContext.request.contextPath}/eventBoard/list?page=${i}${searchParam}">${i}</a>
-							</li>
-						</c:otherwise>
-					</c:choose>
-				</c:forEach>
+        	<!-- 페이지 번호 -->
+        	<c:forEach var="i" begin="${pi.startPage}" end="${pi.endPage}">
+            	<c:choose>
+                	<c:when test="${i == pi.currentPage}">
+                    	<li class="page-item active">
+                        	<span class="page-link">${i}</span>
+                    	</li>
+                	</c:when>
+                	<c:otherwise>
+                    	<li class="page-item">
+                        	<a class="page-link" href="${pageContext.request.contextPath}/eventBoard/list?page=${i}${searchParam}">${i}</a>
+                    	</li>
+                	</c:otherwise>
+            	</c:choose>
+        	</c:forEach>
 
-				<!-- 다음 버튼 -->
-				<c:choose>
-					<c:when test="${pi.currentPage < pi.totalPage}">
-						<li class="page-item"><a class="page-link"
-							href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage + 1}${searchParam}">다음</a>
-						</li>
-					</c:when>
-					<c:otherwise>
-						<li class="page-item disabled"><span class="page-link">다음</span>
-						</li>
-					</c:otherwise>
-				</c:choose>
+        	<!-- 다음 버튼 -->
+        	<c:choose>
+            	<c:when test="${pi.currentPage < pi.totalPage}">
+                	<li class="page-item">
+                    	<a class="page-link" href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage + 1}${searchParam}">다음</a>
+                	</li>
+            	</c:when>
+            	<c:otherwise>
+                	<li class="page-item disabled">
+                    	<span class="page-link">다음</span>
+                	</li>
+            	</c:otherwise>
+        	</c:choose>
 
-			</ul>
-		</nav>
+    	</ul>
+	</nav>
+		
+		
+		
+		
 	</div>
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />

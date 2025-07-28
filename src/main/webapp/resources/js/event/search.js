@@ -37,6 +37,9 @@ $('#endDate').datepicker({
 	//showOn: 'button',       // 입력 필드 클릭 또는 버튼 클릭 시 표시
 	//buttonText: '<i>선택</i>', // 버튼 아이콘 (Font Awesome 사용)
 	//	minDate: 0,          // 오늘 이전 날짜 선택 불가
+	
+	minDate: $('#startDate').datepicker('getDate'),
+	
 	// maxDate: '+1M +10D', // 오늘로부터 한 달 10일 후까지 선택 가능 (선택 사항)
 	onSelect: function(dateText, inst) {
 		resetDateBtn();

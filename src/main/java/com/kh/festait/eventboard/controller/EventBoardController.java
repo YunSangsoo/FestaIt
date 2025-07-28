@@ -35,25 +35,29 @@ public class EventBoardController {
 	public String eventList(@RequestParam(value = "page", defaultValue = "1") int currentPage,
 			@RequestParam Map<String, Object> paramMap, Model model) {
 		EventBoard eventBoard = new EventBoard();
+		
 
 		String eventCode = (String) paramMap.get("eventCode"); // 넘어온 파라미터
 		List<String> eventCodeList = new ArrayList<String>();
+		
 		if(eventCode != null && !eventCode.isEmpty()) {
 			eventCodeList = Arrays.asList(eventCode.split(","));			
 		}
-		
-		paramMap.put("eventCodeList", eventCodeList);	
-		
 		int limit = 8; // 한 페이지에 보여줄 게시글 수
 		int offset = (currentPage - 1) * limit; // 시작행 번호
+		
+		// 검색용 행사 코드 리스트 작성, 다중 선택을 가능케 함
+		paramMap.put("eventCodeList", eventCodeList);
+		// mapper용 행 계산 parameter
+		paramMap.put("startRow", offset);
+		paramMap.put("endRow", offset + limit);
+		// 리스트/캘린더형에 따라 행사 리스트 출력 기본값(날짜)을 지정하기 위한 구분자, L/C
+		paramMap.put("boardCode", "L");
+		
 		int totalEventCount = eventBoardService.selectEventCount(paramMap);
 		int pageBlock = 5; // 한 번에 보여줄 페이지 번호 개수
 		
 		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
-		
-		// mapper용 행 계산 parameter
-		paramMap.put("startRow", offset);
-		paramMap.put("endRow", offset + limit);
 		
 	    List<EventBoard> list = eventBoardService.selectEventList(pi, paramMap);
 	    
@@ -62,8 +66,6 @@ public class EventBoardController {
 	    model.addAttribute("eventList", list);
 	    model.addAttribute("pi", pi);
 		model.addAttribute("param", paramMap);
-	    
-	    System.out.println("현재 유효한 행사 수: "+list.size());
 	    
 	    return "event/eventBoardList";
 	}
@@ -80,19 +82,21 @@ public class EventBoardController {
 		if(eventCode != null && !eventCode.isEmpty()) {
 			eventCodeList = Arrays.asList(eventCode.split(","));			
 		}
+		int limit = 300; // 한 페이지에 보여줄 게시글 수
+		int offset = (currentPage - 1) * limit; // 시작행 번호
 		
 		paramMap.put("eventCodeList", eventCodeList);	
-		
-		int limit = 8; // 한 페이지에 보여줄 게시글 수
-		int offset = (currentPage - 1) * limit; // 시작행 번호
-		int totalEventCount = eventBoardService.selectEventCount(paramMap);
-		int pageBlock = 5; // 한 번에 보여줄 페이지 번호 개수
-		
-		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
 		
 		// mapper용 행 계산 parameter
 		paramMap.put("startRow", offset);
 		paramMap.put("endRow", offset + limit);
+		// 리스트/캘린더형에 따라 행사 리스트 출력 기본값(날짜)을 지정하기 위한 구분자, L/C
+		paramMap.put("boardCode", "C");
+		
+		int totalEventCount = eventBoardService.selectEventCount(paramMap);
+		int pageBlock = 5; // 한 번에 보여줄 페이지 번호 개수
+		
+		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
 		
 	    List<EventBoard> list = eventBoardService.selectEventList(pi, paramMap);
 	    
@@ -101,8 +105,6 @@ public class EventBoardController {
 	    model.addAttribute("eventList", list);
 	    model.addAttribute("pi", pi);
 		model.addAttribute("param", paramMap);
-	    
-	    System.out.println("현재 유효한 행사 수: "+list.size());
 		
 		return "event/eventBoardCalendar";
 	}

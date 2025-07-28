@@ -71,25 +71,6 @@
 					</button>
 				</div>
 
-				<%-- 				<c:choose>
-					<c:when test="${empty list}">
-						<tr>
-							<td colspan="5">게시글이 없습니다</td>
-						</tr>
-					</c:when>
-					<c:otherwise>
-						<c:forEach var="board" items="${list }">
-							<tr onclick="movePage(${board.boardNo})">
-								<td>${board.boardNo }</td>
-								<td>${board.boardTitle }</td>
-								<td>${board.boardWriter}</td>
-								<td>${board.count }</td>
-								<td>${board.createDate }</td>
-							</tr>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose> --%>
-
 				<c:forEach var="banner" items="${list}">
 					<tr onclick="movePage(${board.boardNo})">
 						<td>${board.boardNo }</td>
@@ -101,88 +82,45 @@
 				</c:forEach>
 
 
-
-				<!-- 
-				<div class="banner">행사 배너</div>
-				 -->
-
 				<!-- 진행중인 행사 -->
 
 				<div class="section-title">진행 중인 행사</div>
 				<div class="events-grid">
-					<div class="event-card" id="event-card">
-						<div class="event-info" id="event-info">
-							<div class="tag">진행중</div>
-							<div class="event-name">여름 해변축제</div>
-							<div>2025.07.01 ~ 07.20</div>
-							<div>지역: 부산 해운대</div>
-							<div>주최: 부산시</div>
-						</div>
-						<img
-							src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
-							class="EventItemHover-img" alt="">
-					</div>
-					<div class="event-card" id="event-card">
-						<div class="event-info" id="event-info">
-							<div class="tag">진행중</div>
-							<div class="event-name">전통문화 박람회</div>
-							<div>2025.07.10 ~ 07.30</div>
-							<div>지역: 전주</div>
-							<div>주최: 문화재청</div>
-						</div>
-						<img
-							src="https://www.coex.co.kr/wp-content/uploads/2025/07/토스.jpg"
-							class="EventItemHover-img" alt="">
-					</div>
-					<div class="event-card" id="event-card">
-						<div class="event-info" id="event-info">
-							<div class="tag">진행중</div>
-							<div class="event-name">푸드 페스티벌</div>
-							<div>2025.07.12 ~ 07.18</div>
-							<div>지역: 서울광장</div>
-							<div>주최: 서울시</div>
-						</div>
-						<img
-							src="https://www.coex.co.kr/wp-content/uploads/2025/07/홈페이지-일정게재-이미지.jpg"
-							class="EventItemHover-img" alt="">
-					</div>
-					<div class="event-card" id="event-card">
-						<div class="event-info" id="event-info">
-							<div class="tag">진행중</div>
-							<div class="event-name">과학체험전</div>
-							<div>2025.07.14 ~ 07.22</div>
-							<div>지역: 대전</div>
-							<div>주최: 국립과학관</div>
-						</div>
-						<img
-							src="https://www.coex.co.kr/wp-content/uploads/2025/04/웹배너-수시.png"
-							class="EventItemHover-img" alt="">
-					</div>
-					<div class="event-card" id="event-card">
-						<div class="event-info" id="event-info">
-							<div class="tag">진행중</div>
-							<div class="event-name">밤하늘 별빛축제</div>
-							<div>2025.07.01 ~ 07.31</div>
-							<div>지역: 강원도</div>
-							<div>주최: 환경부</div>
-						</div>
-						<img
-							src="https://www.coex.co.kr/wp-content/uploads/2024/08/V.19배너_수정.png"
-							class="EventItemHover-img" alt="">
-					</div>
-					<div class="event-card" id="event-card">
-						<div class="event-info" id="event-info">
-							<div class="tag">진행중</div>
-							<div class="event-name">K-POP 콘서트</div>
-							<div>2025.07.15 ~ 07.17</div>
-							<div>지역: 인천</div>
-							<div>주최: 방송국</div>
-						</div>
-						<img
-							src="https://www.coex.co.kr/wp-content/uploads/2024/12/coex.png"
-							class="EventItemHover-img" alt="">
-					</div>
 
+
+					<c:choose>
+						<c:when test="${not empty eventList}">
+							<c:forEach var="event" items="${eventList}">
+								<div class="event-card" id="event-card">
+									<a
+										href="${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}"
+										class="text-decoration-none text-dark">
+										<div class="event-info" id="event-info">
+											<div class="tag">${event.eventName}</div>
+											<div class="event-name">${event.appTitle}</div>
+											<div class="date">
+												<fmt:formatDate value="${event.startDate}"
+													pattern="yyyy.MM.dd" />
+												-
+												<fmt:formatDate value="${event.endDate}"
+													pattern="yyyy.MM.dd" />
+											</div>
+											<div>지역: ${event.region}</div>
+											<div>주최: ${event.appOrg}</div>
+										</div> <img
+										<%-- 
+										src="${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}"
+										 --%>
+										src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
+										class="EventItemHover-img" alt="">
+									</a>
+								</div>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<div>등록된 행사 게시물이 없습니다.</div>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 
@@ -192,63 +130,37 @@
 				<div class="today-title">오늘의 행사</div>
 
 				<div class="today-grid">
-					<!-- 6개 이상 항목 예시 -->
-					<div class="today-event">
-						<div class="thumb"></div>
-						<div class="info">
-							<div class="org">주관처1</div>
-							<div class="title">[전시] IT박람회</div>
-							<div>07.15 ~ 07.17</div>
-						</div>
-					</div>
-					<div class="today-event">
-						<div class="thumb"></div>
-						<div class="info">
-							<div class="org">주관처2</div>
-							<div class="title">[공연] 시민 음악회</div>
-							<div>07.15</div>
-						</div>
-					</div>
-					<div class="today-event">
-						<div class="thumb"></div>
-						<div class="info">
-							<div class="org">주관처3</div>
-							<div class="title">[체험] 과학놀이터</div>
-							<div>07.15 ~ 07.16</div>
-						</div>
-					</div>
-					<div class="today-event">
-						<div class="thumb"></div>
-						<div class="info">
-							<div class="org">주관처4</div>
-							<div class="title">[축제] 강릉단오제</div>
-							<div>07.10 ~ 07.20</div>
-						</div>
-					</div>
-					<div class="today-event">
-						<div class="thumb"></div>
-						<div class="info">
-							<div class="org">주관처5</div>
-							<div class="title">[푸드] 야시장 축제</div>
-							<div>07.15 ~ 07.15</div>
-						</div>
-					</div>
-					<div class="today-event">
-						<div class="thumb"></div>
-						<div class="info">
-							<div class="org">주관처6</div>
-							<div class="title">[전시] 스마트시티 체험</div>
-							<div>07.15 ~ 07.20</div>
-						</div>
-					</div>
-					<div class="today-event">
-						<div class="thumb"></div>
-						<div class="info">
-							<div class="org">주관처7</div>
-							<div class="title">오늘의 행사7</div>
-							<div>07.15 ~ 07.20</div>
-						</div>
-					</div>
+
+					<c:choose>
+						<c:when test="${not empty todayEventList}">
+							<c:forEach var="todayEvent" items="${todayEventList}">
+
+								<a
+									href="${pageContext.request.contextPath}/eventBoard/detail?appId=${todayEvent.appId}"
+									class="text-decoration-none text-dark today-event">
+									<div class="thumb">
+										<img
+										src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
+											class="EventItemHover-img" alt="">
+									</div>
+									<div class="info">
+										<div class="org">${todayEvent.appOrg}</div>
+										<div class="title event-name">[${todayEvent.eventName}]
+											${todayEvent.appTitle}</div>
+										<div class="date stretch">
+											<fmt:formatDate value="${todayEvent.startDate}"
+												pattern="yyyy.MM.dd" />
+											-
+											<fmt:formatDate value="${todayEvent.endDate}" pattern="yyyy.MM.dd" />
+										</div>
+									</div>
+								</a>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<div>오늘의 행사 게시물이 없습니다.</div>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 
@@ -393,8 +305,6 @@
 						<div class="create-date">2025-07-18</div>
 					</div>
 				</div>
-
-
 			</div>
 		</div>
 
@@ -436,37 +346,6 @@
 							</tr>
 						</c:otherwise>
 					</c:choose>
-
-					<!-- 백엔드 구현 전 임시 데이터 -->
-
-					<tr>
-						<td>8</td>
-						<td class="text-start" id="notice-title">------백엔드 구현 전 임시
-							데이터--ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ----</td>
-						<td>2025.04.13</td>
-					</tr>
-					<tr>
-						<td>7</td>
-						<td class="text-start" id="notice-title">2025년도 5월 행사 신청 안내</td>
-						<td>2025.04.10</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td class="text-start" id="notice-title">2025년도 4월 행사 신청 안내</td>
-						<td>2025.03.10</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td class="text-start" id="notice-title">(수정)2025년도 3월 행사 신청
-							안내</td>
-						<td>2025.02.07</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td class="text-start" id="notice-title">(긴급) 2월 23일 XX페스티벌
-							취소 안내</td>
-						<td>2025.02.03</td>
-					</tr>
 				</tbody>
 			</table>
 		</div>
