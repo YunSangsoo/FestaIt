@@ -1,6 +1,8 @@
 package com.kh.festait.app.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -91,5 +94,25 @@ public class AdminAppController {
             ra.addFlashAttribute("msg", "해당하는 신청서를 찾을 수 없습니다.");
 		return "app/eventApplicationForm";
 	}
+	
+	@PostMapping("appApprove")
+	public String approvingApp(
+			@RequestParam("action") String action,
+			@PathVariable("appId") String appId,
+			@PathVariable("AdminComment") String adminComment,
+			 Model model,RedirectAttributes ra
+			) {
+		int result = 0;
+		if(action.equals("A")) {
+			result = appService.approvingApp(appId);
+		}else {
+			Map<String,String> setMap = new HashMap<>(); 
+			setMap.put("appId", appId);
+			setMap.put("adminComment", adminComment);
+			result = appService.rejectingApp(setMap);
+		}
+		return "";
+	}
+	
 	
 }

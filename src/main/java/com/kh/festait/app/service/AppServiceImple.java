@@ -153,4 +153,17 @@ public class AppServiceImple implements AppService {
         return appDao.selectAppList(paramMap);
     }
 
+	@Override
+	public int approvingApp(String appId) {
+		return appDao.approvingApp(appId);
+		
+	}
+
+	@Override
+	public int rejectingApp(Map<String, String> setMap) {
+		
+		return appDao.rejectingApp(setMap);
+		
+	}
+
 }

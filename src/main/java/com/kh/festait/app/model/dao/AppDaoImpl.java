@@ -62,4 +62,15 @@ public class AppDaoImpl implements AppDao {
 		return session.selectOne("app.selectAppListCount");
 	}
 
+	@Override
+	public int approvingApp(String appId) {
+		// TODO Auto-generated method stub
+		return session.update("app.approvingApp",appId);
+	}
+
+	@Override
+	public int rejectingApp(Map<String, String> setMap) {
+		return session.update("app.rejectingApp",setMap);
+	}
+
 }

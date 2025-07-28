@@ -176,5 +176,19 @@
     	ON A.APP_ID = B.APP_ID
         WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
     </select>
+    
+    
+    <update id="approvingApp">
+    	UPDATE EVENT_APPLICAITON SET
+    	STAT_CODE = 'A'
+    	WHERE APP_ID = #{appId};
+    </update>
+    
+    <update id="rejectingApp" parameterType="map">
+    	UPDATE EVENT_APPLICAITON SET
+    	STAT_CODE = 'R',
+    	ADMIN_COMMENT = #{adminComment}
+    	WHERE APP_ID = #{appId};
+    </update>
 	
 </mapper>

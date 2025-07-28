@@ -24,4 +24,8 @@ public interface AppDao {
 
 	int selectAppListCount();
 
+	int approvingApp(String appId);
+
+	int rejectingApp(Map<String, String> setMap);
+
 }
