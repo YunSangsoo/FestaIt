@@ -47,18 +47,16 @@
                 <div class="container">
                     <h2 style="font-family: Georgia, 'Times New Roman', Times, serif; font-size: 40px; color: #6A1B9A;">Official</h2>
                     <h2 style="font-family: Georgia, 'Times New Roman', Times, serif; font-size: 40px; color: #6A1B9A;">Login</h2>
-                    <form method="post" action="${contextPath}/user/loginProcess" id="login-form2">
+                    <form:form method="post" action="${pageContext.request.contextPath}/user/loginProcess" id="login-form2">
                         <div class="login_input">
-                            <input type="text" name="id" placeholder=" ID" required />
-                            <input type="password" name="passwd" required placeholder=" PASSWORD" maxlength="15" />
+                            <input type="text" name="userId" placeholder=" ID" required />
+                            <input type="password" name="userPwd" required placeholder=" PASSWORD" maxlength="15" />
                             <button class="btn-idpw" type="button" onclick="location.href='아이디찾기.html'">ID/PW찾기</button>
                         </div>
                         <button class="bt1" type="submit"><span class="tx1">로그인</span></button>
-                    </form>
+                    </form:form>
 
-                    <form method="get" action="${contextPath}/user/join2">
-                                        <a href="/festait/join" class="bt2">회원가입</a>
-                    </form>
+                    <a href="${pageContext.request.contextPath}/security/join" class="bt2">회원가입</a>
                 </div>
             </div>
         </div>
