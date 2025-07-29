@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
-
+<html>
 <head>
 <meta charset="UTF-8" />
 <title>공지 작성</title>
@@ -17,20 +18,22 @@
 	<div class="container my-5" style="max-width: 700px;">
 		<h3 class="mb-4 border-bottom pb-2">공지 게시판 작성</h3>
 
-		<form action="${pageContext.request.contextPath}/noticeBoard/create"
+		<form:form modelAttribute="notice"
+			action="${pageContext.request.contextPath}/noticeBoard/create"
 			method="post" enctype="multipart/form-data">
+
 			<!-- 제목 -->
 			<div class="mb-3">
-				<label for="noticeTitle" class="form-label fw-semibold">제목</label> <input
-					type="text" id="noticeTitle" name="noticeTitle"
-					class="form-control" placeholder="제목을 입력해주세요." required />
+				<label for="noticeTitle" class="form-label fw-semibold">제목</label>
+				<form:input path="noticeTitle" id="noticeTitle" class="form-control"
+					placeholder="제목을 입력해주세요." />
 			</div>
 
 			<!-- 내용 -->
 			<div class="mb-3">
-				<label for="content" class="form-label fw-semibold">내용</label>
-				<textarea id="noticeDetail" name="noticeDetail" class="form-control"
-					rows="7" placeholder="내용을 입력해주세요." required></textarea>
+				<label for="noticeDetail" class="form-label fw-semibold">내용</label>
+				<form:textarea path="noticeDetail" id="noticeDetail"
+					class="form-control" rows="7" placeholder="내용을 입력해주세요." />
 			</div>
 
 			<!-- 첨부파일 -->
@@ -48,7 +51,8 @@
 			<div class="d-flex justify-content-end">
 				<button type="submit" class="btn btn-primary px-4">등록</button>
 			</div>
-		</form>
+
+		</form:form>
 	</div>
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
@@ -60,7 +64,6 @@
 		const fileInput = document.getElementById('noticeFile');
 		const clearBtn = document.getElementById('clearFileBtn');
 
-		// 파일 선택 시 X 버튼 보이기
 		fileInput
 				.addEventListener(
 						'change',
@@ -69,12 +72,10 @@
 									: 'none';
 						});
 
-		// X 버튼 클릭 시 파일 초기화
 		clearBtn.addEventListener('click', function() {
-			fileInput.value = ''; // 첨부파일 초기화
-			clearBtn.style.display = 'none'; // 버튼 숨기기
+			fileInput.value = '';
+			clearBtn.style.display = 'none';
 		});
 	</script>
 </body>
-
 </html>

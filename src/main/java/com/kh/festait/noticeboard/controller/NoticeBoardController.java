@@ -61,7 +61,8 @@ public class NoticeBoardController {
 
     //3. 작성 폼
     @GetMapping("/noticeWrite")
-    public String showWriteForm() {
+    public String showWriteForm(Model model) {
+    	model.addAttribute("notice", new NoticeBoard());
         return "noticeBoard/noticeWrite";
     }
     @PostMapping("/create")
