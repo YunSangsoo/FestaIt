@@ -89,6 +89,9 @@ a {
 	color: #6A1B9A;
 }
 
+.section-title {
+	height: 20px;
+}
 
 /* 진행 중인 행사 카드 그리드 */
 .events-grid {
@@ -108,15 +111,21 @@ a {
 }
 
 /* 카드 상단 태그 */
-.event-card.tag {
+.event-card .tag {
 	position: absolute;
-	top: 10px;
-	right: 10px;
+	bottom: 10px;
+	left: 10px;
 	background-color: #ea870e;
 	color: white;
 	font-size: 12px;
 	padding: 2px 6px;
 	border-radius: 4px;
+}
+
+.bookmark {
+	position: absolute;
+	top: 10px;
+	right: 10px;
 }
 
 .event-info {
@@ -177,6 +186,15 @@ a {
 		justify-content: space-between;
 	}
 }
+
+
+.title-area {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	justify-content: space-between;
+}
+
 
 /* 오늘의 행사 */
 .today-event {

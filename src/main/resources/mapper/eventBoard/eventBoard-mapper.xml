@@ -103,10 +103,10 @@
 		    ) N
 		    WHERE ROWNUM &lt;= #{endRow}
        	)
-      	 WHERE RNUM &gt; #{startRow}
+      	WHERE RNUM &gt; #{startRow}
 	</select>
 	
-	<!-- 수정======================================================================================= -->
+	<!-- 수정?======================================================================================= -->
 	<select id="selectEventCalendar" resultMap="eventBoardMap" parameterType="map">
 		SELECT * FROM (
 		    SELECT ROWNUM RNUM, N.* FROM (

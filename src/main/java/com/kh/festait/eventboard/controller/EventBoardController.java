@@ -79,14 +79,15 @@ public class EventBoardController {
 
 		String eventCode = (String) paramMap.get("eventCode"); // 넘어온 파라미터
 		List<String> eventCodeList = new ArrayList<String>();
+		
 		if(eventCode != null && !eventCode.isEmpty()) {
 			eventCodeList = Arrays.asList(eventCode.split(","));			
 		}
-		int limit = 300; // 한 페이지에 보여줄 게시글 수
+		int limit = 5000; // 한 페이지에 보여줄 게시글 수
 		int offset = (currentPage - 1) * limit; // 시작행 번호
 		
-		paramMap.put("eventCodeList", eventCodeList);	
-		
+		// 검색용 행사 코드 리스트 작성, 다중 선택을 가능케 함
+		paramMap.put("eventCodeList", eventCodeList);
 		// mapper용 행 계산 parameter
 		paramMap.put("startRow", offset);
 		paramMap.put("endRow", offset + limit);

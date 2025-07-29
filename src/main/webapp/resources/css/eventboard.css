@@ -82,12 +82,11 @@ a {
 
 .search-grid.date {
 	height: 100%;
-	flex-grow: 1;
 }
 
 .search-grid.right {
 	gap: 25px;
-	flex-grow: 4;
+	flex-grow: 5;
 }
 
 @media ( min-width : 970px) {
@@ -105,12 +104,12 @@ a {
 	flex-shrink: 0;
 }
 
-.search-option.bookmark {
+.bookmark-option {
 	font-size: 16px;
 	width: fit-content;
 }
 
-.search-option.bookmark:active {
+.bookmark-option:active {
 	font-size: 16px;
 	font-weight: bold;
 	width: fit-content;
@@ -225,15 +224,21 @@ input[type="checkbox"]{
 	
 }
 
-.tag {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #EA870E;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
+.event-card .tag {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	background-color: #ea870e;
+	color: white;
+	font-size: 12px;
+	padding: 2px 6px;
+	border-radius: 4px;
+}
+
+.bookmark {
+	position: absolute;
+	top: 10px;
+	right: 10px;
 }
 
 .event-info {
@@ -283,7 +288,7 @@ input[type="checkbox"]{
     height: fit-content;
     /* width: 100%;
     height: fit-content; */
-    margin: 0 auto;
+    margin: 0 auto 50px;
   }
  
 .fc-col-header-cell-cushion {
@@ -300,6 +305,12 @@ input[type="checkbox"]{
 .fc-daygrid-event {
 	
 }
+
+/* .fc-h-event {
+    background-color: #000000;
+    border: 1px solid #000000;
+    display: block;
+} */
 
 .fc-event-time {
 	display: none;

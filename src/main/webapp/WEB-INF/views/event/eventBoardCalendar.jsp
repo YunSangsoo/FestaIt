@@ -180,7 +180,7 @@ thead.lavender-header th {
 			<div class="flex-area view-format flex-center">
 				<a href="${pageContext.request.contextPath}/myEventApp"
 					class="btn lavender-btn">행사 신청 현황</a>
-				<!-- 경로 수정 필요 -->
+				<!-- 경로 수정 필요, 권한 부여 시 a 태그만 hide -->
 			</div>
 
 			<div class="flex-area view-format">
@@ -304,13 +304,13 @@ thead.lavender-header th {
 					const eventEl = info.el;
 					
 					eventEl.addEventListener('mouseenter', function () { // mousemove도 소용 없음...
-						const eventName = info.event.eventName;
+						const eventName = info.event.extendedProps.eventName;
 						const title = info.event.title;
 						const appOrg = info.event.extendedProps.appOrg;
 						const startDateText = info.event.extendedProps.startDateText;
 						const endDateText = info.event.extendedProps.endDateText;
 						
-						console.log("이벤트 정보:", title, startDateText, appOrg); // 각 값이 비어 있는지 확인
+						console.log("이벤트 정보:", title, startDateText, eventName); // 각 값이 비어 있는지 확인
 						console.log("typeof title:", typeof title, "| title 값:", title); // string 맞음
 						
 						

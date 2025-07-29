@@ -84,6 +84,15 @@ function getFutureDate(days) {
 // 버튼 클릭 핸들러
 document.querySelectorAll('.btn-date').forEach(btn => {
   btn.addEventListener('click', function() {
+  	if ($(this).hasClass('selected')) {
+	  // 이미 선택된 버튼을 다시 클릭하면 선택 해제
+		$(this).removeClass('selected active');
+	} else {
+		$(this).addClass('selected active');
+	}
+	
+	
+	
     // 모든 버튼 선택 해제
     document.querySelectorAll('.btn-date').forEach(b => b.classList.remove('selected', 'active'));
     // 현재 버튼 선택
@@ -98,6 +107,7 @@ document.querySelectorAll('.btn-date').forEach(btn => {
     // form input에 값 삽입
     document.getElementById('startDate').value = startDate;
     document.getElementById('endDate').value = endDate;
+  
   });
 });
 

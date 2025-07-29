@@ -156,7 +156,7 @@ thead.lavender-header th {
 
 						<input type="checkbox" name="bookmark-check"
 							class="bookmark-check" />
-						<div class="search-option bookmark">북마크한 행사</div>
+						<div class="search-option bookmark-option">북마크한 행사</div>
 					</div>
 
 				</div>
@@ -209,6 +209,9 @@ thead.lavender-header th {
 									src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
 									class="EventItemHover-img" alt="">
 								</a>
+								<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-bookmark bookmark" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
+								</svg>
 							</div>
 						</c:forEach>
 					</c:when>
