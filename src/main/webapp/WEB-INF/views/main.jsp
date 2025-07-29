@@ -13,6 +13,9 @@
 	scope="application" />
 <link href="${contextPath }/resources/css/mainpage.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="todayDate" /> <!-- ${todayDate} -->
 </head>
 
 <body>
@@ -26,6 +29,7 @@
 			<!-- 메인 좌측 -->
 			<div class="main-content">
 				<!-- 홍보 배너 -->
+				<div>=========데이터 연결 해야 합니다=========</div>
 				<div id="myCarousel" class="carousel slide mb-6"
 					data-bs-ride="carousel">
 					<div class="carousel-indicators">
@@ -84,7 +88,9 @@
 
 				<!-- 진행중인 행사 -->
 
-				<div class="section-title">진행 중인 행사</div>
+				<a href="${pageContext.request.contextPath}/eventBoard/list?startDate=${todayDate}" class="text-decoration-none text-dark section-title">
+					<div class="section-title">진행 중인 행사</div>
+				</a>
 				<div class="events-grid">
 
 
@@ -126,8 +132,10 @@
 
 			<!-- 오늘의 행사 -->
 			<div class="today-section">
-
-				<div class="today-title">오늘의 행사</div>
+				
+				<a href="${pageContext.request.contextPath}/eventBoard/list?startDate=${todayDate}&endDate=${todayDate}" class="text-decoration-none text-dark section-title">
+					<div class="today-title">오늘의 행사</div>
+				</a>
 
 				<div class="today-grid">
 
@@ -140,7 +148,7 @@
 									class="text-decoration-none text-dark today-event">
 									<div class="thumb">
 										<img
-										src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
+											src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
 											class="EventItemHover-img" alt="">
 									</div>
 									<div class="info">
@@ -151,7 +159,8 @@
 											<fmt:formatDate value="${todayEvent.startDate}"
 												pattern="yyyy.MM.dd" />
 											-
-											<fmt:formatDate value="${todayEvent.endDate}" pattern="yyyy.MM.dd" />
+											<fmt:formatDate value="${todayEvent.endDate}"
+												pattern="yyyy.MM.dd" />
 										</div>
 									</div>
 								</a>
@@ -170,7 +179,7 @@
 		<!-- 리뷰 영역 -->
 
 		<div class="review-section">
-			<div class="review-title">실시간 리뷰</div>
+			<div class="review-title">실시간 리뷰 =========데이터 연결 해야 합니다=========</div>
 			<div class="review-grid">
 				<div class="review-card">
 					<div class="review-profile"></div>
@@ -312,7 +321,10 @@
 
 		<!-- 공지사항 영역 -->
 		<div class="notice-section">
-			<div class="notice-title">공지사항</div>
+			<a href="${pageContext.request.contextPath}/noticeBoard" class="text-decoration-none text-dark section-title">
+				<div class="notice-title">공지사항</div>
+			</a>
+			
 			<table class="notice-table">
 
 			</table>
@@ -363,10 +375,12 @@
 	<script>
 	$(".event-card")
 		.on("mouseenter", function() {
+			$(this).css("border-color","#D1C4E9");
 			$(this).find(".EventItemHover-img").fadeOut(100);
 			$(this).find(".event-info").fadeIn(300);
 		})
 		.on("mouseleave", function() {
+			$(this).css("border-color","#FFFFFF");
 			$(this).find(".EventItemHover-img").fadeIn(100);
 			$(this).find(".event-info").fadeOut(300);
 		})

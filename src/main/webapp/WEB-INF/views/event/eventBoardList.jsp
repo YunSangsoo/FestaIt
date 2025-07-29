@@ -288,7 +288,7 @@ thead.lavender-header th {
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script
-		src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
+		src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
 
 </body>
 

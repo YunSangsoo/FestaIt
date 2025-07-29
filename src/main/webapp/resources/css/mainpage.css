@@ -100,16 +100,15 @@ a {
 /* 행사 카드 */
 .event-card {
 	background-color: white;
-	border: 2px solid #D1C4E9;
+	border: 2px solid #FFFFFF;
+	/* border: 2px solid #D1C4E9; */
 	border-radius: 8px;
 	position: relative;
 	aspect-ratio: 1/1; /* 정사각형 비율 */
 }
 
 /* 카드 상단 태그 */
-.event-card
- 
-.tag {
+.event-card.tag {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -133,6 +132,10 @@ a {
 	font-weight: bold;
 	margin-bottom: 10px;
 	color: #6A1B9A;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
 }
 
 .EventItemHover-img {
@@ -219,23 +222,6 @@ a {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* 리뷰 섹션 */
 .review-section {
 	flex: 1;
@@ -254,95 +240,6 @@ a {
 		grid-template-columns: repeat(2, 1fr);
 	}
 	.review-grid>*:nth-child(n+7) {
-		display: none;
-	}
-}
-
-.section-title, .review-title, .today-title, .notice-title {
-	font-size: 20px;
-	font-weight: bold;
-	margin-bottom: 20px;
-	color: #6A1B9A;
-}
-
-/* 진행 중인 행사 카드 그리드 */
-.events-grid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 5px;
-}
-
-/* 행사 카드 */
-.event-card {
-	background-color: white;
-	border: 2px solid #D1C4E9;
-	border-radius: 8px;
-	position: relative;
-	aspect-ratio: 1/1; /* 정사각형 비율 */
-}
-
-/* 카드 상단 태그 */
-.event-card .tag {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background-color: #ea870e;
-	color: white;
-	font-size: 12px;
-	padding: 2px 6px;
-	border-radius: 4px;
-}
-
-.event-info {
-	padding: 16px;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	display: none;
-}
-
-/* 행사 이름 텍스트 ---------------------------------------길어지면 줄임 설정 */
-.event-name {
-	font-weight: bold;
-	margin-bottom: 10px;
-	color: #6A1B9A;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 1;
-	overflow: hidden;
-}
-
-.EventItemHover-img {
-	width: 100%;
-	height: 100%;
-	border-radius: 4px;
-	position: relative;
-}
-
-
-
-/* 리뷰 섹션 */
-.review-section {
-	flex: 1;
-}
-
-.review-grid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 10px;
-	min-width: 760px;
-}
-
-@media ( max-width : 1080px) {
-	.review-grid {
-		grid-template-rows: 3;
-		grid-template-columns: repeat(2, 1fr);
-	}
-	.review-grid>*
-:nth-child
-(
-n+7
-) {
 		display: none;
 	}
 }
@@ -388,6 +285,13 @@ n+7
 .review-bottom.create-date {
 	font-size: 10px;
 }
+
+
+
+
+
+
+
 
 /* 공지사항 영역 */
 .notice-section {

@@ -244,7 +244,7 @@ input[type="checkbox"]{
 }
 
 /* 행사 이름 텍스트 ---------------------------------------길어지면 줄임 설정 */
-.event-name {
+.event-name, .event-name-thumb {
 	font-weight: bold;
 	margin-bottom: 10px;
 	color: #6A1B9A;
@@ -252,6 +252,10 @@ input[type="checkbox"]{
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 1;
 	overflow: hidden;
+}
+
+.event-name-thumb {
+	margin-bottom: 5px;
 }
 
 .EventItemHover-img {
@@ -306,12 +310,15 @@ input[type="checkbox"]{
 	height: 320px;
 	display: flex;
 	flex-direction: column;
-	
+	position:absolute;
+	z-index: 500;
+	display:none;
 }
 
 .thumbcard-img {
 	width: 100%;
 	aspect-ratio: 1/1;
+	margin-bottom: 5px;
 }
 
 .event-org {

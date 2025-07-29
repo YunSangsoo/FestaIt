@@ -178,7 +178,6 @@ thead.lavender-header th {
 
 		<div class="flex-area result-inform">
 			<div class="flex-area view-format flex-center">
-				<div class="total-num">총 ${pi.totalCount}건</div>
 				<a href="${pageContext.request.contextPath}/myEventApp"
 					class="btn lavender-btn">행사 신청 현황</a>
 				<!-- 경로 수정 필요 -->
@@ -196,28 +195,27 @@ thead.lavender-header th {
 
 		<div id="calendar"></div>
 
-		<div class="event-hover-thumbcard">
+		<div class="event-hover-thumbcard" id="event-hover-thumbcard">
 			<a
 				href="${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}"
 				class="text-decoration-none text-dark">
 				<div class="event-info" id="event-info">
 					<div class="rel">
-						<div class="tag">${event.eventName}카테고리</div>
+						<div class="tag" id="tag">${event.eventName}카테고리</div>
 						<img
 							src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
-							class="thumbcard-img" alt="">
+							class="thumbcard-img" id="" alt="">
 					</div>
-
-					<div class="event-name">${event.appTitle}행사이름</div>
-					<div class="event-org">[${event.appOrg}주최]</div>
-					<div class="date">
-						<fmt:formatDate value="${event.startDate}" pattern="yyyy.MM.dd" />
-						<div>-</div>
-						<fmt:formatDate value="${event.endDate}" pattern="yyyy.MM.dd" />
+					<div class="event-name-thumb" id="event-name-thumb">행사이름</div>
+					<div class="event-org" id="event-org">[주최]</div>
+					<div class="date" id="date">
 					</div>
 				</div>
 			</a>
 		</div>
+		
+		
+		
 	</div>
 
 
@@ -265,8 +263,7 @@ thead.lavender-header th {
 		});
 	</script> -->
 
-
-	<script>
+<script>
 
 		document.addEventListener('DOMContentLoaded', function() {
 			var calendarEl = document.getElementById('calendar');
@@ -278,32 +275,67 @@ thead.lavender-header th {
 				        title: '${event.appTitle}', // 제목
 				        start: '<fmt:formatDate value="${event.startDate}" pattern="yyyy-MM-dd" />',
 				        end: '<fmt:formatDate value="${event.endDate}" pattern="yyyy-MM-dd 00:01:00" />',
-				        url: '${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}'
+				        url: '${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}',
+				        extendedProps: {
+				        	appId: '${event.appId}',
+				            eventName: '${event.eventName}',
+				            appOrg: '${event.appOrg}',
+				            thumb: 'https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png',
+				            startDateText: '<fmt:formatDate value="${event.startDate}" pattern="yyyy.MM.dd" />',
+				            endDateText: '<fmt:formatDate value="${event.endDate}" pattern="yyyy.MM.dd" />'
+				          }
 				      }<c:if test="${!status.last}">,</c:if>
 				    </c:forEach>
 				  ];
 
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				headerToolbar : {
-					left : 'prevYear,prev,next,nextYear',
+					left : 'prevYear,prev',
 					center : 'title',
-					right : 'dayGridMonth,dayGridWeek'
+					right : 'next,nextYear'
 				},
 				initialDate : today,
 				navLinks : true, // can click day/week names to navigate views
 				editable : true,
 				dayMaxEvents : true, // allow "more" link when too many events
-				events : eventList
+				events : eventList,
+				eventDidMount: function (info) {
+					
+					const eventEl = info.el;
+					
+					eventEl.addEventListener('mouseenter', function () { // mousemove도 소용 없음...
+						const eventName = info.event.eventName;
+						const title = info.event.title;
+						const appOrg = info.event.extendedProps.appOrg;
+						const startDateText = info.event.extendedProps.startDateText;
+						const endDateText = info.event.extendedProps.endDateText;
+						
+						console.log("이벤트 정보:", title, startDateText, appOrg); // 각 값이 비어 있는지 확인
+						console.log("typeof title:", typeof title, "| title 값:", title); // string 맞음
+						
+						
+						document.getElementById("tag").textContent = `\${eventName}`;
+						document.getElementById("event-name-thumb").textContent = `\${title}`;
+						document.getElementById("event-org").textContent = `\${appOrg}`;
+						document.getElementById("date").textContent = `\${startDateText} - \${endDateText}`;
+						
+						
+						
+						
+						
+					});
+					
+					
+				}
 			});
 
 			calendar.render();
 		});
-	</script>
-
-	<script>
-	// 행사 카드 호버 이벤트
+		
+		
 		
 	</script>
+
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
@@ -316,7 +348,7 @@ thead.lavender-header th {
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script
-		src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
+		src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
 
 
 </body>

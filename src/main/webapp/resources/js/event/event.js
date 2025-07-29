@@ -48,10 +48,13 @@ $('#endDate').datepicker({
 }
 });
 
+// 행사 카드 호버 이벤트
 $(".event-card").on("mouseenter", function() {
+	$(this).css("border-color","#FFFFFF");
 	$(this).find(".EventItemHover-img").fadeIn(100);
 	$(this).find(".event-info").fadeOut(300);
 }).on("mouseleave", function() {
+	$(this).css("border-color","#D1C4E9");
 	$(this).find(".EventItemHover-img").fadeOut(100);
 	$(this).find(".event-info").fadeIn(300);
 });
@@ -119,7 +122,28 @@ $('.btn-category').on("click", function() {
 	  $('#eventCode').val(categoryAll);
 });
  
- 
+// 캘린더 호버 이벤트
+$(document).on('mouseenter', '.fc-daygrid-event', function(e) {
+  $('#event-hover-thumbcard')
+    .css({
+      display: 'block',
+      left: e.pageX + 10 + 'px',
+      top: e.pageY + 10 + 'px'
+    });
+});
+
+$(document).on('mouseleave', '.fc-daygrid-event', function() {
+  $('#event-hover-thumbcard').hide();
+});
+
+$(document).on('mousemove', '.fc-daygrid-event', function(e) {
+  $('#event-hover-thumbcard')
+    .css({
+      left: e.pageX + 10 + 'px',
+      top: e.pageY + 10 + 'px'
+    });
+});
+
  
  
  
