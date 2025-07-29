@@ -49,6 +49,8 @@ public class UserServiceImpl implements UserService{
 	public int insertUser(User u) {
 		
 		int result = uDao.insertUser(u);
+		
+		uDao.insertAuthority(u);
 	    //uDao.insertAuthority(u);
 		return result;
 	}
@@ -74,6 +76,11 @@ public class UserServiceImpl implements UserService{
 	//마이페이지 회원정보 조회
 	public User myPageUserInfo(String userId) {
 		return uDao.myPageUserInfo(userId);
+	}
+
+	@Override
+	public User login(User u) {
+		return uDao.getUserByUser(u);
 	}
 
 

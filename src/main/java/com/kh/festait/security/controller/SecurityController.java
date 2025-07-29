@@ -1,50 +1,61 @@
-package com.kh.festait.user.controller;
+package com.kh.festait.security.controller;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kh.festait.user.model.validator.Uservalidator;
 import com.kh.festait.user.model.vo.User;
 import com.kh.festait.user.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/user")
 @Slf4j
-public class UserController {
-
-	@Autowired
+@RequestMapping("/security")
+public class SecurityController {
+	
+	private BCryptPasswordEncoder passwordEncoder;
 	private UserService uService;
 	
-	//GET
+	public SecurityController(BCryptPasswordEncoder passwordEncoder, UserService uService) {
+		this.passwordEncoder = passwordEncoder;
+		this.uService = uService;
+	}
+
+	
+	//에러페이지 포워딩용 url
+	@RequestMapping("/accessDenied")
+	public String accessDenied(Model model) {
+		model.addAttribute("errorMsg","접근불가!!!");
+		return "common/errorPage";
+	}
+	
 	//회원가입 페이지 이동
-	@RequestMapping(value = "/join", method = RequestMethod.GET)
-	public String joinPage() {
-		return "/join";
+	@GetMapping("join")
+	public String joinPage(@ModelAttribute User user) {
+		return "user/join";
 	}
 	
-	//로그인 페이지 이동  
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginuser() {
-		return "user/login";
-	}
-	
-	//로그아웃 처리 및 메인페이지 이동 
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpSession session, SessionStatus status) {
-		session.invalidate(); 
-		status.setComplete();
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(new Uservalidator());
 		
-		return "/main";
+		//추가해야할 바인딩 형태 추가
+		
 	}
 	
 	//마이페이지 이동
@@ -64,47 +75,36 @@ public class UserController {
 	
 	/*********** POST MAPPING *////////
 	//회원 가입 
-	@RequestMapping(value = "/join", method = RequestMethod.POST) 
-	public String insertUser(User m, Model model,RedirectAttributes ra) {
-		
-		System.out.println("m : "+model.toString());
-		int result = uService.insertUser(m);
-		String viewName = "";
-		
-		if (result > 0) {
-			ra.addFlashAttribute("alertMsg", "회원가입 성공.");
-			viewName = "redirect:/";
-		} else {
-			model.addAttribute("errorMsg", "회원가입 실패.s");
-			viewName = "/join";
-		}
-		
-		return viewName;
-	}
-	
-	
-	@PostMapping("/login")
-	public ModelAndView loginUser(User u, ModelAndView mv, Model model, 
-			HttpSession session, // 로그인 성공시, 사용자 정보를 보관할 객체
+	@PostMapping("join")
+	public String insertUser(
+			@Validated @ModelAttribute User m,
+			BindingResult bindingResult,
 			RedirectAttributes ra) {
-		System.out.println("check");
-		User loginUser = uService.login(u);
-		log.info("user : {}",loginUser);
-		if(loginUser != null) {
-			model.addAttribute("loginUser",loginUser);
-			ra.addFlashAttribute("alertMsg", "로그인 성공.");
-		}else {
-			ra.addFlashAttribute("alertMsg", "로그인 실패.");
+		
+		
+
+		//유효성 검사
+		if(bindingResult.hasErrors()) {
+			return "user/join";
 		}
-		mv.setViewName("redirect:/");
-		return mv;
+		
+
+		log.info("user: {} ",m);
+		
+		//유효성 검사 통과시 비밀번호 정보는 암호화하여, 회원가입 진행
+		String encryptedPassword = passwordEncoder.encode(m.getUserPwd());
+		m.setUserPwd(encryptedPassword);
+
+		int result = uService.insertUser(m);
+		
+		return "redirect:/user/login";
 	}
+	
 	/*
 	//회원 로그인
 	@RequestMapping(value = "/login", method = RequestMethod.POST) 
-	public ModelAndView loginUser(User u, ModelAndView mv ,Model model, HttpServletRequest request, HttpSession session) {
-
-		System.out.println("check1");
+	public ModelAndView loginUser(User u, Model model, HttpServletRequest request, HttpSession session) {
+		
 		ModelAndView mav = new ModelAndView();
 		User userInfo = new User();
 
@@ -112,8 +112,7 @@ public class UserController {
 		System.out.println("map : "+loginMap.toString());
 		
 		String succesYn = loginMap.get("SUCCES_YN");
-
-		System.out.println("check2");
+	
 		if ("Y".equals(succesYn)) {
 		   userInfo.setRole(loginMap.get("USER_ROLE"));
 		   userInfo.setUserName(loginMap.get("USER_NAME"));
@@ -125,21 +124,19 @@ public class UserController {
 		   
 //		   userInfo.setUserNo(loginMap.get("USER_NO"))
 //		   userInfo.setUserNo("N");
-		   //session.setAttribute("loginUser", userInfo);
-		   
-		   model.addAttribute("loginUser",userInfo);
-		   mav.setViewName("redirect:/");
+		   session.setAttribute("loginUser", userInfo);
+		   mav.setViewName("/main");
 		} else {
 		   mav.addObject("loginSuccesYn", succesYn);
 		   //해당 회원이 없습니다. alert띄워야함
 		   mav.setViewName("/user/login");
 		}
 		
+		
 //		session.setAttribute(succesYn, mav)
 //		session.setAttribute("loginUserRole", "");
 		return mav;
 	}
-		*/
 	
 	
 	
@@ -160,7 +157,7 @@ public class UserController {
 		int succesYn = uService.updateUser(u);
 		return "/main";
 	}
+	*/
 	
 	
 }
-

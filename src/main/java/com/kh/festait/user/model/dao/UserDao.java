@@ -35,4 +35,6 @@ public interface UserDao {
     void userLastLoaginAtUpdate(User u);
     
     User myPageUserInfo(String userId);
+
+	User getUserByUser(User u);
 }
