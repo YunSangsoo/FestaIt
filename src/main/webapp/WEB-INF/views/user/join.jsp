@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
 
 <title>Insert title here</title>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -20,9 +22,10 @@
 		<h2>회원가입</h2>
 		
 		<form method="post"
-			action="${pageContext.request.contextPath}/user/join" id="joinForm"
+			action="${pageContext.request.contextPath}/security/join" id="joinForm"
 			onsubmit="return validateForm();">
 			<div>
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			
 				<label for="user">개인</label>
 				<input name="userType" type="radio" id="user" value="개인" checked>
@@ -152,11 +155,30 @@
 	</div>
 
 
+	<!--아래부터 주소검색 스크립트-->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js">
+	//카카오 주소검색으로 가져옴
+	</script> 
 
 	<!--!!!비밀번호 검사 스크립트!!! 실수하면 고치기 힘듦 !!!!-->
 	<script>
         
         let idDupChkVal = false; //아이디 중복 체크 통과 여부 값
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+
+        //이메일 인증용
+		const contextPath = '${pageContext.request.contextPath}';
+		
+
+		$("#bsGrgiNumText").hide();
+		$("#bsGrgiNum").hide();
+		$("#bsGrgiNameText").hide();
+		$("#bsGrgiName").hide();
+        $('#bsGrgiNum').prop('disabled', true); // <--- 추가
+        $('#bsGrgiName').prop('disabled', true); // <--- 추가
+		
+		
         
         document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById('password');
@@ -166,6 +188,7 @@
 
         const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])[A-Za-z\d]{1,15}$/; // 조건임
 
+
         
         $('input[name="userType"]').change(function(){
         	var value = $(this).val();
@@ -174,10 +197,18 @@
         	if(value == "개인") {
         		$("#bsGrgiNumText").hide();
         		$("#bsGrgiNum").hide();
+        		$("#bsGrgiNameText").hide();
+        		$("#bsGrgiName").hide();
+                $('#bsGrgiNum').prop('disabled', true); // <--- 추가
+                $('#bsGrgiName').prop('disabled', true); // <--- 추가
         	}
         	if(value == "사업자") {
         		$("#bsGrgiNumText").show();
         		$("#bsGrgiNum").show();
+        		$("#bsGrgiNameText").show();
+        		$("#bsGrgiName").show();
+                $('#bsGrgiNum').prop('disabled', false); // <--- 추가
+                $('#bsGrgiName').prop('disabled', false); // <--- 추가
         		
         	}
         	
@@ -250,7 +281,8 @@
       function checkId(){
       	
       	let userId = $('input[name=userId]').val(); //입력한 아이디값
-      	
+        // CSRF 토큰과 헤더 이름을 메타 태그에서 읽어옴
+        
       	$.ajax({
       		url : '${pageContext.request.contextPath}/user/idChecker',
       		<!-- url: '${pageContext.request.contextPath}/user/idChecker',			//컨트롤러 -->
@@ -259,6 +291,11 @@
       		data: {
       			userId: userId				//DATA필드
       		},
+      		beforeSend: function(xhr) {
+                if (header && token) { // 토큰이 존재하는 경우에만 헤더 추가
+                    xhr.setRequestHeader(header, token);
+                }
+            },
       		success: function(data){			//성공시
       			if(data.cnt > 0){
       				alert("동일한 아이디가 존재합니다.");
@@ -289,9 +326,6 @@
 			});
 		});
 
-        </script>
-
-	<script>
         <!--ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ닉 중복확인 스크립트ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ-->
         let usernick = $('input[name=nickName]').val();
         let nickDupChkVal = false
@@ -311,6 +345,11 @@
 				url: `${pageContext.request.contextPath}/user/nickChecker`,
 				type: 'POST',
 				data: { nickName: nickName},
+	      		beforeSend: function(xhr) {
+	                if (header && token) { // 토큰이 존재하는 경우에만 헤더 추가
+	                    xhr.setRequestHeader(header, token);
+	                }
+	            },
 				success: function(data) {
 					if (data.cnt > 0) { // 0이상일때
 						alert("동일한 닉네임이 존재합니다.");
@@ -333,14 +372,6 @@
 			});
 		});
         
-        </script>
-
-	<!--아래부터 주소검색 스크립트-->
-	<script
-		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js">
-	//카카오 주소검색으로 가져옴
-	</script> 
-	<script>
 	// 버튼클릭시 팝업창으로 주소검색한걸 텍스트창에 입력하는 스크립트
         function execDaumPostcode() {
             new daum.Postcode({
@@ -354,11 +385,8 @@
                     }
                 }).open();
             }
-        </script>
 
-	<!-- 여기서부터 이메일인증코드 발송/확인 스크립트 -->
-	<script>
-		const contextPath = '${pageContext.request.contextPath}';	
+	<!-- 여기서부터 이메일인증코드 발송/확인 스크립트 -->	
 		
 		
         let timerInterVal;
@@ -405,7 +433,8 @@
 			
 			fetch(contextPath + "/email/sendCode", {
 				method: "POST",
-				headers: { "Content-Type": "application/json"},
+				headers: { "Content-Type": "application/json",
+					[header]:token},
 				body: JSON.stringify({ email: email }),
 			})
 				.then((res) => res.text())
@@ -420,10 +449,11 @@
 					}
 				})
 				.catch((err) => {
-					
+					console.log(err);
 					alert("서버오류발생!"); // 진짜 ㅈ됨
 				});
 		}
+		
 		//아래서부터 인증코드 확인 함수
 		function verifyCode() {
 			const code = document.getElementById("code").value.trim();
@@ -435,7 +465,8 @@
 			
 			fetch(contextPath + "/email/verifyCode", {
 				method: "POST", // GET or Post
-				headers: {"Content-Type": "application/json"},
+				headers: {"Content-Type": "application/json",
+					[header]:token},
 				body: JSON.stringify({ code: code}),
 			})
 			.then(res => res.text())
@@ -451,8 +482,6 @@
 			.catch(() => alert("서버 오류발생!")); //이건제발 안나오길
 		}
 		
-		</script>
-		<script>
 		$(document).ready(function() {
 			function applyUserTypeChange() {
 				let userType = $('input[name="userType"]:checked').val();

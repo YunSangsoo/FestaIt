@@ -14,7 +14,7 @@ public class User {
 	
 	private String userId; //회원 아이디
 	
-	private int compId; //?
+	private String compId; //?
 	
 	private String nickname; //닏네임 
 	
@@ -36,7 +36,7 @@ public class User {
 	
 	private String enrollDate; //가입일자
 	
-    private String modifyDate; //회원수정일자
+    private String updateDate; //회원수정일자
     
     private String status; //회원상태
     
@@ -52,5 +52,6 @@ public class User {
     
     private String role; //권한
     
-    private String bsGrgiNum; //사업자번호 이거는 새로 만들기
+    private User2 manager;
+    
 }
