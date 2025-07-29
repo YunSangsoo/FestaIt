@@ -148,9 +148,7 @@ public class AppController {
 		else {
 			eventApplication.setStatCode("S");
 			eventApplication.setSubmittedDate(new Date());
-			log.debug("submitDate : {}" , eventApplication.getSubmittedDate());
 		}
-		log.debug("evApp : {}" , eventApplication);
 
 		int result = appService.saveOrUpdateApplication(eventApplication);
 		
@@ -159,7 +157,7 @@ public class AppController {
 		}
 		ra.addFlashAttribute("alertMsg","신청서 작성 성공");
 		if("save".equals(action)) {
-			return "redirect:/myEventApp/appEdit/" + eventApplication.getAppId();
+			return "redirect:/myEventApp";
 		}else
 			return "redirect:/myEventApp";
 	}
@@ -184,5 +182,27 @@ public class AppController {
         log.debug("조회된 게시글 목록: {}", list.size());
 		
 		return "app/eventApplicationList";
+	}
+	
+	@PostMapping("/appDel")
+	public String appDelete(
+			@ModelAttribute("eventApplication") /*@Valid*/  EventApplication eventApplication,
+			//BindingResult bindingResult, 유효성 결과
+			Model model,
+			RedirectAttributes ra,
+			@RequestParam(value="existingImgNo", required=false, defaultValue="0") int existingImgNo // JSP에서 hidden 필드로 전달된 기존 이미지 번호
+			) {
+		
+		Image posterImage = null;
+		System.out.println(existingImgNo);
+		if (existingImgNo != 0) { // 기존 이미지 번호가 0이 아니면 (기존 이미지가 있었음)
+            posterImage = new Image();
+            posterImage.setImgNo(-1); // 삭제 요청임을 Service에 알림
+            eventApplication.setPosterImage(posterImage);
+		}
+
+		int result = appService.deleteApplication(eventApplication);
+		
+		return "redirect:/myEventApp";
 	}
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberBoardMapper">
+
+	<select id="getTotalCount" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM USERS u
+		JOIN AUTHORITIES a ON u.user_no = a.user_no
+		<where>
+			<if test="keyword != null and keyword != ''">
+				(u.user_id LIKE '%' || #{keyword} || '%'
+				OR u.nickname
+				LIKE '%' || #{keyword} || '%')
+			</if>
+		</where>
+	</select>
+
+	<select id="selectUserList" parameterType="map"
+		resultType="com.kh.festait.memberboard.model.vo.MemberBoardList">
+		SELECT u.user_no, a.AUTHORITY AS userType, u.user_id, u.nickname,
+		u.enroll_date AS enrollDate
+		FROM USERS u
+		LEFT JOIN AUTHORITIES a ON
+		u.user_no = a.user_no
+		<where>
+			<if test="keyword != null and keyword != ''">
+				(u.user_id LIKE '%' || #{keyword} || '%'
+				OR u.nickname
+				LIKE '%' || #{keyword} || '%')
+			</if>
+		</where>
+		ORDER BY u.user_no DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS
+		ONLY
+	</select>
+
+	<delete id="deleteUserAuthorities" parameterType="long">
+		DELETE FROM
+		AUTHORITIES WHERE user_no = #{userNo}
+	</delete>
+
+	<delete id="deleteUser" parameterType="long">
+		DELETE FROM USERS WHERE
+		user_no = #{userNo}
+	</delete>
+
+
+	<select id="selectUserById" parameterType="long"
+		resultType="com.kh.festait.memberboard.model.vo.MemberBoardList">
+		SELECT
+			u.user_no,
+			u.user_id,
+			u.user_name,
+			u.nickname,
+			u.enroll_date,
+			u.last_login_at,
+			u.email,
+			u.phone,
+			u.addr,
+			a.authority AS userType
+		FROM USERS u
+		LEFT JOIN AUTHORITIES a ON u.user_no = a.user_no
+		WHERE u.user_no = #{userNo}
+	</select>
+
+</mapper>

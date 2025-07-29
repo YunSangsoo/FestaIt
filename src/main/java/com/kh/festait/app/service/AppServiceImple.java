@@ -60,7 +60,7 @@ public class AppServiceImple implements AppService {
 		eventApplication.setAppItem(Utils.XSSHandling(eventApplication.getAppItem()));
 		eventApplication.setAppHost(Utils.XSSHandling(eventApplication.getAppHost()));
 		eventApplication.setAppOrg(Utils.XSSHandling(eventApplication.getAppOrg()));
-		eventApplication.setAppSponser(Utils.XSSHandling(eventApplication.getAppSponser()));
+		eventApplication.setAppSponsor(Utils.XSSHandling(eventApplication.getAppSponsor()));
 		
 		AppManager inputManager = eventApplication.getAppManager(); 
 		
@@ -140,6 +140,11 @@ public class AppServiceImple implements AppService {
     public int selectAppListCount() {
         return appDao.selectAppListCount();
     }
+
+	@Override
+    public int selectAppAllListCount() {
+        return appDao.selectAppAllListCount();
+    }
 	
 	@Override
     public List<EventApplication> selectAppList(PageInfo pi) {
@@ -152,5 +157,60 @@ public class AppServiceImple implements AppService {
 
         return appDao.selectAppList(paramMap);
     }
+	
+	@Override
+	public List<EventApplication> selectAppAllList(PageInfo pi) {
 
+		Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("offset", pi.getOffset()); // PageInfo에서 계산된 offset 사용
+        paramMap.put("limit", pi.getLimit());   // PageInfo에서 계산된 limit 사용 (boardLimit과 동일)
+
+        return appDao.selectAppAllList(paramMap);
+	}
+
+	@Override
+	public int approvingApp(String appId) {
+		return appDao.approvingApp(appId);
+		
+	}
+
+	@Override
+	public int rejectingApp(Map<String, String> setMap) {
+		
+		return appDao.rejectingApp(setMap);
+		
+	}
+
+	@Transactional(rollbackFor = {Exception.class})
+	@Override
+	public int deleteApplication(EventApplication eventApplication) {
+
+		AppManager inputManager = eventApplication.getAppManager(); 
+
+		// 이미지 처리
+		Image posterImage = eventApplication.getPosterImage();
+		int result = 0, imageResult=0,result2=0;
+		if (posterImage != null) {
+            // 기존 이미지 정보 조회 (물리 파일 삭제를 위함)
+            Image existingPoster = imgDao.getImageByRefNoAndType(eventApplication.getAppId(), "A");
+			log.info("del image : {}",existingPoster);
+            if (existingPoster != null) {
+                imageResult = imgDao.deleteImageByRefNoAndType(eventApplication.getAppId(), "A");
+                if (imageResult > 0) { // DB 삭제 성공 시 물리 파일도 삭제
+                    // Utils.deleteFile 함수 호출
+                    boolean isDeleted = Utils.deleteFile(existingPoster.getChangeName(), app, "eventPoster");
+                    if (!isDeleted) {
+                    	log.error("물리 파일 삭제 : {}",existingPoster.getChangeName());
+                        // 파일 삭제 실패 시에도 트랜잭션 롤백 여부는 비즈니스 로직에 따라 결정
+                        // 여기서는 DB는 삭제되었으므로 성공으로 간주하지만, 로그는 남김
+                    }
+                }
+            }
+        }
+        result2 = appDao.deleteAppMager(inputManager.getAppId()); // DELETE 메서드
+        result = appDao.deleteApplication(eventApplication.getAppId()); // DELETE 메서드
+		
+		
+		return result;
+	}
 }

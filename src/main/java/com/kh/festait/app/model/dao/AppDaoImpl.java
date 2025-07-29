@@ -57,9 +57,42 @@ public class AppDaoImpl implements AppDao {
 		return session.selectList("app.selectAppList",paramMap);
 	}
 
+
+	@Override
+	public List<EventApplication> selectAppAllList(Map<String, Object> paramMap) {
+		return session.selectList("app.selectAppAllList",paramMap);
+	}
+
 	@Override
 	public int selectAppListCount() {
 		return session.selectOne("app.selectAppListCount");
 	}
+
+	@Override
+	public int selectAppAllListCount() {
+		return session.selectOne("app.selectAppAllListCount");
+	}
+
+	@Override
+	public int approvingApp(String appId) {
+		// TODO Auto-generated method stub
+		return session.update("app.approvingApp",appId);
+	}
+
+	@Override
+	public int rejectingApp(Map<String, String> setMap) {
+		return session.update("app.rejectingApp",setMap);
+	}
+
+	@Override
+	public int deleteAppMager(int appId) {
+		return session.delete("app.deleteAppMager",appId);
+	}
+
+	@Override
+	public int deleteApplication(int appId) {
+		return session.delete("app.deleteApplication",appId);
+	}
+
 
 }

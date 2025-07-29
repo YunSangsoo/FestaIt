@@ -25,7 +25,7 @@
 		APP_ITEM,
 		APP_HOST,
 		APP_ORG,
-		APP_SPONSER
+		APP_SPONSOR
 	) VALUES (
 		#{eventCode},
 		#{statCode},
@@ -45,7 +45,7 @@
 		#{appItem},
 		#{appHost},
 		#{appOrg},
-		#{appSponser}
+		#{appSponsor}
 	)
 	</insert>
 	
@@ -97,7 +97,7 @@
         <result property="appItem" column="APP_ITEM"/>
         <result property="appHost" column="APP_HOST"/>
         <result property="appOrg" column="APP_ORG"/>
-        <result property="appSponser" column="APP_SPONSER"/>
+        <result property="appSponsor" column="APP_SPONSOR"/>
         <result property="adminComment" column="ADMIN_COMMENT"/>
 
         <association property="appManager" javaType="com.kh.festait.app.model.vo.AppManager">
@@ -124,12 +124,15 @@
 		END_DATE = #{endDate},
 		START_TIME = #{startTime},
 		END_TIME = #{endTime},
-		SUBMITTED_DATE = SYSDATE,
+		UPDATE_DATE = SYSDATE,
+		<if test="statCode.equals('S')">
+			SUBMITTED_DATE = SYSDATE,
+		</if>
 		APP_FEE = #{appFee},
 		APP_ITEM = #{appItem},
 		APP_HOST = #{appHost},
 		APP_ORG = #{appOrg},
-		APP_SPONSER = #{appSponser}
+		APP_SPONSOR = #{appSponsor}
 		WHERE APP_ID = #{appId}
 	</update>
 	
@@ -157,7 +160,12 @@
 	
 	
 	<select id="selectAppListCount" resultType="int">
-    	SELECT COUNT(*) FROM NOTICE
+    	SELECT COUNT(*) FROM EVENT_APPLICATION
+	</select>
+	
+	<select id="selectAppAllListCount" resultType="int">
+    	SELECT COUNT(*) FROM EVENT_APPLICATION
+        WHERE STAT_CODE != 'P'
 	</select>
 	
 	
@@ -173,5 +181,44 @@
     	ON A.APP_ID = B.APP_ID
         WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
     </select>
+    
+   	<select id="selectAppAllList" resultMap="eventApplicationMap">
+		SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
+    	FROM (
+	    	SELECT EA.*, ROWNUM RNUM
+		    FROM (
+		        SELECT * FROM EVENT_APPLICATION
+		        WHERE STAT_CODE != 'P'
+		        ORDER BY CREATE_DATE DESC
+	    	) EA
+    	) A LEFT JOIN APP_MANAGER B
+    	ON A.APP_ID = B.APP_ID
+        WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
+    </select>
+    
+    
+    <update id="approvingApp">
+    	UPDATE EVENT_APPLICATION SET
+    	STAT_CODE = 'A'
+    	WHERE APP_ID = #{appId}
+    </update>
+    
+    <update id="rejectingApp" parameterType="map">
+    	UPDATE EVENT_APPLICATION SET
+    	STAT_CODE = 'R',
+    	ADMIN_COMMENT = #{adminComment}
+    	WHERE APP_ID = #{appId}
+    </update>
+    
+    <delete id="deleteAppMager">
+		DELETE FROM APP_MANAGER
+	    WHERE APP_ID = #{appId}
+    </delete>
+    
+    
+    <delete id="deleteApplication">
+		DELETE FROM EVENT_APPLICATION
+	    WHERE APP_ID = #{appId}
+    </delete>
 	
 </mapper>

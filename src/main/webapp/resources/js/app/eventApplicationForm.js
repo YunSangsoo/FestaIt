@@ -36,31 +36,9 @@
         form.classList.add('was-validated');
       }, false);
     });
+    
+    
 })();
-
-
-
-
-
-//(() => {
-//  'use strict'
-
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  //const forms = document.querySelectorAll('.needs-validation')
-  // Loop over them and prevent submission
-//  Array.from(forms).forEach(form => {
-//    form.addEventListener('submit', event => {
-//      if (!form.checkValidity()) {
-//        event.preventDefault()
-//        event.stopPropagation()
-//      }
-
-//      form.classList.add('was-validated')
-//    }, false);
-//  })
-//})();
-
-
 
 $('#startDate').datepicker({
 	dateFormat: 'yy-mm-dd', // 날짜 형식: YYYY-MM-DD
@@ -107,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
             visitHomepageBtn.disabled = true;        // 버튼 비활성화
         }
     }
-
     // 입력 필드 값이 변경될 때마다 버튼 가시성 및 활성화 상태 업데이트
     homepageLinkInput.addEventListener('input', updateHomepageButtonVisibility);
 
@@ -125,6 +102,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 페이지 로드 시 한 번 실행하여 초기 상태 설정
     updateHomepageButtonVisibility();
+    
+    
+    if(isViewMode){
+    	const dSetElements = document.querySelectorAll('.dSet');
+	    dSetElements.forEach(element => {
+	        // element.disabled = true;
+	        // 이 방법은 <input>, <select>, <textarea>, <button>, <fieldset> 같은 폼 요소에 직접적으로 적용됩니다.
+	        // 다른 일반적인 HTML 태그(예: div, span)에는 semantic하게 'disabled'가 적용되지 않지만,
+	        // 속성 자체는 설정됩니다.
+	
+	        // 더 범용적으로 HTML 속성을 설정하려면 setAttribute를 사용할 수 있습니다.
+	        // 하지만 폼 컨트롤의 'disabled' 상태 변경에는 .disabled = true/false 가 더 일반적이고 권장됩니다.
+	        element.setAttribute('disabled', 'true'); // HTML 속성으로 'disabled="true"' 추가
+	    });
+    }
+    const categorySelect = document.getElementById('category');
+        if (categorySelect && initialEventCode) {
+            // 할당하기 전에 혹시 모를 공백 제거
+            categorySelect.value = initialEventCode.trim();
+        }
 });
 
 const posterInput = document.querySelector('.input-poster');
@@ -236,3 +233,23 @@ new daum.Postcode({
 	}
 }).open();
 }
+
+//$('#test').on('click', async event =>{
+//
+//            const result = await window.showCommonModal(
+//                "선택 확인",
+//               "이 내용을 임시 저장하시겠습니까?", // 이미지에서 보였던 "선택 확인"은 제목, 내용은 예시
+//                {
+//                    confirmButtonText: "예",
+//                    cancelButtonText: "아니오"
+//                }
+//            );
+//
+//            if (result) {
+//                console.log("임시 저장을 진행합니다.");
+//                // 실제 폼 제출 또는 저장 로직
+//                // saveFormButton.form.submit(); // 폼을 수동으로 제출할 경우
+//            } else {
+//                console.log("임시 저장을 취소했습니다.");
+//            }
+//});
