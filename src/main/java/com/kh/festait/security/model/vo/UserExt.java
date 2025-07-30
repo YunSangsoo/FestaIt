@@ -42,7 +42,7 @@ public class UserExt extends User implements UserDetails{
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
-		return getStatus().equals("Y");
+		return getStatus().equals("T");
 	}
 
 	@Override

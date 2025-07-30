@@ -3,12 +3,14 @@ package com.kh.festait.memberboard.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.festait.memberboard.model.service.MemberBoardService;
 import com.kh.festait.memberboard.model.vo.MemberBoardList;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/memberBoard")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class MemberBoardController {
 
     @Autowired
@@ -58,9 +61,15 @@ public class MemberBoardController {
     
     //목록에서 삭제
     @PostMapping("/deleteUser")
-    public String deleteUser(@RequestParam("userNo") Long userNo) {
+    public String deleteUser(@RequestParam("userNo") Long userNo, RedirectAttributes redirectAttrs) {
+        MemberBoardList member = memberBoardService.selectUserById(userNo);
+        if (member == null) {
+            redirectAttrs.addFlashAttribute("errorMsg", "존재하지 않는 회원입니다.");
+            return "redirect:/memberBoard";
+        }
+
         memberBoardService.deleteUser(userNo);
-        return "redirect:/memberBoard";  // 삭제 후 목록으로 이동
+        return "redirect:/memberBoard";
     }
     
     @GetMapping("/detail")

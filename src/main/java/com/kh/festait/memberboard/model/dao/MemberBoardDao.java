@@ -16,8 +16,11 @@ public interface MemberBoardDao {
 
 	void deleteUser(Long userNo);
 
-	void deleteUserAuthorities(Long userNo);
-
+	void deleteUserAuthorities(String userId);
+	
 	MemberBoardList selectUserById(Long userNo);
+
+	String getUserIdByUserNo(Long userNo);
+
 
 }

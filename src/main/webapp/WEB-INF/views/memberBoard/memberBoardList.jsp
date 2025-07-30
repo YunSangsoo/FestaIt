@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -84,6 +85,7 @@ tbody tr:hover {
 						<td>${user.userNo}</td>
 						<td><c:choose>
 								<c:when test="${user.userType eq 'ROLE_ADMIN'}">관리자</c:when>
+								<c:when test="${user.userType eq 'ROLE_MANAGER'}">행사관계자</c:when>
 								<c:when test="${user.userType eq 'ROLE_USER'}">일반회원</c:when>
 								<c:otherwise>기타</c:otherwise>
 							</c:choose></td>
@@ -96,6 +98,7 @@ tbody tr:hover {
 								action="${pageContext.request.contextPath}/memberBoard/deleteUser"
 								method="post" style="margin: 0;">
 								<input type="hidden" name="userNo" value="${user.userNo}" />
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 								<button type="submit" class="lavender-btn"
 									onclick="event.stopPropagation(); return confirm('정말 삭제하시겠습니까?');">삭제</button>
 							</form>

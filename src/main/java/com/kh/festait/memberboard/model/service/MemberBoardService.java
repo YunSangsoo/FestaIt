@@ -13,5 +13,6 @@ public interface MemberBoardService {
 
 	MemberBoardList selectUserById(Long userNo);
 	
+	String getUserIdByUserNo(Long userNo);
 
 }
