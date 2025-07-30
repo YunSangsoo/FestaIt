@@ -37,6 +37,7 @@
 			access='permitAll' />
 
 		<!-- 관리자와 관련된 URL은 관리자 권한을 가지고 있어야만 접근가능하도록 제한 -->
+
 		<intercept-url pattern="/admin/**"
 			access="hasRole('ADMIN')" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
@@ -66,6 +67,7 @@
 		<!-- 권한없는 페이지 접근시 처리할 핸들러 -->
 		<access-denied-handler
 			error-page="/security/accessDenied" />
+
 	</http>
 
 	<!-- Authentication provider Manager / Provider 등록 -->

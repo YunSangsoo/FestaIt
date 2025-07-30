@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reviewMapper">
+
+	<select id="selectReviewListWithPaging" parameterType="map" resultType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
+        SELECT * FROM (
+            SELECT ROWNUM RNUM, A.* FROM (
+            	SELECT R.USER_NO, R.APP_ID, R."COMMENT",
+            		R.RATING, R.CREATE_DATE, R.UPDATE_DATE,
+            		U.USER_ID, U.USER_NAME, U.NICKNAME
+				FROM REVIEW R
+				JOIN USERS U ON R.USER_NO = U.USER_NO
+				ORDER BY R.CREATE_DATE DESC
+			) A
+            WHERE ROWNUM &lt;= #{endRow}
+        )
+        WHERE RNUM &gt; #{startRow}
+    </select>
+
+	<select id="getReviewCount" resultType="int">
+    	SELECT COUNT(*) FROM REVIEW
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insertReview" parameterType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
+		INSERT INTO REVIEW (USER_NO, APP_ID, "COMMENT", RATING)
+		VALUES (2, 1, #{comment}, #{rating})
+	</insert>
+
+	<!-- 수정 -->
+	<update id="updateByUserNo" parameterType="ReviewBoard">
+		UPDATE REVIEW
+		SET "COMMENT" = #{comment}
+		WHERE USER_NO = #{userNo}
+	</update>
+
+	<!-- 삭제 -->
+	<delete id="deleteByUserNo" parameterType="int">
+		DELETE FROM REVIEW
+		WHERE USER_NO = #{userNo}
+	</delete>
+
+</mapper>
