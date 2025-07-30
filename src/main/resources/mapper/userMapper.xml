@@ -35,7 +35,7 @@
 	
 
 	<!-- 회원가입 -->
-	<insert id="insertUser" parameterType="user">
+	<insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userNo" keyColumn="USER_NO">
 	 INSERT INTO USERS ( COMP_ID
                          , USER_ID 
                          , USER_NAME 
@@ -166,6 +166,18 @@
 		SELECT COMP_ID
 		FROM COMPANY
 		WHERE COMP_NAME = #{userName}
+	</select>
+	
+	
+	<insert id="insertAuthority">
+		INSERT INTO AUTHORITIES (AUTHORITY,USER_NO) VALUES ('ROLE_USER',#{userNo})
+	</insert>
+	
+	<select id="getUserByUser" resultType="user">
+		SELECT * 
+		FROM USERS
+		WHERE USER_ID = #{userId}
+		AND USER_PWD = #{userPwd}
 	</select>
 	
 </mapper>

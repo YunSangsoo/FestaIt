@@ -17,5 +17,7 @@ public interface UserService {
 	int secessionUser(User u);
 	
 	User myPageUserInfo(String userId);
+
+	User login(User u);
 	
 }
