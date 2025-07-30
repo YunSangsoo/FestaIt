@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -86,15 +87,15 @@ thead.lavender-header th {
 					<div class="search-option">기간</div>
 					<div class="flex-area stretch date-btns">
 						<button class="btn btn-light rounded-pill px-3 btn-date"
-							type="button" id="btn-search" onclick="putDate()" data-period="7">일주일</button>
+							type="button" id="btn-search" data-period="7">일주일</button>
 						<button class="btn btn-light rounded-pill px-3 btn-date"
-							type="button" id="btn-search" onclick="putDate()"
+							type="button" id="btn-search"
 							data-period="30">1개월</button>
 						<button class="btn btn-light rounded-pill px-3 btn-date"
-							type="button" id="btn-search" onclick="putDate()"
+							type="button" id="btn-search"
 							data-period="90">3개월</button>
 						<button class="btn btn-light rounded-pill px-3 btn-date"
-							type="button" id="btn-search" onclick="putDate()"
+							type="button" id="btn-search"
 							data-period="180">6개월</button>
 					</div>
 					<div class="flex-area stretch dateInput">

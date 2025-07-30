@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ page session="false"%>
 <html>
 <head>
@@ -141,9 +142,11 @@ thead.lavender-header th {
 						class="text-decoration-none text-dark section-title">
 						<div class="section-title">진행 중인 행사</div>
 					</a>
-					<%-- <a href="${pageContext.request.contextPath}/myEventApp"
-						class="btn lavender-btn">행사 관리</a> --%>
-					<!-- 넣을까 말까... 경로 수정 필요 -->
+					<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<a href="${pageContext.request.contextPath}/myEventApp"
+							class="btn lavender-btn">행사 관리</a>
+					</sec:authorize>
+					
 				</div>
 				<div class="events-grid">
 
@@ -174,9 +177,13 @@ thead.lavender-header th {
 										src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
 										class="EventItemHover-img" alt="">
 									</a>
-									<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-bookmark bookmark" viewBox="0 0 16 16">
-									  <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
-									</svg>
+									<sec:authorize access="hasRole('ROLE_USER')">
+										<div class="bookmark">
+											<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ea870e" class="bi bi-bookmark" viewBox="0 0 16 16">
+											  <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
+											</svg>
+										</div>
+									</sec:authorize>
 									
 
 									
@@ -214,8 +221,8 @@ thead.lavender-header th {
 											class="EventItemHover-img" alt="">
 									</div>
 									<div class="info">
-										<div class="org">${todayEvent.appOrg}</div>
-										<div class="title event-name">[${todayEvent.eventName}]
+										<div class="org">[${todayEvent.eventName}] ${todayEvent.appOrg}</div>
+										<div class="title event-name">
 											${todayEvent.appTitle}</div>
 										<div class="date stretch">
 											<fmt:formatDate value="${todayEvent.startDate}"
@@ -393,8 +400,8 @@ thead.lavender-header th {
 
 			</table>
 
-			<table class="table table-hover text-center align-middle">
-				<thead class="lavender-header">
+			<table class="table table-hover text-center align-middle notice-table">
+				<thead>
 					<tr>
 						<th style="width: 10%;">번호</th>
 						<th>제목</th>
@@ -455,55 +462,24 @@ thead.lavender-header th {
 	</script>
 	
 	<script>
-	  document.addEventListener('DOMContentLoaded', function () {
-	    const bookmarkIcon = document.querySelector('.bookmark');
-	    bookmarkIcon.addEventListener('click', function () {
-	    	
-			const path = bookmarkIcon.querySelector('path');
-			
-	    	if ($(this).hasClass('selected')) {
-    		 	 // 이미 선택된 버튼을 다시 클릭하면 선택 해제
-    			$(this).removeClass('selected');
-				if (path) {
-				  path.setAttribute('d', 'M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z');
-				}
-    		} else {
-    			$(this).addClass('selected');
-				if (path) {
-				  path.setAttribute('d', 'M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5M8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.18.18 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.18.18 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.18.18 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.18.18 0 0 1-.134-.098z');
-				}
-    		}
-	    	
-	    });
-	  });
-	</script>
-	
-	
-	
-	
-	<!-- 
-	검토 후 사용
-	
-	<script>
 	  $(document).ready(function () {
 	    $('.bookmark').on('click', function () {
-	      const $this = $(this);
 	      const path = this.querySelector('path');
 	
-	      if ($this.hasClass('selected')) {
-	        $this.removeClass('selected');
+	      if ($(this).hasClass('selected')) {
+	    	  $(this).removeClass('selected');
 	        if (path) {
 	          path.setAttribute('d', 'M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z');
 	        }
 	      } else {
-	        $this.addClass('selected');
+	    	  $(this).addClass('selected');
 	        if (path) {
 	          path.setAttribute('d', 'M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5M8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.18.18 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.18.18 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.18.18 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.18.18 0 0 1-.134-.098z');
 	        }
 	      }
 	    });
 	  });
-	</script> -->
+	</script>
 	
 	
 	

@@ -1,14 +1,12 @@
 package com.kh.festait.eventboard.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +17,7 @@ import com.kh.festait.common.Pagination;
 import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.eventboard.model.Service.EventBoardService;
 import com.kh.festait.eventboard.model.vo.EventBoard;
+import com.kh.festait.user.model.vo.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +35,6 @@ public class EventBoardController {
 			@RequestParam Map<String, Object> paramMap, Model model) {
 		EventBoard eventBoard = new EventBoard();
 		
-
 		String eventCode = (String) paramMap.get("eventCode"); // 넘어온 파라미터
 		List<String> eventCodeList = new ArrayList<String>();
 		
@@ -60,6 +58,7 @@ public class EventBoardController {
 		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
 		
 	    List<EventBoard> list = eventBoardService.selectEventList(pi, paramMap);
+	    setRegion(list);
 	    
 	    model.addAttribute("eventCodeList", eventCodeList);		
 	    model.addAttribute("eventSearch", eventBoard);
@@ -100,6 +99,7 @@ public class EventBoardController {
 		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
 		
 	    List<EventBoard> list = eventBoardService.selectEventList(pi, paramMap);
+	    setRegion(list);
 	    
 	    model.addAttribute("eventCodeList", eventCodeList);		
 	    model.addAttribute("eventSearch", eventBoard);
@@ -110,14 +110,41 @@ public class EventBoardController {
 		return "event/eventBoardCalendar";
 	}
 	
-	//2. 공지사항 상세 보기
+	//2. 행사 상세 보기
     @GetMapping("/detail")
     public String noticeDetail(@RequestParam("eventId") int eventId, Model model) {
-//    	EventBoard event = eventBoardService.selectEventById(eventId);
-//        model.addAttribute("event", event);
+    	EventBoard event = eventBoardService.selectEventById(eventId);
+        model.addAttribute("event", event);
         return "eventBoard/eventDetail"; // 김현주 작성 jsp 경로 확인
     }
-	
-	
+    
+    public static List<EventBoard> setRegion(List<EventBoard> list){
+    	
+    	for (EventBoard event : list) {
+    		
+    		String region = event.getRegion();
+    		String newRegion = "";
+    		
+    	    if (region == null) {
+    	        newRegion = "기타";
+    	    } else {
+    	        switch(region) {
+    	            case "서울": newRegion = "서울시"; break;
+    	            case "인천": newRegion = "인천시"; break;
+    	            case "경기": newRegion = "경기도"; break;
+    	            case "강원": newRegion = "강원도"; break;
+    	            case "충북": case "충남": newRegion = "충청도"; break;
+    	            case "경북": case "경남": newRegion = "경상도"; break;
+    	            case "전북": case "전남": newRegion = "전라도"; break;
+    	            case "제주": newRegion = "제주도"; break;
+    	            default: newRegion = "기타";
+    	        }
+    	    }
+    	    
+    		event.setRegion(newRegion);
+		}
+    	return list;
+    }
+    
 }
 

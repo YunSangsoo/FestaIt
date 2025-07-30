@@ -25,6 +25,9 @@
 		<!-- 관리자와 관련된 URL은 관리자 권한을 가지고 있어야만 접근가능하도록 제한 -->
 		<intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/**" access="permitAll"/>
+		<!-- 권한 필요하게 할 때는 아래 코드 사용
+		<intercept-url pattern="/**" access="isAuthenticated()"/>
+		 -->
 	
 	<!-- form-login
 		-폼 기반 로그인 인증 설정을 지정하는 태그

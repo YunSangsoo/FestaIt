@@ -33,8 +33,7 @@ public class EventBoard {
 	private String appOrg;
 	
 	private Image posterImage;
-	
-	
-	
+
+
 	
 }

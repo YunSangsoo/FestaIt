@@ -12,6 +12,13 @@ document.querySelectorAll('.dateInput').forEach(di => {
   di.addEventListener('input', resetDateBtn());
 });
 
+const startDate = document.getElementById("startDate");
+const endDate = document.getElementById("endDate");
+
+function putMinDate(){	
+    $('#endDate').datepicker('option', 'minDate', $('#startDate').val());
+}
+
 $('#startDate').datepicker({
 	dateFormat: 'yy-mm-dd', // 날짜 형식: YYYY-MM-DD
 	//showOn: 'button',       // 입력 필드 클릭 또는 버튼 클릭 시 표시
@@ -25,7 +32,6 @@ $('#startDate').datepicker({
 		$('#endDate').datepicker('option', 'minDate', startDate);
 		var endDate = $('#endDate').datepicker('getDate');
 		if (endDate && endDate < startDate) {
-			$('#endDate').val(''); // 종료 날짜 필드 비움
 			$('#selectedEndDate').text('선택되지 않음'); // 종료 날짜 텍스트 초기화
 		}
 }
@@ -46,6 +52,15 @@ $('#endDate').datepicker({
 		// 날짜 선택 시 실행되는 콜백 함수
 		//$('#startDate').text(dateText);
 }
+});
+
+startDate.addEventListener("change", function() {
+	resetDateBtn();
+	putMinDate();
+});
+
+endDate.addEventListener("change", function() {
+	resetDateBtn();
 });
 
 // 행사 카드 호버 이벤트
@@ -83,31 +98,35 @@ function getFutureDate(days) {
 
 // 버튼 클릭 핸들러
 document.querySelectorAll('.btn-date').forEach(btn => {
-  btn.addEventListener('click', function() {
+	btn.addEventListener('click', function() {
+	
+  
   	if ($(this).hasClass('selected')) {
-	  // 이미 선택된 버튼을 다시 클릭하면 선택 해제
-		$(this).removeClass('selected active');
+		// 이미 선택된 버튼을 다시 클릭하면 선택 해제
+		// 모든 버튼 선택 해제
+		document.querySelectorAll('.btn-date').forEach(b => b.classList.remove('selected', 'active'));
+    	$('#startDate').datepicker('setDate', null);
+		$('#endDate').datepicker('setDate', null);
+    	$('#endDate').datepicker('option', 'minDate', null);
+    	
 	} else {
-		$(this).addClass('selected active');
+		// 모든 버튼 선택 해제
+		document.querySelectorAll('.btn-date').forEach(b => b.classList.remove('selected', 'active'));
+		// 현재 버튼 선택
+    	this.classList.add('selected', 'active');
+    	
+	    // 기간 가져오기
+	    const days = parseInt(this.dataset.period, 10);
+	    // 날짜 계산
+	    const startDate = getToday();
+	    const endDate = getFutureDate(days);
+	
+	    // form input에 값 삽입
+	    document.getElementById('startDate').value = startDate;
+	    document.getElementById('endDate').value = endDate;
+		putMinDate();
 	}
 	
-	
-	
-    // 모든 버튼 선택 해제
-    document.querySelectorAll('.btn-date').forEach(b => b.classList.remove('selected', 'active'));
-    // 현재 버튼 선택
-    this.classList.add('selected', 'active');
-
-    // 기간 가져오기
-    const days = parseInt(this.dataset.period, 10);
-    // 날짜 계산
-    const startDate = getToday();
-    const endDate = getFutureDate(days);
-
-    // form input에 값 삽입
-    document.getElementById('startDate').value = startDate;
-    document.getElementById('endDate').value = endDate;
-  
   });
 });
 
@@ -153,6 +172,11 @@ $(document).on('mousemove', '.fc-daygrid-event', function(e) {
       top: e.pageY + 10 + 'px'
     });
 });
+
+// 북마크 반응
+
+
+
 
  
  

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 //import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 
+import com.kh.festait.eventboard.controller.EventBoardController;
 import com.kh.festait.eventboard.model.vo.EventBoard;
 import com.kh.festait.mainpage.model.service.MainpageService;
 import com.kh.festait.noticeboard.model.vo.NoticeBoard;
@@ -27,10 +28,6 @@ public class MainpageController {
 		todayEventMain(model);
 		reviewMain(model);
 		noticeMain(model);
-		
-	    System.out.println("메인페이지 컨트롤러 작동 테스트");
-	    
-	    
 	}
 	
 	// 1. 배너 슬라이더
@@ -45,6 +42,7 @@ public class MainpageController {
 		
 		int limit = 6; // 한 페이지에 보여줄 게시글 수
 	    List<EventBoard> eventList = mainpageService.selectEventList(limit);
+	    EventBoardController.setRegion(eventList);
 	    model.addAttribute("eventList", eventList);
 	    
 	}

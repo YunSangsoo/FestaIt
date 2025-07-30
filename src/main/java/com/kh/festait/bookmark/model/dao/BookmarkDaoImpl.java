@@ -1,0 +1,30 @@
+package com.kh.festait.bookmark.model.dao;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class BookmarkDaoImpl implements BookmarkDao {
+	@Autowired
+    private SqlSessionTemplate sqlSession;
+
+    @Override
+    public void insertBookmark(int userNo, int appId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userNo", userNo);
+        map.put("appId", appId);
+        sqlSession.insert("bookmarkMapper.insertBookmark", map);
+    }
+
+    @Override
+    public void deleteBookmark(int userNo, int appId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userNo", userNo);
+        map.put("appId", appId);
+        sqlSession.delete("bookmarkMapper.deleteBookmark", map);
+    }
+}

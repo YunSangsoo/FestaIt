@@ -26,6 +26,7 @@
             EVENT_NAME,
             STAT_CODE,
             LOCATION,
+            SUBSTR(LOCATION, 0, 2) REGION,
             START_DATE, 
             END_DATE,
             APP_ORG

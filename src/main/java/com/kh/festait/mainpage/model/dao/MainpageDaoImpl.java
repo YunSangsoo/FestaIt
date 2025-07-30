@@ -37,8 +37,6 @@ public class MainpageDaoImpl implements MainpageDao{
 	@Override
 	public List<EventBoard> selectTodayEventList(int limit) {
 		paramMap.put("limit", limit);
-
-	    System.out.println(sqlSession.selectList("mainpageMapper.selectTodayEventList", paramMap).size());
 		return sqlSession.selectList("mainpageMapper.selectTodayEventList", paramMap);
 	}
 }
