@@ -9,7 +9,7 @@
 		resultType="int">
 		SELECT COUNT(*)
 		FROM USERS u
-		JOIN AUTHORITIES a ON u.user_no = a.user_no
+		JOIN AUTHORITIES a ON u.user_id = a.user_id
 		<where>
 			<if test="keyword != null and keyword != ''">
 				(u.user_id LIKE '%' || #{keyword} || '%'
@@ -19,13 +19,20 @@
 		</where>
 	</select>
 
+	<select id="getUserIdByUserNo" parameterType="long"
+		resultType="string">
+		SELECT user_id
+		FROM USERS
+		WHERE user_no = #{userNo}
+	</select>
+
 	<select id="selectUserList" parameterType="map"
 		resultType="com.kh.festait.memberboard.model.vo.MemberBoardList">
 		SELECT u.user_no, a.AUTHORITY AS userType, u.user_id, u.nickname,
 		u.enroll_date AS enrollDate
 		FROM USERS u
 		LEFT JOIN AUTHORITIES a ON
-		u.user_no = a.user_no
+		u.user_id = a.user_id
 		<where>
 			<if test="keyword != null and keyword != ''">
 				(u.user_id LIKE '%' || #{keyword} || '%'
@@ -38,9 +45,8 @@
 		ONLY
 	</select>
 
-	<delete id="deleteUserAuthorities" parameterType="long">
-		DELETE FROM
-		AUTHORITIES WHERE user_no = #{userNo}
+	<delete id="deleteUserAuthorities" parameterType="string">
+		DELETE FROM AUTHORITIES WHERE user_id = #{userId}
 	</delete>
 
 	<delete id="deleteUser" parameterType="long">
@@ -52,18 +58,23 @@
 	<select id="selectUserById" parameterType="long"
 		resultType="com.kh.festait.memberboard.model.vo.MemberBoardList">
 		SELECT
-			u.user_no,
-			u.user_id,
-			u.user_name,
-			u.nickname,
-			u.enroll_date,
-			u.last_login_at,
-			u.email,
-			u.phone,
-			u.addr,
-			a.authority AS userType
+		u.user_no,
+		u.user_id,
+		u.user_name,
+		u.nickname,
+		u.enroll_date,
+		u.last_login_at,
+		u.email,
+		u.phone,
+		u.addr,
+		(
+		SELECT
+		MIN(a.authority)
+		FROM AUTHORITIES a
+		WHERE a.user_id = u.user_id
+		) AS
+		userType
 		FROM USERS u
-		LEFT JOIN AUTHORITIES a ON u.user_no = a.user_no
 		WHERE u.user_no = #{userNo}
 	</select>
 

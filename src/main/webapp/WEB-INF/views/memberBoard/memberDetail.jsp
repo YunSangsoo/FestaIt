@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -101,14 +102,12 @@ button, .btn {
 			</tr>
 			<tr>
 				<td class="label-col">등급</td>
-				<td>
-					<c:choose>
+				<td><c:choose>
 						<c:when test="${not empty member.userType}">
       						${member.userType}
    						</c:when>
 						<c:otherwise>일반</c:otherwise>
-					</c:choose>
-				</td>
+					</c:choose></td>
 			</tr>
 		</table>
 
@@ -125,10 +124,12 @@ button, .btn {
 					href="${pageContext.request.contextPath}/faqBoard?userId=${member.userId}"
 					class="btn btn-outline-secondary">작성 문의 보기</a>
 
-				<form action="${pageContext.request.contextPath}/admin/memberDelete"
+				<form
+					action="${pageContext.request.contextPath}/memberBoard/deleteUser"
 					method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"
 					class="d-inline">
-					<input type="hidden" name="userId" value="${member.userId}" />
+					<input type="hidden" name="userNo" value="${member.userNo}" />
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<button type="submit" class="btn btn-outline-danger">회원 삭제</button>
 				</form>
 			</div>

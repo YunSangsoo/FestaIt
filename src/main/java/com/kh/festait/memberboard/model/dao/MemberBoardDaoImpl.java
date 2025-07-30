@@ -40,14 +40,18 @@ public class MemberBoardDaoImpl implements MemberBoardDao {
 	}
 
 	@Override
-	public void deleteUserAuthorities(Long userNo) {
-		sqlSession.delete("memberBoardMapper.deleteUserAuthorities", userNo);
-		
+	public void deleteUserAuthorities(String userId) {
+		sqlSession.delete("memberBoardMapper.deleteUserAuthorities", userId);
 	}
 
 	@Override
 	public MemberBoardList selectUserById(Long userNo) {
 		return sqlSession.selectOne("memberBoardMapper.selectUserById", userNo);
+	}
+
+	@Override
+	public String getUserIdByUserNo(Long userNo) {
+		 return sqlSession.selectOne("memberBoardMapper.getUserIdByUserNo", userNo);
 	}
 
 
