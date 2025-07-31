@@ -1,5 +1,6 @@
 package com.kh.festait.reviewboard.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,6 @@ public interface ReviewBoardService {
 
 	int updateReviewByUserNo(ReviewBoard review);
 
-	int deleteReviewByUserNo(int userNo);
+	int deleteReviewByUserNo(Map<String, Object> paramMap);
 
 }

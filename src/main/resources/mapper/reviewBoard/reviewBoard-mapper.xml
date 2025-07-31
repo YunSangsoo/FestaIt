@@ -26,7 +26,7 @@
 	<!-- 등록 -->
 	<insert id="insertReview" parameterType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
 		INSERT INTO REVIEW (USER_NO, APP_ID, "COMMENT", RATING)
-		VALUES (2, 1, #{comment}, #{rating})
+		VALUES (#{userNo}, #{appId}, #{comment}, #{rating})
 	</insert>
 
 	<!-- 수정 -->
@@ -39,7 +39,7 @@
 	<!-- 삭제 -->
 	<delete id="deleteByUserNo" parameterType="int">
 		DELETE FROM REVIEW
-		WHERE USER_NO = #{userNo}
+		WHERE USER_NO = #{userNo} AND APP_ID = #{appId}
 	</delete>
 
 </mapper>

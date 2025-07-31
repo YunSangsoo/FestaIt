@@ -1,5 +1,6 @@
 package com.kh.festait.reviewboard.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,6 @@ public interface ReviewBoardDao {
 
 	int updateByUserNo(ReviewBoard review);
 
-	int deleteByUserNo(int userNo);
+	int deleteByUserNo(Map<String, Object> paramMap);
 
 }

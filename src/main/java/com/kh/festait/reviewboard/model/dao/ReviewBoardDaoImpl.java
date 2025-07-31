@@ -1,5 +1,6 @@
 package com.kh.festait.reviewboard.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +37,8 @@ public class ReviewBoardDaoImpl implements ReviewBoardDao {
 	}
 
 	@Override
-	public int deleteByUserNo(int userNo) {
-		return sqlSession.delete("reviewMapper.deleteByUserNo", userNo);
+	public int deleteByUserNo(Map<String, Object> paramMap) {
+		return sqlSession.delete("reviewMapper.deleteByUserNo", paramMap);
 	}
 
 }

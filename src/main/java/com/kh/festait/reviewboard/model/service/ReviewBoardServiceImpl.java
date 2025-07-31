@@ -24,7 +24,6 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
 		Map<String, Object> paramMap = new HashMap<>();
 	    paramMap.put("startRow", offset);
 	    paramMap.put("endRow", offset + limit);
-
 	    return reviewBoardDao.selectReviewListWithPaging(paramMap);
 	}
 
@@ -44,8 +43,8 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
 	}
 
 	@Override
-	public int deleteReviewByUserNo(int userNo) {
-		return reviewBoardDao.deleteByUserNo(userNo);
+	public int deleteReviewByUserNo(Map<String, Object> paramMap) {
+		return reviewBoardDao.deleteByUserNo(paramMap);
 	}
 
 }
