@@ -3,6 +3,7 @@ package com.kh.festait.noticeboard.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,11 +61,14 @@ public class NoticeBoardController {
     }
 
     //3. 작성 폼
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/noticeWrite")
     public String showWriteForm(Model model) {
     	model.addAttribute("notice", new NoticeBoard());
         return "noticeBoard/noticeWrite";
     }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public String createNotice(NoticeBoard notice, RedirectAttributes ra) {
         int result = noticeBoardService.insertNotice(notice);
@@ -73,6 +77,7 @@ public class NoticeBoardController {
     }
 
     //4. 수정
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/update")
     public String updateNotice(NoticeBoard notice, RedirectAttributes ra) {
         int result = noticeBoardService.updateNotice(notice);
@@ -81,6 +86,7 @@ public class NoticeBoardController {
     }
 
     //5. 공지 삭제
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/delete")
     public String deleteNotice(@RequestParam("noticeId") int noticeId, RedirectAttributes ra) {
         int result = noticeBoardService.deleteNotice(noticeId);

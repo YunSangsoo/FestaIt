@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -40,8 +41,10 @@ thead.lavender-header th {
 
 		<div class="d-flex justify-content-between align-items-center mb-3">
 			<h2 class="fw-bold">공지 게시판</h2>
-			<a href="${pageContext.request.contextPath}/noticeBoard/noticeWrite"
-				class="btn lavender-btn">공지 작성</a>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<a href="${pageContext.request.contextPath}/noticeBoard/noticeWrite"
+					class="btn lavender-btn">공지 작성</a>
+			</sec:authorize>
 
 			<!--<c:if test="${not empty msg}">
         	<div class="alert alert-info">${msg}</div>
