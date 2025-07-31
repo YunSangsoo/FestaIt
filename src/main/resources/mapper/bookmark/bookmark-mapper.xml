@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bookmarkMapper">
+
+<insert id="insertBookmark">
+    INSERT INTO BOOKMARK (USER_NO, APP_ID)
+    VALUES (#{userNo}, #{appId})
+</insert>
+
+<delete id="deleteBookmark">
+    DELETE FROM BOOKMARK
+    WHERE USER_NO = #{userNo}
+      AND APP_ID = #{appId}
+</delete>
+
+<select id="selectBookmarkedAppIdsByUser" resultMap="bookmarkMap" parameterType="map">
+	SELECT *
+	FROM BOOKMARK
+	WHERE USER_NO = #{userNo}
+</select>
+
+<resultMap id="bookmarkMap" type="Bookmark">
+    <id property="appId" column="APP_ID"/>
+    <result property="userNo" column="USER_NO"/>
+    <result property="createDate" column="CREATE_DATE"/>
+</resultMap>
+
+
+
+</mapper>
