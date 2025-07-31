@@ -1,0 +1,349 @@
+/* 기본 초기화 및 폰트 */
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Pretendard', sans-serif;
+	background-color: #FAFAFA;
+	color: #212121;
+	/* 	color: rgb(var(- -bs-tertiary-color-rgb)); */
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+/* 메인 컨테이너 */
+.container {
+	display: flex;
+	justify-content: space-between;
+	padding: 30px 5%;
+	gap: 40px;
+	flex-wrap: wrap;
+}
+
+/* 화면 크기에 따른 페이지 컨테이너 사이즈 지정 ------------------------------ 1080 이하 수정 필요 ------------------------- */
+@media ( max-width : 1080px) {
+	#container {
+		max-width: 100%;
+	}
+}
+
+@media ( min-width : 1080px) {
+	#container {
+		max-width: 1040px;
+	}
+	.main-content {
+		margin-right: 40px;
+	}
+}
+
+@media ( min-width : 1200px) {
+	#container {
+		max-width: 1160px;
+	}
+	.main-content {
+		margin-right: 40px;
+	}
+}
+
+.top-content {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	height: fit-content;
+}
+
+/* 좌측 메인 콘텐츠 */
+.main-content {
+	flex: 1;
+	height: 100%;
+}
+
+@media ( max-width : 1080px) {
+	.main-content {
+		height: 100%;
+		margin-bottom: 40px;
+	}
+}
+
+/* 배너 영역 */
+.carousel {
+	margin-bottom: 40px;
+	aspect-ratio: 3/1;
+	overflow: hidden;
+}
+
+.Banner-img {
+	width: 100%;
+}
+
+/* 섹션 제목 */
+.section-title, .review-title, .today-title, .notice-title {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 20px;
+	color: #6A1B9A;
+}
+
+.section-title {
+	height: 20px;
+}
+
+/* 진행 중인 행사 카드 그리드 */
+.events-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 5px;
+}
+
+/* 행사 카드 */
+.event-card {
+	background-color: white;
+	border: 2px solid #FFFFFF;
+	/* border: 2px solid #D1C4E9; */
+	border-radius: 8px;
+	position: relative;
+	aspect-ratio: 1/1; /* 정사각형 비율 */
+}
+
+/* 카드 상단 태그 */
+.event-card .tag {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	background-color: #ea870e;
+	color: white;
+	font-size: 12px;
+	padding: 2px 6px;
+	border-radius: 4px;
+}
+
+.bookmark {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.event-info {
+	padding: 16px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+/* 행사 이름 텍스트 ---------------------------------------길어지면 줄임 설정 */
+.event-name {
+	font-weight: bold;
+	margin-bottom: 10px;
+	color: #6A1B9A;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
+}
+
+.EventItemHover-img {
+	width: 100%;
+	height: 100%;
+	border-radius: 7px;
+	position: relative;
+}
+
+
+
+
+
+
+/* 우측 오늘의 행사 */
+.today-section {
+	min-height: 500px;
+	width: 30%;
+	flex-shrink: 0;
+	background-color: white;
+	border-left: 4px solid #6A1B9A;
+	padding: 20px 20px 0px 20px;
+	border-radius: 8px;
+	/* height: 100%; */
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+	align-items: stretch;
+}
+
+@media ( max-width : 1080px) {
+	.today-section {
+		min-height: 0px;
+		min-width: 760px;
+		width: 100%;
+	}
+	.today-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+		justify-content: space-between;
+	}
+}
+
+
+.title-area {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	justify-content: space-between;
+}
+
+
+/* 오늘의 행사 */
+.today-event {
+	display: flex;
+	align-items: center;
+	margin-bottom: 30px; /* 간격 확대 */
+	/* min-width: 250px; */
+	/* width: 40%; */
+	width: 100%;
+	height: fit-content;
+	flex-shrink: 1;
+}
+
+.today-event .thumb {
+	background-color: #D1C4E9;
+	width: 80px;
+	height: 80px;
+	margin-right: 15px;
+	border-radius: 4px;
+	flex-shrink: 0;
+}
+
+@media ( max-width : 1200px) {
+	.today-event .thumb {
+		width: 68px;
+		height: 68px;
+	}
+}
+
+.today-event .info{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.today-event .info .org {
+	color: black;
+	font-weight: bold;
+	font-size: 10px;
+}
+
+.today-event .info .title {
+	color: #6A1B9A;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.date {
+	font-size: 12px;
+}
+
+
+/* 리뷰 섹션 */
+.review-section {
+	flex: 1;
+}
+
+.review-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+	min-width: 760px;
+}
+
+@media ( max-width : 1080px) {
+	.review-grid {
+		grid-template-rows: 3;
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.review-grid>*:nth-child(n+7) {
+		display: none;
+	}
+}
+
+.review-card {
+	background-color: white;
+	border: 1px solid #DDD;
+	border-radius: 8px;
+	padding: 8px;
+	display: flex;
+	align-items: flex-start;
+	align-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.review-profile {
+	width: 60px;
+	height: 60px;
+	background-color: #E0E0E0;
+	border-radius: 4px;
+}
+
+.review-info {
+	flex: 1;
+	margin-left: 5px;
+	min-width: 60px;
+}
+
+.review-content {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
+}
+
+.review-bottom {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.review-bottom.create-date {
+	font-size: 10px;
+}
+
+
+
+
+
+
+
+
+/* 공지사항 영역 */
+.notice-section {
+	width: 100%;
+}
+
+.notice-title {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+/* 1줄 이상 hidden 처리------------------------------------------------------- 추후 일괄 작업 */
+.notice-title, #notice-title {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
+}
+
+.notice-table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: white;
+}
+
+.notice-table th, .notice-table td {
+	border-top: 1px solid #CCC;
+	padding: 10px;
+	text-align: left;
+}

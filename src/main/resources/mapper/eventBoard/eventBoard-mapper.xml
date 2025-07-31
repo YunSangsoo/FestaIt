@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="eventMapper">
+
+<!-- 		<select id="selectList" parameterType="map" resultType="board">
+		SELECT
+			BOARD_NO,
+			BOARD_TITLE,
+			USER_NAME AS BOARD_WRITER,
+			COUNT,
+			CREATE_DATE
+		FROM BOARD B
+		LEFT JOIN MEMBER M ON BOARD_WRITER = USER_NO
+		WHERE
+		B.STATUS='Y' AND BOARD_CD = #{boardCode} -->
+
+<!-- 이거 검색할 때 써야 함===================================================== -->
+<!-- 		<if test="keyword != null and keyword != ''">
+			AND
+			<choose>
+				<when test="condition.equals('title')">
+					BOARD_TITLE LIKE '%' || #{keyword} || '%'
+				</when>
+			</choose>
+		</if>
+	</select> -->
+	
+	<sql id="commonSelect">
+	    SELECT
+            APP_ID, 
+            APP_TITLE, 
+            APP_SUB_TITLE,
+            EVENT_CODE,
+            EVENT_NAME,
+            STAT_CODE,
+            LOCATION,
+            SUBSTR(LOCATION, 0, 2) REGION,
+            START_DATE, 
+            END_DATE,
+            APP_ORG
+        FROM EVENT_APPLICATION
+        JOIN EVENT_CATEGORY USING(EVENT_CODE)
+        WHERE STAT_CODE = 'A'
+        	AND (APP_TITLE LIKE '%' || #{keyword} || '%')
+        	<if test="region != null and region != ''">
+				AND
+				<choose>
+					<when test="region.equals('seoul')">
+						LOCATION LIKE '서울' || '%'
+					</when>
+					<when test="region.equals('gyeonggi')">
+						LOCATION LIKE '경기' || '%'
+					</when>
+					<when test="region.equals('incheon')">
+						LOCATION LIKE '인천' || '%'
+					</when>
+					<when test="region.equals('gangwon')">
+						LOCATION LIKE '강원' || '%'
+					</when>
+					<when test="region.equals('chungcheong')">
+						LOCATION LIKE '충북' || '%' OR LOCATION LIKE '충남' || '%'
+					</when>
+					<when test="region.equals('gyeongsang')">
+						LOCATION LIKE '경북' || '%' OR LOCATION LIKE '경남' || '%'
+					</when>
+					<when test="region.equals('jeonla')">
+						LOCATION LIKE '전북' || '%' OR LOCATION LIKE '전남' || '%'
+					</when>
+					<when test="region.equals('jeju')">
+						LOCATION LIKE '제주' || '%'
+					</when>
+				</choose>
+			</if>
+			<if test="eventCodeList != null and eventCodeList.size() > 0">
+				  AND EVENT_CODE IN
+				  <foreach collection="eventCodeList" item="code" separator="," open="(" close=")">
+				    #{code}
+				  </foreach>
+			</if>
+			<choose>
+				<when test="startDate == null or startDate == ''">
+					<if test='boardCode == "L"'>
+					  	AND END_DATE &gt;= TRUNC(SYSDATE)
+					</if>
+				</when>
+				<when test="startDate != null and startDate != ''">
+					AND END_DATE &gt;= TO_DATE(#{startDate}, 'YY-MM-DD')
+				</when>
+			</choose>
+			<if test="endDate != null and endDate != ''">
+			  	AND START_DATE &lt;= TO_DATE(#{endDate}, 'YY-MM-DD')
+			</if>
+			<if test="bookmark != null and bookmark.equals('on')">
+				  AND APP_ID IN (
+				  	SELECT APP_ID
+				  	FROM BOOKMARK
+					WHERE USER_NO = #{userNo}
+				  	)
+			</if>
+        ORDER BY END_DATE
+	</sql>
+	
+	
+	
+	<select id="selectEventList" resultMap="eventBoardMap" parameterType="map">
+		SELECT * FROM (
+		    SELECT ROWNUM RNUM, N.* FROM (
+		    	<include refid="commonSelect" />
+		    ) N
+		    WHERE ROWNUM &lt;= #{endRow}
+       	)
+      	WHERE RNUM &gt; #{startRow}
+	</select>
+	
+	<!-- 수정?======================================================================================= -->
+	<select id="selectEventCalendar" resultMap="eventBoardMap" parameterType="map">
+		SELECT * FROM (
+		    SELECT ROWNUM RNUM, N.* FROM (
+		    	<include refid="commonSelect" />
+		    ) N
+		    WHERE RNUM &gt; #{startRow}
+       	)
+      	 WHERE RNUM &gt; #{startRow}
+	</select>
+
+	<resultMap id="eventBoardMap" type="EventBoard">
+        <id property="appId" column="APP_ID"/>
+        <result property="appTitle" column="APP_TITLE"/>
+        <result property="appSubTitle" column="APP_SUB_TITLE"/>
+        <result property="eventCode" column="EVENT_CODE"/>
+        <result property="eventName" column="EVENT_NAME"/>
+        <result property="statCode" column="STAT_CODE"/>
+        <result property="region" column="REGION"/>
+        <result property="location" column="LOCATION"/>
+        <result property="startDate" column="START_DATE"/>
+        <result property="endDate" column="END_DATE"/>
+        <result property="appOrg" column="APP_ORG"/>
+    </resultMap>
+        <!-- appSubTitle 아래 행 <result property="userNo" column="USER_NO"/> --> <!-- 로그인 후========================= -->
+
+	<select id="selectEventCount" resultType="int"> 
+			SELECT COUNT(*) 
+			FROM (
+		    	<include refid="commonSelect" />
+		    )
+	</select>
+
+
+</mapper>
