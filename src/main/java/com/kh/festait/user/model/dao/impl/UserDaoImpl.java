@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao{
 		//회원가입할때 라디오체크가 사업자면 COMPANY 테이블 INSERT한다.
 		if ("사업자".equals(u.getUserType())) {
 			System.out.println("사업자임 : " + u.getUserType());
-				sqlSession.insert("user.insertCompany", u);
+				int compId = sqlSession.insert("user.insertCompany", u);
 
 				//COMPANY 테이블 INSERT 하면 COMP_ID 조회 후 USERS테이블에 넣어줘야함.
 				int result2 = sqlSession.selectOne("user.selectCompId", u);

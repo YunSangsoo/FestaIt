@@ -25,7 +25,7 @@
 
             /* 테이블 헤더 스타일 */
             thead.lavender-header th {
-                background-color: #e6ccff;
+                  background-color: #e6ccff;
                 color: #5E2B97;
             }
             
@@ -58,6 +58,34 @@
 				</c:when>
 				<c:otherwise>
 	            	<h2 class="fw-bold">행사 게시판</h2>
+	            	
+           			<form method="get" action="${contextPath}/eventApp" class="search-form d-flex justify-content-end align-items-center" id="searchForm">
+					<div class="input-group mx-2">
+		                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="searchTypeDropdownText">
+		                    <%-- Model에서 넘어온 searchType 값에 따라 기본 텍스트 설정 --%>
+		                    <c:choose>
+		                        <c:when test="${searchType eq 'applicant'}">신청자</c:when>
+		                        <c:when test="${searchType eq 'eventType'}">행사 종류</c:when>
+		                        <c:when test="${searchType eq 'eventName'}">행사명</c:when>
+		                        <c:when test="${searchType eq 'status'}">신청 상태</c:when>
+		                        <c:otherwise>전체</c:otherwise> <%-- 기본값 또는 '전체' --%>
+		                    </c:choose>
+		                </button>
+		                <ul class="dropdown-menu">
+		                    <li><a class="dropdown-item" href="#" data-search-type="">전체</a></li>
+		                    <li><a class="dropdown-item" href="#" data-search-type="managerName">신청자</a></li>
+		                    <li><a class="dropdown-item" href="#" data-search-type="eventType">행사 종류</a></li>
+		                    <li><a class="dropdown-item" href="#" data-search-type="appTitle">행사명</a></li>
+		                    <li><a class="dropdown-item" href="#" data-search-type="statType">신청 상태</a></li>
+		                </ul>
+			            <input type="hidden" name="searchType" id="searchType" value="${searchType}">
+			
+			            <input type="text" class="form-control" name="keyword" value="${keyword}" placeholder="검색어를 입력하세요" aria-label="검색어">
+			            
+			            <button class="btn btn-outline-secondary" type="submit">검색</button>
+	            	</div>
+	            
+					</form>
 				</c:otherwise>
 			</c:choose>
         </div>
@@ -155,7 +183,15 @@
         	<c:choose>
             	<c:when test="${pi.currentPage > 1}">
                 	<li class="page-item">
+                		
+		            <c:choose>
+			            <c:when test="${isEditMode}" >
                     	<a class="page-link" href="${pageContext.request.contextPath}/myEventApp?page=${pi.currentPage - 1}">이전</a>
+                    	</c:when>
+                    <c:otherwise>
+                    	<a class="page-link" href="${pageContext.request.contextPath}/eventApp?page=${pi.currentPage - 1}">이전</a>
+                    </c:otherwise>
+                </c:choose>
                 	</li>
             	</c:when>
             	<c:otherwise>
@@ -175,7 +211,17 @@
                 	</c:when>
                 	<c:otherwise>
                     	<li class="page-item">
-                        	<a class="page-link" href="${pageContext.request.contextPath}/myEventApp?page=${i}">${i}</a>
+                    	
+				            <c:choose>
+					            <c:when test="${isEditMode}" >
+                       				<a class="page-link" href="${pageContext.request.contextPath}/myEventApp?page=${i}">${i}</a>
+		                    	</c:when>
+			                    <c:otherwise>
+                       				<a class="page-link" href="${pageContext.request.contextPath}/eventApp?page=${i}">${i}</a>
+			                    </c:otherwise>
+			                </c:choose>
+                    	
+                    	
                     	</li>
                 	</c:otherwise>
             	</c:choose>
@@ -185,7 +231,14 @@
         	<c:choose>
             	<c:when test="${pi.currentPage < pi.totalPage}">
                 	<li class="page-item">
-                    	<a class="page-link" href="${pageContext.request.contextPath}/myEventApp?page=${pi.currentPage + 1}">다음</a>
+			            <c:choose>
+				            <c:when test="${isEditMode}" >
+                    			<a class="page-link" href="${pageContext.request.contextPath}/myEventApp?page=${pi.currentPage + 1}">다음</a>
+	                    	</c:when>
+		                    <c:otherwise>
+                    			<a class="page-link" href="${pageContext.request.contextPath}/eventApp?page=${pi.currentPage + 1}">다음</a>
+		                    </c:otherwise>
+		                </c:choose>
                 	</li>
             	</c:when>
             	<c:otherwise>
@@ -205,6 +258,36 @@
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<script>
+    $(document).ready(function() {
+        // 드롭다운 아이템 클릭 시
+        $('.dropdown-menu .dropdown-item').on('click', function(event) {
+            event.preventDefault(); // 기본 링크 동작 방지
+
+            var $this = $(this);
+            var searchType = $this.data('search-type'); // data-search-type 값 가져오기
+            
+            // 1. 드롭다운 버튼 텍스트 변경
+            $('#searchTypeDropdownText').text($this.text());
+            
+            // 2. 숨겨진 input 필드의 값 업데이트
+            $('#searchType').val(searchType);
+            
+            console.log('선택된 검색 기준:', searchType);
+        });
+
+        // (선택 사항) 엔터 키로 폼 제출 기능
+        $('input[name="keyword"]').keypress(function(e) {
+            if (e.which == 13) { // Enter key
+                e.preventDefault(); // 기본 엔터 동작 방지
+                $('#searchForm').submit(); // 폼 제출
+            }
+        });
+
+        // 페이지 로드 시 현재 검색 기준에 맞는 드롭다운 텍스트 설정 (반복되는 코드 제거)
+        // 다만, 필요에 따라 초기화 로직을 추가할 수 있습니다.
+    });
+</script>
 </body>
 </html>
