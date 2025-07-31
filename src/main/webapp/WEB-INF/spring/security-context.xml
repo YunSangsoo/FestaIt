@@ -31,16 +31,22 @@
 			access='permitAll' />
 		<intercept-url pattern="/email/verifyCode"
 			access='permitAll' />
-		<intercept-url pattern="/noticeBoard"
+		<intercept-url pattern="/intro"
 			access='permitAll' />
-		<intercept-url pattern="/noticeBoard/detail"
-			access='permitAll' />
+		
 
 		<!-- 관리자와 관련된 URL은 관리자 권한을 가지고 있어야만 접근가능하도록 제한 -->
 
 		<intercept-url pattern="/admin/**"
 			access="hasRole('ADMIN')" />
+		<intercept-url pattern="/memberBoard/**" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/noticeBoard/noticeWrite" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/noticeBoard/create" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/noticeBoard/update" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/noticeBoard/delete" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/noticeBoard/**" access='permitAll' />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
+		
 
 		<!-- form-login -폼 기반 로그인 인증 설정을 지정하는 태그 -login-page : 로그인 폼 페이지의 경로 -login-processing-url 
 			: 로그인 폼 제출시 해당 폼의 정보를 처리하는 url을 지정 (AuthenticationFilter의 mapping-url로 지정) 

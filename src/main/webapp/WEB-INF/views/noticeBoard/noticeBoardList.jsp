@@ -1,7 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -67,7 +68,7 @@ thead.lavender-header th {
 							<tr style="cursor: pointer;"
 								onclick="location.href='${pageContext.request.contextPath}/noticeBoard/detail?noticeId=${notice.noticeId}'">
 								<td>${notice.noticeId}</td>
-								<td class="text-start">${notice.noticeTitle}</td>
+								<td class="text-start"><c:out value="${notice.noticeTitle}" /></td>
 								<td><fmt:formatDate value="${notice.createDate}"
 										pattern="yyyy.MM.dd HH:mm" /></td>
 							</tr>
