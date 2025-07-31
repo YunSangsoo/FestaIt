@@ -2,29 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper
-	namespace="noticeMapper">
+<mapper namespace="noticeMapper">
 
 
-	<select id="selectNoticeListWithPaging" parameterType="map" resultType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
-        SELECT * FROM (
-            SELECT ROWNUM RNUM, N.* FROM (
-                SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE, HIGHLIGHT
-                FROM NOTICE
-                ORDER BY NOTICE_ID DESC
-            ) N
-            WHERE ROWNUM &lt;= #{endRow}
-        )
-        WHERE RNUM &gt; #{startRow}
-    </select>
+	<select id="selectNoticeList"
+		resultType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
+		SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE,
+		HIGHLIGHT
+		FROM NOTICE
+		ORDER BY NOTICE_ID DESC
+	</select>
+
+
+	<select id="selectNoticeListWithPaging" parameterType="map"
+		resultType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
+		SELECT * FROM (
+		SELECT ROWNUM RNUM, N.* FROM (
+		SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE,
+		HIGHLIGHT
+		FROM NOTICE
+		ORDER BY NOTICE_ID DESC
+		) N
+		WHERE ROWNUM &lt;= #{endRow}
+		)
+		WHERE RNUM &gt; #{startRow}
+	</select>
 
 	<select id="getNoticeCount" resultType="int">
-    	SELECT COUNT(*) FROM NOTICE
+		SELECT COUNT(*) FROM NOTICE
 	</select>
-	
+
 	<!-- 등록 -->
 	<insert id="insertNotice"
-		parameterType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
+		parameterType="com.kh.festait.noticeboard.model.vo.NoticeBoard"  useGeneratedKeys="true" keyProperty="noticeId" keyColumn="NOTICE_ID">
 		INSERT INTO NOTICE (
 		NOTICE_TITLE,
 		NOTICE_DETAIL
@@ -33,30 +43,32 @@
 		#{noticeDetail}
 		)
 	</insert>
-	
+
 	<!-- 상세 조회 -->
 	<select id="selectNoticeById" parameterType="int"
-            resultType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
-        SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE, HIGHLIGHT
-        FROM NOTICE
-        WHERE NOTICE_ID = #{noticeId}
-    </select>
-    
-     <!-- 수정 -->
-    <update id="updateNotice" parameterType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
-        UPDATE NOTICE
-        SET NOTICE_TITLE = #{noticeTitle},
-            NOTICE_DETAIL = #{noticeDetail},
-            UPDATE_DATE = SYSDATE
-        WHERE NOTICE_ID = #{noticeId}
-    </update>
+		resultType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
+		SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE,
+		HIGHLIGHT
+		FROM NOTICE
+		WHERE NOTICE_ID = #{noticeId}
+	</select>
 
-    <!-- 삭제 -->
-    <delete id="deleteNotice" parameterType="int">
-        DELETE FROM NOTICE
-        WHERE NOTICE_ID = #{noticeId}
-    </delete>
-    
+	<!-- 수정 -->
+	<update id="updateNotice"
+		parameterType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
+		UPDATE NOTICE
+		SET NOTICE_TITLE = #{noticeTitle},
+		NOTICE_DETAIL = #{noticeDetail},
+		UPDATE_DATE = SYSDATE
+		WHERE NOTICE_ID = #{noticeId}
+	</update>
+
+	<!-- 삭제 -->
+	<delete id="deleteNotice" parameterType="int">
+		DELETE FROM NOTICE
+		WHERE NOTICE_ID = #{noticeId}
+	</delete>
+
 
 
 

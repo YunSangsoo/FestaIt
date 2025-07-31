@@ -7,6 +7,7 @@
 	
 	<insert id="insertApplication" useGeneratedKeys="true" keyProperty="appId" keyColumn="APP_ID">
 		INSERT INTO EVENT_APPLICATION (
+		USER_NO,
 		EVENT_CODE,
 		STAT_CODE,
 		APP_TITLE,
@@ -27,6 +28,7 @@
 		APP_ORG,
 		APP_SPONSOR
 	) VALUES (
+		#{userNo},
 		#{eventCode},
 		#{statCode},
 		#{appTitle},
@@ -108,6 +110,33 @@
             <result property="fax" column="FAX"/>
         </association>
     </resultMap>
+    
+<sql id="searchConditions">
+    <if test="searchType != null or (searchType == null and keyword != null and keyword != '')">
+        <choose>
+            <when test="searchType == 'managerName' and keyword != null and keyword != ''">
+                AND am.MANAGER_NAME LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'eventType' and keyword != null and keyword != ''">
+                AND ec.EVENT_NAME LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'appTitle' and keyword != null and keyword != ''">
+                AND ea.APP_TITLE LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'statType' and keyword != null and keyword != ''">
+                AND aps.STAT_NAME LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="(searchType == null or searchType == '') and keyword != null and keyword != ''">
+                AND (
+                       ea.APP_TITLE LIKE '%' || #{keyword} || '%'
+                    OR am.MANAGER_NAME LIKE '%' || #{keyword} || '%'
+                    OR ec.EVENT_NAME LIKE '%' || #{keyword} || '%' OR aps.STAT_NAME LIKE '%' || #{keyword} || '%' )
+            </when>
+            <otherwise>
+                </otherwise>
+        </choose>
+    </if>
+    </sql>
 	
 	<update id="updateApplication">
 		UPDATE EVENT_APPLICATION SET
@@ -161,11 +190,16 @@
 	
 	<select id="selectAppListCount" resultType="int">
     	SELECT COUNT(*) FROM EVENT_APPLICATION
+    	WHERE USER_NO = #{userNo}
 	</select>
 	
-	<select id="selectAppAllListCount" resultType="int">
-    	SELECT COUNT(*) FROM EVENT_APPLICATION
-        WHERE STAT_CODE != 'P'
+	<select id="selectAppAllListCount" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM EVENT_APPLICATION ea
+        LEFT JOIN APP_MANAGER am ON ea.APP_ID = am.APP_ID
+        LEFT JOIN EVENT_CATEGORY ec ON ea.EVENT_CODE = ec.EVENT_CODE
+        LEFT JOIN APP_STATUS aps ON ea.STAT_CODE = aps.STAT_CODE
+        WHERE ea.STAT_CODE != 'P'
+        <include refid="searchConditions"/>
 	</select>
 	
 	
@@ -175,6 +209,7 @@
 	    	SELECT EA.*, ROWNUM RNUM
 		    FROM (
 		        SELECT * FROM EVENT_APPLICATION
+		        WHERE USER_NO = #{userNo}
 		        ORDER BY CREATE_DATE DESC
 	    	) EA
     	) A LEFT JOIN APP_MANAGER B
@@ -182,7 +217,25 @@
         WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
     </select>
     
-   	<select id="selectAppAllList" resultMap="eventApplicationMap">
+    
+     <select id="selectAppAllList" parameterType="map" resultMap="eventApplicationMap">
+        SELECT ea.*, am.APP_ID, am.MANAGER_NAME, am.EMAIL, am.TEL, am.FAX
+    	FROM (
+	    	SELECT EA.*, ROWNUM RNUM
+		    FROM (
+		        SELECT * FROM EVENT_APPLICATION
+		        WHERE STAT_CODE != 'P'
+		        ORDER BY CREATE_DATE DESC
+	    	)EA
+    	)ea
+   		LEFT JOIN APP_MANAGER am ON ea.APP_ID = am.APP_ID
+     		LEFT JOIN EVENT_CATEGORY ec ON ea.EVENT_CODE = ec.EVENT_CODE
+      		LEFT JOIN APP_STATUS aps ON ea.STAT_CODE = aps.STAT_CODE
+       	WHERE ea.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
+        <include refid="searchConditions"/>
+    </select>
+    
+   	<select id="selectAppAllList1" resultMap="eventApplicationMap">
 		SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
     	FROM (
 	    	SELECT EA.*, ROWNUM RNUM

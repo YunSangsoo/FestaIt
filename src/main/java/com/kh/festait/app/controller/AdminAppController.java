@@ -53,16 +53,19 @@ public class AdminAppController {
 	
 
 	@GetMapping("")
-	public String appList(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
+	public String appList(@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "searchType", required = false) String searchType,
+            @RequestParam(value = "keyword", required = false) String keyword,
+			Model model) {
 		
-		int totalCount = appService.selectAppAllListCount();
+		int totalCount = appService.selectAppAllListCount(searchType,keyword);
 		int limit = 10; // 한 페이지 하단에 보여질 페이지 목록 수
         int pageBlock = 10; // 한 페이지에 보여질 게시글 수
         
         //com.kh.festait.common에 Pagination 클래스를, com.kh.festait.common.model.vo에 pageInfo VO를 생성해뒀습니다.
         PageInfo pi = Pagination.getPageInfo(totalCount, page, limit, pageBlock);
         
-        List<EventApplication> list = appService.selectAppAllList(pi);
+        List<EventApplication> list = appService.selectAppAllList(pi,searchType,keyword);
         
         model.addAttribute("list", list);
         model.addAttribute("pi", pi);

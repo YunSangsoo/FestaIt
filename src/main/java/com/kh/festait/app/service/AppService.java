@@ -12,17 +12,17 @@ public interface AppService {
 
 	int saveOrUpdateApplication(EventApplication eventApplication);
 	
-	List<EventApplication> selectAppList(PageInfo pi);
+	List<EventApplication> selectAppList(PageInfo pi,int userNo);
 
-	int selectAppListCount();
+	int selectAppListCount(int userNo);
 
 	int approvingApp(String appId);
 
 	int rejectingApp(Map<String, String> setMap);
 
-	List<EventApplication> selectAppAllList(PageInfo pi);
+	List<EventApplication> selectAppAllList(PageInfo pi,String searchType, String keyword);
 
-	int selectAppAllListCount();
+	int selectAppAllListCount(String searchType, String keyword);
 
 	int deleteApplication(EventApplication eventApplication);
 }

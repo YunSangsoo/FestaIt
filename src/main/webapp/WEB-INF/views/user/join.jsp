@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link href="${pageContext.request.contextPath}/resources/css/join.css"
 	rel="stylesheet" />
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
 
 <title>Insert title here</title>
-<meta name="_csrf" content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -21,11 +23,10 @@
 		<br> <br>
 		<h2>회원가입</h2>
 		
-		<form method="post"
+		<form:form method="post" modelAttribute="joinUser"
 			action="${pageContext.request.contextPath}/security/join" id="joinForm"
 			onsubmit="return validateForm();">
 			<div>
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			
 				<label for="user">개인</label>
 				<input name="userType" type="radio" id="user" value="개인" checked>
@@ -73,9 +74,9 @@
 			
 			<div>
 				<h3>
-					<label for="">닉네임</label>
+					<label for="nickname">닉네임</label>
 				</h3>
-				<input class="box2" name="nickName" required type="text" placeholder="닉네임입력"> 
+				<input class="box2" name="nickname" required type="text" placeholder="닉네임입력"> 
 				<input class="but" type="button" value="중복확인" onclick="checkNick()"> <!-- 함수on -->
 			</div>
 
@@ -133,24 +134,24 @@
 				
 				<div>
 					<h3>
-						<label for="bsGrgiNum" id="bsGrgiNumText"  name="bsGrgiNumText">사업자번호</label>
+						<label for="bsGrgiNum" id="bsGrgiNumText" name="bsGrgiNum">사업자번호</label>
 					</h3>
-					<input name="bsGrgiNum" required type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
-					 required id="bsGrgiNum"class="box4">
+					<form:input path="manager.bsRegiNum" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+					 id="bsGrgiNum" class="box4" required="required"/>
 				</div>
 				
 				<div>
 					<h3>
 						<label for="bsGrgiName" id="bsGrgiNameText"  name="bsGrgiNameText">사업자 상호명</label>
 					</h3>
-					<input name="bsGrgiName" required type="text" required id="bsGrgiName"class="box4">
+					<form:input path="manager.compName" name="bsGrgiName" required="required" type="text" id="bsGrgiName" class="box4"/>
 				</div>
 				
 				<br> <br>
 				<div>
 					<input type="submit" class="btn_join" value="가입하기">
 				</div>
-		</form>
+		</form:form>
 		<br>
 	</div>
 
@@ -327,13 +328,13 @@
 		});
 
         <!--ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ닉 중복확인 스크립트ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ-->
-        let usernick = $('input[name=nickName]').val();
+        let usernick = $('input[name=nickname]').val();
         let nickDupChkVal = false
         
         function checkNick() {
         	
         	alert("ㅇㅅㅇ");
-			const nickName = $('input[name=nickName]').val().trim();
+			const nickName = $('input[name=nickname]').val().trim();
 			
 			if (nickName === "") { // 공백일때
 				alert("닉네임을 입력해주세요");
