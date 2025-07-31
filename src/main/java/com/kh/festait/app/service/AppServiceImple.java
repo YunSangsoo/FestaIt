@@ -1,6 +1,5 @@
 package com.kh.festait.app.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +7,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -137,33 +137,40 @@ public class AppServiceImple implements AppService {
 	}
 	
 	@Override
-    public int selectAppListCount() {
-        return appDao.selectAppListCount();
+    public int selectAppListCount(int userNo) {
+        return appDao.selectAppListCount(userNo);
     }
 
 	@Override
-    public int selectAppAllListCount() {
-        return appDao.selectAppAllListCount();
+    public int selectAppAllListCount(String searchType, String keyword) {
+
+        Map<String, String> searchMap = new HashMap<>();
+        searchMap.put("searchType", searchType);
+        searchMap.put("keyword", keyword);
+        return appDao.selectAppAllListCount(searchMap);
     }
 	
 	@Override
-    public List<EventApplication> selectAppList(PageInfo pi) {
+    public List<EventApplication> selectAppList(PageInfo pi,int userNo) {
         // offset: 몇 개의 게시글을 건너뛸 것인가
         // limit: 몇 개의 게시글을 조회할 것인가 (boardLimit과 동일)
 
 		Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("offset", pi.getOffset()); // PageInfo에서 계산된 offset 사용
         paramMap.put("limit", pi.getLimit());   // PageInfo에서 계산된 limit 사용 (boardLimit과 동일)
+        paramMap.put("userNo", userNo);
 
         return appDao.selectAppList(paramMap);
     }
 	
 	@Override
-	public List<EventApplication> selectAppAllList(PageInfo pi) {
+	public List<EventApplication> selectAppAllList(PageInfo pi,String searchType, String keyword) {
 
 		Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("offset", pi.getOffset()); // PageInfo에서 계산된 offset 사용
         paramMap.put("limit", pi.getLimit());   // PageInfo에서 계산된 limit 사용 (boardLimit과 동일)
+        paramMap.put("searchType", searchType);
+        paramMap.put("keyword", keyword);
 
         return appDao.selectAppAllList(paramMap);
 	}

@@ -13,7 +13,7 @@ public class User2 {
 	
 	private int compId; // 사업자 아이디
     
-    private String bsGrgiNum; // 사업자번호
+    private String bsRegiNum; // 사업자번호
     
     private String compAddr; // 사업자 주소
     

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.festait.user.model.validator.Uservalidator;
 import com.kh.festait.user.model.vo.User;
+import com.kh.festait.user.model.vo.User2;
 import com.kh.festait.user.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,10 @@ public class SecurityController {
 	
 	//회원가입 페이지 이동
 	@GetMapping("join")
-	public String joinPage(@ModelAttribute User user) {
+	public String joinPage(Model model) {
+		User m = new User();
+		m.setManager(new User2());
+		model.addAttribute("joinUser",m);
 		return "user/join";
 	}
 	
@@ -77,7 +81,7 @@ public class SecurityController {
 	//회원 가입 
 	@PostMapping("join")
 	public String insertUser(
-			@Validated @ModelAttribute User m,
+			@Validated @ModelAttribute("joinUser") User m,
 			BindingResult bindingResult,
 			RedirectAttributes ra) {
 		

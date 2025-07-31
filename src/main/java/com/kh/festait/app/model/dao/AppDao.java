@@ -22,7 +22,7 @@ public interface AppDao {
 
 	List<EventApplication> selectAppList(Map<String, Object> paramMap);
 
-	int selectAppListCount();
+	int selectAppListCount(int userNo);
 
 	int approvingApp(String appId);
 
@@ -30,10 +30,10 @@ public interface AppDao {
 
 	List<EventApplication> selectAppAllList(Map<String, Object> paramMap);
 
-	int selectAppAllListCount();
-
 	int deleteAppMager(int i);
 
 	int deleteApplication(int i);
+
+	int selectAppAllListCount(Map<String, String> searchMap);
 
 }

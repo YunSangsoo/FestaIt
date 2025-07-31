@@ -122,8 +122,8 @@
 						
 				</sec:authorize>
 				<sec:authorize access="isAnonymous()">
-					<a href="/festait/login" class="btn btn-outline-light">로그인</a>
-					<a href="/festait/join" class="btn btn-warning">회원가입</a>
+					<a href="/festait/user/login" class="btn btn-outline-light">로그인</a>
+					<a href="/festait/security/join" class="btn btn-warning">회원가입</a>
 				</sec:authorize>
 			</div>
 		</div>

@@ -5,6 +5,9 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,7 @@ import com.kh.festait.common.Utils;
 import com.kh.festait.common.model.vo.Image;
 import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.common.service.ImageService;
+import com.kh.festait.user.model.vo.User;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,7 +93,7 @@ public class AppController {
 			@ModelAttribute("eventApplication") /*@Valid*/  EventApplication eventApplication,
 			//BindingResult bindingResult, 유효성 결과
 			Model model,
-			//Authentication auth,
+			Authentication auth,
 			@RequestParam("action") String action,
 			RedirectAttributes ra,
 			//@RequestParam(value="inputPoster",required=false) List<MultipartFile> upfiles, // inputPoster의 name 속성과 일치
@@ -98,6 +102,10 @@ public class AppController {
 			) {
 		
 		//사용자가 업로드한 새로운 이미지 파일이 들어갈 객체
+
+		int userNo = ((User)auth.getPrincipal()).getUserNo(); 
+		
+		eventApplication.setUserNo(userNo);
 		Image posterImage = null;
 		
 		// 1. 새로운 파일이 업로드된 경우
@@ -161,18 +169,22 @@ public class AppController {
 		}else
 			return "redirect:/myEventApp";
 	}
-	
+
+	@PreAuthorize("hasRole('MANAGER')")
 	@GetMapping("")
-	public String appList(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
-		
-		int totalCount = appService.selectAppListCount();
+	public String appList(@RequestParam(value = "page", defaultValue = "1") int page,
+			Authentication auth,
+			Model model) {
+		System.out.println("Authorities: " + auth.getAuthorities());
+		int userNo = ((User)auth.getPrincipal()).getUserNo(); 
+		int totalCount = appService.selectAppListCount(userNo);
 		int limit = 10; // 한 페이지 하단에 보여질 페이지 목록 수
         int pageBlock = 10; // 한 페이지에 보여질 게시글 수
         
         //com.kh.festait.common에 Pagination 클래스를, com.kh.festait.common.model.vo에 pageInfo VO를 생성해뒀습니다.
         PageInfo pi = Pagination.getPageInfo(totalCount, page, limit, pageBlock);
         
-        List<EventApplication> list = appService.selectAppList(pi);
+        List<EventApplication> list = appService.selectAppList(pi,userNo);
         
         model.addAttribute("list", list);
         model.addAttribute("pi", pi);

@@ -64,13 +64,13 @@ public class AppDaoImpl implements AppDao {
 	}
 
 	@Override
-	public int selectAppListCount() {
-		return session.selectOne("app.selectAppListCount");
+	public int selectAppListCount(int userNo) {
+		return session.selectOne("app.selectAppListCount",userNo);
 	}
 
 	@Override
-	public int selectAppAllListCount() {
-		return session.selectOne("app.selectAppAllListCount");
+	public int selectAppAllListCount(Map<String, String> searchMap) {
+		return session.selectOne("app.selectAppAllListCount",searchMap);
 	}
 
 	@Override

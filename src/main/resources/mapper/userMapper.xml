@@ -75,7 +75,7 @@
                			  #{userName}
                			 , #{address1}
                			 , #{address2}
-               			 , #{bsGrgiNum}
+               			 , #{manager.bsRegiNum}
                	 		)	
 	</insert>
 	
@@ -170,7 +170,21 @@
 	
 	
 	<insert id="insertAuthority">
-		INSERT INTO AUTHORITIES (AUTHORITY,USER_NO) VALUES ('ROLE_USER',#{userNo})
+		INSERT INTO AUTHORITIES 
+		(AUTHORITY,
+		USER_ID) 
+		VALUES 
+		(
+		<choose>
+			<when test="userType.equals('개인')">
+				'ROLE_USER'
+			</when>
+			<when test="userType.equals('사업자')">
+				'ROLE_MANAGER'
+			</when>
+		</choose>
+		,
+		#{userId})
 	</insert>
 	
 	<select id="getUserByUser" resultType="user">
