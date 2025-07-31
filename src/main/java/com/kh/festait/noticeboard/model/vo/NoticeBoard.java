@@ -2,6 +2,8 @@ package com.kh.festait.noticeboard.model.vo;
 
 import java.util.Date;
 
+import com.kh.festait.common.model.vo.Image;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,5 +17,5 @@ public class NoticeBoard {
     private Date updateDate;
     private String highlight;
 
-
+    private Image posterImage;
 }
