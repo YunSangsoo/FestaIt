@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.kh.festait.bookmark.controller.BookmarkController;
 import com.kh.festait.common.Pagination;
 import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.eventboard.model.Service.EventBoardService;
@@ -28,12 +29,21 @@ public class EventBoardController {
 	
 	@Autowired
 	private EventBoardService eventBoardService;
+	@Autowired
+	private BookmarkController bc;
 	
 	//1-1. 행사 리스트
 	@GetMapping("/list")
 	public String eventList(@RequestParam(value = "page", defaultValue = "1") int currentPage,
-			@RequestParam Map<String, Object> paramMap, Model model) {
+			@RequestParam Map<String, Object> paramMap, Model model, Authentication authentication) {
 		EventBoard eventBoard = new EventBoard();
+		
+		Integer userNo = 0;
+		
+    	if (authentication != null && authentication.isAuthenticated()) {
+        	User loginUser = (User) authentication.getPrincipal();
+            userNo = loginUser.getUserNo();
+        }
 		
 		String eventCode = (String) paramMap.get("eventCode"); // 넘어온 파라미터
 		List<String> eventCodeList = new ArrayList<String>();
@@ -51,18 +61,23 @@ public class EventBoardController {
 		paramMap.put("endRow", offset + limit);
 		// 리스트/캘린더형에 따라 행사 리스트 출력 기본값(날짜)을 지정하기 위한 구분자, L/C
 		paramMap.put("boardCode", "L");
+		paramMap.put("userNo", userNo);
 		
 		int totalEventCount = eventBoardService.selectEventCount(paramMap);
 		int pageBlock = 5; // 한 번에 보여줄 페이지 번호 개수
 		
 		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
 		
-	    List<EventBoard> list = eventBoardService.selectEventList(pi, paramMap);
-	    setRegion(list);
+	    List<EventBoard> eventList = eventBoardService.selectEventList(pi, paramMap);
+	    
+	    if (eventList != null) {
+	    	setRegion(eventList);
+	    	bc.setBookmark(eventList, userNo);
+        }
 	    
 	    model.addAttribute("eventCodeList", eventCodeList);		
 	    model.addAttribute("eventSearch", eventBoard);
-	    model.addAttribute("eventList", list);
+	    model.addAttribute("eventList", eventList);
 	    model.addAttribute("pi", pi);
 		model.addAttribute("param", paramMap);
 	    
@@ -98,12 +113,15 @@ public class EventBoardController {
 		
 		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
 		
-	    List<EventBoard> list = eventBoardService.selectEventList(pi, paramMap);
-	    setRegion(list);
+	    List<EventBoard> eventList = eventBoardService.selectEventList(pi, paramMap);
+	    
+	    if (eventList != null) {
+	    	setRegion(eventList);
+        }
 	    
 	    model.addAttribute("eventCodeList", eventCodeList);		
 	    model.addAttribute("eventSearch", eventBoard);
-	    model.addAttribute("eventList", list);
+	    model.addAttribute("eventList", eventList);
 	    model.addAttribute("pi", pi);
 		model.addAttribute("param", paramMap);
 		

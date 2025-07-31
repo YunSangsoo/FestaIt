@@ -92,6 +92,13 @@
 			<if test="endDate != null and endDate != ''">
 			  	AND START_DATE &lt;= TO_DATE(#{endDate}, 'YY-MM-DD')
 			</if>
+			<if test="bookmark != null and bookmark.equals('on')">
+				  AND APP_ID IN (
+				  	SELECT APP_ID
+				  	FROM BOOKMARK
+					WHERE USER_NO = #{userNo}
+				  	)
+			</if>
         ORDER BY END_DATE
 	</sql>
 	

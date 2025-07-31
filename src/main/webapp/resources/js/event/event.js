@@ -1,156 +1,5 @@
 
-/* 버튼 사용 후 기간 수정 시 버튼 select 해제 */
-function resetDateBtn(){	
-    document.querySelectorAll('.btn-date').forEach(b => {
-      if (b.classList.contains('selected')) {
-        b.classList.remove('selected', 'active');
-      }
-	});
-}
 
-document.querySelectorAll('.dateInput').forEach(di => {
-  di.addEventListener('input', resetDateBtn());
-});
-
-const startDate = document.getElementById("startDate");
-const endDate = document.getElementById("endDate");
-
-function putMinDate(){	
-    $('#endDate').datepicker('option', 'minDate', $('#startDate').val());
-}
-
-$('#startDate').datepicker({
-	dateFormat: 'yy-mm-dd', // 날짜 형식: YYYY-MM-DD
-	//showOn: 'button',       // 입력 필드 클릭 또는 버튼 클릭 시 표시
-	//buttonText: '<i>선택</i>', // 버튼 아이콘 (Font Awesome 사용)
-	//	minDate: 0,          // 오늘 이전 날짜 선택 불가
-	// maxDate: '+1M +10D', // 오늘로부터 한 달 10일 후까지 선택 가능 (선택 사항)
-	onSelect: function(selectedDate) {
-		// 날짜 선택 시 실행되는 콜백 함수
-		resetDateBtn();
-		var startDate = $(this).datepicker('getDate');
-		$('#endDate').datepicker('option', 'minDate', startDate);
-		var endDate = $('#endDate').datepicker('getDate');
-		if (endDate && endDate < startDate) {
-			$('#selectedEndDate').text('선택되지 않음'); // 종료 날짜 텍스트 초기화
-		}
-}
-
-});
-
-$('#endDate').datepicker({
-	dateFormat: 'yy-mm-dd', // 날짜 형식: YYYY-MM-DD
-	//showOn: 'button',       // 입력 필드 클릭 또는 버튼 클릭 시 표시
-	//buttonText: '<i>선택</i>', // 버튼 아이콘 (Font Awesome 사용)
-	//	minDate: 0,          // 오늘 이전 날짜 선택 불가
-	
-	minDate: $('#startDate').datepicker('getDate'),
-	
-	// maxDate: '+1M +10D', // 오늘로부터 한 달 10일 후까지 선택 가능 (선택 사항)
-	onSelect: function(dateText, inst) {
-		resetDateBtn();
-		// 날짜 선택 시 실행되는 콜백 함수
-		//$('#startDate').text(dateText);
-}
-});
-
-startDate.addEventListener("change", function() {
-	resetDateBtn();
-	putMinDate();
-});
-
-endDate.addEventListener("change", function() {
-	resetDateBtn();
-});
-
-// 행사 카드 호버 이벤트
-$(".event-card").on("mouseenter", function() {
-	$(this).css("border-color","#FFFFFF");
-	$(this).find(".EventItemHover-img").fadeIn(100);
-	$(this).find(".event-info").fadeOut(300);
-}).on("mouseleave", function() {
-	$(this).css("border-color","#D1C4E9");
-	$(this).find(".EventItemHover-img").fadeOut(100);
-	$(this).find(".event-info").fadeIn(300);
-});
-
-
-// 오늘 날짜 구하는 함수 (yyyy-MM-dd)
-function getToday() {
-  const today = new Date();
-  
-  return today.toISOString().split('T')[0];
-}
-
-// N일 뒤 날짜 구하는 함수
-function getFutureDate(days) {
-  var today = new Date();
-  
-  switch(days){
-  case 7: today.setDate(today.getDate() + days); break;
-  case 30: today.setMonth(today.getMonth() + 1); break;
-  case 90: today.setMonth(today.getMonth() + 3); break;
-  case 180: today.setMonth(today.getMonth() + 6); break;
-  }
-  return today.toISOString().split('T')[0];
-}
-
-
-// 버튼 클릭 핸들러
-document.querySelectorAll('.btn-date').forEach(btn => {
-	btn.addEventListener('click', function() {
-	
-  
-  	if ($(this).hasClass('selected')) {
-		// 이미 선택된 버튼을 다시 클릭하면 선택 해제
-		// 모든 버튼 선택 해제
-		document.querySelectorAll('.btn-date').forEach(b => b.classList.remove('selected', 'active'));
-    	$('#startDate').datepicker('setDate', null);
-		$('#endDate').datepicker('setDate', null);
-    	$('#endDate').datepicker('option', 'minDate', null);
-    	
-	} else {
-		// 모든 버튼 선택 해제
-		document.querySelectorAll('.btn-date').forEach(b => b.classList.remove('selected', 'active'));
-		// 현재 버튼 선택
-    	this.classList.add('selected', 'active');
-    	
-	    // 기간 가져오기
-	    const days = parseInt(this.dataset.period, 10);
-	    // 날짜 계산
-	    const startDate = getToday();
-	    const endDate = getFutureDate(days);
-	
-	    // form input에 값 삽입
-	    document.getElementById('startDate').value = startDate;
-	    document.getElementById('endDate').value = endDate;
-		putMinDate();
-	}
-	
-  });
-});
-
-
-$('.btn-category').on("click", function() {
-	if ($(this).hasClass('selected')) {
-	  // 이미 선택된 버튼을 다시 클릭하면 선택 해제
-		$(this).removeClass('selected active');
-	} else {
-		$(this).addClass('selected active');
-	}
-   
-	  // 선택된 버튼들 찾기
-	  const selectedValues = [];
-	  $('.btn-category.selected').each(function() {
-	    selectedValues.push(this.value);
-	  });
-
-	  // ','로 구분된 문자열로 연결
-	  const categoryAll = selectedValues.join(',');
-	  // hidden input에 반영
-	  $('#eventCode').val(categoryAll);
-});
- 
 // 캘린더 호버 이벤트
 $(document).on('mouseenter', '.fc-daygrid-event', function(e) {
   $('#event-hover-thumbcard')
@@ -173,7 +22,62 @@ $(document).on('mousemove', '.fc-daygrid-event', function(e) {
     });
 });
 
-// 북마크 반응
+
+// 북마크 기본 설정
+
+const bookmarkEmpty = 'M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z';
+const bookmarkFill = 'M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5M8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.18.18 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.18.18 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.18.18 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.18.18 0 0 1-.134-.098z';
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.bookmark').forEach(function (bookmarkEl) {
+        const path = bookmarkEl.querySelector('path');
+        if (path) {
+            path.setAttribute('d', bookmarkEmpty);
+        }
+    });
+    document.querySelectorAll('.bookmark.selected').forEach(function (bookmarkEl) {
+        const path = bookmarkEl.querySelector('path');
+        if (path) {
+            path.setAttribute('d', bookmarkFill);
+        }
+    });
+});
+
+// 북마크 클릭 이벤트
+$(document).ready(function () {
+	$('.bookmark').on('click', function () {
+
+		const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+	  
+		const $this = $(this);
+		const appId = $this.data('app-id');
+		const path = this.querySelector('path');
+		
+		
+		$.ajax({
+			url : $this.hasClass('selected') ? '/festait/bookmark/remove'
+					: '/festait/bookmark/add', 
+			method : 'POST',
+			beforeSend: function(xhr){
+				if(token && header) {
+			    	xhr.setRequestHeader(header, token);
+			    }
+		    },
+		    success: function(res) {
+				$this.toggleClass('selected'); // 선택 상태 토글
+				if ($this.hasClass('selected')) path.setAttribute('d', bookmarkFill);
+				else path.setAttribute('d', bookmarkEmpty);
+		    },
+			data : {
+				appId : appId
+			},
+			error : function() {
+				alert('로그인 후 사용할 수 있는 기능입니다.');
+			}
+		});
+  });
+});
 
 
 

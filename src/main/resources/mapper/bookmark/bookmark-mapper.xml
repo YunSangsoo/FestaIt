@@ -7,12 +7,26 @@
 <insert id="insertBookmark">
     INSERT INTO BOOKMARK (USER_NO, APP_ID)
     VALUES (#{userNo}, #{appId})
-  </insert>
+</insert>
 
-  <delete id="deleteBookmark">
+<delete id="deleteBookmark">
     DELETE FROM BOOKMARK
     WHERE USER_NO = #{userNo}
       AND APP_ID = #{appId}
-  </delete>
+</delete>
+
+<select id="selectBookmarkedAppIdsByUser" resultMap="bookmarkMap" parameterType="map">
+	SELECT *
+	FROM BOOKMARK
+	WHERE USER_NO = #{userNo}
+</select>
+
+<resultMap id="bookmarkMap" type="Bookmark">
+    <id property="appId" column="APP_ID"/>
+    <result property="userNo" column="USER_NO"/>
+    <result property="createDate" column="CREATE_DATE"/>
+</resultMap>
+
+
 
 </mapper>

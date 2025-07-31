@@ -33,6 +33,9 @@ public class EventBoard {
 	private String appOrg;
 	
 	private Image posterImage;
+	
+	private String bookmarkCheck; // on, off로 내가 북마크한 게시글인지 확인
+	
 
 
 	

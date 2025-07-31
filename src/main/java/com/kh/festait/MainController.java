@@ -1,6 +1,7 @@
 package com.kh.festait;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,8 @@ public class MainController {
     private MainpageController mainpageController;
 	
 	@GetMapping("/")
-	public String home(Model model) {
-		mainpageController.mainpageLoading(model);
+	public String home(Model model, Authentication authentication) {
+		mainpageController.mainpageLoading(model, authentication);
 		return "main";
 	}
 	

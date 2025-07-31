@@ -19,8 +19,10 @@
 	href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
 <c:set var="contextPath" value="${pageContext.request.contextPath}"
 	scope="application" />
-<link href="${contextPath }/resources/css/eventboard.css"
-	rel="stylesheet">
+<link href="${contextPath}/resources/css/eventboard.css" rel="stylesheet">
+	
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 
 
 <style>
@@ -69,7 +71,7 @@ thead.lavender-header th {
 
 	<c:if test="${not empty param}">
 		<c:set var="searchParam"
-			value="&eventCode=${param.eventCode}&region=${param.region}&keyword=${param.keyword}&startDate=${param.startDate}&endDate=${param.endDate}" />
+			value="&eventCode=${param.eventCode}&region=${param.region}&keyword=${param.keyword}&startDate=${param.startDate}&endDate=${param.endDate}&bookmark=${param.bookmark}" />
 	</c:if>
 
 	<!-- 북마크용 데이터 -->
@@ -160,7 +162,7 @@ thead.lavender-header th {
 							<form:checkbox path="bookmark" name="bookmark-check" class="bookmark-check"/>
 							 --%>
 
-						<input type="checkbox" name="bookmark" class="bookmark-check" />
+						<input type="checkbox" name="bookmark" class="bookmark-check" ${param.bookmark eq 'on' ? 'checked' : ''} />
 						<div class="search-option bookmark-option">북마크한 행사</div>
 					</div>
 
@@ -217,18 +219,13 @@ thead.lavender-header th {
 									class="EventItemHover-img" alt="">
 								</a>
 
-								<div class="bookmark" data-app-id="${event.appId}" 
-									<sec:authorize access="isAuthenticated()">
-								        data-user-no="<sec:authentication property='principal.userNo' />"
-								     </sec:authorize>">
+								<div class="bookmark ${event.bookmarkCheck eq 'on' ? 'selected' : ''}"
+								data-app-id="${event.appId}" <sec:authorize access="isAuthenticated()">data-user-no = "<sec:authentication property='principal.userNo'/>" </sec:authorize>">
 									<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
 										fill="#ea870e" class="bi bi-bookmark" viewBox="0 0 16 16">
-									  <path fill-rule="evenodd"
-											d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z" />
+									  <path fill-rule="evenodd"/>
 									</svg>
 								</div>
-								
-								
 								
 							</div>
 						</c:forEach>
@@ -294,6 +291,21 @@ thead.lavender-header th {
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
+	<script type="text/javascript">
+	
+	// 행사 카드 호버 이벤트
+	$(".event-card").on("mouseenter", function() {
+		$(this).css("border-color","#FFFFFF");
+		$(this).find(".EventItemHover-img").fadeIn(100);
+		$(this).find(".event-info").fadeOut(300);
+	}).on("mouseleave", function() {
+		$(this).css("border-color","#D1C4E9");
+		$(this).find(".EventItemHover-img").fadeOut(100);
+		$(this).find(".event-info").fadeIn(300);
+	});
+	
+	</script>
+	
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script
@@ -302,68 +314,9 @@ thead.lavender-header th {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		
+	<script src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
 	<script src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<script type="text/javascript">
-	
-	$(document).ready(function () {
-		  $('.bookmark').on('click', function () {
-		    const path = this.querySelector('path');
-		     if ($(this).hasClass('selected')) {
-		  	  // $(this).removeClass('selected');
-		      if (path) {
-		        path.setAttribute('d', 'M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z');
-		      }
-		    } else {
-		  	  // $(this).addClass('selected');
-		      if (path) {
-		        path.setAttribute('d', 'M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5M8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.18.18 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.18.18 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.18.18 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.18.18 0 0 1-.134-.098z');
-		      }
-		    }
-		    
-		    const $this = $(this);
-			const appId = $this.data('app-id');
-
-			$.ajax({
-				url : $this.hasClass('selected') ? "/bookmark/remove"
-						: "/bookmark/add",
-				method : 'POST',
-				data : {
-					appId : appId
-				},
-				success : function() {
-					$this.toggleClass('selected'); // 선택 상태 토글
-				},
-				error : function() {
-					alert('처리 중 오류가 발생했습니다.');
-				}
-			});
-		    
-		  });
-		});
-	
-	</script>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 

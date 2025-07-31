@@ -348,8 +348,9 @@ thead.lavender-header th {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<script
-		src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
+		
+	<script src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
+	<script src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
 
 
 </body>
