@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mainpageMapper">
+	
+	
+	<select id="selectNoticeList" parameterType="map" resultType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
+		SELECT * FROM (
+            SELECT ROWNUM RNUM, N.* FROM (
+                SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE, HIGHLIGHT
+                FROM NOTICE
+                ORDER BY NOTICE_ID DESC
+            ) N
+            WHERE ROWNUM &lt;= #{limit}
+        )
+        WHERE RNUM &gt; 0
+	</select>
+	
+	<sql id="commonSelectEvent">
+		SELECT
+            APP_ID, 
+            APP_TITLE, 
+            APP_SUB_TITLE,
+            EVENT_CODE,
+            EVENT_NAME,
+            STAT_CODE,
+            LOCATION,
+            SUBSTR(LOCATION, 0, 2) REGION,
+            START_DATE, 
+            END_DATE,
+            APP_ORG
+        FROM EVENT_APPLICATION
+        JOIN EVENT_CATEGORY USING(EVENT_CODE)
+        WHERE STAT_CODE = 'A'
+        AND END_DATE &gt;= TRUNC(SYSDATE)
+	</sql>
+	
+	<select id="selectEventList" resultMap="eventBoardMap" parameterType="map">
+		SELECT * FROM (
+		    SELECT ROWNUM RNUM, N.* FROM (
+		    	<include refid="commonSelectEvent" />
+		    	ORDER BY END_DATE
+		    ) N
+            WHERE ROWNUM &lt;= #{limit}
+        )
+        WHERE RNUM &gt; 0
+	</select>
+	
+	<select id="selectTodayEventList" resultMap="eventBoardMap" parameterType="map">
+		SELECT * FROM (
+		    SELECT ROWNUM RNUM, N.* FROM (
+		    	<include refid="commonSelectEvent" />
+			    	AND START_DATE &lt;= SYSDATE
+		    	ORDER BY END_DATE
+		    ) N
+            WHERE ROWNUM &lt;= #{limit}
+        )
+        WHERE RNUM &gt; 0
+	</select>
+
+	<resultMap id="eventBoardMap" type="EventBoard">
+        <id property="appId" column="APP_ID"/>
+        <result property="appTitle" column="APP_TITLE"/>
+        <result property="appSubTitle" column="APP_SUB_TITLE"/>
+        <result property="eventCode" column="EVENT_CODE"/>
+        <result property="eventName" column="EVENT_NAME"/>
+        <result property="statCode" column="STAT_CODE"/>
+        <result property="region" column="REGION"/>
+        <result property="location" column="LOCATION"/>
+        <result property="startDate" column="START_DATE"/>
+        <result property="endDate" column="END_DATE"/>
+        <result property="appOrg" column="APP_ORG"/>
+    </resultMap>
+        <!-- appSubTitle 아래 행 <result property="userNo" column="USER_NO"/> --> <!-- 로그인 후========================= -->
+
+
+</mapper>
