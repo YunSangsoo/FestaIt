@@ -82,22 +82,24 @@ public class UserController {
 		return viewName;
 	}
 	
-	
 	@PostMapping("/login")
 	public ModelAndView loginUser(User u, ModelAndView mv, Model model, 
-			HttpSession session, // 로그인 성공시, 사용자 정보를 보관할 객체
-			RedirectAttributes ra) {
-		System.out.println("check");
-		User loginUser = uService.login(u);
-		log.info("user : {}",loginUser);
-		if(loginUser != null) {
-			model.addAttribute("loginUser",loginUser);
-			ra.addFlashAttribute("alertMsg", "로그인 성공.");
-		}else {
-			ra.addFlashAttribute("alertMsg", "로그인 실패.");
-		}
-		mv.setViewName("redirect:/");
-		return mv;
+	        HttpSession session, // 로그인 성공시, 사용자 정보를 보관할 객체
+	        RedirectAttributes ra) {
+	    System.out.println("check");
+	    User loginUser = uService.login(u);
+	    log.info("user : {}",loginUser);
+	    if (loginUser != null) {
+	        // 세션에 로그인 사용자 정보를 저장해야 이후 요청에서도 꺼낼 수 있어요!
+	        session.setAttribute("loginUser", loginUser);
+
+	        model.addAttribute("loginUser", loginUser); // 이건 없어도 됨, 세션이 더 중요
+	        ra.addFlashAttribute("alertMsg", "로그인 성공.");
+	    } else {
+	        ra.addFlashAttribute("alertMsg", "로그인 실패.");
+	    }
+	    mv.setViewName("redirect:/");
+	    return mv;
 	}
 	/*
 	//회원 로그인

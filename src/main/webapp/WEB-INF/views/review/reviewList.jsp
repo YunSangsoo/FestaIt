@@ -23,10 +23,11 @@
 </style>
 </head>
 <body>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	<div class="container my-5">
 	<h2 style="margin-bottom: 20px; font-weight: bold;">리뷰 (총 ${totalCount} 건)</h2>
-		<form action="${pageContext.request.contextPath}/reviewBoard/create"
-			method="post">
+		<form action="${pageContext.request.contextPath}/reviewBoard/create" method="post">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<div class="input-group">
 				<svg height="60" width="60" xmlns="http://www.w3.org/2000/svg">
 					<rect width="100%" height="100%" fill="gray" />
@@ -85,14 +86,16 @@
 												</div>
 
 												<!-- 수정/삭제 버튼 -->
-												<div>
-													<button type="button" class="btn btn-primary btn-sm me-2"
-														data-userno="${review.userNo}"
-														data-comment="${fn:escapeXml(review.comment)}"
-														onclick="handleEditClick(this)">수정</button>
-													<button type="button" class="btn btn-danger btn-sm"
-														onclick="openDeleteModal(${review.userNo})">삭제</button>
-												</div>
+												<c:if test="${sessionScope.loginUser != null && sessionScope.loginUser.userNo == review.userNo}">
+													<div>
+														<button type="button" class="btn btn-primary btn-sm me-2"
+															data-userno="${review.userNo}"
+															data-comment="${fn:escapeXml(review.comment)}"
+															onclick="handleEditClick(this)">수정</button>
+														<button type="button" class="btn btn-danger btn-sm"
+															onclick="openDeleteModal(${review.userNo})">삭제</button>
+													</div>
+												</c:if>
 											</div>
 
 											<!-- 댓글 내용 -->
@@ -235,6 +238,7 @@
 	}
 	</script>
 
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

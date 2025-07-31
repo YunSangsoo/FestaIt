@@ -25,12 +25,12 @@
 
 	<!-- 등록 -->
 	<insert id="insertReview" parameterType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
-		INSERT INTO REVIEW (USER_NO, APP_ID, "COMMENT", RATING)
-		VALUES (2, 1, #{comment}, #{rating})
+		INSERT INTO REVIEW (USER_NO, COMMENT, RATING)
+		VALUES (#{userNo}, #{comment}, #{rating})
 	</insert>
 
 	<!-- 수정 -->
-	<update id="updateByUserNo" parameterType="ReviewBoard">
+	<update id="updateByUserNo" parameterType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
 		UPDATE REVIEW
 		SET "COMMENT" = #{comment}
 		WHERE USER_NO = #{userNo}
