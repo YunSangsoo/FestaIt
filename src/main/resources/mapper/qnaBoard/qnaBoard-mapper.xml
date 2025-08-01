@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="qnaBoardMapper">
+
+	<!-- resultMap: DB 컬럼명 → VO 필드명 명시적 매핑 -->
+	<resultMap id="qnaBoardMap"
+		type="com.kh.festait.qnaboard.model.vo.QnaBoard">
+		<id property="qnaId" column="QNA_ID" />
+		<result property="userNo" column="USER_NO" />
+		<result property="qnaTitle" column="QNA_TITLE" />
+		<result property="qnaDetail" column="QNA_DETAIL" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="updateDate" column="UPDATE_DATE" />
+		<result property="qnaType" column="QNA_TYPE" />
+		<result property="isPrivate" column="IS_PRIVATE" />
+		<result property="answerDetail" column="ANSWER_DETAIL" />
+		<result property="answerDate" column="ANSWER_DATE" />
+	</resultMap>
+
+	<!-- 1. 등록 -->
+	<insert id="insertQna"
+		parameterType="com.kh.festait.qnaboard.model.vo.QnaBoard">
+		INSERT INTO QNA (
+		USER_NO, QNA_TITLE,
+		QNA_DETAIL,
+		QNA_TYPE, IS_PRIVATE
+		) VALUES (
+		#{userNo},
+		#{qnaTitle},
+		#{qnaDetail},
+		#{qnaType},
+		#{isPrivate}
+		)
+	</insert>
+
+	<!-- 2. 전체 목록 (페이징) -->
+	<select id="selectAllQna" resultMap="qnaBoardMap"
+		parameterType="map">
+    <![CDATA[
+    SELECT * FROM (
+        SELECT ROWNUM rnum, A.*
+        FROM (
+            SELECT * FROM QNA ORDER BY QNA_ID DESC
+        ) A
+        WHERE ROWNUM <= #{offset} + #{limit}
+    )
+    WHERE rnum > #{offset}
+    ]]>
+	</select>
+
+	<!-- 3. 사용자별 목록 (페이징) -->
+	<select id="selectQnaListByUser" resultMap="qnaBoardMap"
+		parameterType="map">
+    <![CDATA[
+    SELECT *
+    FROM (
+        SELECT ROWNUM rnum, A.*
+        FROM (
+            SELECT * FROM QNA
+            WHERE USER_NO = #{userNo}
+            ORDER BY QNA_ID DESC
+        ) A
+        WHERE ROWNUM <= #{offset} + #{limit}
+    )
+    WHERE rnum > #{offset}
+    ]]>
+	</select>
+
+	<!-- 4. 상세 조회 -->
+	<select id="selectQnaById" resultMap="qnaBoardMap"
+		parameterType="int">
+		SELECT * FROM QNA WHERE QNA_ID = #{id}
+	</select>
+
+	<!-- 5. 전체 카운트 -->
+	<select id="countAllQna" resultType="int">
+		SELECT COUNT(*) FROM QNA
+	</select>
+
+	<!-- 6. 사용자 카운트 -->
+	<select id="countQnaByUser" resultType="int" parameterType="int">
+		SELECT COUNT(*) FROM QNA WHERE USER_NO = #{userNo}
+	</select>
+
+	<update id="updateAnswer" parameterType="map">
+		UPDATE QNA
+		SET
+		ANSWER_DETAIL = #{answerDetail},
+		ANSWER_DATE = SYSDATE
+		WHERE QNA_ID = #{qnaId}
+	</update>
+
+</mapper>
