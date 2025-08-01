@@ -12,6 +12,8 @@ public interface ReviewBoardService {
 	List<ReviewBoard> selectReviewList(int offset, int limit);
 
 	int getReviewCount();
+	
+	int setReviewIdentifier(Map<String, Object> paramMap);
 
 	int insertReview(ReviewBoard review);
 

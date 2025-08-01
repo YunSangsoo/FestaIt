@@ -26,7 +26,8 @@ public class ReviewBoardController {
 
 	@Autowired
 	private ReviewBoardService reviewBoardService;
-	private int userNo = 0;
+	private int userNo = -1;
+	private int reviewIdentifier = 0;
 
 	// 1. 리뷰 관리 페이지
 	@GetMapping("")
@@ -57,11 +58,24 @@ public class ReviewBoardController {
 	
 	// 리뷰 리스트 페이지
     @GetMapping("/list")
-    public String reviewList(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
+    public String reviewList(@RequestParam(value = "page", defaultValue = "1") int page, Model model, 
+    		@RequestParam Map<String, Object> paramMap, Authentication authentication) {
+    	
+    	setUserNo(authentication);
+    	
+//    	행사 세부 합친 후 아래 코드 1행 삭제===========================================================================================
+    	paramMap.put("appId", 1);
+		paramMap.put("userNo", userNo);
+    	
+    	
+    	reviewIdentifier = reviewBoardService.setReviewIdentifier(paramMap); // 0이면 리뷰 작성한 적 X
+    	
+    	
         int limit = 5;
         int offset = (page - 1) * limit;
 
         List<ReviewBoard> list = reviewBoardService.selectReviewList(offset, limit);
+        
         int totalCount = reviewBoardService.getReviewCount();
 
         int totalPage = (int) Math.ceil((double) totalCount / limit);
@@ -77,6 +91,9 @@ public class ReviewBoardController {
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        
+        model.addAttribute("userNo", userNo);
+        model.addAttribute("reviewIdentifier", reviewIdentifier);
 
         return "review/reviewList";
     }
@@ -87,14 +104,18 @@ public class ReviewBoardController {
     		@RequestParam Map<String, Object> paramMap, Model model) {
 		
 		setUserNo(authentication);
-    	
     	review.setUserNo(userNo);
+    	if(userNo == -1) {
+    		ra.addFlashAttribute("msg", "로그인 후 사용할 수 있는 기능입니다.");
+    		return "redirect:/reviewBoard/list";
+    	}
+    	
 //    	행사 세부 합친 후 아래 코드로 수정===========================================================================================
 //    	review.setAppId(paramMap.get(appId));
     	review.setAppId(1);
 		
 		int result = reviewBoardService.insertReview(review);
-//        ra.addFlashAttribute("msg", result > 0 ? "등록 완료" : "등록 실패");
+        ra.addFlashAttribute("msg", result > 0 ? "등록 완료" : "등록 실패");
         return "redirect:/reviewBoard/list";
     }
 	
@@ -105,9 +126,14 @@ public class ReviewBoardController {
 		setUserNo(authentication);
     	
 //    	행사 세부 합친 후 아래 코드 1행 삭제===========================================================================================
-    	paramMap.put("appId", 1);
-		paramMap.put("userNo", userNo);
+		review.setAppId(1);
+		review.setUserNo(userNo);
 		
+    	if(userNo == -1) {
+    		ra.addFlashAttribute("msg", "로그인 후 사용할 수 있는 기능입니다.");
+    		return "redirect:/reviewBoard/list";
+    	}
+    	
 		int result = reviewBoardService.updateReviewByUserNo(review);
 		
 		ra.addFlashAttribute("msg", result > 0 ? "수정 완료" : "수정 실패");
@@ -121,7 +147,11 @@ public class ReviewBoardController {
 			RedirectAttributes ra) {
 		
 		setUserNo(authentication);
-    	
+    	if(userNo == -1) {
+    		ra.addFlashAttribute("msg", "로그인 후 사용할 수 있는 기능입니다.");
+    		return "redirect:/reviewBoard/list";
+    	}
+		
 //    	행사 세부 합친 후 아래 코드 1행 삭제===========================================================================================
     	paramMap.put("appId", 1);
 		paramMap.put("userNo", userNo);

@@ -23,6 +23,11 @@
     	SELECT COUNT(*) FROM REVIEW
 	</select>
 
+	<select id="setReviewIdentifier" resultType="int">
+    	SELECT COUNT(*) FROM REVIEW
+    	WHERE USER_NO = #{userNo} AND APP_ID = #{appId}
+	</select>
+
 	<!-- 등록 -->
 	<insert id="insertReview" parameterType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
 		INSERT INTO REVIEW (USER_NO, APP_ID, "COMMENT", RATING)
@@ -32,8 +37,8 @@
 	<!-- 수정 -->
 	<update id="updateByUserNo" parameterType="ReviewBoard">
 		UPDATE REVIEW
-		SET "COMMENT" = #{comment}
-		WHERE USER_NO = #{userNo}
+		SET "COMMENT" = #{comment}, UPDATE_DATE = SYSDATE
+		WHERE USER_NO = #{userNo} AND APP_ID = #{appId}
 	</update>
 
 	<!-- 삭제 -->

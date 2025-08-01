@@ -32,6 +32,8 @@
 <body>
 	<c:set var="loginUser" value="${sessionScope.loginUser}" />
 	
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	
 	<div class="container my-5">
 	<h2 style="margin-bottom: 20px; font-weight: bold;">리뷰 (총 ${totalCount} 건)</h2>
 		<form action="${pageContext.request.contextPath}/reviewBoard/create"
@@ -89,8 +91,9 @@
 														<c:forEach var="i" begin="1" end="${review.rating}">★</c:forEach><c:forEach
 															var="i" begin="${review.rating + 1}" end="5">☆</c:forEach>
 													</small>
-													<small class="text-muted ms-3">
+													<small class="text-muted ms-3 d-flex">
 														<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd HH:mm:ss" />
+														<div class="edit-check" style="display: ${empty review.updateDate ? 'none' : 'block'}">(수정됨)</div>
 													</small>
 												</div>
 
@@ -223,6 +226,31 @@
 	</div>
 
 	<script>
+	
+    const userNo = ${userNo};
+    const reviewIdentifier = ${reviewIdentifier};
+    
+    // 비로그인 시+이미 리뷰를 작성했을 시 재작성 금지
+    document.addEventListener("DOMContentLoaded", function () {
+    	if (userNo === -1 || reviewIdentifier > 0) {
+            const textarea = document.querySelector('textarea[name="comment"]');
+            if (textarea) {
+                textarea.readOnly = true;
+                if(reviewIdentifier > 0) textarea.placeholder = '이미 리뷰를 작성한 행사입니다.';
+                else textarea.placeholder = '로그인 후 리뷰를 작성할 수 있습니다.';
+            }
+            const select = document.querySelector('select[name="rating"].form-select.form-select-sm');
+            if (select) {
+                select.disabled = true;
+            }
+            const button = document.querySelector('button.btn.btn-outline-secondary.mt-2.col-12');
+            if (button) {
+                button.disabled = true;
+            }
+        }
+	});
+    
+    
 	// 수정 모달 열기
 	function openEditModal(userNo, comment) {
 		document.getElementById('editUserNo').value = userNo;
@@ -248,8 +276,16 @@
 	
 	// 수정 삭제 버튼
 	document.addEventListener("DOMContentLoaded", function () {
-	    document.querySelectorAll('.review-row').forEach(function () {
-	    	// if(comment-id == loginUser)
+	    document.querySelectorAll('.review-row').forEach(function (row) {
+	    	console.log(userNo);
+	        const commentUserNo = parseInt(row.dataset.commentId); // data-comment-id
+	
+	        if (commentUserNo === userNo) {
+	            const btn = row.querySelector('.btn-edit-delete');
+	            if (btn) {
+	                btn.style.display = 'block';
+	            }
+	        }
 	    });
 	});
 	</script>

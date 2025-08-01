@@ -25,6 +25,11 @@ public class ReviewBoardDaoImpl implements ReviewBoardDao {
 	public int getReviewCount() {
 		return sqlSession.selectOne("reviewMapper.getReviewCount");
 	}
+	
+	@Override
+	public int setReviewIdentifier(Map<String, Object> paramMap) {
+		return sqlSession.selectOne("reviewMapper.setReviewIdentifier", paramMap);
+	}
 
 	@Override
 	public int insertReview(ReviewBoard review) {

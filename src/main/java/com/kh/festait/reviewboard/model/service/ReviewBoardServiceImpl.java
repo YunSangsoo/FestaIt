@@ -31,6 +31,11 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
 	public int getReviewCount() {
 		return reviewBoardDao.getReviewCount();
 	}
+	
+	@Override
+	public int setReviewIdentifier(Map<String, Object> paramMap) {
+		return reviewBoardDao.setReviewIdentifier(paramMap);
+	}
 
 	@Override
 	public int insertReview(ReviewBoard review) {

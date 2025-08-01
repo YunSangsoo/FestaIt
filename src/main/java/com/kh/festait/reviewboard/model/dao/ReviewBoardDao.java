@@ -1,6 +1,5 @@
 package com.kh.festait.reviewboard.model.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +13,8 @@ public interface ReviewBoardDao {
 	List<ReviewBoard> selectReviewListWithPaging(Map<String, Object> paramMap);
 
 	int getReviewCount();
+	
+	int setReviewIdentifier(Map<String, Object> paramMap);
 
 	int insertReview(ReviewBoard review);
 
