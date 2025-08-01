@@ -45,8 +45,7 @@
             <div class="content-wrapper">
                 <aside class="left-sidebar">
                     <div class="poster-section">
-                        <img src="${contextPath}/resources/images/${event.appId}_poster.png" alt="행사 포스터" class="event-poster-img">
-
+                        <img src="${contextPath}${event.posterImage.changeName}" alt="행사 포스터" class="event-poster-img">
                         <c:if test="${not empty event.website}">
                             <a href="${event.website}" target="_blank" class="homepage-link">홈페이지 바로가기</a>
                         </c:if>
@@ -68,7 +67,7 @@
                         </span>
 
                         <div class="views-share">
-                            <%-- 북마크 아이콘 표시 로직 (로그인 여부에 따라 다르게 표시) --%>
+                            <%-- 북마크 아이콘 표시 로직 (로그인 여부에 따라 다르게) --%>
                             <c:if test="${not empty loginUser}">
                                 <span>
                                     <i class="bi ${event.bookmarked ? 'bi-bookmark-star-fill' : 'bi-bookmark'}" id="bookmarkIcon" style="cursor: pointer;"></i>

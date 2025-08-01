@@ -1,25 +1,25 @@
+/* 기본 설정 */
 * {
     box-sizing: border-box;
 }
 
-/* 기본 설정 */
 body {
     font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa; 
+    background-color: #f8f9fa;
     color: #333;
 }
 
 .page-wrapper {
-    max-width: 1200px; 
-    margin: 0 auto; 
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
 }
 
-/* 헤더와 검색창 사이 공간 */
+/* 헤더와 본문 사이 여백 */
 .top-spacer {
-    height: 80px; 
+    height: 80px;
 }
 
 /* Flash Message (알림 메시지) */
@@ -38,25 +38,26 @@ body {
     border-color: #bee5eb;
 }
 
+/* 보드 헤더 섹션 */
 .board-header-section {
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
     margin-bottom: 30px;
-    padding: 0 10px; 
+    padding: 0 10px;
 }
 
 /* 검색창 영역 */
 .search-bar-area {
-    width: 100%; 
-    display: flex; 
-    justify-content: center; 
-    margin-bottom: 15px; 
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
 }
 
-/* 검색 폼 자체의 너비 조절 */
+/* 검색 폼 너비 조절 */
 .search-form {
-    width: 100%; 
+    width: 100%;
     max-width: 600px !important;
     margin: 0 auto;
 }
@@ -64,9 +65,9 @@ body {
 .search-wrapper {
     display: flex;
     border: 1px solid #ddd;
-    border-radius: 0; 
+    border-radius: 0;
     overflow: hidden;
-    width: 100%; 
+    width: 100%;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
@@ -78,7 +79,7 @@ body {
     outline: none;
     font-size: 16px;
     color: #555;
-    border-radius: 0; 
+    border-radius: 0;
 }
 
 .search-input::placeholder {
@@ -93,100 +94,112 @@ body {
     cursor: pointer;
     font-size: 18px;
     transition: background-color 0.3s ease;
-    border-radius: 0; 
+    border-radius: 0;
 }
 
 .search-button:hover {
     background-color: #a069cb;
 }
 
-/* 등록하기 버튼 영역 */
+/* 등록 버튼 스타일 (통합버전) */
+a.btn.lavender-btn {
+    background-color: #b481d9;
+    color: white;
+    border: 1px solid #a069cb;
+
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    min-width: 120px;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+a.btn.lavender-btn:hover {
+    background-color: #a069cb;
+    border-color: #904ebc;
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* 등록 버튼 컨테이너 정렬 */
 .register-button-container {
-    text-align: center; 
+    text-align: center;
     margin-top: 30px;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 
-.register-button-container a.btn.lavender-btn {
-    background-color: #9370db !important; 
-    color: white !important;
-    border: none !important; 
-    padding: 10px 20px !important; 
-    border-radius: 5px !important; 
-    font-size: 1em !important; 
-    transition: background-color 0.3s ease !important; 
-    min-width: 120px !important; 
-    text-align: center !important; 
-    text-decoration: none !important; 
-    vertical-align: middle !important; 
-    cursor: pointer !important; 
+/* 테이블 헤더 색상 */
+thead.lavender-header th {
+    background-color: #e6ccff;
+    color: #5e2b97;
 }
 
-.register-button-container a.btn.lavender-btn:hover {
-    background-color: #8a2be2 !important;
-    color: white !important;
-}
-
-/* 검색 폼 컨테이너의 여백 조정 */
+/* 검색 폼 컨테이너 마진 */
 .row.mb-3.justify-content-end {
     margin-bottom: 20px;
 }
 
-/* 검색창 입력 필드와 버튼 크기 조정 */
+/* 검색창 및 버튼 크기 조정 */
 .col-md-6 form .form-select.form-select-lg {
-    height: 34px !important; 
-    padding: 0.2rem 0.75rem !important; 
-    font-size: 0.85rem !important; /
+    height: 34px !important;
+    padding: 0.2rem 0.75rem !important;
+    font-size: 0.85rem !important;
 }
 
 .col-md-6 form .form-control.form-control-lg {
     height: 34px !important;
-    padding: 0.2rem 0.75rem !important; 
+    padding: 0.2rem 0.75rem !important;
     font-size: 0.85rem !important;
 }
 
 .col-md-6 form .btn.btn-outline-secondary.btn-lg {
-    height: 34px !important; 
-    padding: 0.2rem 0.75rem !important; 
-    font-size: 0.85rem !important; 
-    line-height: 1 !important; 
+    height: 34px !important;
+    padding: 0.2rem 0.75rem !important;
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-width: 65px !important; 
-    white-space: nowrap !important; 
+    min-width: 65px !important;
+    white-space: nowrap !important;
 }
 
 /* 페이지네이션 스타일 */
 .pagination-container {
-    margin-top: 30px !important; 
+    margin-top: 30px !important;
     margin-bottom: 50px !important;
-    width: 100% !important; 
-    display: flex !important; 
-    justify-content: center !important; 
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
 }
 
 .pagination .page-item {
-    margin: 0 2px !important; 
+    margin: 0 2px !important;
 }
 
 .pagination .page-item .page-link {
     border-radius: 5px !important;
     margin: 0 2px !important;
-    color: #b481d9 !important; 
-    border-color: #b481d9 !important; 
+    color: #b481d9 !important;
+    border-color: #b481d9 !important;
     transition: background-color 0.2s ease, color 0.2s ease !important;
 }
 
 .pagination .page-item.active .page-link {
-    background-color: #e9ecef !important; 
+    background-color: #e9ecef !important;
     border-color: #a069cb !important;
-    color: black !important; 
+    color: black !important;
 }
 
 .pagination .page-item .page-link:hover {
-    background-color: #a069cb !important; 
-    border-color: #a069cb !important; 
+    background-color: #a069cb !important;
+    border-color: #a069cb !important;
     color: white !important;
 }
 
@@ -195,13 +208,13 @@ body {
     display: inline-block !important;
     font-size: 1.2rem !important;
     color: inherit !important;
-    line-height: 1 !important; 
-    font-weight: bold !important; 
+    line-height: 1 !important;
+    font-weight: bold !important;
 }
 
-/* 활성 페이지의 화살표 색상*/
+/* 활성 페이지의 화살표 색상 */
 .pagination .page-item.active .page-link span {
-    color: black !important; 
+    color: black !important;
 }
 
 /* 반응형 디자인 */
@@ -211,23 +224,23 @@ body {
         max-width: calc((100% - 2 * 30px) / 3);
     }
     .search-form {
-        max-width: 600px !important;    
+        max-width: 600px !important;
     }
 }
 
 @media (max-width: 768px) {
     .board-header-section {
         flex-direction: column;
-        align-items: stretch; 
+        align-items: stretch;
     }
 
     .search-bar-area {
         margin-right: 0;
-        margin-bottom: 20px; 
+        margin-bottom: 20px;
     }
 
     .search-form {
-        max-width: 100% !important;    
+        max-width: 100% !important;
     }
 
     .post {
@@ -238,7 +251,7 @@ body {
 
 @media (max-width: 480px) {
     .post {
-        flex: 0 0 100%; 
+        flex: 0 0 100%;
         max-width: 100%;
     }
 
@@ -252,9 +265,10 @@ body {
         font-size: 16px;
     }
 
-    .register-promo-btn {
+    a.btn.lavender-btn {
         padding: 8px 20px;
         font-size: 14px;
+        min-width: auto;
     }
 
     .post-title {

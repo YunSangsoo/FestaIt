@@ -37,11 +37,11 @@ public class EventDetailController {
             Authentication authentication
     ) {
 
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("appId", appId);
-
-        int userNoForBookmark = 0; 
-        User loginUserForJsp = null; 
+    	Map<String, Object> paramMap = new HashMap<>();
+    	paramMap.put("appId", appId);
+    	
+    	int userNoForBookmark = 0; 
+    	User loginUserForJsp = null; 
 
         // 로그인 정보 확인 및 userNo 추출
         if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {

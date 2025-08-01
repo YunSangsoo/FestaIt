@@ -8,15 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-// Image 클래스 임포트 추가 (com.kh.festait.common.model.vo.Image 경로 확인)
 import com.kh.festait.common.model.vo.Image; 
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(callSuper = true) // 부모 클래스가 있다면 부모 필드도 출력
+@ToString
 @Builder
 public class EventDetailVo {
     
@@ -50,8 +48,6 @@ public class EventDetailVo {
     private boolean bookmarked;    // 북마크 여부
 
     private String eventAppName;   // 행사 신청명
-
-    // --- 추가된 이미지 필드 ---
-    // 하나의 행사에 하나의 포스터 이미지가 연결된다고 가정합니다.
+    
     private Image posterImage;
 }

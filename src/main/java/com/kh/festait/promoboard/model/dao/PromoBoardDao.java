@@ -6,16 +6,17 @@ import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.promoboard.model.vo.PromoBoardVo;
 
 public interface PromoBoardDao {
-    int selectPromoCount(); // SqlSessionTemplate 파라미터 제거
-    List<PromoBoardVo> selectPromoList(PageInfo pi); // SqlSessionTemplate 파라미터 제거
-    int selectSearchPromoCount(String searchKeyword); // SqlSessionTemplate 파라미터 제거
-    List<PromoBoardVo> selectSearchPromo(String searchKeyword, PageInfo pi); // SqlSessionTemplate 파라미터 제거
+    int selectPromoCount();
+    List<PromoBoardVo> selectPromoList(PageInfo pi); 
+    int selectSearchPromoCount(String searchKeyword);
+    List<PromoBoardVo> selectSearchPromo(String searchKeyword, PageInfo pi);
 
-    int insertPromo(PromoBoardVo promo); // SqlSessionTemplate 파라미터 제거
-    PromoBoardVo selectPromoDetail(int promoId); // SqlSessionTemplate 파라미터 제거
-    int increasePromoViews(int promoId); // SqlSessionTemplate 파라미터 제거
-    Integer selectWriterUserNoByPromoId(int promoId); // SqlSessionTemplate 파라미터 제거
-    List<PromoBoardVo> selectUserEventApplications(int userNo); // SqlSessionTemplate 파라미터 제거
-    int updatePromo(PromoBoardVo promo); // SqlSessionTemplate 파라미터 제거
-    int deletePromo(int promoId); // SqlSessionTemplate 파라미터 제거
+    int insertPromo(PromoBoardVo promo);
+    PromoBoardVo selectPromoDetail(int promoId);
+    int increasePromoViews(int promoId);
+    Integer selectWriterUserNoByPromoId(int promoId); 
+    List<PromoBoardVo> selectUserEventApplications(int userNo);
+    int updatePromo(PromoBoardVo promo); 
+    int updateEventApplicationWebsite(PromoBoardVo promo);
+    int deletePromo(int promoId); 
 }
