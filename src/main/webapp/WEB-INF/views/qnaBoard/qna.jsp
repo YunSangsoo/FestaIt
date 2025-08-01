@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,36 +31,56 @@
 		<h3 class="mb-4">문의 게시판</h3>
 
 		<!-- 문의 작성 폼 -->
-		<form
-			action="${pageContext.request.contextPath}/qnaBoard?action=create"
-			method="post" class="mb-5">
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" />
+		<sec:authorize access="isAuthenticated()">
+			<c:if test="${param.action != 'detail'}">
+				<form action="${pageContext.request.contextPath}/qnaBoard"
+					method="post" class="mb-5">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
 
-			<div class="row g-3 align-items-center mb-3">
-				<div class="col-auto">
-					<select name="qnaType" class="form-select" required>
-						<option value="" disabled selected>문의 종류 선택</option>
-						<option value="행사 관련">행사 관련</option>
-						<option value="행사 등록 관련">행사 등록 관련</option>
-						<option value="기술 지원">기술 지원</option>
-						<option value="계정 문의">계정 문의</option>
-						<option value="기타 문의">기타 문의</option>
-					</select>
-				</div>
-				<div class="col-auto flex-grow-1">
-					<input type="text" name="qnaTitle" class="form-control"
-						placeholder="제목을 입력해주세요." required />
-				</div>
-				<div class="col-auto">
-					<button type="submit" class="btn btn-primary">문의하기</button>
-				</div>
+					<div class="row g-3 align-items-center mb-3">
+						<div class="col-auto">
+							<select name="qnaType" class="form-select" required>
+								<option value="" disabled selected>문의 종류 선택</option>
+								<option value="행사 관련">행사 관련</option>
+								<option value="행사 등록 관련">행사 등록 관련</option>
+								<option value="기술 지원">기술 지원</option>
+								<option value="계정 문의">계정 문의</option>
+								<option value="기타 문의">기타 문의</option>
+							</select>
+						</div>
+
+						<div class="col-auto">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="isPrivate"
+									id="isPrivate" value="Y" /> <label class="form-check-label"
+									for="isPrivate">비밀글로 작성</label>
+							</div>
+						</div>
+
+						<div class="col-auto flex-grow-1">
+							<input type="text" name="qnaTitle" class="form-control"
+								placeholder="제목을 입력해주세요." required />
+						</div>
+						<div class="col-auto">
+							<button type="submit" class="btn btn-primary">문의하기</button>
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<textarea name="qnaDetail" class="form-control" rows="4"
+							placeholder="문의 내용을 작성해주세요." required></textarea>
+					</div>
+				</form>
+			</c:if>
+		</sec:authorize>
+
+		<sec:authorize access="!isAuthenticated()">
+			<div class="alert alert-warning">
+				문의를 작성하려면 <a href="${pageContext.request.contextPath}/login">로그인</a>이
+				필요합니다.
 			</div>
-			<div class="mb-3">
-				<textarea name="qnaDetail" class="form-control" rows="4"
-					placeholder="문의 내용을 작성해주세요." required></textarea>
-			</div>
-		</form>
+		</sec:authorize>
 
 		<c:choose>
 
@@ -89,7 +111,6 @@
 						</tr>
 					</thead>
 					<tbody>
-					<tbody>
 						<c:forEach var="qna" items="${qnaList}">
 							<tr
 								onclick="location.href='${pageContext.request.contextPath}/qnaBoard?action=detail&id=${qna.qnaId}'"
@@ -104,9 +125,12 @@
 											<span class="badge bg-secondary">검토중</span>
 										</c:otherwise>
 									</c:choose></td>
-								<td>${qna.qnaTitle}</td>
+								<!-- 비밀글 표시 추가 -->
+								<td><c:if test="${qna.isPrivate == 'Y'}">
+										<span class="badge bg-warning text-dark">비밀글</span>
+									</c:if> ${qna.qnaTitle}</td>
 								<!-- 링크 제거 -->
-								<td>${qna.userNo}</td>
+								<td><c:out value="${qna.userId}" /></td>
 								<td><fmt:formatDate value="${qna.createDate}"
 										pattern="yyyy.MM.dd" /></td>
 							</tr>
@@ -114,22 +138,20 @@
 					</tbody>
 				</table>
 
-				<nav aria-label="Page navigation">
+				<nav aria-label="Page navigation example">
 					<ul class="pagination justify-content-center">
-						<c:if test="${currentPage > 1}">
-							<li class="page-item"><a class="page-link"
-								href="?action=list&page=${currentPage - 1}&view=${viewMode}">이전</a></li>
-						</c:if>
-						<c:forEach begin="1" end="${totalPage}" var="pageNum">
-							<li class="page-item ${pageNum == currentPage ? 'active' : ''}">
-								<a class="page-link"
-								href="?action=list&page=${pageNum}&view=${viewMode}">${pageNum}</a>
-							</li>
+						<li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+							<a class="page-link" href="?page=${currentPage - 1}"
+							tabindex="-1">이전</a>
+						</li>
+						<c:forEach var="i" begin="1" end="${totalPage}">
+							<li class="page-item ${i == currentPage ? 'active' : ''}"><a
+								class="page-link" href="?page=${i}">${i}</a></li>
 						</c:forEach>
-						<c:if test="${currentPage < totalPage}">
-							<li class="page-item"><a class="page-link"
-								href="?action=list&page=${currentPage + 1}&view=${viewMode}">다음</a></li>
-						</c:if>
+						<li
+							class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
+							<a class="page-link" href="?page=${currentPage + 1}">다음</a>
+						</li>
 					</ul>
 				</nav>
 
@@ -137,12 +159,18 @@
 
 
 			<c:when test="${param.action == 'detail'}">
+				<!-- 여기에 에러 메시지 출력 추가 -->
+				<c:if test="${not empty errorMessage}">
+					<div class="alert alert-danger" role="alert">${errorMessage}
+					</div>
+				</c:if>
+
 				<c:if test="${not empty qna}">
 					<div class="card mb-3">
 						<div class="card-header">
-							<h5>${qna.qnaTitle}</h5>
+							<h5><c:out value="${qna.qnaTitle}" /></h5>
 							<small class="text-muted"> 문의 종류: ${qna.qnaType} | 작성자:
-								${qna.userNo} | 작성일: <fmt:formatDate value="${qna.createDate}"
+								${qna.userId} | 작성일: <fmt:formatDate value="${qna.createDate}"
 									pattern="yyyy.MM.dd" />
 							</small>
 						</div>
@@ -150,7 +178,15 @@
 							<p>
 								<strong>문의 내용</strong>
 							</p>
-							<p style="white-space: pre-wrap;">${qna.qnaDetail}</p>
+							<c:choose>
+								<c:when
+									test="${qna.isPrivate == 'Y' && (user == null || user.userNo != qna.userNo) && !pageContext.request.isUserInRole('ROLE_ADMIN')}">
+									<p class="text-muted">비밀글입니다. 작성자와 관리자만 내용 확인이 가능합니다.</p>
+								</c:when>
+								<c:otherwise>
+									<p style="white-space: pre-wrap;"><c:out value="${qna.qnaDetail}" /></p>
+								</c:otherwise>
+							</c:choose>
 
 							<hr />
 
@@ -168,20 +204,27 @@
 
 							<!-- 답변 내용은 모두가 볼 수 있음 -->
 							<c:if test="${not empty qna.answerDetail}">
-								<div class="border rounded p-3 mb-3"
-									style="background: #f9f9f9;">
-									<p>
-										<strong>관리자 답변:</strong>
-									</p>
-									<p style="white-space: pre-wrap;">${qna.answerDetail}</p>
-									<small class="text-muted"> 등록일: <fmt:formatDate
-											value="${qna.answerDate}" pattern="yyyy.MM.dd HH:mm:ss" />
-									</small>
-								</div>
+								<c:choose>
+									<c:when
+										test="${qna.isPrivate == 'Y' && (user == null || user.userNo != qna.userNo) && !pageContext.request.isUserInRole('ROLE_ADMIN')}">
+										<p class="text-muted">관리자 답변도 비밀글이므로 작성자와 관리자만 확인할 수 있습니다.</p>
+									</c:when>
+									<c:otherwise>
+										<div class="border rounded p-3 mb-3"
+											style="background: #f9f9f9;">
+											<p>
+												<strong>관리자 답변:</strong>
+											</p>
+											<p style="white-space: pre-wrap;">${qna.answerDetail}</p>
+											<small class="text-muted"> 등록일: <fmt:formatDate
+													value="${qna.answerDate}" pattern="yyyy.MM.dd HH:mm:ss" /></small>
+										</div>
+									</c:otherwise>
+								</c:choose>
 							</c:if>
 
-							<!-- 관리자만 답변 작성 가능 -->
-							<c:if test="${sessionScope.isAdmin}">
+							<!-- 답변 작성 폼 (관리자이면서, 아직 답변이 없을 때만) -->
+							<sec:authorize access="hasRole('ROLE_ADMIN')">
 								<c:if test="${empty qna.answerDetail}">
 									<form
 										action="${pageContext.request.contextPath}/qnaBoard?action=answer&id=${qna.qnaId}"
@@ -197,13 +240,30 @@
 										<button type="submit" class="btn btn-primary">답변 등록</button>
 									</form>
 								</c:if>
-							</c:if>
-
+							</sec:authorize>
 							<a
 								href="${pageContext.request.contextPath}/qnaBoard?action=list&view=all"
 								class="btn btn-secondary btn-sm">목록으로</a>
+
+							<sec:authorize access="isAuthenticated()">
+								<c:if
+									test="${user.userNo == qna.userNo or pageContext.request.isUserInRole('ROLE_ADMIN')}">
+									<form
+										action="${pageContext.request.contextPath}/qnaBoard?action=delete&id=${qna.qnaId}"
+										method="post"
+										style="position: absolute; bottom: 15px; right: 15px; margin: 0;">
+										<input type="hidden" name="${_csrf.parameterName}"
+											value="${_csrf.token}" />
+										<button type="submit" class="btn btn-danger btn-sm"
+											onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+									</form>
+								</c:if>
+							</sec:authorize>
+
+
 						</div>
 					</div>
+
 				</c:if>
 			</c:when>
 		</c:choose>

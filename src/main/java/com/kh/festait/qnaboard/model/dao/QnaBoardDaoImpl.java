@@ -63,5 +63,10 @@ public class QnaBoardDaoImpl implements QnaBoardDao {
 	    sqlSession.update(NAMESPACE + "updateAnswer", params);
 		
 	}
+
+	@Override
+	public void deleteQna(int qnaId) {
+	    sqlSession.delete(NAMESPACE + "deleteQna", qnaId);
+	}
     
 }
