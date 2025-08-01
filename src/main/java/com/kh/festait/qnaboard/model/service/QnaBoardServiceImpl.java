@@ -5,19 +5,17 @@ import com.kh.festait.qnaboard.model.vo.QnaBoard;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class QnaBoardServiceImpl implements QnaBoardService{
+public class QnaBoardServiceImpl implements QnaBoardService {
 
-	private static final int PAGE_SIZE = 10;  // 페이지 당 게시물 수
+    private static final int PAGE_SIZE = 10;  // 페이지 당 게시물 수
 
-    @Autowired
-    private QnaBoardDao qnaBoardDao;
+    private final QnaBoardDao qnaBoardDao;
 
     @Override
     public void insertQna(QnaBoard qna) {
@@ -25,14 +23,14 @@ public class QnaBoardServiceImpl implements QnaBoardService{
     }
 
     @Override
-    public List<QnaBoard> selectQnaList(String viewMode, int userNo, int page) {
-        int offset = (page - 1) * PAGE_SIZE;
+    public List<QnaBoard> selectQnaList(String viewMode, int userNo, int page, int limit) {
+        int offset = (page - 1) * limit;
         List<QnaBoard> list;
 
         if ("mine".equals(viewMode)) {
-            list = qnaBoardDao.selectQnaListByUser(userNo, offset, PAGE_SIZE);
+            list = qnaBoardDao.selectQnaListByUser(userNo, offset, limit);
         } else {
-            list = qnaBoardDao.selectAllQna(offset, PAGE_SIZE);
+            list = qnaBoardDao.selectAllQna(offset, limit);
         }
 
         for (QnaBoard qna : list) {
@@ -49,19 +47,28 @@ public class QnaBoardServiceImpl implements QnaBoardService{
 
     @Override
     public int getTotalPage(String viewMode, int userNo) {
-        int totalCount = "mine".equals(viewMode)
-                ? qnaBoardDao.countQnaByUser(userNo)
-                : qnaBoardDao.countAllQna();
-
+        int totalCount = getTotalCount(viewMode, userNo);
         return (int) Math.ceil((double) totalCount / PAGE_SIZE);
     }
 
-	@Override
-	public void updateAnswer(int qnaId, String answerDetail) {
-		qnaBoardDao.updateAnswer(qnaId, answerDetail);
-		
-	}
-    
-    
-	
+    @Override
+    public int getTotalCount(String viewMode, int userNo) {
+        if ("mine".equals(viewMode)) {
+            return qnaBoardDao.countQnaByUser(userNo);
+        } else {
+            return qnaBoardDao.countAllQna();
+        }
+    }
+
+    @Override
+    public void updateAnswer(int qnaId, String answerDetail) {
+        qnaBoardDao.updateAnswer(qnaId, answerDetail);
+    }
+
+    @Override
+    public void deleteQna(int qnaId) {
+        qnaBoardDao.deleteQna(qnaId);
+    }
 }
+    
+    

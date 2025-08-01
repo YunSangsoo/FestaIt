@@ -23,4 +23,6 @@ public interface QnaBoardDao {
 
 	void updateAnswer(int qnaId, String answerDetail);
 
+	void deleteQna(int qnaId);
+
 }
