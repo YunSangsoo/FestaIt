@@ -45,6 +45,7 @@
 		<intercept-url pattern="/noticeBoard/update" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/noticeBoard/delete" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/noticeBoard/**" access='permitAll' />
+		<intercept-url pattern="/qnaBoard/**" access='permitAll' />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 		
 

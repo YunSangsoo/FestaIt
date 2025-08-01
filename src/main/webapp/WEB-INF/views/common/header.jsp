@@ -85,7 +85,7 @@
 					<li class="nav-item separator">|</li>
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 					<li class="nav-item separator">|</li>
-					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/faqBoard">FAQ</a></li>
+					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">FAQ</a></li>
 					<li class="nav-item separator">|</li>
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/reviewBoard">리뷰</a></li>
 					<li class="nav-item separator">|</li>
@@ -98,7 +98,7 @@
 					<li class="nav-item separator">|</li>
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 					<li class="nav-item separator">|</li>
-					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/faqBoard">FAQ</a></li>
+					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">FAQ</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAnonymous()">
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/eventBoard/list">행사</a></li>
@@ -107,7 +107,7 @@
 					<li class="nav-item separator">|</li>
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 					<li class="nav-item separator">|</li>
-					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/faqBoard">FAQ</a></li>
+					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">FAQ</a></li>
 				</sec:authorize>
 			</ul>
 			<!-- 로그인/회원가입 or 마이페이지 -->

@@ -40,9 +40,9 @@ public class MainController {
 		return "/common/footer";
 	}
 	
-	@GetMapping("/test")
-	public String test() {
-		return "/admin/memberListBoard";
+	@GetMapping("/intro")
+	public String intro() {
+		return "intro/intro";
 	}
 	
 	@GetMapping("/login")
