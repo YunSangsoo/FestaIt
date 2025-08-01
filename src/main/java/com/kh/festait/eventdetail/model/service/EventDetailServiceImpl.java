@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import com.kh.festait.eventdetail.model.dao.EventDetailDao;
 import com.kh.festait.eventdetail.model.vo.EventDetailVo;
 
-import com.kh.festait.bookmark.model.dao.BookmarkDao; // BookmarkDao 임포트
-import com.kh.festait.bookmark.model.vo.Bookmark; // Bookmark VO 임포트
+import com.kh.festait.bookmark.model.dao.BookmarkDao;
+import com.kh.festait.bookmark.model.vo.Bookmark;
 
 import lombok.extern.slf4j.Slf4j;
 

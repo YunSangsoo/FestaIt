@@ -31,13 +31,8 @@ public class PromoBoardVo {
     private String promoWriter;
     private int writerUserNo;
 
-    // *** 기존 IMAGE 관련 필드들을 제거하거나 주석 처리하고, Image 객체로 대체 ***
-    // private long imgNo;
-    // private String posterPath;
-    // private String originalFilename;
-
-    // IMAGE 테이블 (이미지 정보) - Image 객체로 포함
-    private Image posterImage; // Image 객체 필드 추가
+    // IMAGE 테이블 (이미지 정보)
+    private Image posterImage;
 
     // EVENT_APPLICATION 테이블 (행사 신청서 정보)
     private String promotionPageUrl;
@@ -47,6 +42,6 @@ public class PromoBoardVo {
     private Date startDate;
     private Date endDate;
 
-    // 행사 신청명 (홍보 게시글 작성 시 행사 선택을 위해)
+    // 행사 신청명 (홍보 게시글 작성 시 행사 선택)
     private String eventAppName;
 }

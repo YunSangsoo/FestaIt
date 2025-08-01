@@ -13,7 +13,6 @@
         <result property="updateDate" column="UPDATE_DATE"/>
         <result property="views" column="VIEWS"/>
 
-        <!-- 파생된 정보 (조인을 통해 가져옴) -->
         <!-- 홍보글과 연관된 '행사 신청자'의 정보 -->
         <result property="userNo" column="USER_NO"/>
         <result property="promoWriter" column="NICKNAME"/>
