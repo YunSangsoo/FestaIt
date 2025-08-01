@@ -2,6 +2,7 @@ package com.kh.festait.security.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,13 +30,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/security")
 public class SecurityController {
 	
+	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	private UserService uService;
 	
-	public SecurityController(BCryptPasswordEncoder passwordEncoder, UserService uService) {
-		this.passwordEncoder = passwordEncoder;
-		this.uService = uService;
-	}
+	@Autowired
+	private UserService uService;
 
 	
 	//에러페이지 포워딩용 url
