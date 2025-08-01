@@ -83,5 +83,18 @@ public class UserServiceImpl implements UserService{
 		return uDao.getUserByUser(u);
 	}
 
+	// 이메일확인을 통한 아이디찾기
+	public String findUserIdEmail(String email) {
+		return uDao.findUserIdEmail(email);
+	}
+
+	@Override
+	public int updatePasswordByEmail(String email, String newPassword) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("email", email);
+		paramMap.put("userPwd", newPassword);
+		
+		return uDao.updatePasswordByEmail(paramMap);
+	}
 
 }

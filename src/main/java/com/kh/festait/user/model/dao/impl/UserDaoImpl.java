@@ -1,6 +1,9 @@
 package com.kh.festait.user.model.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -118,4 +121,15 @@ public class UserDaoImpl implements UserDao{
 		return sqlSession.selectOne("user.getUserByUser",u);
 	}
 	
+	// 이메일로 아이디 찾기
+	public String findUserIdEmail(String email) {
+		return sqlSession.selectOne("user.findUserEmail",email);
+	}
+
+	@Override
+	//비번찾기
+	public int updatePasswordByEmail(Map<String, Object> paramMap) {
+		return sqlSession.update("user.updatePasswordByEmail", paramMap);
+	}
+
 }

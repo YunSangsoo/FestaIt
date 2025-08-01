@@ -9,14 +9,17 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.festait.user.service.UserApiService;
+import com.kh.festait.user.service.UserService;
 
 @RestController // JSON으로만 나감
 @SessionAttributes({"loginUser"})
@@ -90,5 +93,18 @@ public class UserApiController {
 		 	return inputCode.equals(saveCode) ? "success" : "fail";
 	}
 	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
 

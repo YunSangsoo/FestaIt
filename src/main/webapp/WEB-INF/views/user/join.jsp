@@ -96,7 +96,8 @@
 					</h3>
 					<input class="box2" id="code" required type="text"
 						oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-						placeholder="이메일 인증번호를 입력해주세요" name="emailcode"> <input
+						placeholder="이메일 인증번호를 입력해주세요" name="emailcode"> 
+						<input
 						class="but" onclick="verifyCode()" type="button" value="인증번호확인">
 				</div>
 
@@ -214,9 +215,7 @@
         	}
         	
         });
-        function userTypeChange() {
-        	
-        }
+        
         
         function validatePassword() {
         const pwVal = password.value;
@@ -282,11 +281,17 @@
       function checkId(){
       	
       	let userId = $('input[name=userId]').val(); //입력한 아이디값
-        // CSRF 토큰과 헤더 이름을 메타 태그에서 읽어옴
-        
+      	
+      	const idRegex = /^[a-z0-9]{5,12}$/; // 정규식
+      	
+      	// 만약 위 조건에 만족하지 못한다면 아래 내용 출력
+      	if (!idRegex.test(userId)) {
+      		alert("아이디는 5~12자의 영문 소문자 및 숫자만 사용 가능합니다.")
+      		idDupChkVal = false;
+      		return;
+      	}
       	$.ajax({
-      		url : '${pageContext.request.contextPath}/user/idChecker',
-      		<!-- url: '${pageContext.request.contextPath}/user/idChecker',			//컨트롤러 -->
+      		url : '${pageContext.request.contextPath}/user/idChecker', //컨트롤러 
       		type: 'POST',						//GET,POST인지
       		async: true,
       		data: {
@@ -336,12 +341,21 @@
         	alert("ㅇㅅㅇ");
 			const nickName = $('input[name=nickname]').val().trim();
 			
-			if (nickName === "") { // 공백일때
+			const nickRegex = /^[가-힣a-zA-Z0-9]{2,8}$/; // 닉 정규식
+			
+			if (nickName === "") { // 공백일때 출력할 코드
 				alert("닉네임을 입력해주세요");
 				nickDupChkVal = false;
 				return;
 			}
+			// 닉네임 조건
+			if (!nickRegex.test(nickName)) {
+				alert("닉네임은 2~8자의 한글,영문,숫자만 사용할 수 있습니다.");
+				nickDupChkVal = false;
+				return;
+			}
 			
+			// 중복확인
 			$.ajax({
 				url: `${pageContext.request.contextPath}/user/nickChecker`,
 				type: 'POST',

@@ -23,5 +23,4 @@ public class UserApiServiceImpl implements UserApiService{
     	return uDao.nickNameCheck(nickName);
     }
     
-
 }
