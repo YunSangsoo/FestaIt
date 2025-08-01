@@ -214,9 +214,10 @@ thead.lavender-header th {
 										</div>
 										<div>지역: ${event.region}</div>
 										<div>주최: ${event.appOrg}</div>
-									</div> <img
-									src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
-									class="EventItemHover-img" alt="">
+									</div> 
+									
+									<img src="${not empty event.posterImage.changeName ? pageContext.request.contextPath.concat(event.posterImage.changeName) : ''}" class="EventItemHover-img" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
+									
 								</a>
 
 								<div class="bookmark ${event.bookmarkCheck eq 'on' ? 'selected' : ''}"
@@ -291,6 +292,19 @@ thead.lavender-header th {
 	
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
+	
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		
+	<script src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
+	<script src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
+	
 	<script type="text/javascript">
 	
 	// 행사 카드 호버 이벤트
@@ -305,19 +319,6 @@ thead.lavender-header th {
 	});
 	
 	</script>
-	
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-	<script
-		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-		
-	<script src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
-	<script src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
-	
 	
 
 </body>

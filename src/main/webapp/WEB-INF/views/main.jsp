@@ -83,7 +83,6 @@ thead.lavender-header th {
 			<!-- 메인 좌측 -->
 			<div class="main-content">
 				<!-- 홍보 배너 -->
-				<div>=========데이터 연결 해야 합니다=========</div>
 				<div id="myCarousel" class="carousel slide mb-6"
 					data-bs-ride="carousel">
 					<div class="carousel-indicators">
@@ -97,26 +96,14 @@ thead.lavender-header th {
 					</div>
 
 					<div class="carousel-inner" id="banner">
-						<div class="carousel-item active">
-							<img
-								src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
-								class="Banner-img" alt="">
-						</div>
-
-						<div class="carousel-item">
-							<img
-								src="https://www.coex.co.kr/wp-content/uploads/2025/07/토스.jpg"
-								class="Banner-img" alt="">
-							<!-- 이게 기준 컬러 -->
-						</div>
-
-						<div class="carousel-item">
-							<img
-								src="https://www.coex.co.kr/wp-content/uploads/2025/07/홈페이지-일정게재-이미지.jpg"
-								class="Banner-img" alt="">
-						</div>
+						<c:forEach var="promo" items="${promoList}">   
+			                <div class="post carousel-item" onclick="location.href='<c:url value='/promoBoard/detail'>
+			                	<c:param name='promoId' value='${promo.promoId}'/></c:url>'">
+		                        <img src="${contextPath}${promo.posterImage.changeName}" alt="포스터 이미지" class="Banner-img" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
+			                </div>
+			            </c:forEach>
 					</div>
-
+					
 					<button class="carousel-control-prev" type="button"
 						data-bs-target="#myCarousel" data-bs-slide="prev">
 						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -129,15 +116,6 @@ thead.lavender-header th {
 					</button>
 				</div>
 
-				<c:forEach var="banner" items="${list}">
-					<tr onclick="movePage(${board.boardNo})">
-						<td>${board.boardNo }</td>
-						<td>${board.boardTitle }</td>
-						<td>${board.boardWriter}</td>
-						<td>${board.count }</td>
-						<td>${board.createDate }</td>
-					</tr>
-				</c:forEach>
 
 
 				<!-- 진행중인 행사 -->
@@ -176,12 +154,8 @@ thead.lavender-header th {
 											</div>
 											<div>지역: ${event.region}</div>
 											<div>주최: ${event.appOrg}</div>
-										</div> <img
-										<%-- 
-										src="${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}"
-										 --%>
-										src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
-										class="EventItemHover-img" alt="">
+										</div> 
+					                    <img src="${not empty event.posterImage.changeName ? pageContext.request.contextPath.concat(event.posterImage.changeName) : ''}" class="EventItemHover-img" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
 									</a>
 									
 									
@@ -224,10 +198,9 @@ thead.lavender-header th {
 									href="${pageContext.request.contextPath}/eventBoard/detail?appId=${todayEvent.appId}"
 									class="text-decoration-none text-dark today-event">
 									<div class="thumb">
-										<img
-											src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
-											class="EventItemHover-img" alt="">
+										<img src="${not empty todayEvent.posterImage.changeName ? pageContext.request.contextPath.concat(todayEvent.posterImage.changeName) : ''}" class="EventItemHover-img" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
 									</div>
+									
 									<div class="info">
 										<div class="org">[${todayEvent.eventName}] ${todayEvent.appOrg}</div>
 										<div class="title event-name">
@@ -256,142 +229,44 @@ thead.lavender-header th {
 		<!-- 리뷰 영역 -->
 
 		<div class="review-section">
-			<div class="review-title">실시간 리뷰 =========데이터 연결 해야
-				합니다=========</div>
+			<div class="review-title">실시간 리뷰</div>
 			<div class="review-grid">
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 1-1</strong>
-						</div>
-						<div class="review-content">ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
-				<!-- 👇 추가 8개 -->
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 1-2</strong>
-						</div>
-						<div class="review-content">리뷰 내용</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
-
-
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 1-3</strong>
-						</div>
-						<div class="review-content">리뷰 내용</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
-
-
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 2-1</strong>
-						</div>
-						<div class="review-content">리뷰 내용</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
-
-
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 2-2</strong>
-						</div>
-						<div class="review-content">글자수 넘치면 3줄까지만 출력하고 자동 줄임
-							ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
-
-
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 2-3</strong>
-						</div>
-						<div class="review-content">리뷰 내용</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
-
-
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 3-1</strong>
-						</div>
-						<div class="review-content">리뷰 내용</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
-
-
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 3-2</strong>
-						</div>
-						<div class="review-content">리뷰 내용</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
-
-
-				<div class="review-card">
-					<div class="review-profile"></div>
-					<div class="review-info">
-						<div>
-							<strong>행사명 3-3</strong>
-						</div>
-						<div class="review-content">리뷰 내용</div>
-					</div>
-					<div class="review-bottom">
-						<div class="rating">⭐⭐☆☆☆</div>
-						<div class="create-date">2025-07-18</div>
-					</div>
-				</div>
+				<c:choose>
+					<c:when test="${not empty reviewList}">
+						<c:forEach var="review" items="${reviewList}">
+							
+							<a
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}"
+								class="text-decoration-none text-dark review-card">
+								
+								<div class="review-profile">
+								
+								<%-- <img
+									
+									src="${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}"
+									
+									src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
+									class="EventItemHover-img" alt=""> --%>
+								
+								</div>
+								<div class="review-info">
+									<div>
+										<strong>${review.appTitle}</strong>
+									</div>
+									<div class="review-content">${review.comment}</div>
+								</div>
+								<div class="review-bottom">
+									<div class="rating" value="${review.rating}"></div>
+									<div class="create-date">${review.createDate}</div>
+								</div>
+							</a>
+							
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div>등록된 리뷰가 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 
@@ -464,6 +339,28 @@ thead.lavender-header th {
 		.on("mouseup", function() {
 			$(this).css("background", "white");
 		});
+	
+	
+	document.addEventListener('DOMContentLoaded', function () {
+	    const ratingElements = document.querySelectorAll('.rating');
+
+	    ratingElements.forEach(function (el) {
+	        const value = parseInt(el.getAttribute('value'));
+	        if (!isNaN(value) && value >= 1 && value <= 5) {
+	            const aCount = '⭐'.repeat(value);
+	            const zCount = '☆'.repeat(5 - value);
+	            el.textContent = aCount + zCount;
+	        } else {
+	            el.textContent = 'Invalid'; // 예외 처리
+	        }
+	    });
+	    
+        const firstItem = document.querySelector('.carousel-inner .carousel-item');
+        if (firstItem) {
+            firstItem.classList.add('active');
+        }
+	    
+	});
 	</script>
 	
 	

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import com.kh.festait.eventboard.model.dao.EventBoardDaoImpl;
 import com.kh.festait.eventboard.model.vo.EventBoard;
 import com.kh.festait.noticeboard.model.vo.NoticeBoard;
+import com.kh.festait.promoboard.model.vo.PromoBoardVo;
+import com.kh.festait.reviewboard.model.vo.ReviewBoard;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,5 +40,17 @@ public class MainpageDaoImpl implements MainpageDao{
 	public List<EventBoard> selectTodayEventList(int limit) {
 		paramMap.put("limit", limit);
 		return sqlSession.selectList("mainpageMapper.selectTodayEventList", paramMap);
+	}
+
+	@Override
+	public List<ReviewBoard> selectReviewList(int limit) {
+		paramMap.put("limit", limit);
+		return sqlSession.selectList("mainpageMapper.selectReviewList", paramMap);
+	}
+
+	@Override
+	public List<PromoBoardVo> selectPromoList(int limit) {
+		paramMap.put("limit", limit);
+		return sqlSession.selectList("mainpageMapper.selectPromoList", paramMap);
 	}
 }

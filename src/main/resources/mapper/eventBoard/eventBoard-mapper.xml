@@ -39,9 +39,11 @@
             SUBSTR(LOCATION, 0, 2) REGION,
             START_DATE, 
             END_DATE,
-            APP_ORG
+            APP_ORG,
+            CHANGE_NAME
         FROM EVENT_APPLICATION
         JOIN EVENT_CATEGORY USING(EVENT_CODE)
+        JOIN IMAGE I ON APP_ID = REF_NO AND I.IMG_TYPE = 'A'
         WHERE STAT_CODE = 'A'
         	AND (APP_TITLE LIKE '%' || #{keyword} || '%')
         	<if test="region != null and region != ''">
@@ -137,6 +139,10 @@
         <result property="startDate" column="START_DATE"/>
         <result property="endDate" column="END_DATE"/>
         <result property="appOrg" column="APP_ORG"/>
+        
+        <association property="posterImage" javaType="com.kh.festait.common.model.vo.Image">
+            <result property="changeName" column="CHANGE_NAME"/>
+        </association>
     </resultMap>
         <!-- appSubTitle 아래 행 <result property="userNo" column="USER_NO"/> --> <!-- 로그인 후========================= -->
 
