@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypromoMapper">
+
+<!-- MyPromoVo와 DB 컬럼 매핑 -->
+    <resultMap id="myPromoResultMap" type="com.kh.festait.mypromo.model.vo.MyPromoVo">
+        <!-- EVENT_PROMOTION 테이블의 실제 컬럼 -->
+        <id property="promoId" column="PROM_ID"/>
+        <result property="eventId" column="EVENT_CODE"/> 
+        <result property="promoTitle" column="PROM_TITLE"/>
+        <result property="promoDetail" column="PROM_DETAIL"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="views" column="VIEWS"/>
+
+        <!-- 파생된 정보 (조인을 통해 가져옴) -->
+        <!-- 홍보글과 연관된 '행사 신청자'의 정보 -->
+        <result property="userNo" column="USER_NO"/>
+        <result property="promoWriter" column="NICKNAME"/>
+        <result property="promoStatus" column="USER_STATUS"/> 
+
+        <!-- 이미지 정보 (포스터 이미지) -->
+        <result property="posterPath" column="CHANGE_NAME"/> 
+
+        <!-- 연관된 행사 신청 정보 -->
+        <result property="promotionPageUrl" column="WEBSITE"/>
+        <result property="isPromoted" column="STAT_CODE"/> 
+        <result property="appId" column="APP_ID"/>
+        <result property="eventAppName" column="APP_TITLE"/>
+    </resultMap>
+
+    <!-- Event Application ID 및 이름만 조회하는 매핑 -->
+    <resultMap id="eventAppIdResultMap" type="com.kh.festait.mypromo.model.vo.MyPromoVo">
+        <result property="appId" column="APP_ID"/>
+        <result property="eventAppName" column="APP_TITLE"/>
+    </resultMap>
+
+    <!-- 내 홍보 게시글 전체 수 조회 (검색 조건 추가) -->
+    <select id="selectListCount" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM EVENT_PROMOTION EP
+        LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        WHERE EA.USER_NO = #{userNo}
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchType == 'title'">
+                    AND EP.PROM_TITLE LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchType == 'content'">
+                    AND EP.PROM_DETAIL LIKE '%' || #{searchKeyword} || '%'
+                </when>
+            </choose>
+        </if>
+    </select>
+
+    <!-- 내 홍보 게시글 목록 조회 (페이징 및 검색 조건 추가) -->
+    <select id="selectMyPromoList" parameterType="map" resultMap="myPromoResultMap">
+        SELECT
+            EP.PROM_ID,
+            EA.EVENT_CODE,
+            EP.PROM_TITLE,
+            EP.PROM_DETAIL,
+            EP.CREATE_DATE,
+            EP.UPDATE_DATE,
+            EP.VIEWS,
+            U.USER_NO,
+            U.NICKNAME,
+            U.STATUS AS USER_STATUS,
+            IMG.CHANGE_NAME,
+            EA.WEBSITE,
+            EA.STAT_CODE,
+            EA.APP_ID,
+            EA.APP_TITLE
+        FROM EVENT_PROMOTION EP
+        LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        LEFT JOIN "USERS" U ON EA.USER_NO = U.USER_NO
+        LEFT JOIN IMAGE IMG ON IMG.REF_NO = EP.PROM_ID AND IMG.IMG_TYPE = 'P'
+        WHERE EA.USER_NO = #{userNo}
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchType == 'title'">
+                    AND EP.PROM_TITLE LIKE '%' || #{searchKeyword} || '%'
+                </when>
+                <when test="searchType == 'content'">
+                    AND EP.PROM_DETAIL LIKE '%' || #{searchKeyword} || '%'
+                </when>
+            </choose>
+        </if>
+        ORDER BY EP.CREATE_DATE DESC
+    </select>
+
+    <!-- 특정 사용자의 (승인된) 행사 신청 목록 조회 -->
+    <select id="selectUserEventApplications" parameterType="_int" resultMap="eventAppIdResultMap">
+        SELECT
+            EA.APP_ID,
+            EA.APP_TITLE 
+        FROM EVENT_APPLICATION EA
+        WHERE EA.USER_NO = #{userNo}
+        AND EA.STAT_CODE = 'A'
+        ORDER BY EA.CREATE_DATE DESC
+    </select>
+
+</mapper>

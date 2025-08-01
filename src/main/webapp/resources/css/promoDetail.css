@@ -1,0 +1,128 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f8f9fa; 
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 페이지 컨테이너 */
+.container {
+    max-width: 900px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #fff;
+    padding: 40px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px;
+}
+
+.top-spacer {
+    height: 60px; 
+}
+
+/* 이미지 미리보기 영역 (정사각형 컨테이너) */
+.image-preview-container {
+    max-width: 500px; 
+    width: 100%;
+    
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
+    
+    position: relative; 
+    overflow: hidden;
+    
+    margin: 60px auto 0px auto; 
+    
+    border-radius: 8px; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: #e0e0e0; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.image-preview-container img {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100% !important; 
+    height: 100% !important; 
+    object-fit: cover !important; 
+    display: block !important;
+}
+
+.image-preview-container .no-image-text {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%; 
+}
+
+/* 내용 부분 스타일 */
+.promo-detail-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #444;
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    text-align: center;
+}
+
+/* 수정/삭제 버튼 */
+.btn-group .btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.btn-group .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-group .btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.homepage-link {
+    display: inline-block !important;
+    max-width: 300px !important;
+    padding: 10px 16px !important;
+    background-color: #fff !important;
+    border: 1px solid #ddd !important;
+    border-radius: 5px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    color: #000 !important;
+    font-weight: bold !important;
+    margin: 10px auto !important;
+    transition: background-color 0.3s, color 0.3s !important;
+}
+
+.homepage-link:hover {
+    background-color: #FFD700 !important;
+    color: #000 !important;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        margin-top: 30px;
+        margin-bottom: 30px;
+        padding: 20px;
+    }
+    .text-md-end {
+        text-align: start !important;
+    }
+    .row.mb-3 > div {
+        margin-bottom: 15px; 
+    }
+}

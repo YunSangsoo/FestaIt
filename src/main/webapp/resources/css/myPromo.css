@@ -1,0 +1,267 @@
+* {
+    box-sizing: border-box;
+}
+
+/* 기본 설정 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; 
+    color: #333;
+}
+
+.page-wrapper {
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 20px;
+}
+
+/* 헤더와 검색창 사이 공간 */
+.top-spacer {
+    height: 80px; 
+}
+
+/* Flash Message (알림 메시지) */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.board-header-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    margin-bottom: 30px;
+    padding: 0 10px; 
+}
+
+/* 검색창 영역 */
+.search-bar-area {
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
+    margin-bottom: 15px; 
+}
+
+/* 검색 폼 자체의 너비 조절 */
+.search-form {
+    width: 100%; 
+    max-width: 600px !important;
+    margin: 0 auto;
+}
+
+.search-wrapper {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 0; 
+    overflow: hidden;
+    width: 100%; 
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.search-input {
+    border: none;
+    padding: 10px 20px;
+    flex-grow: 1;
+    outline: none;
+    font-size: 16px;
+    color: #555;
+    border-radius: 0; 
+}
+
+.search-input::placeholder {
+    color: #aaa;
+}
+
+.search-button {
+    background-color: #b481d9;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    border-radius: 0; 
+}
+
+.search-button:hover {
+    background-color: #a069cb;
+}
+
+/* 등록하기 버튼 영역 */
+.register-button-container {
+    text-align: center; 
+    margin-top: 30px;
+    margin-bottom: 20px; 
+}
+
+.register-button-container a.btn.lavender-btn {
+    background-color: #9370db !important; 
+    color: white !important;
+    border: none !important; 
+    padding: 10px 20px !important; 
+    border-radius: 5px !important; 
+    font-size: 1em !important; 
+    transition: background-color 0.3s ease !important; 
+    min-width: 120px !important; 
+    text-align: center !important; 
+    text-decoration: none !important; 
+    vertical-align: middle !important; 
+    cursor: pointer !important; 
+}
+
+.register-button-container a.btn.lavender-btn:hover {
+    background-color: #8a2be2 !important;
+    color: white !important;
+}
+
+/* 검색 폼 컨테이너의 여백 조정 */
+.row.mb-3.justify-content-end {
+    margin-bottom: 20px;
+}
+
+/* 검색창 입력 필드와 버튼 크기 조정 */
+.col-md-6 form .form-select.form-select-lg {
+    height: 34px !important; 
+    padding: 0.2rem 0.75rem !important; 
+    font-size: 0.85rem !important; /
+}
+
+.col-md-6 form .form-control.form-control-lg {
+    height: 34px !important;
+    padding: 0.2rem 0.75rem !important; 
+    font-size: 0.85rem !important;
+}
+
+.col-md-6 form .btn.btn-outline-secondary.btn-lg {
+    height: 34px !important; 
+    padding: 0.2rem 0.75rem !important; 
+    font-size: 0.85rem !important; 
+    line-height: 1 !important; 
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 65px !important; 
+    white-space: nowrap !important; 
+}
+
+/* 페이지네이션 스타일 */
+.pagination-container {
+    margin-top: 30px !important; 
+    margin-bottom: 50px !important;
+    width: 100% !important; 
+    display: flex !important; 
+    justify-content: center !important; 
+}
+
+.pagination .page-item {
+    margin: 0 2px !important; 
+}
+
+.pagination .page-item .page-link {
+    border-radius: 5px !important;
+    margin: 0 2px !important;
+    color: #b481d9 !important; 
+    border-color: #b481d9 !important; 
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #e9ecef !important; 
+    border-color: #a069cb !important;
+    color: black !important; 
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #a069cb !important; 
+    border-color: #a069cb !important; 
+    color: white !important;
+}
+
+/* 페이지네이션 화살표 (span) 스타일 */
+.pagination .page-item .page-link span {
+    display: inline-block !important;
+    font-size: 1.2rem !important;
+    color: inherit !important;
+    line-height: 1 !important; 
+    font-weight: bold !important; 
+}
+
+/* 활성 페이지의 화살표 색상*/
+.pagination .page-item.active .page-link span {
+    color: black !important; 
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .post {
+        flex: 0 0 calc((100% - 2 * 30px) / 3);
+        max-width: calc((100% - 2 * 30px) / 3);
+    }
+    .search-form {
+        max-width: 600px !important;    
+    }
+}
+
+@media (max-width: 768px) {
+    .board-header-section {
+        flex-direction: column;
+        align-items: stretch; 
+    }
+
+    .search-bar-area {
+        margin-right: 0;
+        margin-bottom: 20px; 
+    }
+
+    .search-form {
+        max-width: 100% !important;    
+    }
+
+    .post {
+        flex: 0 0 calc((100% - 1 * 30px) / 2);
+        max-width: calc((100% - 1 * 30px) / 2);
+    }
+}
+
+@media (max-width: 480px) {
+    .post {
+        flex: 0 0 100%; 
+        max-width: 100%;
+    }
+
+    .search-input {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .search-button {
+        padding: 8px 12px;
+        font-size: 16px;
+    }
+
+    .register-promo-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .post-title {
+        font-size: 16px;
+    }
+
+    .post-date {
+        font-size: 14px;
+    }
+}
