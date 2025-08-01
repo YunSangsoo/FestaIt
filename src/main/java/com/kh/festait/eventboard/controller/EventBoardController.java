@@ -128,14 +128,6 @@ public class EventBoardController {
 		return "event/eventBoardCalendar";
 	}
 	
-	//2. 행사 상세 보기
-    @GetMapping("/detail")
-    public String noticeDetail(@RequestParam("eventId") int eventId, Model model) {
-    	EventBoard event = eventBoardService.selectEventById(eventId);
-        model.addAttribute("event", event);
-        return "eventBoard/eventDetail"; // 김현주 작성 jsp 경로 확인
-    }
-    
     public static List<EventBoard> setRegion(List<EventBoard> list){
     	
     	for (EventBoard event : list) {
