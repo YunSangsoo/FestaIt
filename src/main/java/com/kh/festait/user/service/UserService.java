@@ -20,4 +20,8 @@ public interface UserService {
 
 	User login(User u);
 	
+	String findUserIdEmail(String email);
+
+	int updatePasswordByEmail(String email, String newPassword);
+	
 }

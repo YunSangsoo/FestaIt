@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="eventDetail">
+
+    <resultMap id="eventDetailResultMap" type="com.kh.festait.eventdetail.model.vo.EventDetailVo">
+        <id property="appId" column="APP_ID" />
+        <result property="userNo" column="USER_NO" />
+        <result property="eventCode" column="EVENT_CODE" />
+        <result property="appTitle" column="APP_TITLE" />
+        <result property="appSubTitle" column="APP_SUB_TITLE" />
+        <result property="appDetail" column="APP_DETAIL" />
+        <result property="location" column="LOCATION" />
+        <result property="locationDetail" column="LOCATION_DETAIL" />
+        <result property="postCode" column="POST_CODE" />
+        <result property="website" column="WEBSITE" />
+        <result property="startDate" column="START_DATE" />
+        <result property="endDate" column="END_DATE" />
+        <result property="startTime" column="START_TIME" />
+        <result property="endTime" column="END_TIME" />
+        <result property="appFee" column="APP_FEE" />
+        <result property="appItem" column="APP_ITEM" />
+        <result property="appHost" column="APP_HOST" />
+        <result property="appOrg" column="APP_ORG" />
+        <result property="appSponsor" column="APP_SPONSOR" />
+        <result property="managerName" column="MANAGER_NAME" />
+        <result property="email" column="EMAIL" />
+        <result property="tel" column="TEL" />
+        <result property="fax" column="FAX" />
+        <result property="eventCategoryName" column="EVENT_CATEGORY_NAME" />
+        <result property="bookmarked" column="IS_BOOKMARKED" />
+        <result property="eventAppName" column="APP_TITLE" /> 
+
+        <association property="posterImage" javaType="com.kh.festait.common.model.vo.Image">
+            <result property="changeName" column="CHANGE_NAME"/>
+            </association>
+    </resultMap>
+
+    <select id="selectEventDetail" parameterType="map" resultMap="eventDetailResultMap">
+        SELECT
+            EA.APP_ID,
+            EA.USER_NO,
+            EA.EVENT_CODE,
+            EA.APP_TITLE,
+            EA.APP_SUB_TITLE,
+            EA.APP_DETAIL,
+            EA.LOCATION,
+            EA.LOCATION_DETAIL,
+            EA.POST_CODE,
+            EA.WEBSITE,
+            EA.START_DATE,
+            EA.END_DATE,
+            EA.START_TIME,
+            EA.END_TIME,
+            EA.APP_FEE,
+            EA.APP_ITEM,
+            EA.APP_HOST,
+            EA.APP_ORG,
+            EA.APP_SPONSOR,
+            AM.MANAGER_NAME,
+            AM.EMAIL,
+            AM.TEL,
+            AM.FAX,
+            EC.EVENT_NAME AS EVENT_CATEGORY_NAME,
+            CASE WHEN #{userNo} > 0 AND B.USER_NO IS NOT NULL THEN 1 ELSE 0 END AS IS_BOOKMARKED,
+
+            I.CHANGE_NAME
+            
+        FROM EVENT_APPLICATION EA
+        LEFT JOIN EVENT_CATEGORY EC ON EA.EVENT_CODE = EC.EVENT_CODE
+        LEFT JOIN APP_MANAGER AM ON EA.APP_ID = AM.APP_ID
+        LEFT JOIN BOOKMARK B ON EA.APP_ID = B.APP_ID AND B.USER_NO = #{userNo}
+        LEFT JOIN IMAGE I ON EA.APP_ID = I.REF_NO AND I.IMG_TYPE = 'E'
+        WHERE EA.APP_ID = #{appId}
+    </select>
+
+</mapper>

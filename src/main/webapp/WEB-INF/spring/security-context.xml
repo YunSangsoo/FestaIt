@@ -34,6 +34,7 @@
 		<intercept-url pattern="/intro"
 			access='permitAll' />
 		
+		<intercept-url pattern="/user/Idpw" access="permitAll" />
 
 		<!-- 관리자와 관련된 URL은 관리자 권한을 가지고 있어야만 접근가능하도록 제한 -->
 
@@ -45,6 +46,7 @@
 		<intercept-url pattern="/noticeBoard/update" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/noticeBoard/delete" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/noticeBoard/**" access='permitAll' />
+		<intercept-url pattern="/qnaBoard/**" access='permitAll' />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 		
 

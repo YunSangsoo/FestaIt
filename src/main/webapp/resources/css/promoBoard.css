@@ -1,0 +1,331 @@
+* {
+    box-sizing: border-box;
+}
+
+/* 기본 설정 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; 
+    color: #333;
+}
+
+/* 페이지 전체 래퍼 */
+.page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 헤더와 검색창 사이 공간 */
+.top-spacer {
+    height: 80px;
+}
+
+/* Flash Message (알림 메시지) */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* 상단 섹션 (검색창, 등록하기 버튼) */
+.board-header-section {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    margin-bottom: 30px;
+    padding: 0 10px; 
+}
+
+/* 검색창 영역 */
+.search-bar-area {
+    width: 100%;
+    display: flex;
+    justify-content: center; 
+    margin-bottom: 15px; 
+}
+
+/* 검색 폼 자체의 너비 조절 */
+.search-form {
+    width: 100%;
+    max-width: 600px !important;
+    margin: 0 auto; 
+}
+
+.search-wrapper {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 0;
+    overflow: hidden;
+    width: 100%; 
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.search-input {
+    border: none;
+    padding: 10px 20px;
+    flex-grow: 1;
+    outline: none;
+    font-size: 16px;
+    color: #555;
+    border-radius: 0; 
+}
+
+.search-input::placeholder {
+    color: #aaa;
+}
+
+.search-button {
+    background-color: #b481d9;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    border-radius: 0; 
+}
+
+.search-button:hover {
+    background-color: #a069cb;
+}
+
+/* 등록하기 버튼 영역 */
+.register-button-area {
+    width: 100%;
+    text-align: right;
+    margin-top: 25px;
+}
+
+.register-promo-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #b481d9;
+    color: white;
+    border: 1px solid #a069cb;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.register-promo-btn:hover {
+    background-color: #a069cb;
+    transform: translateY(-2px);
+}
+
+/* 구분선 (기존 .hr 대체) */
+.section-divider {
+    border: 0;
+    height: 1px;
+    background-color: #eee;
+    margin: 40px 0;
+}
+
+/* 포스터 컨테이너 */
+.promotion-container {
+    display: flex; 
+    flex-wrap: wrap;
+    gap: 30px; 
+    justify-content: flex-start;
+    margin-bottom: 50px;
+}
+
+/* 각 포스터 아이템 */
+.post {
+    flex: 0 0 calc((100% - 3 * 30px) / 4);
+    max-width: calc((100% - 3 * 30px) / 4);
+    min-width: 200px; 
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column; 
+    position: relative; 
+}
+
+.post:hover {
+    transform: translateY(-5px);
+    box-shadow: #FFD700;
+}
+
+.placeholder-post {
+    cursor: default; 
+}
+
+.placeholder-post:hover {
+    transform: none;
+    box-shadow: #FFD700; 
+}
+
+.placeholder-post .post-title,
+.placeholder-post .post-date {
+    text-align: center;
+}
+
+
+/* 포스터 이미지 영역 */
+.poster {
+    width: 100%;
+    padding-top: 100%; 
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+}
+
+.poster img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+/* 조회수 */
+.views-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #EA870E;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 10;
+}
+
+/* 제목 */
+.post-title {
+    font-size: 16px !important;
+    font-weight: 700;
+    padding: 15px 15px 5px !important;
+    color: #333;
+    line-height: 1.5 !important; 
+    max-height: 4.25em !important; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+}
+
+/* 이벤트 날짜 */
+.post-date {
+    font-size: 14px;
+    color: #777;
+    padding: 0 15px 15px;
+    margin-top: auto; 
+}
+
+/* 페이지네이션 컨테이너 */
+.pagination-container {
+    margin-top: 30px;
+    margin-bottom: 50px; 
+    width: 100%;
+}
+
+/* 페이지네이션 아이템 간의 간격 */
+.pagination .page-item {
+    margin: 0 2px;
+}
+
+.pagination .page-item .page-link {
+    border-radius: 5px;
+    margin: 0 2px;
+    color: #b481d9;
+    border-color: #b481d9;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #e9ecef; 
+    border-color: #a069cb; 
+    color: black; 
+
+}
+
+.pagination .page-item .page-link:hover {
+	background-color: #a069cb; 
+    border-color: #a069cb;
+    color: white;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .post {
+       
+        flex: 0 0 calc((100% - 2 * 30px) / 3);
+        max-width: calc((100% - 2 * 30px) / 3);
+    }
+    .search-form {
+        max-width: 600px !important; 
+    }
+}
+
+@media (max-width: 768px) {
+    .board-header-section {
+        flex-direction: column; 
+        align-items: stretch; 
+    }
+
+    .search-bar-area {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .search-form {
+        max-width: 100% !important; 
+    }
+
+    .post {
+        flex: 0 0 calc((100% - 1 * 30px) / 2);
+        max-width: calc((100% - 1 * 30px) / 2);
+    }
+}
+
+@media (max-width: 480px) {
+    .post {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .search-input {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .search-button {
+        padding: 8px 12px;
+        font-size: 16px;
+    }
+
+    .register-promo-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .post-title {
+        font-size: 16px;
+    }
+
+    .post-date {
+        font-size: 14px;
+    }
+}

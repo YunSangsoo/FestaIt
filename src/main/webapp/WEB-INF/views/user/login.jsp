@@ -34,7 +34,7 @@
                             <input type="text" name="userId" id="userId" placeholder="아이디를 입력해주세요." required />
                             <input type="password" name="userPwd" id="userPwd" required placeholder=" 비밀번호를 입력해주세요." maxlength="15" />
                             
-                            <button class="btn-idpw" type="button" onclick="location.href='아이디찾기.html'">ID/PW찾기</button>
+                            <a class="btn-idpw" type="button" href="${pageContext.request.contextPath}/user/Idpw">ID/PW찾기</a>
                         </div>
                         <button class="bt1" type="submit"><span class="tx1">로그인</span></button>
                     </form:form>
@@ -49,9 +49,15 @@
                     <h2 style="font-family: Georgia, 'Times New Roman', Times, serif; font-size: 40px; color: #6A1B9A;">Login</h2>
                     <form:form method="post" action="${pageContext.request.contextPath}/user/loginProcess" id="login-form2">
                         <div class="login_input">
+<<<<<<< Updated upstream
                             <input type="text" name="userId" placeholder=" ID" required />
                             <input type="password" name="userPwd" required placeholder=" PASSWORD" maxlength="15" />
                             <button class="btn-idpw" type="button" onclick="location.href='아이디찾기.html'">ID/PW찾기</button>
+=======
+                            <input type="text" name="id" placeholder=" 아이디를 입력해주세요." required />
+                            <input type="password" name="passwd" required placeholder=" 비밀번호를 입력해주세요." maxlength="15" />
+                            <a class="btn-idpw" type="button">ID/PW찾기</a>
+>>>>>>> Stashed changes
                         </div>
                         <button class="bt1" type="submit"><span class="tx1">로그인</span></button>
                     </form:form>
@@ -61,8 +67,11 @@
             </div>
         </div>
     </div>
+    
 
-
+ 	
+	
+	
 <script src="${pageContext.request.contextPath}/resources/js/index.js"></script>
 </body>
 
