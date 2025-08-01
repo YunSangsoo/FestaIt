@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="promoBoardMapper">
+
+    <!-- 기본 PromoBoard 매핑 -->
+<resultMap id="promoBoardResultMap" type="com.kh.festait.promoboard.model.vo.PromoBoardVo">
+        <id property="promoId" column="PROM_ID"/>
+        <result property="promoTitle" column="PROM_TITLE"/>
+        <result property="promoDetail" column="PROM_DETAIL"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="views" column="VIEWS"/>
+        <result property="promotionPageUrl" column="WEBSITE"/>
+        <result property="isPromoted" column="STAT_CODE"/>
+        <result property="appId" column="APP_ID"/>
+        <result property="promoWriter" column="NICKNAME"/>
+        <result property="writerUserNo" column="USER_NO"/>
+        <result property="startDate" column="START_DATE"/>
+        <result property="endDate" column="END_DATE"/>
+        <result property="eventAppName" column="APP_TITLE"/>
+
+        <association property="posterImage" javaType="com.kh.festait.common.model.vo.Image">
+            <id property="imgNo" column="IMG_NO"/>
+            <result property="originName" column="ORIGIN_NAME"/>     <result property="changeName" column="CHANGE_NAME"/>     <result property="imgType" column="IMG_TYPE"/>
+            <result property="imgOrder" column="IMG_ORDER"/>
+            <result property="createDate" column="CREATE_DATE"/>   <result property="refNo" column="REF_NO"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="eventAppIdResultMap" type="com.kh.festait.promoboard.model.vo.PromoBoardVo">
+        <result property="appId" column="APP_ID"/>
+        <result property="eventAppName" column="APP_TITLE"/>
+    </resultMap>
+
+    <select id="selectPromoCount" resultType="int">
+        SELECT COUNT(*)
+        FROM EVENT_PROMOTION EP
+        JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        JOIN USERS U ON EA.USER_NO = U.USER_NO
+        WHERE U.STATUS = 'T'
+    </select>
+
+    <select id="selectPromoList" resultMap="promoBoardResultMap">
+        SELECT
+            EP.PROM_ID, EP.PROM_TITLE, EP.PROM_DETAIL,
+            EP.CREATE_DATE, EP.UPDATE_DATE, EP.VIEWS,
+            I.CHANGE_NAME, I.ORIGIN_NAME, I.IMG_NO, I.IMG_TYPE, I.IMG_ORDER, I.CREATE_DATE AS IMG_CREATE_DATE, I.REF_NO, EA.WEBSITE, AS2.STAT_CODE, EA.APP_ID,
+            U.NICKNAME, EA.START_DATE, EA.END_DATE, EA.APP_TITLE
+        FROM EVENT_PROMOTION EP
+        JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        LEFT JOIN APP_STATUS AS2 ON EA.STAT_CODE = AS2.STAT_CODE
+        LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+        WHERE U.STATUS = 'T'
+        ORDER BY EP.PROM_ID DESC
+    </select>
+
+    <select id="selectSearchPromoCount" resultType="int">
+        SELECT COUNT(*)
+        FROM EVENT_PROMOTION EP
+        JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        JOIN USERS U ON EA.USER_NO = U.USER_NO
+        WHERE U.STATUS = 'T'
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND EP.PROM_TITLE LIKE '%' || #{searchKeyword} || '%'
+        </if>
+    </select>
+
+    <select id="selectSearchPromo" resultMap="promoBoardResultMap">
+        SELECT
+            EP.PROM_ID, EP.PROM_TITLE, EP.PROM_DETAIL,
+            EP.CREATE_DATE, EP.UPDATE_DATE, EP.VIEWS,
+            I.CHANGE_NAME, I.ORIGIN_NAME, I.IMG_NO, I.IMG_TYPE, I.IMG_ORDER, I.CREATE_DATE AS IMG_CREATE_DATE, I.REF_NO, EA.WEBSITE, AS2.STAT_CODE, EA.APP_ID,
+            U.NICKNAME, EA.START_DATE, EA.END_DATE, EA.APP_TITLE
+        FROM EVENT_PROMOTION EP
+        JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        LEFT JOIN APP_STATUS AS2 ON EA.STAT_CODE = AS2.STAT_CODE
+        LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+        WHERE U.STATUS = 'T'
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND EP.PROM_TITLE LIKE '%' || #{searchKeyword} || '%'
+        </if>
+        ORDER BY EP.PROM_ID DESC
+    </select>
+
+    <select id="selectWriterUserNoByPromoId" parameterType="_int" resultType="_int">
+        SELECT U.USER_NO
+        FROM EVENT_PROMOTION EP
+        JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        JOIN USERS U ON EA.USER_NO = U.USER_NO
+        WHERE EP.PROM_ID = #{promoId}
+    </select>
+
+    <select id="selectUserEventApplications" parameterType="_int" resultMap="eventAppIdResultMap">
+        SELECT EA.APP_ID, EA.APP_TITLE
+        FROM EVENT_APPLICATION EA
+        WHERE EA.USER_NO = #{userNo}
+        ORDER BY EA.CREATE_DATE DESC
+    </select>
+
+    <insert id="insertPromo" parameterType="com.kh.festait.promoboard.model.vo.PromoBoardVo">
+        INSERT INTO EVENT_PROMOTION (
+            APP_ID, PROM_TITLE, PROM_DETAIL, CREATE_DATE, VIEWS
+        ) VALUES (
+            #{appId}, #{promoTitle}, #{promoDetail}, SYSDATE, 0
+        )
+        <selectKey keyProperty="promoId" resultType="_int" order="AFTER">
+            SELECT PROM_ID
+            FROM EVENT_PROMOTION
+            WHERE APP_ID = #{appId}
+            ORDER BY CREATE_DATE DESC, PROM_ID DESC
+            FETCH FIRST 1 ROW ONLY
+        </selectKey>
+    </insert>
+
+    <update id="updateEventApplicationWebsite" parameterType="com.kh.festait.promoboard.model.vo.PromoBoardVo">
+        UPDATE EVENT_APPLICATION
+        SET WEBSITE = #{promotionPageUrl}
+        WHERE APP_ID = #{appId}
+    </update>
+
+    <select id="selectPromoDetail" resultMap="promoBoardResultMap">
+        SELECT
+            EP.PROM_ID, EP.PROM_TITLE, EP.PROM_DETAIL,
+            EP.CREATE_DATE, EP.UPDATE_DATE, EP.VIEWS,
+            I.CHANGE_NAME, I.ORIGIN_NAME, I.IMG_NO, I.IMG_TYPE, I.IMG_ORDER, I.CREATE_DATE AS IMG_CREATE_DATE, I.REF_NO, EA.WEBSITE, AS2.STAT_CODE, EA.APP_ID,
+            U.NICKNAME, U.USER_NO,
+            EA.START_DATE, EA.END_DATE, EA.APP_TITLE
+        FROM EVENT_PROMOTION EP
+        JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        LEFT JOIN APP_STATUS AS2 ON EA.STAT_CODE = AS2.STAT_CODE
+        LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+        WHERE EP.PROM_ID = #{promoId}
+          AND U.STATUS = 'T'
+    </select>
+
+    <update id="increasePromoViews">
+        UPDATE EVENT_PROMOTION
+        SET VIEWS = VIEWS + 1
+        WHERE PROM_ID = #{promoId}
+    </update>
+
+    <update id="updatePromo" parameterType="com.kh.festait.promoboard.model.vo.PromoBoardVo">
+        UPDATE EVENT_PROMOTION
+        SET PROM_TITLE = #{promoTitle}, PROM_DETAIL = #{promoDetail}, UPDATE_DATE = SYSDATE
+        WHERE PROM_ID = #{promoId}
+    </update>
+
+    <delete id="deletePromo" parameterType="int">
+        DELETE FROM EVENT_PROMOTION
+        WHERE PROM_ID = #{promoId}
+    </delete>
+
+</mapper>

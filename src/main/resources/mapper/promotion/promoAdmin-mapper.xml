@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="promoAdminMapper">
+
+    <resultMap id="promoAdminResultMap" type="com.kh.festait.promoadmin.model.vo.PromoAdminVo">
+        <id property="promoId" column="PROM_ID"/>
+        <result property="appId" column="APP_ID"/>
+        <result property="promoTitle" column="PROM_TITLE"/>
+        <result property="promoDetail" column="PROM_DETAIL"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="views" column="VIEWS"/>
+        
+        <result property="promoWriter" column="PROMO_WRITER"/>
+        <result property="writerUserNo" column="WRITER_USER_NO"/>
+        <result property="userStatus" column="USER_ACCOUNT_STATUS"/> 
+        
+        <result property="imgNo" column="IMG_NO"/>
+        <result property="posterPath" column="POSTER_PATH"/>
+        <result property="originalFilename" column="ORIGIN_NAME"/>
+        <result property="promotionPageUrl" column="PROMOTION_PAGE_URL"/>
+        <result property="isPromoted" column="IS_PROMOTED"/>
+        <result property="startDate" column="START_DATE"/>
+        <result property="endDate" column="END_DATE"/>
+        <result property="appTitle" column="APP_TITLE"/>
+    </resultMap>
+
+    <select id="getTotalPromoPostsCount" parameterType="map" resultType="_int">
+        SELECT COUNT(*)
+        FROM EVENT_PROMOTION EP
+        LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+        WHERE 1=1
+        AND U.STATUS = 'T'
+        
+        <if test="keyword != null and keyword != ''">
+            <choose>
+                <when test="searchType == 'title'">
+                    AND EP.PROM_TITLE LIKE '%' || #{keyword} || '%'
+                </when>
+                <when test="searchType == 'writer'">
+                    AND U.NICKNAME LIKE '%' || #{keyword} || '%'
+                </when>
+                <otherwise> 
+                    AND (EP.PROM_TITLE LIKE '%' || #{keyword} || '%' OR EP.PROM_DETAIL LIKE '%' || #{keyword} || '%')
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <select id="selectPromoPostsList" parameterType="map" resultMap="promoAdminResultMap">
+        SELECT *
+        FROM (
+            SELECT ROWNUM RNUM, A.*
+            FROM (
+                SELECT
+                    EP.PROM_ID,
+                    EP.APP_ID,
+                    EP.PROM_TITLE,
+                    EP.PROM_DETAIL,
+                    EP.CREATE_DATE,
+                    EP.UPDATE_DATE,
+                    EP.VIEWS,
+                    U.NICKNAME AS PROMO_WRITER,
+                    U.STATUS AS USER_ACCOUNT_STATUS,
+                    EA.USER_NO AS WRITER_USER_NO,
+                    I.IMG_NO,
+                    I.CHANGE_NAME AS POSTER_PATH,
+                    I.ORIGIN_NAME AS ORIGINAL_FILENAME,
+                    EA.WEBSITE AS PROMOTION_PAGE_URL,
+                    EA.STAT_CODE AS IS_PROMOTED, 
+                    EA.START_DATE,
+                    EA.END_DATE,
+                    EA.APP_TITLE AS APP_TITLE
+                FROM EVENT_PROMOTION EP
+                LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+                LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+                LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+                WHERE 1=1
+                AND U.STATUS = 'T'
+                
+                <if test="keyword != null and keyword != ''">
+                    <choose>
+                        <when test="searchType == 'title'">
+                            AND EP.PROM_TITLE LIKE '%' || #{keyword} || '%'
+                        </when>
+                        <when test="searchType == 'writer'">
+                            AND U.NICKNAME LIKE '%' || #{keyword} || '%'
+                        </when>
+                        <otherwise> 
+                            AND (EP.PROM_TITLE LIKE '%' || #{keyword} || '%' OR EP.PROM_DETAIL LIKE '%' || #{keyword} || '%')
+                        </otherwise>
+                    </choose>
+                </if>
+                ORDER BY EP.CREATE_DATE DESC
+            ) A
+        )
+        WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+    </select>
+
+    <delete id="deletePromoPost" parameterType="_int">
+        DELETE FROM EVENT_PROMOTION
+        WHERE PROM_ID = #{promoId}
+    </delete>
+
+    <select id="selectPromoDetail" parameterType="_int" resultMap="promoAdminResultMap">
+        SELECT
+            EP.PROM_ID,
+            EP.APP_ID,
+            EP.PROM_TITLE,
+            EP.PROM_DETAIL,
+            EP.CREATE_DATE,
+            EP.UPDATE_DATE,
+            EP.VIEWS,
+            U.NICKNAME AS PROMO_WRITER,
+            U.STATUS AS USER_ACCOUNT_STATUS,
+            EA.USER_NO AS WRITER_USER_NO,
+            I.IMG_NO,
+            I.CHANGE_NAME AS POSTER_PATH,
+            I.ORIGIN_NAME AS ORIGINAL_FILENAME,
+            EA.WEBSITE AS PROMOTION_PAGE_URL,
+            EA.STAT_CODE AS IS_PROMOTED, 
+            EA.START_DATE,
+            EA.END_DATE,
+            EA.APP_TITLE AS APP_TITLE
+        FROM EVENT_PROMOTION EP
+        LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+        LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+        WHERE EP.PROM_ID = #{promoId}
+    </select>
+
+</mapper>
