@@ -23,22 +23,15 @@
 	cursor: pointer;
 	text-decoration: none;
 }
-
-.btn-edit-delete {
-	display: none;
-}
 </style>
 </head>
 <body>
 	<c:set var="loginUser" value="${sessionScope.loginUser}" />
 	
-	<jsp:include page="/WEB-INF/views/common/header.jsp" />
-	
 	<div class="container my-5">
 	<h2 style="margin-bottom: 20px; font-weight: bold;">리뷰 (총 ${totalCount} 건)</h2>
 		<form action="${pageContext.request.contextPath}/reviewBoard/create"
 			method="post">
-			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			<div class="input-group">
 				<svg height="60" width="60" xmlns="http://www.w3.org/2000/svg">
 					<rect width="100%" height="100%" fill="gray" />
@@ -72,7 +65,7 @@
 
 					<c:otherwise>
 						<c:forEach var="review" items="${reviewList}">
-							<tr class="review-row" data-comment-id="${review.userNo}">
+							<tr data-comment-id="${review.userNo}">
 								<td>
 									<div class="d-flex my-4" data-comment-id="${review.userNo}">
 										<!-- 왼쪽: 프로필 이미지 -->
@@ -91,14 +84,13 @@
 														<c:forEach var="i" begin="1" end="${review.rating}">★</c:forEach><c:forEach
 															var="i" begin="${review.rating + 1}" end="5">☆</c:forEach>
 													</small>
-													<small class="text-muted ms-3 d-flex">
+													<small class="text-muted ms-3">
 														<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd HH:mm:ss" />
-														<div class="edit-check" style="display: ${empty review.updateDate ? 'none' : 'block'}">(수정됨)</div>
 													</small>
 												</div>
 
 												<!-- 수정/삭제 버튼 -->
-												<div class="btn-edit-delete">
+												<div>
 													<button type="button" class="btn btn-primary btn-sm me-2"
 														data-userno="${review.userNo}"
 														data-comment="${fn:escapeXml(review.comment)}"
@@ -124,7 +116,6 @@
 								<form id="editForm"
 									action="${pageContext.request.contextPath}/reviewBoard/update"
 									method="post">
-									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 									<div class="modal-content">
 										<div class="modal-header">
 											<h5 class="modal-title" id="saveConfirmModalLabel">댓글 수정</h5>
@@ -157,7 +148,6 @@
 								<form id="deleteForm"
 									action="${pageContext.request.contextPath}/reviewBoard/delete"
 									method="post">
-									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 									<div class="modal-content">
 										<div class="modal-header">
 											<h5 class="modal-title" id="deleteConfirmModalLabel">댓글
@@ -226,31 +216,6 @@
 	</div>
 
 	<script>
-	
-    const userNo = ${userNo};
-    const reviewIdentifier = ${reviewIdentifier};
-    
-    // 비로그인 시+이미 리뷰를 작성했을 시 재작성 금지
-    document.addEventListener("DOMContentLoaded", function () {
-    	if (userNo === -1 || reviewIdentifier > 0) {
-            const textarea = document.querySelector('textarea[name="comment"]');
-            if (textarea) {
-                textarea.readOnly = true;
-                if(reviewIdentifier > 0) textarea.placeholder = '이미 리뷰를 작성한 행사입니다.';
-                else textarea.placeholder = '로그인 후 리뷰를 작성할 수 있습니다.';
-            }
-            const select = document.querySelector('select[name="rating"].form-select.form-select-sm');
-            if (select) {
-                select.disabled = true;
-            }
-            const button = document.querySelector('button.btn.btn-outline-secondary.mt-2.col-12');
-            if (button) {
-                button.disabled = true;
-            }
-        }
-	});
-    
-    
 	// 수정 모달 열기
 	function openEditModal(userNo, comment) {
 		document.getElementById('editUserNo').value = userNo;
@@ -273,21 +238,6 @@
 		document.getElementById('editComment').value = comment;
 		new bootstrap.Modal(document.getElementById('saveConfirmModal')).show();
 	}
-	
-	// 수정 삭제 버튼
-	document.addEventListener("DOMContentLoaded", function () {
-	    document.querySelectorAll('.review-row').forEach(function (row) {
-	    	console.log(userNo);
-	        const commentUserNo = parseInt(row.dataset.commentId); // data-comment-id
-	
-	        if (commentUserNo === userNo) {
-	            const btn = row.querySelector('.btn-edit-delete');
-	            if (btn) {
-	                btn.style.display = 'block';
-	            }
-	        }
-	    });
-	});
 	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
