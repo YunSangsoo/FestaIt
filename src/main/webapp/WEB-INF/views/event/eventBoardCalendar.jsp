@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -89,14 +90,11 @@ thead.lavender-header th {
 						<button class="btn btn-light rounded-pill px-3 btn-date"
 							type="button" id="btn-search" data-period="7">일주일</button>
 						<button class="btn btn-light rounded-pill px-3 btn-date"
-							type="button" id="btn-search"
-							data-period="30">1개월</button>
+							type="button" id="btn-search" data-period="30">1개월</button>
 						<button class="btn btn-light rounded-pill px-3 btn-date"
-							type="button" id="btn-search"
-							data-period="90">3개월</button>
+							type="button" id="btn-search" data-period="90">3개월</button>
 						<button class="btn btn-light rounded-pill px-3 btn-date"
-							type="button" id="btn-search"
-							data-period="180">6개월</button>
+							type="button" id="btn-search" data-period="180">6개월</button>
 					</div>
 					<div class="flex-area stretch dateInput">
 						<form:input type="text" path="startDate"
@@ -197,97 +195,59 @@ thead.lavender-header th {
 		<div id="calendar"></div>
 
 		<div class="event-hover-thumbcard" id="event-hover-thumbcard">
-			<a
-				href="${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}"
+			<a href="${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}"
 				class="text-decoration-none text-dark">
-				<div class="event-info" id="event-info">
+				<div class="event-info-c" id="event-info">
 					<div class="rel">
 						<div class="tag" id="tag">${event.eventName}카테고리</div>
-						<img
-							src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
-							class="thumbcard-img" id="" alt="">
+						<img class="thumbcard-img" id="thumbcard-img"
+							onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
 					</div>
 					<div class="event-name-thumb" id="event-name-thumb">행사이름</div>
 					<div class="event-org" id="event-org">[주최]</div>
-					<div class="date" id="date">
-					</div>
+					<div class="date" id="date"></div>
 				</div>
 			</a>
 		</div>
-		
-		
-		
 	</div>
 
 
-	</div>
 
-	<!-- 백업 코드 -->
-	<!-- 	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			var calendarEl = document.getElementById('calendar');
-			var today=new Date();
 
-			var calendar = new FullCalendar.Calendar(calendarEl, {
-				headerToolbar : {
-					left : 'prevYear,prev,next,nextYear',
-					center : 'title',
-					right : 'dayGridMonth,dayGridWeek'
-				},
-				initialDate : today,
-				navLinks : true, // can click day/week names to navigate views
-				editable : true,
-				dayMaxEvents : true, // allow "more" link when too many events
-				events : [ {
-					title : 'All Day Event',
-					start : today
-				}, {
-					title : 'Long Event',
-					start : '2025-07-07',
-					end : '2025-07-09'
-				}, {
-					title : 'Long Event',
-					start : '2025-07-08',
-					end : '2025-07-11'
-				}, {
-					title : 'Long Event',
-					start : '2025-07-10',
-					end : '2025-07-14'
-				}, {
-					groupId : 999,
-					title : 'Repeating Event',
-					start : '2025-07-10'
-				}]
-			});
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
-			calendar.render();
-		});
-	</script> -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-<script>
-
+	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			var calendarEl = document.getElementById('calendar');
 			var today=new Date();
 			
-			  const eventList = [
-				    <c:forEach var="event" items="${eventList}" varStatus="status">
-				      {
-				        title: '${event.appTitle}', // 제목
-				        start: '<fmt:formatDate value="${event.startDate}" pattern="yyyy-MM-dd" />',
-				        end: '<fmt:formatDate value="${event.endDate}" pattern="yyyy-MM-dd 00:01:00" />',
-				        url: '${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}',
-				        extendedProps: {
-				        	appId: '${event.appId}',
-				            eventName: '${event.eventName}',
-				            appOrg: '${event.appOrg}',
-				            thumb: 'https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png',
-				            startDateText: '<fmt:formatDate value="${event.startDate}" pattern="yyyy.MM.dd" />',
-				            endDateText: '<fmt:formatDate value="${event.endDate}" pattern="yyyy.MM.dd" />'
-				          }
-				      }<c:if test="${!status.last}">,</c:if>
-				    </c:forEach>
-				  ];
+			const eventList = [
+			   <c:forEach var="event" items="${eventList}" varStatus="status">
+			     {
+			       title: '${event.appTitle}', // 제목
+			       start: '<fmt:formatDate value="${event.startDate}" pattern="yyyy-MM-dd" />',
+			       end: '<fmt:formatDate value="${event.endDate}" pattern="yyyy-MM-dd 00:01:00" />',
+			       url: '${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}',
+			       extendedProps: {
+			       	appId: '${event.appId}',
+			           eventName: '${event.eventName}',
+			           appOrg: '${event.appOrg}',
+			           thumb: '${not empty event.posterImage.changeName ? pageContext.request.contextPath.concat(event.posterImage.changeName) : ""}',
+			           startDateText: '<fmt:formatDate value="${event.startDate}" pattern="yyyy.MM.dd" />',
+			           endDateText: '<fmt:formatDate value="${event.endDate}" pattern="yyyy.MM.dd" />'
+			         }
+			     }<c:if test="${!status.last}">,</c:if>
+			   </c:forEach>
+			 ];
 
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				headerToolbar : {
@@ -310,6 +270,7 @@ thead.lavender-header th {
 						const appOrg = info.event.extendedProps.appOrg;
 						const startDateText = info.event.extendedProps.startDateText;
 						const endDateText = info.event.extendedProps.endDateText;
+						const thumb = info.event.extendedProps.thumb;
 						
 						console.log("이벤트 정보:", title, startDateText, eventName); // 각 값이 비어 있는지 확인
 						console.log("typeof title:", typeof title, "| title 값:", title); // string 맞음
@@ -319,37 +280,17 @@ thead.lavender-header th {
 						document.getElementById("event-name-thumb").textContent = `\${title}`;
 						document.getElementById("event-org").textContent = `\${appOrg}`;
 						document.getElementById("date").textContent = `\${startDateText} - \${endDateText}`;
-						
-						
-						
-						
-						
+						document.getElementById("thumbcard-img").src = `\${thumb}`;
 					});
-					
-					
 				}
 			});
-
 			calendar.render();
 		});
-		
-		
-		
 	</script>
 
 
-	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
-
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-	<script
-		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-		
-	<script src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
+		src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
 	<script src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
 
 

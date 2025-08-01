@@ -18,4 +18,6 @@ public class ReviewBoard {
 	private String userId;
 	private String userName;
 	private String nickname;
+	
+	private String appTitle;
 }

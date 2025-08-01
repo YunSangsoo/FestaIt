@@ -12,11 +12,5 @@ public class Mainpage {
 	
 	// 리뷰
 	
-	// 공지
-	private int noticeId;
-	private String noticeTitle;
-	private String noticeDetail;
-	private Date createDate;
-	private Date updateDate;
-	private String highlight;	
+	// 공지	
 }

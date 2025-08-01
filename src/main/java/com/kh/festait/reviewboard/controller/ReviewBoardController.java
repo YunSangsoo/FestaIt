@@ -161,6 +161,7 @@ public class ReviewBoardController {
 	}
 	
 	public void setUserNo(Authentication authentication) {
+		userNo = -1;
 		if (authentication != null && authentication.isAuthenticated()) {
         	User loginUser = (User) authentication.getPrincipal();
             userNo = loginUser.getUserNo();

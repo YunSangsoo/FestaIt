@@ -37,7 +37,7 @@
 	<!-- 수정 -->
 	<update id="updateByUserNo" parameterType="ReviewBoard">
 		UPDATE REVIEW
-		SET "COMMENT" = #{comment}, UPDATE_DATE = SYSDATE
+		SET "COMMENT" = #{comment}, RATING = #{rating}, UPDATE_DATE = SYSDATE
 		WHERE USER_NO = #{userNo} AND APP_ID = #{appId}
 	</update>
 

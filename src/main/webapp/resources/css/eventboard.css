@@ -235,6 +235,17 @@ input[type="checkbox"]{
 	border-radius: 4px;
 }
 
+.event-info-c .tag {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background-color: #ea870e;
+	color: white;
+	font-size: 12px;
+	padding: 2px 6px;
+	border-radius: 4px;
+}
+
 .bookmark {
 	position: absolute;
 	top: 10px;
