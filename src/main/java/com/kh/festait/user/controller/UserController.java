@@ -1,17 +1,12 @@
 package com.kh.festait.user.controller;
 
-import java.io.Console;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +27,9 @@ public class UserController {
 
 	@Autowired
 	private UserService uService;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
 	
 	//GET
 	//회원가입 페이지 이동
@@ -73,6 +71,7 @@ public class UserController {
 	//아이디 비번찾기창 이동
 	@RequestMapping(value = "/Idpw", method = RequestMethod.GET)
 	public String Idpw() {
+		System.out.println("check");
 		return "user/Idpw";
 	}
 	//아이디찾기 컨트롤러
@@ -82,7 +81,7 @@ public class UserController {
 	public String findIdEmail(@RequestParam("email") String email) {
 		
 		String userId = uService.findUserIdEmail(email);
-	    
+	    System.out.println("userId : " + userId);
 
 		if (userId != null) {
 			return userId;
@@ -200,23 +199,22 @@ public class UserController {
 	public String resetPassword(
 			@RequestParam("email") String email,
 			@RequestParam("newPassword") String newPassword,
-			@RequestParam("confirmPassword") String confirmPassword,
-			RedirectAttributes redirectAttributes) {
-	    System.out.println("비밀번호 변경 요청 들어옴"); // 테스트용
+			@RequestParam("confirmPassword") String confirmPassword) {
+			
 		if (!newPassword.equals(confirmPassword)) {
-			redirectAttributes.addAttribute("msg","비밀번호가 일치하지 않습니다");
-			return "redirect:/user/Idpw";
+			return "<script>alert('비밀번호가 일치하지 않습니다.'); location.href='/user/Idpw';</script>";
 		}
 
 	    System.out.println("업데이트 결과: " + email + " " + newPassword); // 테스트용
-		int result = uService.updatePasswordByEmail(email, newPassword);
+	    String encodedPwd = passwordEncoder.encode(newPassword);
+		int result = uService.updatePasswordByEmail(email, encodedPwd);
 	    System.out.println("업데이트 결과: " + result); // 테스트용
-		if (result > 0) {
-			redirectAttributes.addFlashAttribute("msg","비밀번호가 변경되었습니다");
-			return "redirect:/login";
-		} else {
-			redirectAttributes.addFlashAttribute("msg","다시 시도해주세요");
-			return "redirect:/user/Idpw";
+	    
+		if (result > 0) { // 성공시
+			return "redirect:/user/login";
+
+		} else { // 실패시
+	        return "redirect:/user/Idpw";
 		}
 	}
 }

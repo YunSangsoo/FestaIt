@@ -52,6 +52,7 @@
                 <div class="container">
                     <h2 style="font-size: 40px; color: #6A1B9A;" >비밀번호 찾기</h2>
                     <form method="post" id="login-form2" action="${pageContext.request.contextPath}/user/resetPassword">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <div class="login_input">
                             <h3>이메일을 입력해주세요</h3>
                             <input type="text" name="email" id="email_pw" placeholder=" 이메일 입력" required />
@@ -86,7 +87,7 @@
         function showChangePw() {
             document.getElementById("chPw").style.display = "block";
             
-            const emailVal = document.getElementById("email_pw").value; // 히든에 담아서 전송
+            const emailVal = document.getElementById("email_pw").value;
             document.getElementById("Email").value = emailVal;
         }
 
@@ -94,7 +95,11 @@
 	
     <!--아래부터 이메일 인증관련 코드-->
     <script>
+    
 		const contextPath = '${pageContext.request.contextPath}';	
+		
+		const csrfHeader = "${_csrf.headerName}";
+		const csrfToken = "${_csrf.token}";
 		
         let timerInterVal;
 
@@ -142,7 +147,8 @@
 			
 			fetch(contextPath + "/email/sendCode", {
 				method: "POST",
-				headers: { "Content-Type": "application/json"},
+				headers: { "Content-Type": "application/json",
+					[csrfHeader]: csrfToken},
 				body: JSON.stringify({ email: email }),
 			})
 				.then((res) => res.text())
@@ -168,6 +174,9 @@
 			const codeInputId = target === "id" ? "code_id" : "code_pw";
 			const codeInbtnId = target === "id" ? "submitbtn_id" : "submitbtn_pw";
 			
+			const csrfHeader = "${_csrf.headerName}";
+			const csrfToken = "${_csrf.token}";
+			
 			const code = document.getElementById(codeInputId).value.trim();
 			
 			if (!code) { // 코드 텍스트창이 공백일때
@@ -177,7 +186,8 @@
 			
 			fetch(contextPath + "/email/verifyCode", {
 				method: "POST", // GET or Post
-				headers: {"Content-Type": "application/json"},
+				headers: {"Content-Type": "application/json",
+					[csrfHeader]: csrfToken},
 				body: JSON.stringify({ code: code}),
 			})
 			.then(res => res.text())
