@@ -34,6 +34,13 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 				
+		<!-- spring-web (ContextLoaderListener 포함) 고훈 2025.07.30 아이디 찾기/비번찾기 필요 위에 webmvc랑 별개역할-->		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>		
+		
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>

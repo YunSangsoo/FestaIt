@@ -5,4 +5,5 @@ public interface UserApiService {
 	int idCheck(String userId);
 	
 	int nickNameCheck(String nickName);
+
 }

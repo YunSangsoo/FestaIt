@@ -1,6 +1,7 @@
 package com.kh.festait.user.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.kh.festait.user.model.vo.MyPageBookmark;
 import com.kh.festait.user.model.vo.User;
@@ -37,4 +38,8 @@ public interface UserDao {
     User myPageUserInfo(String userId);
 
 	User getUserByUser(User u);
+
+	String findUserIdEmail(String email);
+
+	int updatePasswordByEmail(Map<String, Object> paramMap);
 }
