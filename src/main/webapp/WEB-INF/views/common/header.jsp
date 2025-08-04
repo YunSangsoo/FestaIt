@@ -62,6 +62,11 @@
 .navbar-nav .nav-link:hover {
   color: #FFD700 !important;
 }
+
+form {
+margin:0;
+}
+
 </style>
 </head>
 <body>

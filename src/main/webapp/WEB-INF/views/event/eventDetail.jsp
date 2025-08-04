@@ -35,7 +35,7 @@
 </head>
 <body>
     <%@ include file="/WEB-INF/views/common/header.jsp" %>
-
+    
     <main class="container">
         <c:if test="${empty event}">
             <p style="text-align: center; margin-top: 50px;">행사 정보를 찾을 수 없습니다.</p>
@@ -146,6 +146,9 @@
                 </div>
             </div>
         </c:if>
+        
+        
+        <jsp:include page="/WEB-INF/views/review/reviewList.jsp" />
     </main>
 
     <%@ include file="/WEB-INF/views/common/footer.jsp" %>

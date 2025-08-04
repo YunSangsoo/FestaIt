@@ -134,7 +134,7 @@ thead.lavender-header th {
 						</form:select>
 
 						<input type="search" name="keyword" value="${param.keyword}"
-							class="form-search" />
+							class="form-search" placeholder="search"/>
 						<button type="submit" class="btn white-btn small-btn">검색</button>
 					</div>
 
@@ -155,12 +155,6 @@ thead.lavender-header th {
 
 						<input type="hidden" name="eventCode" id="eventCode"
 							value="${param.eventCode}" />
-
-						<!-- 권한 부여 후 북마크 설정 추가해야 함 ============================================================ -->
-
-						<%-- 
-							<form:checkbox path="bookmark" name="bookmark-check" class="bookmark-check"/>
-							 --%>
 
 						<input type="checkbox" name="bookmark" class="bookmark-check" ${param.bookmark eq 'on' ? 'checked' : ''} />
 						<div class="search-option bookmark-option">북마크한 행사</div>

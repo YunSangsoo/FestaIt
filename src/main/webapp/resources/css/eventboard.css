@@ -335,6 +335,7 @@ input[type="checkbox"]{
 	position:absolute;
 	z-index: 500;
 	display:none;
+	padding: 10px;
 }
 
 .thumbcard-img {

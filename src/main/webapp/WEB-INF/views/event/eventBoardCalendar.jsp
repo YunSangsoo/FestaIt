@@ -81,7 +81,7 @@ thead.lavender-header th {
 
 		<!-- 검색 영역 -->
 		<form:form modelAttribute="eventSearch"
-			action="${pageContext.request.contextPath}/eventBoard/calendar"
+			action="${pageContext.request.contextPath}/eventBoard/list"
 			method="get">
 			<div class="search-section">
 				<div class="search-grid date">
@@ -133,15 +133,12 @@ thead.lavender-header th {
 						</form:select>
 
 						<input type="search" name="keyword" value="${param.keyword}"
-							class="form-search" />
+							class="form-search" placeholder="search"/>
 						<button type="submit" class="btn white-btn small-btn">검색</button>
 					</div>
 
 					<div class="flex-area stretch">
 						<div class="search-option">카테고리</div>
-
-
-
 						<button
 							class="btn btn-light rounded-pill px-3 btn-category ${param.eventCode.contains('L') ? 'selected active' : ''}"
 							type="button" id="btn-search" value="L">지역행사</button>
@@ -157,43 +154,41 @@ thead.lavender-header th {
 
 						<input type="hidden" name="eventCode" id="eventCode"
 							value="${param.eventCode}" />
-
-						<!-- 권한 부여 후 북마크 설정 추가해야 함 ============================================================ -->
-
-						<%-- 
-							<form:checkbox path="bookmark" name="bookmark-check" class="bookmark-check"/>
-							 --%>
-
-						<input type="checkbox" name="bookmark-check"
-							class="bookmark-check" />
-						<div class="search-option bookmark">북마크한 행사</div>
+							
+						<input type="checkbox" name="bookmark" class="bookmark-check" ${param.bookmark eq 'on' ? 'checked' : ''} />
+						<div class="search-option bookmark-option">북마크한 행사</div>
 					</div>
 
 				</div>
 			</div>
+
 		</form:form>
 
 
 
 		<div class="flex-area result-inform">
 			<div class="flex-area view-format flex-center">
-				<a href="${pageContext.request.contextPath}/myEventApp"
-					class="btn lavender-btn">행사 신청 현황</a>
-				<!-- 경로 수정 필요, 권한 부여 시 a 태그만 hide -->
+				<div class="total-num">총 ${pi.totalCount}건</div>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<a href="${pageContext.request.contextPath}/myEventApp"
+						class="btn lavender-btn">행사 신청 현황</a>
+					<!-- 경로 수정 필요 -->
+				</sec:authorize>
 			</div>
 
 			<div class="flex-area view-format">
 				<a class="view-button list"
-					href="${pageContext.request.contextPath}/eventBoard/list/#;">리스트형</a>
+					href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage}${searchParam}#;">리스트형</a>
 				<div class="v-line"></div>
 				<a class="view-button calendar"
-					href="${pageContext.request.contextPath}/eventBoard/calendar">캘린더형</a>
+					href="${pageContext.request.contextPath}/eventBoard/calendar?${searchParam}">캘린더형</a>
 			</div>
 		</div>
 
 
 		<div id="calendar"></div>
-
+		
+		<!-- 마우스오버 시 썸네일 카드-->
 		<div class="event-hover-thumbcard" id="event-hover-thumbcard">
 			<a href="${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}"
 				class="text-decoration-none text-dark">
@@ -271,10 +266,6 @@ thead.lavender-header th {
 						const startDateText = info.event.extendedProps.startDateText;
 						const endDateText = info.event.extendedProps.endDateText;
 						const thumb = info.event.extendedProps.thumb;
-						
-						console.log("이벤트 정보:", title, startDateText, eventName); // 각 값이 비어 있는지 확인
-						console.log("typeof title:", typeof title, "| title 값:", title); // string 맞음
-						
 						
 						document.getElementById("tag").textContent = `\${eventName}`;
 						document.getElementById("event-name-thumb").textContent = `\${title}`;

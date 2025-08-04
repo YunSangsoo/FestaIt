@@ -2,6 +2,8 @@ package com.kh.festait.reviewboard.model.vo;
 
 import java.util.Date;
 
+import com.kh.festait.common.model.vo.Image;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +22,7 @@ public class ReviewBoard {
 	private String nickname;
 	
 	private String appTitle;
+	
+
+	private Image profileImage;
 }

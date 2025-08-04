@@ -12,6 +12,9 @@
             		U.USER_ID, U.USER_NAME, U.NICKNAME
 				FROM REVIEW R
 				JOIN USERS U ON R.USER_NO = U.USER_NO
+				<if test="appId != null and appId != ''">
+				  	WHERE R.APP_ID = #{appId}
+				</if>
 				ORDER BY R.CREATE_DATE DESC
 			) A
             WHERE ROWNUM &lt;= #{endRow}
@@ -21,11 +24,12 @@
 
 	<select id="getReviewCount" resultType="int">
     	SELECT COUNT(*) FROM REVIEW
+    	WHERE APP_ID = #{appId}
 	</select>
 
 	<select id="setReviewIdentifier" resultType="int">
     	SELECT COUNT(*) FROM REVIEW
-    	WHERE USER_NO = #{userNo} AND APP_ID = #{appId}
+    	WHERE USER_NO = #{loginUserNo} AND APP_ID = #{appId}
 	</select>
 
 	<!-- 등록 -->
