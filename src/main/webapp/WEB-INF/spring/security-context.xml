@@ -4,19 +4,20 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.7.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<!-- 암호화 인코딩 기능을 가진 bean 객체 등록 -->
-	<beans:bean id="bcryptPasswordEncoder"
-		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+		<beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+		
+		<beans:bean id="authenticationFailureHandler" class="com.kh.festait.handler.CustomAuthenticationFailureHandler" />
+		<beans:bean id="accessDeniedHandler" class="com.kh.festait.handler.CustomAccessDeniedHandler" />
+		<beans:bean id="authenticationEntryPoint" class="com.kh.festait.handler.CustomAuthenticationEntryPoint" />
 
 	<!-- 정적파일에 대한 보안검사 제외 옵션 -->
 	<http security="none" pattern="/resources/**" />
-	<http auto-config="true">
+	<http auto-config="true" entry-point-ref="authenticationEntryPoint">
 		<!-- (메인페이지(/), 회원가입페이지(security/insert), 로그인페이지, 아이디 중복체크는 모든 사용자가 이용 
 			가능하도록 설정 -->
 		<intercept-url pattern="/" access="permitAll" />
@@ -33,13 +34,14 @@
 			access='permitAll' />
 		<intercept-url pattern="/intro"
 			access='permitAll' />
+		<intercept-url pattern="/bookmark/**" access="isAuthenticated()" />
 		
 		<intercept-url pattern="/user/Idpw" access="permitAll" />
+		<intercept-url pattern="/eventBoard/**" access="permitAll" />
 
 		<!-- 관리자와 관련된 URL은 관리자 권한을 가지고 있어야만 접근가능하도록 제한 -->
 
-		<intercept-url pattern="/admin/**"
-			access="hasRole('ADMIN')" />
+		<intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/memberBoard/**" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/noticeBoard/noticeWrite" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/noticeBoard/create" access="hasRole('ADMIN')" />
@@ -47,6 +49,7 @@
 		<intercept-url pattern="/noticeBoard/delete" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/noticeBoard/**" access='permitAll' />
 		<intercept-url pattern="/qnaBoard/**" access='permitAll' />
+		<intercept-url pattern="/denied/**" access="permitAll" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 		
 
@@ -57,8 +60,11 @@
 			username, password가 아닌 경우 지정 -->
 
 		<form-login login-page="/user/login"
-			login-processing-url="/user/loginProcess" username-parameter="userId"
-			password-parameter="userPwd" />
+			login-processing-url="/user/loginProcess"
+			username-parameter="userId"
+			password-parameter="userPwd"
+	        authentication-failure-handler-ref="authenticationFailureHandler"
+			/>
 
 		<!-- servlet의 mappingurl이 아닌 filter의 mappingurl -->
 		<logout logout-url="/user/logout" invalidate-session="true"
@@ -71,13 +77,14 @@
 
 		<remember-me data-source-ref="dataSource"
 			token-validity-seconds="1209600" />
-
+			
+		
 		<!-- 권한없는 페이지 접근시 처리할 핸들러 -->
-		<access-denied-handler
-			error-page="/security/accessDenied" />
-
+		<access-denied-handler  ref="accessDeniedHandler"/>
+		<!--  error-page="/security/accessDenied" --> 
+		
 	</http>
-
+	
 	<!-- Authentication provider Manager / Provider 등록 -->
 	<context:component-scan
 		base-package="com.kh.festait.security" />
@@ -94,7 +101,7 @@
 		</authentication-provider>
 	</authentication-manager>
 
-	<security:global-method-security
+	<global-method-security
 		pre-post-annotations="enabled" proxy-target-class="true" />
-
+		
 </beans:beans>

@@ -42,7 +42,7 @@
         <c:set var="formActionUrl" value="${contextPath}/eventApp/appApprove" /> <%-- 수정 기능이 있다면 이 URL로 POST --%>
     </c:if>
 	
-	<form:form modelAttribute="eventApplication" action="${formActionUrl }" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate">
+	<form:form modelAttribute="eventApplication" action="${formActionUrl }" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="novalidate" id="appForm">
         
 	<main class="container shadow p-3 mb-5 rounded">
         <form:hidden path="appId"/>
@@ -80,10 +80,10 @@
 					</div>
 					
 					
-	    		<c:if test="${(eventApplication.statCode == 'S' && isViewMode)||(eventApplication.statCode=='R'&&isEditMode)}">  <%-- 조건 변경: 'S'와 같을 때 --%>
+	    		<c:if test="${(eventApplication.statCode=='R'&&isEditMode)}">  <%-- 조건 변경: 'S'와 같을 때 --%>
 					<div class="col-12 my-2">
 					  <div class="form-floating">
-					    <form:textarea class="form-control overflow-y-auto" path="adminComment" id="adminComment" name="adminComment" style="height: 600px" placeholder="비고 작성"></form:textarea>
+					    <form:textarea class="form-control overflow-y-auto" path="adminComment" id="adminComment" name="adminComment" style="height: 600px" placeholder="비고 작성" readonly="true"></form:textarea>
 					    <label for="adminComment">Comment</label>
 					  </div>
 				  	</div>
@@ -132,11 +132,11 @@
             </div>
 
             <div class="col-3">
-            	<form:input type="text" path="startDate" class="form-control dSet" id="startDate" placeholder="행사 시작일" value="" required="required"/>
+            	<form:input type="text" path="startDate" class="form-control dSet" id="startDate" placeholder="행사 시작일" value="" required="required" readonly="true"/>
             </div>
             
             <div class="col-3">
-            	<form:input type="text" path="endDate" class="form-control dSet" id="endDate" placeholder="행사 종료일" value="" required="required"/>
+            	<form:input type="text" path="endDate" class="form-control dSet" id="endDate" placeholder="행사 종료일" value="" required="required" readonly="true"/>
             </div>
             <div class="w-100"></div>
           <hr class="my-3 mx-3">
@@ -248,6 +248,7 @@
         </div>
         
 	</div>
+	<input type="hidden" name="action" id="actionHiddenInput" value="" />
    		<c:if test="${((eventApplication.statCode == 'P')||(empty eventApplication.statCode)||(eventApplication.statCode == 'R')) && isEditMode}">  <%-- 조건 변경: 'S'와 같을 때 --%>
 			<div class="row">
 				<div class="d-grid col-3 mx-auto">
@@ -259,14 +260,13 @@
 		    </div>
 		</c:if>
 		<c:if test="${eventApplication.statCode == 'S' && isViewMode}">  <%-- 조건 변경: 'S'와 같을 때 --%>
+			<form:input path="adminComment" type="hidden" id="reasonHiddenInput" name="adminComment" value=""></form:input>	    
 			<div class="row">
 				<div class="d-grid col-3 mx-auto">
-			          <button class="w-10 btn btn-outline-primary btn-lg" name="action" type="submit" value="A" id="approveForm">행사 승인</button> 
-			    </div>
-				<div class="d-grid col-3 mx-auto">
-			          <button class="w-10 btn btn-outline-warning btn-lg" name="action" type="submit" value="R" id="rejectForm">행사 반려</button> 
+			          <button class="w-10 btn btn-outline-primary btn-lg" name="action" type="submit" value="approval" id="approveForm">행사 결재</button> 
 			    </div>
 		    </div>
+		    
 		</c:if>
 	
 
@@ -281,11 +281,11 @@
 	
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/views/common/modal.jsp" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="<%= request.getContextPath() %>/resources/js/app/eventApplicationForm.js"></script>
 	
 	
 	<script>
@@ -297,11 +297,8 @@
     	const isViewMode = ${isViewMode || eventApplication.statCode == 'S' || eventApplication.statCode=='A'};
         const isEditMode = ${isEditMode && (eventApplication.statCode=='P'||eventApplication.statCode=='R')};
         const initialEventCode = "${eventApplication.eventCode}";
-
 	</script>
 	
     
-    <script src="<%= request.getContextPath() %>/resources/js/commonModal.js"></script>
-	<script src="<%= request.getContextPath() %>/resources/js/app/eventApplicationForm.js"></script>
 </body>
 </html>
