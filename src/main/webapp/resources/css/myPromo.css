@@ -1,4 +1,3 @@
-/* 기본 설정 */
 * {
     box-sizing: border-box;
 }
@@ -101,12 +100,11 @@ body {
     background-color: #a069cb;
 }
 
-/* 등록 버튼 스타일 (통합버전) */
+/* 등록 버튼 스타일 */
 a.btn.lavender-btn {
     background-color: #b481d9;
     color: white;
     border: 1px solid #a069cb;
-
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 1em;
@@ -203,7 +201,7 @@ thead.lavender-header th {
     color: white !important;
 }
 
-/* 페이지네이션 화살표 (span) 스타일 */
+/* 페이지네이션 화살표 스타일 */
 .pagination .page-item .page-link span {
     display: inline-block !important;
     font-size: 1.2rem !important;

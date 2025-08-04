@@ -3,7 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="promoBoardMapper">
 
-    <!-- 기본 PromoBoard 매핑 -->
 <resultMap id="promoBoardResultMap" type="com.kh.festait.promoboard.model.vo.PromoBoardVo">
         <id property="promoId" column="PROM_ID"/>
         <result property="promoTitle" column="PROM_TITLE"/>

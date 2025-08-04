@@ -116,7 +116,6 @@ public class UserController {
 		return viewName;
 	}
 	
-	
 	@PostMapping("/login")
 	public ModelAndView loginUser(User u, ModelAndView mv, Model model, 
 			HttpSession session, // 로그인 성공시, 사용자 정보를 보관할 객체

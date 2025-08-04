@@ -138,11 +138,6 @@
                 <div class="bottom-left-buttons">
                     <button class="btn list-btn" onclick="location.href='${contextPath}/eventBoard/list'">목록 보기</button>
                 </div>
-                <div class="bottom-right-buttons">
-                    <sec:authorize access="hasRole('ROLE_MANAGER')">
-                        <button class="btn promote-btn">게시물 홍보하기</button>
-                    </sec:authorize>
-                </div>
             </div>
         </c:if>
     </main>

@@ -78,37 +78,31 @@
             </tbody>
         </table>
 
-        <!-- 페이지네이션 -->
+     <!-- 페이지네이션 -->
 		<div class="pagination-container d-flex justify-content-center">
 		    <nav aria-label="Page navigation">
 		        <ul class="pagination">
-		            <!-- 이전 버튼 -->
 		            <li class="page-item ${pi.currentPage <= 1 ? 'disabled' : ''}">
-		                <c:url var="prevPageUrl" value="${contextPath}/promoBoard">
+		                <c:url var="prevPageUrl" value="${contextPath}/myPage/myPromo">
 		                    <c:param name="cpage" value="${pi.currentPage - 1}"/>
-		                    <c:param name="searchKeyword" value="${param.searchKeyword}"/>
 		                </c:url>
 		                <a class="page-link" href="${prevPageUrl}" aria-label="Previous">
 		                    <span aria-hidden="true">&laquo;</span>
 		                </a>
 		            </li>
-		
-		            <!-- 페이지 번호 -->
+		            
 		            <c:forEach var="i" begin="${pi.startPage}" end="${pi.endPage}">
 		                <li class="page-item ${i == pi.currentPage ? 'active' : ''}">
-		                    <c:url var="pageUrl" value="${contextPath}/promoBoard">
-		                        <c:param name="cpage" value="${i}"/>
-		                        <c:param name="searchKeyword" value="${param.searchKeyword}"/>
+		                   <c:url var="pageUrl" value="/myPage/myPromo">
+							    <c:param name="cpage" value="${i}"/>
 		                    </c:url>
 		                    <a class="page-link" href="${pageUrl}">${i}</a>
 		                </li>
 		            </c:forEach>
-		
-		            <!-- 다음 버튼 -->
+		            
 		            <li class="page-item ${pi.currentPage >= pi.totalPage ? 'disabled' : ''}">
-		                <c:url var="nextPageUrl" value="${contextPath}/promoBoard">
+		                <c:url var="nextPageUrl" value="${contextPath}/myPage/myPromo">
 		                    <c:param name="cpage" value="${pi.currentPage + 1}"/>
-		                    <c:param name="searchKeyword" value="${param.searchKeyword}"/>
 		                </c:url>
 		                <a class="page-link" href="${nextPageUrl}" aria-label="Next">
 		                    <span aria-hidden="true">&raquo;</span>
@@ -117,7 +111,6 @@
 		        </ul>
 		    </nav>
 		</div>
-	</div>
     <!-- 공통 푸터 및 모달 영역 포함 -->
     <jsp:include page="/WEB-INF/views/common/footer.jsp" />
     <jsp:include page="/WEB-INF/views/common/modal.jsp" />

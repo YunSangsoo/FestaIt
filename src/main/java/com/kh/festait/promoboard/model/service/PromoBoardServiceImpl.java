@@ -82,9 +82,6 @@ public class PromoBoardServiceImpl implements PromoBoardService {
         if (newOrExistingPosterImage != null) {
             int deleteCount = imageDao.deleteImageByRefNoAndType(promo.getPromoId(), newOrExistingPosterImage.getImgType());
             if (deleteCount > 0) {
-                log.debug("Service: 기존 이미지 DB에서 " + deleteCount + "개 삭제 완료 (refNo: " + promo.getPromoId() + ", type: " + newOrExistingPosterImage.getImgType() + ")");
-            } else {
-                log.debug("Service: 기존 이미지 DB에서 삭제할 항목이 없거나 이미 삭제됨 (refNo: " + promo.getPromoId() + ", type: " + newOrExistingPosterImage.getImgType() + ")");
             }
 
             if (newOrExistingPosterImage.getImgNo() != -1) {
