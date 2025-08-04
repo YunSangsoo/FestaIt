@@ -64,6 +64,10 @@
         </div>
     </div>
 	
+	
+	<!-- 공용 Modal -->
+    <jsp:include page="/WEB-INF/views/common/modal.jsp" />
+    <script src="${pageContext.request.contextPath}/resources/js/commonModal.js"></script>
 
 </body>
 </html>

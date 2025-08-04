@@ -16,10 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // 모달이 완전히 닫힐 때 Promise를 resolve(false)하는 이벤트 리스너 (한 번만 등록)
         // 이 리스너는 모달이 확인 버튼 외의 방식으로 닫혔을 때 (취소, ESC, 백드롭 클릭) Promise를 처리합니다.
         commonModalElement.addEventListener('hidden.bs.modal', function () {
-            // 현재 활성 Promise의 resolve 함수가 있다면 호출하고 초기화
-            if (commonModalElement._currentModalPromiseResolve) {
-                commonModalElement._currentModalPromiseResolve(false);
-                commonModalElement._currentModalPromiseResolve = null; // 초기화
+            // 다른 모달이 열려 있는지 확인
+            const openModals = document.querySelectorAll('.modal.show');
+            if (openModals.length === 0) {
+                // 현재 열린 모달이 없으면 Promise를 해결
+                if (commonModalElement._currentModalPromiseResolve) {
+                    commonModalElement._currentModalPromiseResolve(false);
+                    commonModalElement._currentModalPromiseResolve = null;
+                }
             }
         });
 
@@ -108,3 +112,48 @@ window.showCommonModal = function(title, content, options = {}) {
         
     });
 };
+
+$(document).ready(function() {
+    // 모든 Ajax 요청에 대한 전역 설정
+    $(document).ajaxError(function(event, xhr, settings, thrownError) {
+    if (xhr.status === 401) {
+    	console.log("401 check");
+        // 401: 인증되지 않음 (로그인 필요)
+        const errorMessage = "로그인이 필요한 기능입니다.";
+        window.showCommonModal('알림', errorMessage, {
+            confirmButtonText: '로그인',
+            showCancelButton: true
+        }).then((result) => {
+            if (result) {
+                window.location.href = '/festait/user/login';
+            }
+        });
+    } else if (xhr.status === 403) {
+        // 403: 권한 없음
+        try {
+            const response = JSON.parse(xhr.responseText);
+            window.showCommonModal('알림', response.message, {
+                confirmButtonText: '확인',
+                showCancelButton: false
+            }).then(() => {
+                // 이전 페이지로 돌아가기
+                window.history.go(-1); 
+            });
+        } catch (e) {
+            window.showCommonModal('알림', '권한이 없습니다.', {
+                confirmButtonText: '확인',
+                showCancelButton: false
+            }).then(() => {
+                window.history.go(-1);
+            });
+        }
+    }
+});
+
+    // Ajax 요청 시 헤더 추가
+    $.ajaxSetup({
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    });
+});

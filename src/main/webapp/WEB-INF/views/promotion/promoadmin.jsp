@@ -120,7 +120,7 @@
                                 <form action="${contextPath}/promoAdmin/deletePromoPost" method="post" style="display:inline;">
                                     <input type="hidden" name="promoId" value="${promo.promoId}" />
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" id="deleteForm">삭제</button>
                                 </form>
                             </td>
                         </tr>
@@ -169,5 +169,25 @@
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<script>
+document.getElementById('deleteForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    let modalTitle = "문의 삭제";
+    let modalContent = "문의 내용을 삭제하시겠습니까?";
+    
+    const result = await window.showCommonModal(
+            modalTitle,
+            modalContent,
+        {
+            cancelButtonText: "아니오",
+            confirmButtonText: "네, 진행합니다"
+    	}
+    );
+    if (result)
+        event.target.submit();
+});
+</script>
 </body>
 </html>

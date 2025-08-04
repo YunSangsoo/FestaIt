@@ -1,9 +1,3 @@
-
-
-<%--
-    이 JSP 파일은 Bootstrap 공통 모달의 HTML 구조를 정의합니다.
-    다른 JSP 페이지에서 include 하여 재사용합니다.
---%>
 <div class="modal fade" id="commonModal" tabindex="-1" aria-labelledby="commonModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -17,4 +11,18 @@
         </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">로딩 중...</span>
+                </div>
+                <p class="mt-2">잠시만 기다려주세요...</p>
+                <button type="button" class="btn btn-secondary mt-3" id="loadingCancelBtn">취소</button>
+            </div>
+        </div>
+    </div>
 </div>

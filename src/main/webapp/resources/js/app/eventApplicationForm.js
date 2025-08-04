@@ -234,22 +234,96 @@ new daum.Postcode({
 }).open();
 }
 
-//$('#test').on('click', async event =>{
-//
-//            const result = await window.showCommonModal(
-//                "선택 확인",
-//               "이 내용을 임시 저장하시겠습니까?", // 이미지에서 보였던 "선택 확인"은 제목, 내용은 예시
-//                {
-//                    confirmButtonText: "예",
-//                    cancelButtonText: "아니오"
-//                }
-//            );
-//
-//            if (result) {
-//                console.log("임시 저장을 진행합니다.");
-//                // 실제 폼 제출 또는 저장 로직
-//                // saveFormButton.form.submit(); // 폼을 수동으로 제출할 경우
-//            } else {
-//                console.log("임시 저장을 취소했습니다.");
-//            }
-//});
+
+document.getElementById('appForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+ 	// 어떤 버튼이 제출을 유발했는지 확인합니다.
+    const submitter = event.submitter;
+    
+    // 제출 버튼이 없으면 함수를 종료합니다.
+    if (!submitter) {
+        return;
+    }
+    
+    const actionValue = submitter.value;
+    let modalTitle = "";
+    let modalContent = "";
+    let approval = false;
+    let actionUrl = "";
+    
+    if (actionValue === 'save') {
+        modalTitle = "임시 저장";
+        modalContent = "작업 내용을 임시로 저장하시겠습니까?";
+    } else if (actionValue === 'submit') {
+        modalTitle = "최종 제출";
+        modalContent = "작업을 최종 제출하시겠습니까?<br>제출 후에는 수정할 수 없습니다.";
+    } else if (actionValue == 'approval') {
+    	modalTitle = "결재 처리";
+    	approval = true;
+    } else if( actionValue == 'delete') {
+    	modalTitle= "신청서 삭제";
+    	modalContent = "작성중인 신청서를 삭제합니다.";
+    	actionUrl = submitter.getAttribute('formaction');
+    }
+    
+    if(!approval){
+	    const result = await window.showCommonModal(
+	            modalTitle,
+	            modalContent,
+	        {
+	            cancelButtonText: "아니오",
+	            confirmButtonText: "네, 진행합니다"
+        	}
+        );
+	    if (result) {
+	        document.getElementById('actionHiddenInput').value = actionValue;
+	        if(actionValue=='delete'){
+	        	console.log(actionUrl);
+	        	document.getElementById('appForm').action=actionUrl;
+        	}
+	        event.target.submit();
+	        console.log("Promise 결과: 사용자가 '네, 진행합니다'를 선택했습니다.");
+	        // 다음 작업 수행
+	    } else {
+	        console.log("Promise 결과: 사용자가 '아니오' 또는 닫기를 선택했습니다.");
+	    }
+    }else{
+    	const result = await window.showCommonModal(
+	            modalTitle,
+	            '행사 결제를 승인하시겠습니까?',
+	        {
+	            cancelButtonText: "반려",
+	            confirmButtonText: "승인"
+	        }
+	    );
+	    if (result) {
+		    document.getElementById('actionHiddenInput').value = 'A';
+	        formElement.submit();
+	    } else {
+	    	const rejectReasonResult = await window.showCommonModal(
+		        '반려 사유 입력',
+		        '<textarea id="rejectReason" class="form-control overflow-y-auto" name="adminComment" rows="5" placeholder="반려 사유를 입력하세요."></textarea>',
+		        {
+		            cancelButtonText: '취소',
+		            confirmButtonText: '반려'
+		        }
+	    	);
+        	if (rejectReasonResult) {
+            	const reasonText = document.getElementById('rejectReason').value.trim();
+            	if (reasonText === '') {
+                	await window.showCommonModal('경고', '반려 사유를 입력해야 합니다.', {
+                    showCancelButton: false,
+                    confirmButtonText: '확인'
+                	});
+            	}
+	        } else {
+	            document.getElementById('actionHiddenInput').value = 'R';
+	            document.getElementById('reasonHiddenInput').value = reasonText;
+	           	event.target.submit(); // 폼 제출
+	        }
+    	}
+    }
+});
+
+

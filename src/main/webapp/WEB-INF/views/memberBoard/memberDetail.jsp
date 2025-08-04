@@ -126,8 +126,8 @@ button, .btn {
 
 				<form
 					action="${pageContext.request.contextPath}/memberBoard/deleteUser"
-					method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');"
-					class="d-inline">
+					method="post" id="deleteForm"
+					class="d-inline" >
 					<input type="hidden" name="userNo" value="${member.userNo}" />
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<button type="submit" class="btn btn-outline-danger">회원 삭제</button>
@@ -140,5 +140,25 @@ button, .btn {
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		
+		<script>
+			document.getElementById('deleteForm').addEventListener('submit', async (event) => {
+			    event.preventDefault();
+			    
+			    let modalTitle = "회원 삭제";
+			    let modalContent = "회원을 삭제하시겠습니까?";
+			    
+			    const result = await window.showCommonModal(
+			            modalTitle,
+			            modalContent,
+			        {
+			            cancelButtonText: "아니오",
+			            confirmButtonText: "네, 진행합니다"
+		        	}
+		        );
+			    if (result)
+			        event.target.submit();
+			});
+		</script>
 </body>
 </html>
