@@ -22,5 +22,13 @@ public class QnaBoard {
 	 private Date answerDate;       // ANSWER_DATE
 	 
 	 private boolean answered;
+	 
+	 private String userId;  // 사용자 식별용 ID
+
+	 
+	// 헬퍼 메서드: 비밀글 여부를 boolean으로 반환
+	 public boolean isSecret() {
+	    return "Y".equalsIgnoreCase(this.isPrivate);
+	 }
 
 }

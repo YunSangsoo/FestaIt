@@ -13,11 +13,13 @@ public interface ReviewBoardDao {
 	List<ReviewBoard> selectReviewListWithPaging(Map<String, Object> paramMap);
 
 	int getReviewCount();
+	
+	int setReviewIdentifier(Map<String, Object> paramMap);
 
 	int insertReview(ReviewBoard review);
 
 	int updateByUserNo(ReviewBoard review);
 
-	int deleteByUserNo(int userNo);
+	int deleteByUserNo(Map<String, Object> paramMap);
 
 }

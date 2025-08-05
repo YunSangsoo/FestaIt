@@ -62,6 +62,7 @@ public class PromoBoardServiceImpl implements PromoBoardService {
     @Override
     @Transactional
     public int updatePromo(PromoBoardVo promo, Image newOrExistingPosterImage) {
+        // EVENT_PROMOTION 테이블 게시글 업데이트
         int promoUpdateResult = promoDao.updatePromo(promo);
 
         if (promoUpdateResult == 0) {
@@ -69,6 +70,15 @@ public class PromoBoardServiceImpl implements PromoBoardService {
             throw new RuntimeException("게시글 업데이트 실패: promoId=" + promo.getPromoId());
         }
 
+        // EVENT_APPLICATION 테이블 URL 업데이트 추가
+        int urlUpdateResult = promoDao.updateEventApplicationWebsite(promo);
+
+        if (urlUpdateResult == 0) {
+            log.error("Service: 이벤트 URL 업데이트 실패 (appId: {})", promo.getAppId());
+            throw new RuntimeException("이벤트 URL 업데이트 실패: appId=" + promo.getAppId());
+        }
+
+        // 이미지 처리 기존 코드 유지
         if (newOrExistingPosterImage != null) {
             int deleteCount = imageDao.deleteImageByRefNoAndType(promo.getPromoId(), newOrExistingPosterImage.getImgType());
             if (deleteCount > 0) {
@@ -78,15 +88,16 @@ public class PromoBoardServiceImpl implements PromoBoardService {
             }
 
             if (newOrExistingPosterImage.getImgNo() != -1) {
-                log.debug("Service: DB에 새로운 이미지 삽입 (refNo: " + promo.getPromoId() + ")"); 
+                log.debug("Service: DB에 새로운 이미지 삽입 (refNo: " + promo.getPromoId() + ")");
                 newOrExistingPosterImage.setRefNo(promo.getPromoId());
                 int insertResult = imageDao.insertImage(newOrExistingPosterImage);
                 if (insertResult == 0) {
-                    log.error("Service: 새로운 이미지 DB 삽입 실패 (refNo: {})", promo.getPromoId()); 
+                    log.error("Service: 새로운 이미지 DB 삽입 실패 (refNo: {})", promo.getPromoId());
                     throw new RuntimeException("새로운 이미지 DB 삽입 실패");
                 }
             }
         }
+
         return promoUpdateResult;
     }
 

@@ -1,12 +1,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>	
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>	
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>행사 세부 페이지 내 리뷰창</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet" />
+<meta name="_csrf" content="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf.headerName}" />
 <style>
 .review {
 	width: 100%;
@@ -20,13 +26,24 @@
 	cursor: pointer;
 	text-decoration: none;
 }
+
+.btn-edit-delete {
+	display: none;
+}
 </style>
 </head>
 <body>
+	<c:set var="loginUser" value="${sessionScope.loginUser}" />
+
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+
 	<div class="container my-5">
-	<h2 style="margin-bottom: 20px; font-weight: bold;">리뷰 (총 ${totalCount} 건)</h2>
+		<h2 style="margin-bottom: 20px; font-weight: bold;">리뷰 (총
+			${totalCount} 건)</h2>
 		<form action="${pageContext.request.contextPath}/reviewBoard/create"
 			method="post">
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
 			<div class="input-group">
 				<svg height="60" width="60" xmlns="http://www.w3.org/2000/svg">
 					<rect width="100%" height="100%" fill="gray" />
@@ -35,15 +52,16 @@
 					maxlength="100" placeholder="100자 이내로 작성해주세요."
 					style="resize: none;" required></textarea>
 				<div class="reviewAction">
-					<select name="rating" class="form-select form-select-sm" aria-label="별점 선택">
+					<select name="rating" class="form-select form-select-sm"
+						aria-label="별점 선택">
 						<option selected value="1">★☆☆☆☆</option>
 						<option value="2">★★☆☆☆</option>
 						<option value="3">★★★☆☆</option>
 						<option value="4">★★★★☆</option>
 						<option value="5">★★★★★</option>
 					</select>
-				<button class="btn btn-outline-secondary mt-2 col-12" type="submit"
-					style="font-size: 20px;">작성</button>
+					<button class="btn btn-outline-secondary mt-2 col-12" type="submit"
+						style="font-size: 20px;">작성</button>
 				</div>
 			</div>
 		</form>
@@ -55,17 +73,20 @@
 			<tbody>
 				<c:choose>
 					<c:when test="${empty reviewList}">
-						<tr><td colspan="3" class="text-center py-5">등록된 리뷰가 없습니다.</td></tr>
+						<tr>
+							<td colspan="3" class="text-center py-5">등록된 리뷰가 없습니다.</td>
+						</tr>
 					</c:when>
 
 					<c:otherwise>
 						<c:forEach var="review" items="${reviewList}">
-							<tr data-comment-id="${review.userNo}">
+							<tr class="review-row" data-comment-id="${review.userNo}">
 								<td>
 									<div class="d-flex my-4" data-comment-id="${review.userNo}">
 										<!-- 왼쪽: 프로필 이미지 -->
 										<div class="mx-3">
-											<svg height="80" width="80" xmlns="http://www.w3.org/2000/svg">
+											<svg height="80" width="80"
+												xmlns="http://www.w3.org/2000/svg">
               									<rect width="100%" height="100%" fill="gray" />
             								</svg>
 										</div>
@@ -75,17 +96,19 @@
 												class="d-flex align-items-center fw-bold justify-content-between">
 												<div class="d-flex align-items-center flex-wrap">
 													<span class="me-2">${review.userId}(${review.nickname})</span>
-													<small class="text-muted ms-2 star-display">
-														<c:forEach var="i" begin="1" end="${review.rating}">★</c:forEach><c:forEach
+													<small class="text-muted ms-2 star-display"> <c:forEach
+															var="i" begin="1" end="${review.rating}">★</c:forEach> <c:forEach
 															var="i" begin="${review.rating + 1}" end="5">☆</c:forEach>
-													</small>
-													<small class="text-muted ms-3">
-														<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd HH:mm:ss" />
+													</small> <small class="text-muted ms-3 d-flex"> <fmt:formatDate
+															value="${review.createDate}"
+															pattern="yyyy.MM.dd HH:mm:ss" />
+														<div class="edit-check"
+															style="display: ${empty review.updateDate ? 'none' : 'block'}">(수정됨)</div>
 													</small>
 												</div>
 
 												<!-- 수정/삭제 버튼 -->
-												<div>
+												<div class="btn-edit-delete">
 													<button type="button" class="btn btn-primary btn-sm me-2"
 														data-userno="${review.userNo}"
 														data-comment="${fn:escapeXml(review.comment)}"
@@ -111,6 +134,8 @@
 								<form id="editForm"
 									action="${pageContext.request.contextPath}/reviewBoard/update"
 									method="post">
+									<input type="hidden" name="${_csrf.parameterName}"
+										value="${_csrf.token}" />
 									<div class="modal-content">
 										<div class="modal-header">
 											<h5 class="modal-title" id="saveConfirmModalLabel">댓글 수정</h5>
@@ -120,7 +145,19 @@
 										<div class="modal-body">
 											<input type="hidden" name="userNo" id="editUserNo" />
 											<div class="mb-3">
-												<label for="editComment" class="form-label">댓글 내용</label>
+
+												<div
+													class="d-flex align-items-center justify-content-between">
+													<label for="editComment" class="form-label">댓글 내용</label> <select
+														name="rating" class="form-select form-select-sm"
+														aria-label="별점 선택" style="width: 116px;" id="editrating">
+														<option value="1">★☆☆☆☆</option>
+														<option value="2">★★☆☆☆</option>
+														<option value="3">★★★☆☆</option>
+														<option value="4">★★★★☆</option>
+														<option value="5">★★★★★</option>
+													</select>
+												</div>
 												<textarea name="comment" id="editComment"
 													class="form-control" rows="3" maxlength="100"
 													style="resize: none;" required></textarea>
@@ -143,6 +180,8 @@
 								<form id="deleteForm"
 									action="${pageContext.request.contextPath}/reviewBoard/delete"
 									method="post">
+									<input type="hidden" name="${_csrf.parameterName}"
+										value="${_csrf.token}" />
 									<div class="modal-content">
 										<div class="modal-header">
 											<h5 class="modal-title" id="deleteConfirmModalLabel">댓글
@@ -165,7 +204,7 @@
 				</c:choose>
 			</tbody>
 		</table>
-		
+
 		<!-- 페이징 영역 -->
 		<nav aria-label="Page navigation">
 			<ul class="pagination justify-content-center">
@@ -211,10 +250,37 @@
 	</div>
 
 	<script>
+	
+    const userNo = ${userNo};
+    const reviewIdentifier = ${reviewIdentifier};
+    
+    // 비로그인 시+이미 리뷰를 작성했을 시 재작성 금지
+    document.addEventListener("DOMContentLoaded", function () {
+    	if (userNo === -1 || reviewIdentifier > 0) {
+            const textarea = document.querySelector('textarea[name="comment"]');
+            if (textarea) {
+                textarea.readOnly = true;
+                if(reviewIdentifier > 0) textarea.placeholder = '이미 리뷰를 작성한 행사입니다.';
+                else textarea.placeholder = '로그인 후 리뷰를 작성할 수 있습니다.';
+            }
+            const select = document.querySelector('select[name="rating"].form-select.form-select-sm');
+            if (select) {
+                select.disabled = true;
+            }
+            const button = document.querySelector('button.btn.btn-outline-secondary.mt-2.col-12');
+            if (button) {
+                button.disabled = true;
+            }
+        }
+	});
+    
+    
 	// 수정 모달 열기
 	function openEditModal(userNo, comment) {
 		document.getElementById('editUserNo').value = userNo;
+		document.getElementById('editrating').value = rating;
 		document.getElementById('editComment').value = comment;
+		
 		const saveModal = new bootstrap.Modal(document.getElementById('saveConfirmModal'));
 		saveModal.show();
 	}
@@ -233,8 +299,24 @@
 		document.getElementById('editComment').value = comment;
 		new bootstrap.Modal(document.getElementById('saveConfirmModal')).show();
 	}
+	
+	// 수정 삭제 버튼
+	document.addEventListener("DOMContentLoaded", function () {
+	    document.querySelectorAll('.review-row').forEach(function (row) {
+	    	console.log(userNo);
+	        const commentUserNo = parseInt(row.dataset.commentId); // data-comment-id
+	
+	        if (commentUserNo === userNo) {
+	            const btn = row.querySelector('.btn-edit-delete');
+	            if (btn) {
+	                btn.style.display = 'block';
+	            }
+	        }
+	    });
+	});
 	</script>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

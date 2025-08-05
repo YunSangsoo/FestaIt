@@ -6,15 +6,12 @@
 	
 	
 	<select id="selectNoticeList" parameterType="map" resultType="com.kh.festait.noticeboard.model.vo.NoticeBoard">
-		SELECT * FROM (
-            SELECT ROWNUM RNUM, N.* FROM (
-                SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE, HIGHLIGHT
-                FROM NOTICE
-                ORDER BY NOTICE_ID DESC
-            ) N
-            WHERE ROWNUM &lt;= #{limit}
-        )
-        WHERE RNUM &gt; 0
+		SELECT ROWNUM RNUM, N.* FROM (
+		    SELECT NOTICE_ID, NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, UPDATE_DATE, HIGHLIGHT
+		    FROM NOTICE
+		    ORDER BY NOTICE_ID DESC
+		) N
+		WHERE ROWNUM &lt;= #{limit}
 	</select>
 	
 	<sql id="commonSelectEvent">
@@ -29,34 +26,30 @@
             SUBSTR(LOCATION, 0, 2) REGION,
             START_DATE, 
             END_DATE,
-            APP_ORG
+            APP_ORG,
+            CHANGE_NAME
         FROM EVENT_APPLICATION
         JOIN EVENT_CATEGORY USING(EVENT_CODE)
+        JOIN IMAGE I ON APP_ID = REF_NO AND I.IMG_TYPE = 'A'
         WHERE STAT_CODE = 'A'
         AND END_DATE &gt;= TRUNC(SYSDATE)
 	</sql>
 	
 	<select id="selectEventList" resultMap="eventBoardMap" parameterType="map">
-		SELECT * FROM (
-		    SELECT ROWNUM RNUM, N.* FROM (
-		    	<include refid="commonSelectEvent" />
-		    	ORDER BY END_DATE
-		    ) N
-            WHERE ROWNUM &lt;= #{limit}
-        )
-        WHERE RNUM &gt; 0
+	    SELECT ROWNUM RNUM, N.* FROM (
+	    	<include refid="commonSelectEvent" />
+	    	ORDER BY END_DATE
+	    ) N
+        WHERE ROWNUM &lt;= #{limit}
 	</select>
 	
 	<select id="selectTodayEventList" resultMap="eventBoardMap" parameterType="map">
-		SELECT * FROM (
-		    SELECT ROWNUM RNUM, N.* FROM (
-		    	<include refid="commonSelectEvent" />
-			    	AND START_DATE &lt;= SYSDATE
-		    	ORDER BY END_DATE
-		    ) N
-            WHERE ROWNUM &lt;= #{limit}
-        )
-        WHERE RNUM &gt; 0
+	    SELECT ROWNUM RNUM, N.* FROM (
+	    	<include refid="commonSelectEvent" />
+		    	AND START_DATE &lt;= SYSDATE
+	    	ORDER BY END_DATE
+	    ) N
+        WHERE ROWNUM &lt;= #{limit}
 	</select>
 
 	<resultMap id="eventBoardMap" type="EventBoard">
@@ -71,8 +64,46 @@
         <result property="startDate" column="START_DATE"/>
         <result property="endDate" column="END_DATE"/>
         <result property="appOrg" column="APP_ORG"/>
+        
+        <association property="posterImage" javaType="com.kh.festait.common.model.vo.Image">
+            <result property="changeName" column="CHANGE_NAME"/>
+        </association>
     </resultMap>
         <!-- appSubTitle 아래 행 <result property="userNo" column="USER_NO"/> --> <!-- 로그인 후========================= -->
+	
+	<select id="selectReviewList" parameterType="map" resultType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
+		SELECT ROWNUM RNUM, A.* FROM (
+           	SELECT R.USER_NO, R.APP_ID, R."COMMENT",
+           		R.RATING, R.CREATE_DATE, R.UPDATE_DATE,
+           		U.USER_ID, U.USER_NAME, U.NICKNAME, APP.APP_TITLE
+			FROM REVIEW R
+			JOIN USERS U ON R.USER_NO = U.USER_NO
+			JOIN EVENT_APPLICATION APP ON R.APP_ID = APP.APP_ID
+			ORDER BY R.CREATE_DATE DESC
+		) A
+        WHERE ROWNUM &lt;= #{limit}
+	</select>
+	
+	<select id="selectPromoList" resultMap="promoBoardResultMap">
+		SELECT
+            EP.PROM_ID, I.CHANGE_NAME
+        FROM EVENT_PROMOTION EP
+        JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+        LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+        WHERE U.STATUS = 'T' AND I.IMG_ORDER = 1
+        ORDER BY EP.PROM_ID DESC
+	</select>
+	
+	
+	<resultMap id="promoBoardResultMap" type="com.kh.festait.promoboard.model.vo.PromoBoardVo">
+        <id property="promoId" column="PROM_ID"/>
+
+        <association property="posterImage" javaType="com.kh.festait.common.model.vo.Image">
+            <result property="changeName" column="CHANGE_NAME"/>
+        </association>
+    </resultMap>
+	
 
 
 </mapper>

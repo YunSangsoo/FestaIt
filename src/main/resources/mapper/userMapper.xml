@@ -46,7 +46,6 @@
                          , ADDR 
                          , PHONE 
                          , ENROLL_DATE
-                         , STATUS
                          , GENDER
                          )
                 VALUES (
@@ -60,7 +59,6 @@
                			 , #{address1} || ' ' || #{address2}
                			 , #{phone}
                			 , SYSDATE
-               			 , 'Y'
                			 , '1'
                	 		)	
 	</insert>
@@ -181,21 +179,12 @@
 	
 	
 	<insert id="insertAuthority">
-		INSERT INTO AUTHORITIES 
-		(AUTHORITY,
-		USER_ID) 
-		VALUES 
-		(
-		<choose>
-			<when test="userType.equals('개인')">
-				'ROLE_USER'
-			</when>
-			<when test="userType.equals('사업자')">
-				'ROLE_MANAGER'
-			</when>
-		</choose>
-		,
-		#{userId})
+		INSERT ALL
+		INTO AUTHORITIES (AUTHORITY, USER_ID) VALUES ('ROLE_USER',#{userId})
+		<if test="userType.equals('사업자')">
+		INTO AUTHORITIES (AUTHORITY, USER_ID) vALUES ('ROLE_MANAGER',#{userId})
+		</if>
+    	SELECT * FROM DUAL
 	</insert>
 	
 	<select id="getUserByUser" resultType="user">

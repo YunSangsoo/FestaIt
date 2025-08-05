@@ -71,10 +71,12 @@ $(document).ready(function () {
 		    },
 			data : {
 				appId : appId
-			},
-			error : function() {
-				alert('로그인 후 사용할 수 있는 기능입니다.');
 			}
+//			,
+//			error : function() {
+//				console.log("check");
+//				alert('로그인 후 사용할 수 있는 기능입니다.');
+//			}
 		});
   });
 });

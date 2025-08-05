@@ -4,7 +4,7 @@
 
 /* 기본 설정 */
 body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'noto sans kr', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f8f9fa; 
@@ -23,7 +23,7 @@ body {
     height: 80px;
 }
 
-/* Flash Message (알림 메시지) */
+/* flash message (알림 메시지) */
 .alert {
     padding: 15px;
     margin-bottom: 20px;
@@ -110,24 +110,25 @@ body {
 }
 
 .register-promo-btn {
-    display: inline-block;
-    padding: 10px 25px;
-    background-color: #b481d9;
-    color: white;
-    border: 1px solid #a069cb;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    cursor: pointer;
+    background-color: #9370db !important; 
+    color: white !important;
+    border: none !important; 
+    padding: 10px 20px !important; 
+    border-radius: 5px !important; 
+    font-size: 1em !important; 
+    transition: background-color 0.3s ease !important; 
+    min-width: 120px !important; 
+    text-align: center !important; 
+    text-decoration: none !important; 
+    vertical-align: middle !important; 
+    cursor: pointer !important; 
 }
 
 .register-promo-btn:hover {
-    background-color: #a069cb;
-    transform: translateY(-2px);
+    background-color: #8a2be2 !important;
+    color: white !important;
 }
 
-/* 구분선 (기존 .hr 대체) */
 .section-divider {
     border: 0;
     height: 1px;
@@ -161,8 +162,8 @@ body {
 }
 
 .post:hover {
-    transform: translateY(-5px);
-    box-shadow: #FFD700;
+    transform: translatey(-5px);
+    box-shadow: #ffd700;
 }
 
 .placeholder-post {
@@ -171,7 +172,7 @@ body {
 
 .placeholder-post:hover {
     transform: none;
-    box-shadow: #FFD700; 
+    box-shadow: #ffd700; 
 }
 
 .placeholder-post .post-title,
@@ -204,7 +205,7 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #EA870E;
+    background-color: #ea870e;
     color: white;
     padding: 5px 10px;
     border-radius: 5px;

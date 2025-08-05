@@ -29,6 +29,6 @@
 	<!-- @Transactional어노테이션 활성화 -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	
-	
+	<view-controller path="/denied" view-name="common/denied"/>
 	
 </beans:beans>

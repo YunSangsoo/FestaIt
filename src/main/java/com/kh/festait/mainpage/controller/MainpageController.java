@@ -9,10 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.kh.festait.bookmark.controller.BookmarkController;
+import com.kh.festait.common.service.ImageService;
 import com.kh.festait.eventboard.controller.EventBoardController;
 import com.kh.festait.eventboard.model.vo.EventBoard;
 import com.kh.festait.mainpage.model.service.MainpageService;
 import com.kh.festait.noticeboard.model.vo.NoticeBoard;
+import com.kh.festait.promoboard.model.vo.PromoBoardVo;
+import com.kh.festait.reviewboard.model.vo.ReviewBoard;
 import com.kh.festait.user.model.vo.User;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,8 @@ public class MainpageController {
 	private MainpageService mainpageService;
 	@Autowired
 	private BookmarkController bc;
+	@Autowired
+	private final ImageService imgService;
 	
 	// 0. 메인 페이지
 	public void mainpageLoading(Model model, Authentication authentication) {
@@ -37,15 +42,16 @@ public class MainpageController {
 	
 	// 1. 배너 슬라이더
 	private void bannerMain(Model model) {
-		// 홍보 게시물과 연결, 어떤 게시물을 띄울 것인지는 상의 필요
-//		model.addAttribute("bannerList", bannerService.getBannerList());
+		int limit = 3; // 출력할 최대 게시물 수
+	    List<PromoBoardVo> promoList = mainpageService.selectPromoList(limit);
+	    model.addAttribute("promoList", promoList);
 		
 	}
 	
 	// 2. 진행 중인 행사
 	private void eventMain(Model model, Authentication authentication) {
 		
-		int limit = 6; // 한 페이지에 보여줄 게시글 수
+		int limit = 6;
 	    List<EventBoard> eventList = mainpageService.selectEventList(limit);
 	    
 	    Integer userNo = 0;
@@ -64,7 +70,7 @@ public class MainpageController {
 	// 3. 오늘의 행사
 	private void todayEventMain(Model model) {
 		
-		int limit = 7; // 한 페이지에 보여줄 게시글 수
+		int limit = 7;
 	    List<EventBoard> todayEventList = mainpageService.selectTodayEventList(limit);
 	    model.addAttribute("todayEventList", todayEventList);
 		
@@ -73,13 +79,16 @@ public class MainpageController {
 	// 4. 실시간 리뷰
 	private void reviewMain(Model model) {
 		
+		int limit = 9;
+	    List<ReviewBoard> reviewList = mainpageService.selectReviewList(limit);
+	    model.addAttribute("reviewList", reviewList);
 		
 	}
 	
 	// 5. 공지사항
 	private void noticeMain(Model model) {
 		
-		int limit = 5; // 한 페이지에 보여줄 게시글 수
+		int limit = 5;
 	    List<NoticeBoard> noticeList = mainpageService.selectNoticeList(limit);
 	    model.addAttribute("noticeList", noticeList);
 		

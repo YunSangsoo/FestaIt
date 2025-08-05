@@ -35,7 +35,7 @@
             </c:if>
 
             <!-- 스프링 폼 태그로 폼 작성 -->
-            <form:form action="${pageContext.request.contextPath}/promoBoard/promoWrite" method="post" modelAttribute="promo" enctype="multipart/form-data">
+            <form:form action="${pageContext.request.contextPath}/promoBoard/promoWrite" method="post" modelAttribute="promo" enctype="multipart/form-data" id="inputForm">
                 
                 <!-- 행사 선택 -->
                 <div class="mb-3">
@@ -153,6 +153,24 @@
                 }
             });
         });
+        
+        document.getElementById('inputForm').addEventListener('submit', async (event) => {
+		    event.preventDefault();
+		    
+		    let modalTitle = "홍보 등록";
+		    let modalContent = "홍보를 등록하시겠습니까?";
+		    
+		    const result = await window.showCommonModal(
+		            modalTitle,
+		            modalContent,
+		        {
+		            cancelButtonText: "아니오",
+		            confirmButtonText: "네, 진행합니다"
+	        	}
+	        );
+		    if (result)
+		        event.target.submit();
+		});
     </script>
 </body>
 </html>

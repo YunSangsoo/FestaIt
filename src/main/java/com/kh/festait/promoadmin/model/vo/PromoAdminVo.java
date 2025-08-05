@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class PromoAdminVo {
-    // EVENT_PROMOTION 테이블의 주요 필드
+    // EVENT_PROMOTION 테이블
     private int promoId;             // PROM_ID (홍보 식별 번호)
     private int appId;               // APP_ID (행사 신청서 식별 번호)
     private String promoTitle;       // PROM_TITLE (홍보 제목)
@@ -24,21 +24,20 @@ public class PromoAdminVo {
     private Date createDate;         // CREATE_DATE (홍보 작성일)
     private Date updateDate;         // UPDATE_DATE (홍보 수정일)
     private int views;               // VIEWS (조회수)
-    // private String status; // 이전 필드 (제거됨)
 
-    // USERS 테이블 조인 필드 (작성자 정보)
+    // USERS 테이블 (작성자 정보)
     private String promoWriter;      // NICKNAME (작성자 닉네임)
     private int writerUserNo;        // 작성자의 USER_NO (사용자 번호)
-    private String userStatus;       // USERS 테이블의 STATUS (T/F) 값을 받을 필드
+    private String userStatus;       // USERS 테이블의 STATUS
 
-    // IMAGE 테이블 조인 필드 (포스터 이미지 정보)
+    // IMAGE 테이블 (포스터 이미지 정보)
     private long imgNo;              // IMG_NO (IMAGE 기본키)
     private String posterPath;       // CHANGE_NAME (파일명)
     private String originalFilename; // ORIGIN_NAME (원본 파일명)
 
-    // EVENT_APPLICATION 테이블 조인 필드 (연결된 행사 신청서 정보)
+    // EVENT_APPLICATION 테이블 (연결된 행사 신청서 정보)
     private String promotionPageUrl; // WEBSITE (행사 사이트 URL)
-    private String isPromoted;       // STAT_CODE (신청서 상태 코드, 홍보 상태를 나타낼 수 있음)
+    private String isPromoted;       // STAT_CODE (신청서 상태 코드, 홍보 상태)
     private Date startDate;          // START_DATE (행사 시작일)
     private Date endDate;            // END_DATE (행사 종료일)
     private String appTitle;         // APP_NAME (행사 신청명)

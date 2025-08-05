@@ -52,7 +52,7 @@
 
         <div class="mb-4 image-preview-container">
             <c:choose>
-                <c:when test="${not empty promo.posterImage.changeName}"> <%-- ⭐️⭐️ 이 부분을 수정했습니다: promo.posterPath -> promo.posterImage.changeName ⭐️⭐️ --%>
+                <c:when test="${not empty promo.posterImage.changeName}">
                     <img src="${contextPath}${promo.posterImage.changeName}" alt="홍보 포스터" class="rounded shadow-sm"
                          onerror="this.onerror=null;this.src='https://placehold.co/600x600/e0e0e0/ffffff?text=No+Image';" />
                 </c:when>
