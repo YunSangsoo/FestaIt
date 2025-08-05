@@ -61,8 +61,10 @@
             </div>
         </div>
     </div>
-    
-
+    <!-- 비밀번호 변경완료시 알럿창 출력 이거 메인페이지에도 있어야함-->
+	<c:if test="${not empty alertMsg}">
+		<script>alert('${alertMsg}');</script>
+	</c:if>
  	
 	
 	

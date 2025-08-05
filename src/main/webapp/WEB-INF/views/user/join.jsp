@@ -135,10 +135,10 @@
 				
 				<div>
 					<h3>
-						<label for="bsGrgiNum" id="bsGrgiNumText" name="bsGrgiNum">사업자번호</label>
+						<label for="bsGrgiNum" id="bsGrgiNumText" name="bsGrgiNum" >사업자번호</label>
 					</h3>
 					<form:input path="manager.bsRegiNum" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
-					 id="bsGrgiNum" class="box4" required="required"/>
+					 id="bsGrgiNum" maxlength="10" class="box4" required="required"/>
 				</div>
 				
 				<div>
@@ -165,6 +165,8 @@
 	<!--!!!비밀번호 검사 스크립트!!! 실수하면 고치기 힘듦 !!!!-->
 	<script>
         
+		let timerInterVal;
+		let nickDupChkVal = false;
         let idDupChkVal = false; //아이디 중복 체크 통과 여부 값
         const token = $("meta[name='_csrf']").attr("content");
         const header = $("meta[name='_csrf_header']").attr("content");
@@ -334,7 +336,7 @@
 
         <!--ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ닉 중복확인 스크립트ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ-->
         let usernick = $('input[name=nickname]').val();
-        let nickDupChkVal = false
+        
         
         function checkNick() {
         	
@@ -404,7 +406,7 @@
 	<!-- 여기서부터 이메일인증코드 발송/확인 스크립트 -->	
 		
 		
-        let timerInterVal;
+        
 
         function startTimer(duration) {
             let timeRemaining = duration;

@@ -42,4 +42,8 @@ public interface UserDao {
 	String findUserIdEmail(String email);
 
 	int updatePasswordByEmail(Map<String, Object> paramMap);
+
+	int updateNickname(Map<String, Object> param);
+
+	int updatePassword(Map<String, Object> param);
 }
