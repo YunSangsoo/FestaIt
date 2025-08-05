@@ -115,7 +115,7 @@
 				<sec:authorize access="isAuthenticated()">
 					   
 					   <form:form class="me-2" action="${pageContext.request.contextPath}/user/logout" method="post" id="logoutForm">
-							<a href="/user/myPage" class="btn btn-outline-light me-2">
+							<a href="${pageContext.request.contextPath}/user/myPage" class="btn btn-outline-light me-2">
 							   ${pageContext.request.userPrincipal.name}님 마이페이지</a>
 						    <button type="submit" class="btn btn-warning">로그아웃</button>
 						</form:form>

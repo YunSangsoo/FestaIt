@@ -132,4 +132,14 @@ public class UserDaoImpl implements UserDao{
 		return sqlSession.update("user.updatePasswordByEmail", paramMap);
 	}
 
+	@Override
+	public int updateNickname(Map<String, Object> param) {
+		return sqlSession.update("updateNickname", param);
+	}
+
+	@Override
+	public int updatePassword(Map<String, Object> param) {
+		return sqlSession.update("updatePassword", param);
+	}
+
 }

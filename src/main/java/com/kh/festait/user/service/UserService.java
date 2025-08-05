@@ -23,5 +23,9 @@ public interface UserService {
 	String findUserIdEmail(String email);
 
 	int updatePasswordByEmail(String email, String newPassword);
+
+	int updateNick(String userId, String nickname);
+
+	int updatePassword(String userId, String newPassword);
 	
 }

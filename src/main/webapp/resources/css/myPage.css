@@ -301,5 +301,8 @@ small { /*비밀번호, 아이디 에러 메세지*/
     display: none;
 }
 
-
+.profile2{
+    margin-left: 70px;
+    
+}
 
