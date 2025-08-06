@@ -25,6 +25,7 @@
 <body>
 
     <jsp:include page="/WEB-INF/views/common/header.jsp" />
+        <jsp:include page="/WEB-INF/views/common/modal.jsp" />
 
     <div class="page-wrapper">
         
@@ -48,7 +49,7 @@
             </div>
 
             <div class="register-button-area">
-                <%-- Spring Security 태그를 사용하여 'MANAGER' 또는 'ADMIN' 권한만 보이게 처리 --%>
+                <%-- 'MANAGER' 또는 'ADMIN' 권한만 보이게 처리 --%>
                 <sec:authorize access="hasAnyRole('MANAGER', 'ADMIN')">
                     <button type="button" class="register-promo-btn" id="registerPromoButton">
                         등록하기
@@ -69,12 +70,12 @@
                         } else {
                             alert("검색된 게시글이 없습니다.");
                         }
-                    }, 100); // 약간의 지연을 주어 commonModal 로드를 기다림
+                    }, 100);
                 });
             </script>
         </c:if>
         <c:if test="${empty promoList and empty param.searchKeyword}">
-            <p style="color:red; font-weight:bold;">게시글 리스트가 비어있어요.</p>
+            <p style="color:red; font-weight:bold;">게시글 리스트가 없습니다.</p>
         </c:if>
 
         <div class="promotion-container">
@@ -85,7 +86,6 @@
                                                 <c:param name='promoId' value='${promo.promoId}'/>
                                             </c:url>'">
                     <div class="poster">
-                        <%-- ⭐️⭐️ 이 부분을 수정했습니다: promo.posterPath -> promo.posterImage.changeName ⭐️⭐️ --%>
                         <img src="${contextPath}${promo.posterImage.changeName}" alt="포스터 이미지" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
                     </div>
                     <div class="views-count">조회수 ${promo.views}</div>
@@ -114,7 +114,8 @@
                 </c:forEach>
             </c:if>
         </div>
-
+        
+        <!-- 페이지네이션 -->
         <div class="pagination-container d-flex justify-content-center">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
@@ -150,7 +151,6 @@
                 </ul>
             </nav>
         </div>
-
     </div>    
 
     <jsp:include page="/WEB-INF/views/common/footer.jsp" />

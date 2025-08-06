@@ -1,8 +1,13 @@
 package com.kh.festait.user.controller;
 
+import java.io.File;
+import java.util.UUID;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kh.festait.security.model.vo.UserExt;
 import com.kh.festait.user.model.vo.User;
 import com.kh.festait.user.service.UserService;
 
@@ -55,18 +62,25 @@ public class UserController {
 	
 	//마이페이지 이동
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
-	public ModelAndView myPage(HttpSession session) {
-		ModelAndView mv = new ModelAndView();
-		User loginUserInfo = (User) session.getAttribute("loginUser");
+	public ModelAndView myPage(@AuthenticationPrincipal UserExt userDetails,
+			Authentication auth
+			) {
 		
-		String userId = loginUserInfo.getUserId();
+		User u = (User)auth.getPrincipal();
+		log.info("user detail : {}",u);
+		
+		ModelAndView mv = new ModelAndView();
+		
+		/*String userId = userDetails.getUsername();
 		
 		User u = uService.myPageUserInfo(userId);
-		System.out.println("u : "+u.toString());
+		System.out.println("u : "+u.toString());*/
+		
 		mv.addObject("userInfo", u);
 		mv.setViewName("/user/myPage");
 		return mv;
 	}
+	
 	
 	//아이디 비번찾기창 이동
 	@RequestMapping(value = "/Idpw", method = RequestMethod.GET)
@@ -96,6 +110,12 @@ public class UserController {
 		return "user/newPw";
 	}
 	
+	//닉,비밀번호 변경페이지로 이동
+	@RequestMapping(value = "/mypage_nickPw", method = RequestMethod.GET)
+	public String mypage_nickPw() {
+		return "user/mypage_nickPw";
+	}
+	
 	/*********** POST MAPPING *////////
 	//회원 가입 
 	@RequestMapping(value = "/join", method = RequestMethod.POST) 
@@ -116,7 +136,7 @@ public class UserController {
 		return viewName;
 	}
 	
-	
+	//로그인
 	@PostMapping("/login")
 	public ModelAndView loginUser(User u, ModelAndView mv, Model model, 
 			HttpSession session, // 로그인 성공시, 사용자 정보를 보관할 객체
@@ -125,7 +145,8 @@ public class UserController {
 		User loginUser = uService.login(u);
 		log.info("user : {}",loginUser);
 		if(loginUser != null) {
-			model.addAttribute("loginUser",loginUser);
+			session.setAttribute("loginUser", loginUser);
+			System.out.println("세션에 있는 아이디" + session.getAttribute("loginUser")); //테스트용
 			ra.addFlashAttribute("alertMsg", "로그인 성공.");
 		}else {
 			ra.addFlashAttribute("alertMsg", "로그인 실패.");
@@ -194,15 +215,17 @@ public class UserController {
 		int succesYn = uService.updateUser(u);
 		return "/main";
 	}
-	
+	//비밀번호 찾기
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
 	public String resetPassword(
 			@RequestParam("email") String email,
 			@RequestParam("newPassword") String newPassword,
-			@RequestParam("confirmPassword") String confirmPassword) {
+			@RequestParam("confirmPassword") String confirmPassword,
+			RedirectAttributes redirectAttributes) {
 			
 		if (!newPassword.equals(confirmPassword)) {
-			return "<script>alert('비밀번호가 일치하지 않습니다.'); location.href='/user/Idpw';</script>";
+			redirectAttributes.addFlashAttribute("alertMsg","비밀번호가 일치하지 않습니다.");
+			return "redirect:/user/Idpw";
 		}
 
 	    System.out.println("업데이트 결과: " + email + " " + newPassword); // 테스트용
@@ -211,12 +234,79 @@ public class UserController {
 	    System.out.println("업데이트 결과: " + result); // 테스트용
 	    
 		if (result > 0) { // 성공시
+			log.info("result : {}",result);
+			redirectAttributes.addFlashAttribute("alertMsg","비밀번호가 변경되었습니다");
 			return "redirect:/user/login";
 
 		} else { // 실패시
+			redirectAttributes.addFlashAttribute("alertMsg","비밀번호 변경에 실패했습니다.");
 	        return "redirect:/user/Idpw";
 		}
 	}
+	
+	// 닉네임변경
+	@ResponseBody
+	@RequestMapping(value = "/updateNick", method = RequestMethod.POST)
+	public String updateNickname(@RequestParam("nickname") String nickname,
+								Authentication auth,
+								 @AuthenticationPrincipal UserExt userDetails) {
+		
+		System.out.println("호출완료");
+		String userId = ((User)auth.getPrincipal()).getUserId(); // 이런식으로 가져와야함
+		//String userId = userDetails.getUsername();
+	    System.out.println("userId = " + userId + ", nickname = " + nickname);
+
+		int result =uService.updateNick(userId, nickname);
+	    System.out.println("update result = " + result);
+
+		return result > 0 ? "success":"fail";
+	}
+	//비번 변경
+	@ResponseBody
+	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+	public String updatePassword(
+			@RequestParam("newPassword")String newPassword,
+			Authentication auth,
+			@AuthenticationPrincipal UserExt userDetails) {
+		
+		System.out.println("새 비밀번호 (평문) = " + newPassword);
+		
+	    String encodedPwd = passwordEncoder.encode(newPassword);
+	    System.out.println("암호화된 비밀번호 ="+ encodedPwd);
+	    
+		String userId = ((User)auth.getPrincipal()).getUserId();
+		log.info("user before : {}",((User)auth.getPrincipal()).getUserPwd());
+		log.info("user : {}",encodedPwd);
+		int result = uService.updatePassword(userId, encodedPwd);
+		log.info("user : {}",userId);
+		log.info("user : {}",encodedPwd);
+		return result > 0 ? "success" : "fail";
+ 	}
+	@ResponseBody
+	@RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
+	public String uploadProfile(@RequestParam("profileImage") MultipartFile file,
+			HttpSession session) {
+			if (file.isEmpty()) {
+				return "fail";
+			}
+			try {
+				String uploadDir = "C:/"; // 저장경로
+				String originalFilename = file.getOriginalFilename();
+				
+				String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFilename;
+				
+				File savaFile = new File(uploadDir + uniqueFileName);
+				file.transferTo(saveFile);
+				
+				String userId = (String) session.getAttribute("loginUserId");
+				
+				return "success";
+				} catch (Exception e) {
+					e.printStackTrace();
+					return "fail";
+				}
+	}
+	
 }
 
 

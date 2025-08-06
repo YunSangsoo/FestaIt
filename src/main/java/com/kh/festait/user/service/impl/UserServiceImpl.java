@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kh.festait.user.model.dao.UserDao;
@@ -15,6 +16,9 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserDao uDao;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Override
 	public Map<String, String> loginUser(User u) {
@@ -87,7 +91,7 @@ public class UserServiceImpl implements UserService{
 	public String findUserIdEmail(String email) {
 		return uDao.findUserIdEmail(email);
 	}
-
+	//비번찾기
 	@Override
 	public int updatePasswordByEmail(String email, String newPassword) {
 		Map<String, Object> paramMap = new HashMap<>();
@@ -96,5 +100,30 @@ public class UserServiceImpl implements UserService{
 		
 		return uDao.updatePasswordByEmail(paramMap);
 	}
+	//닉변
+	@Override
+	public int updateNick(String userId, String nickname) {
+		System.out.println("서비스 userId = " + userId);
+	    System.out.println("서비스 nickname = " + nickname);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("userId", userId);
+		param.put("nickname", nickname);
+		
+		return uDao.updateNickname(param);
+	}
+
+	@Override
+	public int updatePassword(String userId, String newPassword) {
+		
+		//String updatePw = passwordEncoder.encode(newPassword);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("userId", userId);
+		param.put("userPwd", newPassword);
+		
+		return uDao.updatePassword(param);
+	}
+
 
 }

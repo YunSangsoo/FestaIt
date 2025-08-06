@@ -1,14 +1,13 @@
 package com.kh.festait.promoboard.controller;
 
 import java.util.*;
-import java.io.File; // File 클래스 사용을 위한 import 추가
-import java.io.IOException; // IOException 처리 추가 (파일 삭제 시 발생 가능)
+import java.io.File;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.*;
-import javax.servlet.ServletContext; // ServletContext 주입을 위해 필요
+import javax.servlet.ServletContext; 
 
-import org.springframework.beans.factory.annotation.Autowired; // @Autowired 사용을 위해 추가
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,8 +22,8 @@ import com.kh.festait.common.Pagination;
 import com.kh.festait.promoboard.model.service.PromoBoardService;
 import com.kh.festait.promoboard.model.vo.PromoBoardVo;
 import com.kh.festait.security.model.vo.UserExt;
-import com.kh.festait.common.model.vo.Image; // Image VO import 추가
-import com.kh.festait.common.service.ImageService; // ImageService import 추가
+import com.kh.festait.common.model.vo.Image;
+import com.kh.festait.common.service.ImageService; 
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +88,7 @@ public class PromoBoardController {
         HttpServletResponse res,
         Authentication authentication
     ) {
+    	log.info("PromoBoardController.selectPromoDetail 호출, promoId={}", promoId);
         PromoBoardVo promo = promoService.selectPromoDetail(promoId);
         if (promo == null) {
             ra.addFlashAttribute("alertMsg", "해당 게시물을 찾을 수 없습니다.");
@@ -412,7 +412,7 @@ public class PromoBoardController {
         if (serverFilePath == null) {
             log.error("ServletContext.getRealPath(\"{}\")가 null을 반환했습니다. 파일을 삭제할 수 없습니다. 배포 환경 확인 필요.", fullWebPathToDelete);
             return; 
-        }
+        } 
 
         File fileToDelete = new File(serverFilePath);
 
@@ -443,7 +443,6 @@ public class PromoBoardController {
         return null;
     }
 
-
     // 공통 - 태그, 제목, 내용 XSS 방지 및 줄바꿈 처리
     private void sanitizePromoFields(PromoBoardVo promo) {
         if (promo.getPromoTitle() != null) {
@@ -453,7 +452,6 @@ public class PromoBoardController {
             promo.setPromoDetail(Utils.XSSHandling(promo.getPromoDetail()).replace("\r\n", "<br>"));
         }
     }
-    
     // 공통 - 예외 메시지 처리
     private String getExceptionMessage(Exception e) {
         if (e.getMessage() == null || e.getMessage().isEmpty()) {

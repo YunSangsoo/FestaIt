@@ -36,9 +36,7 @@
         
         <form:hidden path="promoId" />
         <form:hidden path="appId" />
-        <%-- ⭐️⭐️ 이 부분을 수정했습니다: originalFilename은 Image 객체에 속해 있으므로 promo.posterImage.originalName으로 접근 ⭐️⭐️ --%>
         <form:hidden path="posterImage.originName" />
-        <%-- ⭐️⭐️ 이 부분을 수정했습니다: posterPath는 Image 객체의 changeName 필드에 해당하므로 promo.posterImage.changeName으로 접근 ⭐️⭐️ --%>
         <form:hidden path="posterImage.changeName" id="originalPromoPosterPath" />
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
@@ -60,7 +58,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label"><strong>프로모션 URL</strong></label>
+            <label class="form-label">홍보 URL</label>
             <form:input path="promotionPageUrl" cssClass="form-control" type="url" readonly="true" id="promotionPageUrl" />
         </div>
 
@@ -85,7 +83,6 @@
             </div>
         </div>
 
-        <%-- 여기부터 요청하신 수정된 버튼 부분입니다 --%>
         <div class="d-flex justify-content-end mt-4 align-items-center gap-2">
             <sec:authorize access="isAuthenticated()">
                 <sec:authentication property="principal.userNo" var="loginUserNo" />

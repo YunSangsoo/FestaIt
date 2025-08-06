@@ -122,12 +122,11 @@
 		<sec:authorize access="hasRole('ROLE_ADMIN')">
 			<form action="${pageContext.request.contextPath}/noticeBoard/delete"
 				method="post"
-				style="position: relative; display: inline-block; margin-top: -42px; float: right; margin-right: 90px;">
+				style="position: relative; display: inline-block; margin-top: -42px; float: right; margin-right: 90px;" id="deleteForm">
 				<input type="hidden" name="noticeId" value="${notice.noticeId}" />
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
-				<button type="submit" class="btn btn-danger"
-					onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+				<button type="submit" class="btn btn-danger" id="deleteNotice">삭제</button>
 			</form>
 		</sec:authorize>
 	</div>
@@ -167,6 +166,24 @@
 		function cancelEdit() {
 			location.reload();
 		}
+		document.getElementById('deleteForm').addEventListener('submit', async (event) => {
+		    event.preventDefault();
+		    
+		    let modalTitle = "공지 삭제";
+		    let modalContent = "공지를 삭제하시겠습니까?";
+		    
+		    const result = await window.showCommonModal(
+		            modalTitle,
+		            modalContent,
+		        {
+		            cancelButtonText: "아니오",
+		            confirmButtonText: "네, 진행합니다"
+	        	}
+	        );
+		    if (result)
+		        event.target.submit();
+		});
+		
 	</script>
 
 	<script

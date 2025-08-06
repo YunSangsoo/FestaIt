@@ -15,9 +15,9 @@ import com.kh.festait.promoboard.model.vo.PromoBoardVo;
 public class PromoBoardDaoImpl implements PromoBoardDao {
 
     @Autowired
-    private SqlSessionTemplate sqlSession; // SqlSessionTemplate을 DaoImpl에서 주입받음
+    private SqlSessionTemplate sqlSession; 
 
-    private static final String NAMESPACE = "promoBoardMapper"; // MyBatis 매퍼 네임스페이스
+    private static final String NAMESPACE = "promoBoardMapper";
 
     @Override
     public int selectPromoCount() {
@@ -31,6 +31,11 @@ public class PromoBoardDaoImpl implements PromoBoardDao {
         return sqlSession.selectList(NAMESPACE + ".selectPromoList", null, rowBounds);
     }
 
+    @Override
+    public int updateEventApplicationWebsite(PromoBoardVo promo) {
+        return sqlSession.update(NAMESPACE + ".updateEventApplicationWebsite", promo);
+    }
+    
     @Override
     public int selectSearchPromoCount(String searchKeyword) {
         return sqlSession.selectOne(NAMESPACE + ".selectSearchPromoCount", searchKeyword);
