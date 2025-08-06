@@ -83,6 +83,8 @@
 		base-package="com.kh.festait.security" />
 	<context:component-scan
 		base-package="com.kh.festait.user" />
+	<context:component-scan
+		base-package="com.kh.festait.common" />
 
 	<!-- authentication-manager -인증 처리를 담당하는 핵심 컴포넌트 authentication-provider 
 		-authentication-manager에 등록되어 실제 인증로직을 수행하는 객체 -실제 인증로직으로 userDetailService를 
