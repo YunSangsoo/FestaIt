@@ -125,7 +125,7 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const imageUrl = e.target.result;
-                        const noImageTextSpan = imagePrevie w.querySelector('.no-image-text');
+                        const noImageTextSpan = imagePreview.querySelector('.no-image-text');
                         if (noImageTextSpan) {
                             noImageTextSpan.remove();
                         }
