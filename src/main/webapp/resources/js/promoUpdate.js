@@ -157,21 +157,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-
-document.getElementById('promoUpdateForm').addEventListener('submit', async (event) => {
-		    event.preventDefault();
-		    
-		    let modalTitle = "게시글 저장 확인";
-		    let modalContent = "게시글 내용을 저장하시겠습니까?";
-		    
-		    const result = await window.showCommonModal(
-		            modalTitle,
-		            modalContent,
-		        {
-		            cancelButtonText: "아니오",
-		            confirmButtonText: "네, 진행합니다"
-	        	}
-	        );
-		    if (result)
-		        event.target.submit();
-});
