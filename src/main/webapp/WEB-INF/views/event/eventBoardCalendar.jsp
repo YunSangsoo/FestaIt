@@ -30,7 +30,7 @@
 
 	<c:if test="${not empty param}">
 		<c:set var="searchParam"
-			value="&eventCode=${param.eventCode}&region=${param.region}&keyword=${param.keyword}&startDate=${param.startDate}&endDate=${param.endDate}" />
+			value="&eventCode=${param.eventCode}&region=${param.region}&keyword=${param.keyword}&startDate=${param.startDate}&endDate=${param.endDate}&bookmark=${param.bookmark}" />
 	</c:if>
 
 	<div class="container" id="container">
@@ -38,7 +38,7 @@
 
 		<!-- 검색 영역 -->
 		<form:form modelAttribute="eventSearch"
-			action="${pageContext.request.contextPath}/eventBoard/list"
+			action="${pageContext.request.contextPath}/eventBoard/calendar"
 			method="get">
 			<div class="search-section">
 				<div class="search-grid date">
@@ -128,7 +128,7 @@
 		<div class="flex-area result-inform">
 			<div class="flex-area view-format flex-center">
 				<div class="total-num">총 ${pi.totalCount}건</div>
-				<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<sec:authorize access="hasRole('ROLE_MANAGER')">
 					<a href="${pageContext.request.contextPath}/myEventApp"
 						class="btn lavender-btn">행사 신청 현황</a>
 					<!-- 경로 수정 필요 -->

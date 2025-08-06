@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.festait.bookmark.controller.BookmarkController;
 import com.kh.festait.common.Pagination;
+import com.kh.festait.common.model.vo.Image;
 import com.kh.festait.common.model.vo.PageInfo;
+import com.kh.festait.common.service.ImageService;
 import com.kh.festait.eventboard.model.Service.EventBoardService;
 import com.kh.festait.eventboard.model.vo.EventBoard;
 import com.kh.festait.user.model.vo.User;
@@ -30,7 +32,10 @@ public class EventBoardController {
 	@Autowired
 	private EventBoardService eventBoardService;
 	@Autowired
+	private final ImageService imgService;
+	@Autowired
 	private BookmarkController bc;
+	private String boardCode = "A";
 	
 	//1-1. 행사 리스트
 	@GetMapping("/list")
@@ -69,6 +74,7 @@ public class EventBoardController {
 		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
 		
 	    List<EventBoard> eventList = eventBoardService.selectEventList(pi, paramMap);
+	    setPosterImage(eventList);
 	    
 	    if (eventList != null) {
 	    	setRegion(eventList);
@@ -156,5 +162,13 @@ public class EventBoardController {
     	return list;
     }
     
+    public void setPosterImage(List<EventBoard> list) {
+		if (list != null) {
+			for(EventBoard event : list) {
+				Image eventImage = imgService.getImageByRefNoAndType(event.getAppId(), boardCode);
+				if(eventImage != null) event.setPosterImage(eventImage);
+			}
+		}
+	}
 }
 

@@ -4,29 +4,6 @@
 
 <mapper namespace="eventMapper">
 
-<!-- 		<select id="selectList" parameterType="map" resultType="board">
-		SELECT
-			BOARD_NO,
-			BOARD_TITLE,
-			USER_NAME AS BOARD_WRITER,
-			COUNT,
-			CREATE_DATE
-		FROM BOARD B
-		LEFT JOIN MEMBER M ON BOARD_WRITER = USER_NO
-		WHERE
-		B.STATUS='Y' AND BOARD_CD = #{boardCode} -->
-
-<!-- 이거 검색할 때 써야 함===================================================== -->
-<!-- 		<if test="keyword != null and keyword != ''">
-			AND
-			<choose>
-				<when test="condition.equals('title')">
-					BOARD_TITLE LIKE '%' || #{keyword} || '%'
-				</when>
-			</choose>
-		</if>
-	</select> -->
-	
 	<sql id="commonSelect">
 	    SELECT
             APP_ID, 
@@ -39,11 +16,9 @@
             SUBSTR(LOCATION, 0, 2) REGION,
             START_DATE, 
             END_DATE,
-            APP_ORG,
-            CHANGE_NAME
+            APP_ORG
         FROM EVENT_APPLICATION
         JOIN EVENT_CATEGORY USING(EVENT_CODE)
-        JOIN IMAGE I ON APP_ID = REF_NO AND I.IMG_TYPE = 'A'
         WHERE STAT_CODE = 'A'
         	AND (APP_TITLE LIKE '%' || #{keyword} || '%')
         	<if test="region != null and region != ''">
