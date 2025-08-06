@@ -1,8 +1,4 @@
-/*
-   promo-form.css
-   홍보 게시글 작성 및 수정 페이지에 공통으로 사용되는 스타일
-*/
-
+/* 기본 바디 설정 */
 body {
     font-family: 'Noto Sans KR', sans-serif;
     background-color: #f4f7f6;
@@ -26,7 +22,7 @@ body {
 
 .promo-form-title {
     text-align: center;
-    color: #4CAF50;
+    color: #000000;
     margin-bottom: 30px;
     font-size: 2em;
     font-weight: 700;
@@ -36,12 +32,12 @@ body {
     margin-bottom: 25px;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
-    font-size: 1.1em;
+label.form-label {
+    display: block !important;
+    margin-bottom: 8px !important;
+    font-weight: 600 !important;
+    color: #000000 !important;
+    font-size: 1em !important;
 }
 
 .form-control {
@@ -65,8 +61,7 @@ textarea.form-control {
     min-height: 150px;
 }
 
-
-/* --- 파일 입력 관련 스타일 (수정 및 통합) --- */
+/* 파일 입력 관련 스타일 */
 
 .file-input-group {
     margin-top: 30px;
@@ -96,20 +91,24 @@ textarea.form-control {
 }
 
 .file-upload-button {
-    background-color: #6A1B9A;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+    background-color: #A069CB;
+    border: 1.5px solid #904EBC;
+    color: #E9ECEF;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95em;
     cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
     white-space: nowrap;
     flex-shrink: 0;
-    z-index: 2; /* 버튼이 input 위에 보이도록 설정 */
+    z-index: 2;
+    box-shadow: none;
 }
 
 .file-upload-button:hover {
-    background-color: #5A1580;
+    background-color: #d7d8db; 
+    color: #6F3B89;
     transform: translateY(-1px);
 }
 
@@ -149,8 +148,7 @@ textarea.form-control {
     font-size: 0.9em;
 }
 
-
-/* --- 버튼 그룹 스타일 --- */
+/* 버튼 그룹 스타일 */
 
 .button-group {
     display: flex;
@@ -166,7 +164,8 @@ textarea.form-control {
     font-size: 1.1em;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transform: none !important;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease !important;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -177,7 +176,6 @@ textarea.form-control {
 
 .submit-btn:hover {
     background-color: #45a049;
-    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -188,12 +186,19 @@ textarea.form-control {
 
 .cancel-btn:hover {
     background-color: #da190b;
-    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+.btn-group .btn:hover,
+.btn-group .btn:focus,
+.btn-group .btn:active {
+    transform: none !important;
+    box-shadow: none !important;
+    top: auto !important;
+    position: relative !important;
+}
 
-/* --- 반응형 디자인 --- */
+/* 반응형 */
 
 @media (max-width: 768px) {
     .page-wrapper {
@@ -203,8 +208,8 @@ textarea.form-control {
     .promo-form-title {
         font-size: 1.8em;
     }
-    .form-group label {
-        font-size: 1em;
+    label.form-label {
+        font-size: 1em !important;
     }
     .form-control {
         padding: 10px 12px;

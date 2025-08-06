@@ -64,19 +64,22 @@
             <form:textarea path="promoDetail" cssClass="form-control" rows="10" readonly="true" id="promoDetail" />
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">홍보 URL</label>
-            <form:input path="promotionPageUrl" cssClass="form-control" type="url" readonly="true" id="promotionPageUrl" />
-        </div>
-        
-        <div class="form-group file-input-group">
-            <label class="form-label">포스터 이미지</label>
-            <div class="file-input-wrapper">
-                <input type="file" id="promoPoster" name="promoPoster" accept="image/*" class="form-control-file" disabled />
-                <label for="promoPoster" class="file-upload-button">파일 선택</label>
-                <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
-            </div>
-        </div>
+		<!-- 홍보 URL -->
+		<div class="form-group mb-3">
+		    <label class="form-label">홍보 URL (선택 사항)</label>
+            <form:input path="promotionPageUrl" id="promotionPageUrl" cssClass="form-control" placeholder="http:// 또는 https:// 로 시작하는 URL 입력" type="url" />
+            <form:errors path="promotionPageUrl" cssClass="text-danger mt-1" />
+		</div>
+		
+		<!-- 포스터 이미지 -->
+		<div class="form-group file-input-group mb-3">
+		    <label class="form-label">포스터 이미지</label>
+		    <div class="file-input-wrapper">
+		        <input type="file" id="promoPoster" name="promoPoster" accept="image/*" class="form-control-file" disabled />
+		        <label for="promoPoster" class="file-upload-button">파일 선택</label>
+		        <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
+		    </div>
+		</div>
 
         <div class="image-preview" id="imagePreview">
             <c:choose>

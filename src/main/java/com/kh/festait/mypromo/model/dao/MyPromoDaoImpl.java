@@ -17,13 +17,11 @@ public class MyPromoDaoImpl implements MyPromoDao {
     private SqlSessionTemplate sqlSession;
 
 
-    // 전체 홍보 게시글 수 조회
     @Override
     public int selectListCount(Map<String, Object> paramMap) {
         return sqlSession.selectOne("mypromoMapper.selectListCount", paramMap);
     }
 
-    // 로그인 사용자의 홍보 게시글 목록 조회 (페이징 포함)
     @Override
     public List<MyPromoVo> selectMyPromoList(Map<String, Object> paramMap, RowBounds rowBounds) {
         return sqlSession.selectList("mypromoMapper.selectMyPromoList", paramMap, rowBounds);

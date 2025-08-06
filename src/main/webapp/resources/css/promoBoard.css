@@ -2,7 +2,6 @@
     box-sizing: border-box;
 }
 
-/* 기본 설정 */
 body {
     font-family: 'noto sans kr', sans-serif;
     margin: 0;
@@ -11,19 +10,12 @@ body {
     color: #333;
 }
 
-/* 페이지 전체 래퍼 */
-.page-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+.container {  
+    margin-top: 50px !important;  
+    padding-top: 30px;
+    max-width: 1160px;
 }
 
-/* 헤더와 검색창 사이 공간 */
-.top-spacer {
-    height: 80px;
-}
-
-/* flash message (알림 메시지) */
 .alert {
     padding: 15px;
     margin-bottom: 20px;
@@ -39,7 +31,6 @@ body {
     border-color: #bee5eb;
 }
 
-/* 상단 섹션 (검색창, 등록하기 버튼) */
 .board-header-section {
     display: flex;
     flex-direction: column;
@@ -48,7 +39,6 @@ body {
     padding: 0 10px;
 }
 
-/* 검색창 영역 */
 .search-bar-area {
     width: 100%;
     display: flex;
@@ -56,7 +46,6 @@ body {
     margin-bottom: 15px;
 }
 
-/* 검색 폼 자체의 너비 조절 */
 .search-form {
     width: 100%;
     max-width: 600px !important;
@@ -102,11 +91,10 @@ body {
     background-color: #a069cb;
 }
 
-/* 등록하기 버튼 영역 */
 .register-button-area {
     width: 100%;
     text-align: right;
-    margin-top: 25px;
+    margin-top: 10px;
 }
 
 .register-promo-btn {
@@ -134,10 +122,9 @@ body {
     border: 0;
     height: 1px;
     background-color: #eee;
-    margin: 40px 0;
+    margin: 0px 0; 
 }
 
-/* 포스터 컨테이너 */
 .promotion-container {
     display: flex;
     flex-wrap: wrap;
@@ -146,7 +133,6 @@ body {
     margin-bottom: 50px;
 }
 
-/* 각 포스터 아이템 */
 .post {
     flex: 0 0 calc((100% - 3 * 30px) / 4);
     max-width: calc((100% - 3 * 30px) / 4);
@@ -236,26 +222,29 @@ body {
 }
 
 /* 페이지네이션 컨테이너 */
-.pagination-container {
+.pagination-container,
+.pagination-area {
     margin-top: 30px;
     margin-bottom: 50px;
     width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-/* 페이지네이션 아이템 간의 간격 */
+/* 페이지네이션 아이템 */
 .pagination .page-item {
-    margin: 0 2px;
+    margin: 0;
 }
 
-/* 페이지네이션 링크 스타일 */
+/* 페이지네이션 기본 */
 .pagination .page-item .page-link {
-    border-radius: 5px;
-    margin: 0 2px;
     color: #7B4BB7;
-    border-color: #904EBC;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 1px solid #ddd; 
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    border-radius: 0;
 }
 
+/* 마우스 오버 시 스타일 */
 .pagination .page-item .page-link:hover {
     color: #212529;
     background-color: #E9ECEF;
@@ -268,6 +257,15 @@ body {
     color: white;
 }
 
+.pagination .page-item:first-child .page-link {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination .page-item:last-child .page-link {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
     .post {

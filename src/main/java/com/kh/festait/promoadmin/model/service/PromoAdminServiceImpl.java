@@ -1,12 +1,8 @@
 package com.kh.festait.promoadmin.model.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// RowBounds는 Service 구현체에서는 직접 사용하지 않으므로 제거합니다.
-// import org.apache.ibatis.session.RowBounds; 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

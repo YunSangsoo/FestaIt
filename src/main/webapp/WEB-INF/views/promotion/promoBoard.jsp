@@ -12,8 +12,8 @@
 
     <c:set var="contextPath" value="${pageContext.request.contextPath}" />
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"  rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"  crossorigin="anonymous"
+/>    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="${contextPath}/resources/css/promoBoard.css">
 
@@ -25,9 +25,8 @@
 
     <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
-    <div class="page-wrapper">
-        
-        <div class="top-spacer"></div>
+	<div class="container mt-4" style="min-height: 600px;">
+        <h2 class="fw-bold mb-3">홍보 게시판</h2>
 
         <c:if test="${not empty alertMsg}">
             <div class="alert alert-info">${alertMsg}</div>
@@ -80,8 +79,8 @@
             
             <c:forEach var="promo" items="${promoList}">    
                 <div class="post" onclick="location.href='<c:url value='/promoBoard/detail'>
-                       <c:param name='promoId' value='${promo.promoId}'/>
-                               </c:url>'">
+                                <c:param name='promoId' value='${promo.promoId}'/>
+                                </c:url>'">
                     <div class="poster">
                         <img src="${contextPath}${promo.posterImage.changeName}" alt="포스터 이미지" onerror="this.onerror=null;this.src='https://placehold.co/400x400/CCCCCC/ffffff?text=No+Image';">
                     </div>
@@ -112,8 +111,7 @@
             </c:if>
         </div>
         
-        <!-- 페이지네이션 -->
-        <div class="pagination-container d-flex justify-content-center">
+        <div class="pagination-area">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item ${pi.currentPage <= 1 ? 'disabled' : ''}">
@@ -122,7 +120,7 @@
                             <c:param name="searchKeyword" value="${param.searchKeyword}"/>
                         </c:url>
                         <a class="page-link" href="${prevPageUrl}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
+                            <span aria-hidden="true">이전</span>
                         </a>
                     </li>
 
@@ -142,7 +140,7 @@
                             <c:param name="searchKeyword" value="${param.searchKeyword}"/>
                         </c:url>
                         <a class="page-link" href="${nextPageUrl}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
+                            <span aria-hidden="true">다음</span>
                         </a>
                     </li>
                 </ul>
@@ -153,7 +151,8 @@
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
     <jsp:include page="/WEB-INF/views/common/modal.jsp" />
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>    
     <script src="${contextPath}/resources/js/commonModal.js"></script>
 
     <script>

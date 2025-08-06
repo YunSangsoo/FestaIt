@@ -50,7 +50,6 @@ public class PromoAdminController {
         int pageLimit = 10;
         PageInfo pi = Pagination.getPageInfo(listCount, currentPage, boardLimit, pageLimit);
 
-        // DAO의 RowBounds 방식에 맞게 offset과 limit을 paramMap에 담는다.
         paramMap.put("offset", pi.getOffset());
         paramMap.put("limit", pi.getBoardLimit());
 

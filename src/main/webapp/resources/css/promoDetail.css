@@ -22,7 +22,6 @@ body {
     height: 60px; 
 }
 
-/* 이미지 미리보기 영역 (정사각형 컨테이너) */
 .image-preview-container {
     max-width: 500px; 
     width: 100%;
@@ -83,12 +82,10 @@ body {
 }
 
 .btn-group .btn:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-group .btn:active {
-    transform: translateY(0);
     box-shadow: none;
 }
 

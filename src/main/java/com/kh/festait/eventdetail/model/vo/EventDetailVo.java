@@ -49,5 +49,5 @@ public class EventDetailVo {
 
     private String eventAppName;   // 행사 신청명
     
-    private Image posterImage;
+    private Image posterImage;	// 이미지
 }

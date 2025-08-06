@@ -47,7 +47,7 @@
                     <div class="poster-section">
                         <img src="${contextPath}${event.posterImage.changeName}" alt="행사 포스터" class="event-poster-img">
                         <c:if test="${not empty event.website}">
-                            <a href="${event.website}" target="_blank" class="homepage-link">홈페이지 바로가기</a>
+                            <a href="${event.website}" class="homepage-link">홈페이지 바로가기</a>
                         </c:if>
                     </div>
 

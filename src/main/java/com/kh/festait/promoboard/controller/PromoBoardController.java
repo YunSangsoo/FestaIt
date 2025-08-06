@@ -43,7 +43,7 @@ public class PromoBoardController {
     private ServletContext application; 
 
     /*
-     * 홍보 게시판의 BoardCode는 P (Promotion)이다.
+     * 홍보 게시판의 BoardCode는 P (Promotion)
      * 이미지는 모두 한 테이블에 저장되기 때문에,
      * 어느 페이지에서 사용된 이미지인지 분류하기 위해 사용
      */
@@ -317,7 +317,6 @@ public class PromoBoardController {
                 return "redirect:/promoBoard/detail?promoId=" + promo.getPromoId();
             }
 
-            // 서비스 호출 시 PromoBoardVo와 이미지 관련 정보(posterImage)만 전달.
             int result = promoService.updatePromo(promo, posterImage);
 
             if (result > 0) {

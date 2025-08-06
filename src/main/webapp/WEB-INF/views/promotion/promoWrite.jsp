@@ -18,7 +18,6 @@
 
     <style>
         .file-input-wrapper #promoPoster {
-            /* promoWrite.css에서와 동일하게 파일 입력 필드를 숨김 */
             display: none;
         }
     </style>
@@ -30,7 +29,7 @@
 
     <sec:authorize access="isAuthenticated()">
         <div class="page-wrapper container mt-5">
-            <h1 class="promo-form-title text-center mb-4">홍보 게시글 작성</h1>
+			<h1 class="promo-form-title border-bottom pb-2">홍보 게시글 작성</h1>
 
             <c:if test="${not empty alertMsg}">
                 <div class="alert alert-info">${alertMsg}</div>
@@ -71,7 +70,7 @@
                 </div>
 
                 <div class="mb-3 form-group">
-                    <label for="promotionPageUrl" class="form-label">프로모션 웹사이트 (선택 사항)</label>
+                    <label for="promotionPageUrl" class="form-label">홍보 URL (선택 사항)</label>
                     <form:input path="promotionPageUrl" id="promotionPageUrl" cssClass="form-control" placeholder="http:// 또는 https:// 로 시작하는 URL 입력" type="url" />
                     <form:errors path="promotionPageUrl" cssClass="text-danger mt-1" />
                 </div>
@@ -88,10 +87,10 @@
                     </div>
                 </div>
 
-                <div class="button-group d-flex justify-content-center gap-2 mt-4">
-                    <button type="submit" class="submit-btn">등록하기</button>
-                    <button type="button" class="cancel-btn" onclick="location.href='${contextPath}/promoBoard'">취소</button>
-                </div>
+				<div class="d-flex justify-content-end mt-4 align-items-center gap-2">
+				    <button type="submit" class="btn btn-primary">등록</button>
+				    <button type="button" class="btn btn-danger" onclick="location.href='${contextPath}/promoBoard'">취소</button>
+				</div>
                 
             </form:form>
         </div>
@@ -126,7 +125,7 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const imageUrl = e.target.result;
-                        const noImageTextSpan = imagePreview.querySelector('.no-image-text');
+                        const noImageTextSpan = imagePrevie w.querySelector('.no-image-text');
                         if (noImageTextSpan) {
                             noImageTextSpan.remove();
                         }

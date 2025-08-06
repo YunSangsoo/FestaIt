@@ -17,7 +17,7 @@ import lombok.ToString;
 @Builder 
 public class MyPromoVo {
 
-    // 홍보 게시글 식별 번호 (PRIMARY KEY)
+    // 홍보 게시글 식별 번호
     private int promoId;
 
     // 행사 카테고리 코드 (이벤트 코드)
@@ -43,24 +43,24 @@ public class MyPromoVo {
 
     // --- 조인한 정보 ---
 
-    // 행사 신청자의 사용자 번호 (USER_NO)
+    // 행사 신청자의 사용자 번호
     private int userNo;
 
-    // 행사 신청자의 닉네임 (홍보 게시글 작성자)
+    // 행사 신청자의 닉네임
     private String promoWriter;
 
-    // 행사 신청자의 계정 상태 (USER 테이블에서 상태값)
+    // 행사 신청자의 계정 상태
     private String promoStatus;
 
-    // 홍보 게시글에 첨부된 포스터 이미지 경로
+    // 홍보 게시글에 첨부된 포스터 경로
     private String posterPath;
 
-    // 행사 웹사이트 URL (이벤트 신청 정보에서 가져옴)
+    // 행사 웹사이트 URL
     private String promotionPageUrl;
 
-    // 행사 신청 상태 코드 (이벤트 신청 상태)
+    // 행사 신청 상태 코드
     private String isPromoted;
 
-    // 행사 제목 (이벤트 신청의 APP_TITLE)
+    // 행사 제목
     private String eventAppName; 
 }

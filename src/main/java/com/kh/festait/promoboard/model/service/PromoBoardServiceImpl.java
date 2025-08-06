@@ -3,17 +3,15 @@ package com.kh.festait.promoboard.model.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j; // SLF4J 로거 사용
+import lombok.extern.slf4j.Slf4j;
 
 import com.kh.festait.common.model.vo.Image;
 import com.kh.festait.common.model.dao.ImageDao;
 import com.kh.festait.promoboard.model.dao.PromoBoardDao;
 import com.kh.festait.promoboard.model.vo.PromoBoardVo;
-import com.kh.festait.common.Pagination;
 import com.kh.festait.common.model.vo.PageInfo;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -70,7 +68,6 @@ public class PromoBoardServiceImpl implements PromoBoardService {
             throw new RuntimeException("게시글 업데이트 실패: promoId=" + promo.getPromoId());
         }
 
-        // EVENT_APPLICATION 테이블 URL 업데이트 추가
         int urlUpdateResult = promoDao.updateEventApplicationWebsite(promo);
 
         if (urlUpdateResult == 0) {
