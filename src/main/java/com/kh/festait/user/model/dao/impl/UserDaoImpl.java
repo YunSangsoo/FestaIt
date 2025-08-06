@@ -155,4 +155,15 @@ public class UserDaoImpl implements UserDao{
 		return sqlSession.selectList("user.selectReviewList", param);
 	}
 
+
+	@Override
+	public int insertImage(Map<String, Object> imgMap) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert("insertProfile",imgMap);
+	}
+
+	@Override
+	public int updateUserSessuion(User u) {
+		return sqlSession.update("user.updateUserSecession", u);
+	}
 }
