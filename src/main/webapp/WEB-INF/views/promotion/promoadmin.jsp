@@ -38,7 +38,6 @@
             background-color: #eedbfd;
             color: #5e2b97;
         }
-
         /* 퐁당퐁당(줄무늬) 스타일 제거 */
         .table tbody tr {
             background-color: #fff;
@@ -62,18 +61,36 @@
         }
 
         /* 검색창 및 버튼 스타일 조정 */
-        .search-area {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            flex-wrap: nowrap;
-        }
-        
-        .search-area .btn {
-            white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
-        }
-
+		#searchForm {
+			width: 70%;
+		}
+		.search-form {
+			display:flex;
+			justify-content: flex-end;
+			margin-bottom: 20px;
+		}
+		#select-list {
+			width: fit-content;
+			height: 100%;
+			margin-right: 8px;
+		}
+		.search-btn {
+			width: 100px;
+			height: 38px !important;
+		}
+		
+		.btn.lavender-btn {
+			background-color: #B481D9;
+			color: white;
+			border: 1px solid #A069CB;
+			height:fit-content;
+			padding: 3px 10px;
+		}
+		.btn.lavender-btn:hover {
+			background-color: #A069CB;
+			border-color: #904EBC;
+		}
+		
         /* 페이지네이션 컨테이너 */
         .pagination-container,
         .pagination-area {
@@ -141,18 +158,18 @@
 <sec:authorize access="hasRole('ADMIN')">
     <div class="container">
         <h2 class="fw-bold mb-3">홍보 관리 게시판</h2>
-
         <div class="search-area">
-            <form action="${contextPath}/promoAdmin" method="get" class="d-flex">
-                <select name="searchType" class="form-select me-2" style="width: auto;">
-                    <option value="title" ${searchType eq 'title' ? 'selected' : ''}>제목</option>
-                    <option value="writer" ${searchType eq 'writer' ? 'selected' : ''}>작성자</option>
-                </select>
-                <input type="text" name="keyword" class="form-control me-2" placeholder="검색어를 입력하세요" value="${keyword}">
-                <button type="submit" class="btn btn-primary">검색</button>
-            </form>
+            <form action="${contextPath}/promoAdmin" method="get" class="search-form d-flex justify-content-end align-items-center">
+	        <select class="form-select" name="searchType" id="select-list">
+                <option value="title" ${searchType eq 'title' ? 'selected' : ''}>제목</option>
+                <option value="writer" ${searchType eq 'writer' ? 'selected' : ''}>작성자</option>
+	        </select>			
+				<input type="text" name="keyword" placeholder="search"
+					value="${keyword}" class="form-control me-2"
+					style="max-width: 250px;" />
+				<button type="submit" class="btn lavender-btn search-btn">검색</button>
+			</form>
         </div>
-
 		<table class="table table-hover">
 				<thead class="lavender-header">
 				    <tr>

@@ -19,7 +19,7 @@ import com.kh.festait.mypromo.model.vo.MyPromoVo;
 import com.kh.festait.security.model.vo.UserExt;  // UserExt import
 
 @Controller
-@RequestMapping("/myPage")
+@RequestMapping("/user/myPage")
 public class MyPromoController {
 
     @Autowired
@@ -48,7 +48,7 @@ public class MyPromoController {
         paramMap.put("searchKeyword", searchKeyword);
 
         int listCount = promoService.selectListCount(paramMap);
-        PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 12);
+        PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
 
         List<MyPromoVo> myPromoList = promoService.selectMyPromoList(paramMap, pi);
 
