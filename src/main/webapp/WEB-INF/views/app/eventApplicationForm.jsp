@@ -55,7 +55,7 @@
 			
     		<div class="container">
 			
-					<c:if test="${not empty eventApplication.posterImage.imgNo && eventApplication.posterImage.imgNo != 0 && !isViewMode}">
+					<c:if test="${not empty eventApplication.posterImage.imgNo && eventApplication.posterImage.imgNo != 0 && isViewMode &&!eventApplication.statCode != 'A'}">
 			        <button type="button" class="btn btn-outline-secondary btn-lg px-4 delete-image-btn mb-2" 
 			                  style="z-index: 10;" data-img-no="${eventApplication.posterImage.imgNo}">이미지 비우기</button>
 			        </c:if>
@@ -67,7 +67,7 @@
 			            src="${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}"
 			            alt="업로드된 포스터 이미지">
 			        </div>
-			        <input type="file" class="form-control input-poster dSet" accept="images/*" id="inputPoster" name="inputPoster"/>
+			        <input type="file" accept="image/*" class="form-control input-poster dSet" accept="images/*" id="inputPoster" name="inputPoster"/>
 			        
 					
 					<div class="homepage-link-section mt-4">
@@ -268,6 +268,15 @@
 		    </div>
 		    
 		</c:if>
+		<c:if test="${eventApplication.statCode == 'A' && isViewMode}">  <%-- 조건 변경: 'S'와 같을 때 --%>
+			<form:input path="adminComment" type="hidden" id="reasonHiddenInput" name="adminComment" value=""></form:input>	    
+			<div class="row">
+				<div class="d-grid col-3 mx-auto">
+			          <button class="w-10 btn btn-outline-primary btn-lg" formaction="${pageContext.request.contextPath}/eventApp/appEdit" name="action" type="submit" value="edit" id="approveForm">행사 수정</button> 
+			    </div>
+		    </div>
+		    
+		</c:if>
 	
 
 	</main>
@@ -277,14 +286,19 @@
 	          <button class="w-10 btn btn-outline-danger btn-lg" name="action" type="submit" formaction="${pageContext.request.contextPath}/myEventApp/appDel" formnovalidate="formnovalidate" value="delete">신청서 삭제</button> 
 	    </div>
 	</c:if>
+	<c:if test="${isViewMode}">
+		<div class="d-grid col-3 mx-auto">
+	          <button class="w-10 btn btn-outline-danger btn-lg" name="action" type="submit" formaction="${pageContext.request.contextPath}/eventApp/appDel" formnovalidate="formnovalidate" value="delete">신청서 삭제</button> 
+	    </div>
+	</c:if>
 	</form:form>
 	
 
-	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 	<script src="<%= request.getContextPath() %>/resources/js/app/eventApplicationForm.js"></script>
 	
 	
@@ -294,8 +308,8 @@
     	const initialPosterSrc = "${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}";
     	const initialExistingImgNo = "${empty eventApplication.posterImage.imgNo ? 0 : eventApplication.posterImage.imgNo }";
     	
-    	const isViewMode = ${isViewMode || eventApplication.statCode == 'S' || eventApplication.statCode=='A'};
-        const isEditMode = ${isEditMode && (eventApplication.statCode=='P'||eventApplication.statCode=='R')};
+    	const isViewMode = ${(isViewMode&&eventApplication.statCode!='A') || eventApplication.statCode == 'S'};
+        const isEditMode = ${(isEditMode && (eventApplication.statCode=='P'||eventApplication.statCode=='R'))||(isViewMode&&eventApplication.statCode!='A')};
         const initialEventCode = "${eventApplication.eventCode}";
 	</script>
 	

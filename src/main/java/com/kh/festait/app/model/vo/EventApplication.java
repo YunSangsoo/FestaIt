@@ -48,4 +48,6 @@ public class EventApplication {
 	
 	private Image posterImage;
 	
+	private String userId;
+	
 }

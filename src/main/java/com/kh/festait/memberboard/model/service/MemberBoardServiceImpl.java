@@ -33,9 +33,11 @@ public class MemberBoardServiceImpl implements MemberBoardService {
 	@Override
 	 public void deleteUser(Long userNo) {
         String userId = memberBoardDao.getUserIdByUserNo(userNo);
+        /*
         if (userId != null) {
             memberBoardDao.deleteUserAuthorities(userId);  // userId 기준 권한 삭제
         }
+        */
         memberBoardDao.deleteUser(userNo);  // userNo 기준 사용자 삭제
     }
 

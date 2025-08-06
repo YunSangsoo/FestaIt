@@ -11,6 +11,7 @@
 		FROM USERS u
 		JOIN AUTHORITIES a ON u.user_id = a.user_id
 		<where>
+			u.STATUS='T'
 			<if test="keyword != null and keyword != ''">
 				(u.user_id LIKE '%' || #{keyword} || '%'
 				OR u.nickname
@@ -34,6 +35,7 @@
 		LEFT JOIN AUTHORITIES a ON
 		u.user_id = a.user_id
 		<where>
+			u.STATUS='T'
 			<if test="keyword != null and keyword != ''">
 				(u.user_id LIKE '%' || #{keyword} || '%'
 				OR u.nickname
@@ -48,12 +50,18 @@
 	<delete id="deleteUserAuthorities" parameterType="string">
 		DELETE FROM AUTHORITIES WHERE user_id = #{userId}
 	</delete>
-
+	
+	<update id="deleteUser" parameterType="long">
+		UPDATE USERS SET
+		STATUS='F'
+		WHERE USER_NO = #{userNo}
+	</update>
+<!--
 	<delete id="deleteUser" parameterType="long">
 		DELETE FROM USERS WHERE
 		user_no = #{userNo}
 	</delete>
-
+ -->
 
 	<select id="selectUserById" parameterType="long"
 		resultType="com.kh.festait.memberboard.model.vo.MemberBoardList">

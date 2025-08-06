@@ -172,6 +172,8 @@ document.getElementById('promoUpdateForm').addEventListener('submit', async (eve
 		            confirmButtonText: "네, 진행합니다"
 	        	}
 	        );
-		    if (result)
+		    if (result){
+	    		window.showLoadingModal();
 		        event.target.submit();
+	        }
 });

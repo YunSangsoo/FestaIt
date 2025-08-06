@@ -65,7 +65,9 @@
     </div>
 	
 	
-	<!-- 공용 Modal -->
+	<!-- 공용 Modal -->	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <jsp:include page="/WEB-INF/views/common/modal.jsp" />
     <script src="${pageContext.request.contextPath}/resources/js/commonModal.js"></script>
 
