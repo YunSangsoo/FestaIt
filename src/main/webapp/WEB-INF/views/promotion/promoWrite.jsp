@@ -9,21 +9,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>홍보 게시글 작성</title>
 
+    <c:set var="contextPath" value="${pageContext.request.contextPath}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/promoWrite.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <link rel="stylesheet" href="${contextPath}/resources/css/promoForm.css" />
+
+    <style>
+        .file-input-wrapper #promoPoster {
+            display: none;
+        }
+    </style>
+
 </head>
 <body>
     <jsp:include page="/WEB-INF/views/common/header.jsp" />
     <div class="top-spacer"></div>
 
-    <!-- 로그인한 사용자만 작성 폼 노출 -->
     <sec:authorize access="isAuthenticated()">
         <div class="page-wrapper container mt-5">
-            <h1 class="promo-write-title text-center mb-4">홍보 게시글 작성</h1>
+			<h1 class="promo-form-title border-bottom pb-2">홍보 게시글 작성</h1>
 
-            <!-- Flash Messages -->
             <c:if test="${not empty alertMsg}">
                 <div class="alert alert-info">${alertMsg}</div>
             </c:if>
@@ -34,76 +41,68 @@
                 <div class="alert alert-warning">${infoMsg}</div>
             </c:if>
 
-            <!-- 스프링 폼 태그로 폼 작성 -->
-            <form:form action="${pageContext.request.contextPath}/promoBoard/promoWrite" method="post" modelAttribute="promo" enctype="multipart/form-data" id="inputForm">
+            <form:form action="${contextPath}/promoBoard/promoWrite" method="post" modelAttribute="promo" enctype="multipart/form-data">
                 
-                <!-- 행사 선택 -->
-                <div class="mb-3">
+                <div class="mb-3 form-group">
                     <label for="appId" class="form-label">홍보할 행사 선택</label>
-                    <form:select path="appId" cssClass="form-select" id="appId" required="true">
+                    <form:select path="appId" cssClass="form-select form-control" id="appId" required="true">
                         <form:option value="" label="-- 행사 선택 --" />
                         <form:options items="${eventApplications}" itemValue="appId" itemLabel="eventAppName" />
                     </form:select>
                     <form:errors path="appId" cssClass="text-danger mt-1" />
                     <c:if test="${empty eventApplications}">
-                        <p class="text-danger mt-2">※ 작성 가능한 승인된 행사 신청이 없습니다. 먼저 행사를 신청하고 승인 받아야 합니다.</p>
+                        <p class="text-danger mt-2">※ 작성 가능한 행사가 없습니다. 먼저 행사를 신청하고 승인 받아야 합니다.</p>
                     </c:if>
                 </div>
 
-                <!-- CSRF -->
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
-                <!-- 제목 -->
-                <div class="mb-3">
+                <div class="mb-3 form-group">
                     <label for="promoTitle" class="form-label">제목</label>
                     <form:input path="promoTitle" id="promoTitle" cssClass="form-control" placeholder="게시글 제목을 입력하세요" required="true" />
                     <form:errors path="promoTitle" cssClass="text-danger mt-1" />
                 </div>
 
-                <!-- 내용 -->
-                <div class="mb-3">
+                <div class="mb-3 form-group">
                     <label for="promoDetail" class="form-label">내용</label>
                     <form:textarea path="promoDetail" id="promoDetail" cssClass="form-control" rows="10" placeholder="게시글 내용을 입력하세요" required="true" />
                     <form:errors path="promoDetail" cssClass="text-danger mt-1" />
                 </div>
 
-                <!-- 프로모션 웹사이트 URL (선택) -->
-                <div class="mb-3">
-                    <label for="promotionPageUrl" class="form-label">프로모션 웹사이트 (선택 사항)</label>
+                <div class="mb-3 form-group">
+                    <label for="promotionPageUrl" class="form-label">홍보 URL (선택 사항)</label>
                     <form:input path="promotionPageUrl" id="promotionPageUrl" cssClass="form-control" placeholder="http:// 또는 https:// 로 시작하는 URL 입력" type="url" />
                     <form:errors path="promotionPageUrl" cssClass="text-danger mt-1" />
                 </div>
 
-                <!-- 포스터 이미지 업로드 (파일 input은 스프링 폼 태그 지원 안됨) -->
-                <div class="mb-3 file-input-group">
+                <div class="mb-3 file-input-group form-group">
                     <label for="promoPoster" class="form-label">포스터 이미지</label>
-                    <div class="file-input-wrapper input-group">
-                        <input type="file" id="promoPoster" name="promoPoster" accept="image/*" class="form-control" />
-                        <label for="promoPoster" class="file-upload-button btn btn-outline-secondary">파일 선택</label>
-                        <span id="fileNameDisplay" class="file-name-display input-group-text flex-grow-1">선택된 파일 없음</span>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="promoPoster" name="promoPoster" accept="image/*" />
+                        <label for="promoPoster" class="file-upload-button">파일 선택</label>
+                        <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
                     </div>
-                    <div class="image-preview border rounded mt-2 p-2 text-center" id="imagePreview">
-                        <span class="no-image-text text-muted">이미지 미리보기</span>
+                    <div class="image-preview" id="imagePreview">
+                        <span class="no-image-text">이미지 미리보기</span>
                     </div>
                 </div>
 
-                <!-- 버튼 그룹 -->
-                <div class="button-group d-flex justify-content-end gap-2 mt-4">
-                    <button type="submit" class="submit-btn btn btn-primary">등록하기</button>
-                    <button type="button" class="cancel-btn btn btn-secondary" onclick="location.href='${pageContext.request.contextPath}/promoBoard'">취소</button>
-                </div>
+				<div class="d-flex justify-content-end mt-4 align-items-center gap-2">
+				    <button type="submit" class="btn btn-primary">등록</button>
+				    <button type="button" class="btn btn-danger" onclick="location.href='${contextPath}/promoBoard'">취소</button>
+				</div>
+                
             </form:form>
         </div>
     </sec:authorize>
 
-    <!-- 비로그인 사용자 접근 시 메시지 -->
     <sec:authorize access="!isAuthenticated()">
         <div class="container mt-5">
             <div class="alert alert-warning text-center">
                 글 작성 권한이 없습니다. 로그인을 먼저 해주세요.
             </div>
             <div class="text-center mt-3">
-                <a href="${pageContext.request.contextPath}/login" class="btn btn-primary">로그인 페이지로 이동</a>
+                <a href="${contextPath}/login" class="btn btn-primary">로그인 페이지로 이동</a>
             </div>
         </div>
     </sec:authorize>
@@ -126,7 +125,7 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const imageUrl = e.target.result;
-                        const noImageTextSpan = imagePreview.querySelector('.no-image-text');
+                        const noImageTextSpan = imagePrevie w.querySelector('.no-image-text');
                         if (noImageTextSpan) {
                             noImageTextSpan.remove();
                         }
@@ -153,24 +152,6 @@
                 }
             });
         });
-        
-        document.getElementById('inputForm').addEventListener('submit', async (event) => {
-		    event.preventDefault();
-		    
-		    let modalTitle = "홍보 등록";
-		    let modalContent = "홍보를 등록하시겠습니까?";
-		    
-		    const result = await window.showCommonModal(
-		            modalTitle,
-		            modalContent,
-		        {
-		            cancelButtonText: "아니오",
-		            confirmButtonText: "네, 진행합니다"
-	        	}
-	        );
-		    if (result)
-		        event.target.submit();
-		});
     </script>
 </body>
 </html>

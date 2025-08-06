@@ -1,7 +1,6 @@
 package com.kh.festait.promoboard.model.dao;
 
 import java.util.List;
-import org.mybatis.spring.SqlSessionTemplate; // 이 import는 필요 없을 수도 있음
 import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.promoboard.model.vo.PromoBoardVo;
 
@@ -13,6 +12,10 @@ public interface PromoBoardDao {
 
     int insertPromo(PromoBoardVo promo);
     PromoBoardVo selectPromoDetail(int promoId);
+    
+    // 추가: 비활성 포함 상세 조회
+    PromoBoardVo selectPromoDetailIncludingInactive(int promoId);
+    
     int increasePromoViews(int promoId);
     Integer selectWriterUserNoByPromoId(int promoId); 
     List<PromoBoardVo> selectUserEventApplications(int userNo);

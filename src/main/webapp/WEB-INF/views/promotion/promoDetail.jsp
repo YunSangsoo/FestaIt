@@ -82,7 +82,7 @@
         <hr />
 
         <div class="d-flex justify-content-between mt-4">
-            <a href="${contextPath}/promoBoard" class="btn btn-outline-secondary">목록으로 돌아가기</a>
+            <a href="${contextPath}/promoBoard" class="btn btn-outline-secondary">목록 보기</a>
 
             <%-- 수정/삭제 버튼: 작성자이거나 관리자 --%>
             <%-- 작성자인 경우의 버튼 --%>

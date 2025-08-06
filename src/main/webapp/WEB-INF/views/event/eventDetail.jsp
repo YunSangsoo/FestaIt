@@ -53,7 +53,7 @@
                     <div class="poster-section">
                         <img src="${contextPath}${event.posterImage.changeName}" alt="행사 포스터" class="event-poster-img">
                         <c:if test="${not empty event.website}">
-                            <a href="${event.website}" target="_blank" class="homepage-link">홈페이지 바로가기</a>
+                            <a href="${event.website}" class="homepage-link">홈페이지 바로가기</a>
                         </c:if>
                     </div>
 
@@ -143,11 +143,6 @@
             <div class="bottom-buttons-wrapper">
                 <div class="bottom-left-buttons">
                     <button class="btn list-btn" onclick="location.href='${contextPath}/eventBoard/list'">목록 보기</button>
-                </div>
-                <div class="bottom-right-buttons">
-                    <sec:authorize access="hasRole('ROLE_MANAGER')">
-                        <button class="btn promote-btn">게시물 홍보하기</button>
-                    </sec:authorize>
                 </div>
             </div>
         </c:if>

@@ -48,7 +48,7 @@ public class MyPromoController {
         paramMap.put("searchKeyword", searchKeyword);
 
         int listCount = promoService.selectListCount(paramMap);
-        PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+        PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 12);
 
         List<MyPromoVo> myPromoList = promoService.selectMyPromoList(paramMap, pi);
 
