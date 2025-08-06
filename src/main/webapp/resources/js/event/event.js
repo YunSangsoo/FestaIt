@@ -56,28 +56,43 @@ $(document).ready(function () {
 		
 		
 		$.ajax({
-			url : $this.hasClass('selected') ? '/festait/bookmark/remove'
-					: '/festait/bookmark/add', 
-			method : 'POST',
-			beforeSend: function(xhr){
-				if(token && header) {
-			    	xhr.setRequestHeader(header, token);
-			    }
-		    },
-		    success: function(res) {
+	url: $this.hasClass('selected') ? '/festait/bookmark/remove' : '/festait/bookmark/add',
+	method: 'POST',
+	beforeSend: function(xhr) {
+		if (token && header) {
+			xhr.setRequestHeader(header, token);
+		}
+	},
+		success: function(res) {
+			// 응답이 비어있으면(로그인 성공) 정상적으로 처리
+			if (!res) {
 				$this.toggleClass('selected'); // 선택 상태 토글
 				if ($this.hasClass('selected')) path.setAttribute('d', bookmarkFill);
 				else path.setAttribute('d', bookmarkEmpty);
-		    },
-			data : {
-				appId : appId
+			} else {
+				// 응답이 비어있지 않으면(로그인 페이지로 리다이렉트 된 경우)
+				window.showCommonModal('알림', "로그인 후 사용할 수 있는 기능입니다.", {
+					showCancelButton: false,
+					confirmButtonText: '확인',
+					// 모달의 '확인' 버튼 클릭 시 로그인 페이지로 이동
+					onConfirm: function() {
+						window.location.href = '/festait/user/login';
+					}
+				});
 			}
-//			,
-//			error : function() {
-//				console.log("check");
-//				alert('로그인 후 사용할 수 있는 기능입니다.');
-//			}
-		});
+		},
+		data: {
+			appId: appId
+		},
+		error: function(xhr, status, error) {
+			// 실제 네트워크 오류나 서버 오류 발생 시 처리
+			console.log("Error:", error);
+			window.showCommonModal('알림', "서버에 문제가 발생했습니다. 다시 시도해 주세요.", {
+				showCancelButton: false,
+				confirmButtonText: '확인'
+			});
+		}
+	});
   });
 });
 

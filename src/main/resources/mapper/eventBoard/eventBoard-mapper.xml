@@ -37,13 +37,13 @@
 						LOCATION LIKE '강원' || '%'
 					</when>
 					<when test="region.equals('chungcheong')">
-						LOCATION LIKE '충북' || '%' OR LOCATION LIKE '충남' || '%'
+						(LOCATION LIKE '충북' || '%' OR LOCATION LIKE '충남' || '%')
 					</when>
 					<when test="region.equals('gyeongsang')">
-						LOCATION LIKE '경북' || '%' OR LOCATION LIKE '경남' || '%'
+						(LOCATION LIKE '경북' || '%' OR LOCATION LIKE '경남' || '%')
 					</when>
 					<when test="region.equals('jeonla')">
-						LOCATION LIKE '전북' || '%' OR LOCATION LIKE '전남' || '%'
+						(LOCATION LIKE '전북' || '%' OR LOCATION LIKE '전남' || '%')
 					</when>
 					<when test="region.equals('jeju')">
 						LOCATION LIKE '제주' || '%'
