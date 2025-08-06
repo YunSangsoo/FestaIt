@@ -11,4 +11,5 @@ public class Bookmark {
 	private int userNo;
 	private int appId;
 	private Date createDate;
+	private String appTitle;
 }

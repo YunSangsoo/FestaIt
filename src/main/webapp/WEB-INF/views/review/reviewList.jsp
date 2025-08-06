@@ -30,24 +30,46 @@
 .btn-edit-delete {
 	display: none;
 }
+
+.profileImage {
+	width: 80px;
+	height: 80px;
+	border-radius: 8px;
+}
+
+#profileImage-user {
+	border-radius: 8px;
+}
 </style>
 </head>
 <body>
-	<c:set var="loginUser" value="${sessionScope.loginUser}" />
-
-	<jsp:include page="/WEB-INF/views/common/header.jsp" />
-
-	<div class="container my-5">
-		<h2 style="margin-bottom: 20px; font-weight: bold;">리뷰 (총
-			${totalCount} 건)</h2>
+	
+	<br><hr>
+	
+	<div class="container my-5" id="review-container">
+		<h2 style="margin-bottom: 20px; font-weight: bold;">리뷰 (총 ${totalCount} 건)</h2>
 		<form action="${pageContext.request.contextPath}/reviewBoard/create"
 			method="post">
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" />
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			<input type="hidden" name="appId" value="${param.appId}" />
+			<input type="hidden" name="page" value="${param.page}" />
+			
+				
 			<div class="input-group">
-				<svg height="60" width="60" xmlns="http://www.w3.org/2000/svg">
-					<rect width="100%" height="100%" fill="gray" />
-				</svg>
+				<!-- 마이페이지 확인 후 수정 ============================================================================================== -->
+				<c:choose>
+				  <c:when test="${not empty loginProfileImage}">
+				    <img id="profileImage-user" class="profileImage-user ${empty loginProfileImage ? 'd-none' : ''}"
+	            	src="${not empty loginProfileImage ? pageContext.request.contextPath.concat(loginProfileImage) : ''}"
+	            	width="60" height="60">
+				  </c:when>
+				  <c:otherwise>
+				    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="gray" class="bi bi-person-square" viewBox="0 0 16 16">
+					  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+					  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+					</svg>
+				  </c:otherwise>
+				</c:choose>
 				<textarea name="comment" class="form-control mx-2" rows="4"
 					maxlength="100" placeholder="100자 이내로 작성해주세요."
 					style="resize: none;" required></textarea>
@@ -85,10 +107,18 @@
 									<div class="d-flex my-4" data-comment-id="${review.userNo}">
 										<!-- 왼쪽: 프로필 이미지 -->
 										<div class="mx-3">
-											<svg height="80" width="80"
-												xmlns="http://www.w3.org/2000/svg">
-              									<rect width="100%" height="100%" fill="gray" />
-            								</svg>
+											<c:choose>
+											  <c:when test="${not empty review.profileImage.changeName}">
+											    <img id="profileImage" class="profileImage ${empty review.profileImage.changeName ? 'd-none' : ''}"
+								            	src="${not empty review.profileImage.changeName ? pageContext.request.contextPath.concat(review.profileImage.changeName) : ''}">
+											  </c:when>
+											  <c:otherwise>
+											    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="gray" class="bi bi-person-square" viewBox="0 0 16 16">
+												  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+												  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+												</svg>
+											  </c:otherwise>
+											</c:choose>
 										</div>
 										<!-- 오른쪽: 닉네임, 작성일, 댓글 내용 -->
 										<div class="flex-grow-1">
@@ -97,7 +127,7 @@
 												<div class="d-flex align-items-center flex-wrap">
 													<span class="me-2">${review.userId}(${review.nickname})</span>
 													<small class="text-muted ms-2 star-display"> <c:forEach
-															var="i" begin="1" end="${review.rating}">★</c:forEach> <c:forEach
+															var="i" begin="1" end="${review.rating}">★</c:forEach><c:forEach
 															var="i" begin="${review.rating + 1}" end="5">☆</c:forEach>
 													</small> <small class="text-muted ms-3 d-flex"> <fmt:formatDate
 															value="${review.createDate}"
@@ -109,12 +139,12 @@
 
 												<!-- 수정/삭제 버튼 -->
 												<div class="btn-edit-delete">
-													<button type="button" class="btn btn-primary btn-sm me-2"
+													<button type="button" class="btn btn-primary btn-sm me-2 btn-edit"
 														data-userno="${review.userNo}"
 														data-comment="${fn:escapeXml(review.comment)}"
 														onclick="handleEditClick(this)">수정</button>
 													<button type="button" class="btn btn-danger btn-sm"
-														onclick="openDeleteModal(${review.userNo})">삭제</button>
+														onclick="openDeleteModal(${review.userNo})" data-userno="${review.userNo}">삭제</button>
 												</div>
 											</div>
 
@@ -136,6 +166,9 @@
 									method="post">
 									<input type="hidden" name="${_csrf.parameterName}"
 										value="${_csrf.token}" />
+									<input type="hidden" name="appId" value="${param.appId}" />
+									<input type="hidden" name="page" value="${param.page}" />
+										
 									<div class="modal-content">
 										<div class="modal-header">
 											<h5 class="modal-title" id="saveConfirmModalLabel">댓글 수정</h5>
@@ -180,6 +213,8 @@
 								<form id="deleteForm"
 									action="${pageContext.request.contextPath}/reviewBoard/delete"
 									method="post">
+								<input type="hidden" name="appId" value="${param.appId}" />
+								<input type="hidden" name="page" value="${param.page}" />
 									<input type="hidden" name="${_csrf.parameterName}"
 										value="${_csrf.token}" />
 									<div class="modal-content">
@@ -212,7 +247,7 @@
 				<c:choose>
 					<c:when test="${currentPage > 1}">
 						<li class="page-item"><a class="page-link"
-							href="${pageContext.request.contextPath}/reviewBoard/list?page=${currentPage - 1}">이전</a>
+							href="${pageContext.request.contextPath}/eventBoard/detail?appId=${param.appId}&page=${currentPage - 1}#review-container">이전</a>
 						</li>
 					</c:when>
 					<c:otherwise>
@@ -228,7 +263,7 @@
 						</c:when>
 						<c:otherwise>
 							<li class="page-item"><a class="page-link"
-								href="${pageContext.request.contextPath}/reviewBoard/list?page=${i}">${i}</a>
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${param.appId}&page=${i}#review-container">${i}</a>
 							</li>
 						</c:otherwise>
 					</c:choose>
@@ -238,7 +273,7 @@
 				<c:choose>
 					<c:when test="${currentPage < totalPage}">
 						<li class="page-item"><a class="page-link"
-							href="${pageContext.request.contextPath}/reviewBoard/list?page=${currentPage + 1}">다음</a>
+							href="${pageContext.request.contextPath}/eventBoard/detail?appId=${param.appId}&page=${currentPage + 1}#review-container">다음</a>
 						</li>
 					</c:when>
 					<c:otherwise>
@@ -251,12 +286,12 @@
 
 	<script>
 	
-    const userNo = ${userNo};
+    const loginUserNo = ${loginUserNo};
     const reviewIdentifier = ${reviewIdentifier};
     
     // 비로그인 시+이미 리뷰를 작성했을 시 재작성 금지
     document.addEventListener("DOMContentLoaded", function () {
-    	if (userNo === -1 || reviewIdentifier > 0) {
+    	if (loginUserNo === -1 || reviewIdentifier > 0) {
             const textarea = document.querySelector('textarea[name="comment"]');
             if (textarea) {
                 textarea.readOnly = true;
@@ -303,13 +338,17 @@
 	// 수정 삭제 버튼
 	document.addEventListener("DOMContentLoaded", function () {
 	    document.querySelectorAll('.review-row').forEach(function (row) {
-	    	console.log(userNo);
 	        const commentUserNo = parseInt(row.dataset.commentId); // data-comment-id
-	
-	        if (commentUserNo === userNo) {
+	        if (commentUserNo === loginUserNo || loginUserNo === 126) {
 	            const btn = row.querySelector('.btn-edit-delete');
 	            if (btn) {
 	                btn.style.display = 'block';
+	            }
+	        }
+	        if (loginUserNo === 126) {
+	            const btn = row.querySelector('.btn-edit');
+	            if (btn) {
+	                btn.style.display = 'none';
 	            }
 	        }
 	    });

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -53,26 +54,23 @@
 			</h2>
 			<hr style="width: 600px;">
 			<div class="a2">
-				<div class="titlename">
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-				</div>
-				<div>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-				</div>
+				<c:choose>
+					<c:when test="${not empty bookmarkList}">
+						<c:forEach var="bookmark" items="${bookmarkList}">
+							<a
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${bookmark.appId}"
+								class="text-decoration-none text-dark titlename">
+								<div class="conname">${bookmark.appTitle}</div>
+								<div class="conname" style="text-align: right; margin-right: 30px;">
+									<fmt:formatDate value="${bookmark.createDate}" pattern="yyyy.MM.dd"/>
+								</div>
+							</a>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div>등록한 리뷰가 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 		<hr>
@@ -89,26 +87,23 @@
 			</h2>
 			<hr style="width: 600px;">
 			<div class="a2">
-				<div class="titlename">
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-				</div>
-				<div>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-				</div>
+				<c:choose>
+					<c:when test="${not empty reviewList}">
+						<c:forEach var="review" items="${reviewList}">
+							<a
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container"
+								class="text-decoration-none text-dark titlename">
+								<div class="conname">${review.appTitle}</div>
+								<div class="conname" style="text-align: right; margin-right: 30px;">
+									<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd"/>
+								</div>
+							</a>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div>등록한 리뷰가 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	</div>

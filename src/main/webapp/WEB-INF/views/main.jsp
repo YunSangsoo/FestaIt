@@ -13,6 +13,7 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 <link href="${contextPath }/resources/css/mainpage.css" rel="stylesheet">
+<link href="${contextPath }/resources/css/common.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet"
 href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
@@ -23,61 +24,17 @@ href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-u
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
-
-
-<style>
-/* 공지 작성 버튼 스타일 */
-a.btn.lavender-btn {
-	background-color: #b481d9;
-	color: white;
-	border: 1px solid #a069cb;
-	height:fit-content;
-	padding: 3px 10px;
-}
-
-a.btn.lavender-btn:hover {
-	background-color: #a069cb;
-	border-color: #904ebc;
-}
-
-/* 테이블 헤더 스타일 */
-thead.lavender-header th {
-	background-color: #e6ccff;
-	color: #5E2B97;
-}
-
-.btn.white-btn {
-	background-color: #ffffff;
-	color: black;
-	border: 1px solid #000000;
-}
-
-.btn.white-btn:hover {
-	background-color: #ea870e;
-	border-color: #ffffff;
-	color: #ffffff;
-}
-
-.btn.white-btn:active {
-	/* -------------------------------------------------------클릭했을 때 색 */
-	background-color: #ea870e;
-	border-color: #000000;
-	color: #000000;
-}
-</style>
-
+<!-- 북마크용 데이터 -->
+<c:set var="loginUser" value="${sessionScope.loginUser}" />
 
 </head>
 
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	
-	<!-- 북마크용 데이터 -->
-	<c:set var="loginUser" value="${sessionScope.loginUser}" />
-
 	<!-- 메인 페이지 바디 시작 -->
 
-	<div class="container" id="container">
+	<div class="container d-flex justify-content-between flex-wrap" id="container">
 		<div class="top-content">
 
 			<!-- 메인 좌측 -->
@@ -127,7 +84,7 @@ thead.lavender-header th {
 						<div class="section-title">진행 중인 행사</div>
 					</a>
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
-						<a href="${pageContext.request.contextPath}/myEventApp"
+						<a href="${pageContext.request.contextPath}/eventApp"
 							class="btn lavender-btn">행사 관리</a>
 					</sec:authorize>
 					
@@ -198,7 +155,7 @@ thead.lavender-header th {
 									href="${pageContext.request.contextPath}/eventBoard/detail?appId=${todayEvent.appId}"
 									class="text-decoration-none text-dark today-event">
 									<div class="thumb">
-										<img src="${not empty todayEvent.posterImage.changeName ? pageContext.request.contextPath.concat(todayEvent.posterImage.changeName) : ''}" class="EventItemHover-img" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
+										<img src="${not empty todayEvent.posterImage.changeName ? pageContext.request.contextPath.concat(todayEvent.posterImage.changeName) : ''}" class="EventItemHover-img-thumb" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
 									</div>
 									
 									<div class="info">
@@ -222,8 +179,6 @@ thead.lavender-header th {
 					</c:choose>
 				</div>
 			</div>
-
-
 		</div>
 
 		<!-- 리뷰 영역 -->
@@ -234,19 +189,25 @@ thead.lavender-header th {
 				<c:choose>
 					<c:when test="${not empty reviewList}">
 						<c:forEach var="review" items="${reviewList}">
-							
 							<a
 								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}"
 								class="text-decoration-none text-dark review-card">
 								
 								<div class="review-profile">
 								
-								<%-- <img
-									
-									src="${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}"
-									
-									src="https://www.coex.co.kr/wp-content/uploads/2025/06/AYP-데모데이-코엑스-전시-신청-웹배너-0619-유스프러너.png"
-									class="EventItemHover-img" alt=""> --%>
+									<c:choose>
+									  <c:when test="${not empty review.profileImage.changeName}">
+									    <img id="profileImage" class="profileImage ${empty review.profileImage.changeName ? 'd-none' : ''}"
+						            	src="${not empty review.profileImage.changeName ? pageContext.request.contextPath.concat(review.profileImage.changeName) : ''}"
+						            	width="100%" height="100%">
+									  </c:when>
+									  <c:otherwise>
+									    <svg xmlns="http://www.w3.org/2000/svg" fill="gray" class="bi bi-person-square" viewBox="0 0 16 16">
+										  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+										  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+										</svg>
+									  </c:otherwise>
+									</c:choose>
 								
 								</div>
 								<div class="review-info">
@@ -257,7 +218,9 @@ thead.lavender-header th {
 								</div>
 								<div class="review-bottom">
 									<div class="rating" value="${review.rating}"></div>
-									<div class="create-date">${review.createDate}</div>
+									<div class="create-date">
+										<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd HH:mm" />
+									</div>
 								</div>
 							</a>
 							
@@ -278,10 +241,6 @@ thead.lavender-header th {
 				class="text-decoration-none text-dark section-title">
 				<div class="notice-title">공지사항</div>
 			</a>
-
-			<table class="notice-table">
-
-			</table>
 
 			<table class="table table-hover text-center align-middle notice-table">
 				<thead>
@@ -359,7 +318,6 @@ thead.lavender-header th {
         if (firstItem) {
             firstItem.classList.add('active');
         }
-	    
 	});
 	</script>
 	

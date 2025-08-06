@@ -1,6 +1,5 @@
 package com.kh.festait.eventdetail.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.festait.eventdetail.model.service.EventDetailService;
 import com.kh.festait.eventdetail.model.vo.EventDetailVo;
+import com.kh.festait.reviewboard.controller.ReviewBoardController;
 import com.kh.festait.user.model.vo.User; 
 import com.kh.festait.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,20 +28,20 @@ public class EventDetailController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private ReviewBoardController rbCon;
 
     @GetMapping("/detail")
     public String selectEventDetail(
             @RequestParam("appId") int appId,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam Map<String, Object> paramMap,
             Model model,
             RedirectAttributes redirectAttributes,
-            Authentication authentication
-    ) {
-
-    	Map<String, Object> paramMap = new HashMap<>();
-    	paramMap.put("appId", appId);
-    	
-    	int userNoForBookmark = 0; 
-    	User loginUserForJsp = null; 
+            Authentication authentication) {
+        int userNoForBookmark = 0; 
+        User loginUserForJsp = null; 
 
         // 로그인 정보 확인 및 userNo 추출
         if (authentication != null && authentication.isAuthenticated() && !authentication.getName().equals("anonymousUser")) {
@@ -84,7 +84,12 @@ public class EventDetailController {
         }
 
         model.addAttribute("event", event); 
-        model.addAttribute("loginUser", loginUserForJsp); 
+        model.addAttribute("loginUser", loginUserForJsp);
+        
+        // 리뷰 리스트 출력
+        rbCon.reviewList(appId, page, model, paramMap, authentication);
+        
+        model.addAttribute("param", paramMap);
 
         return "event/eventDetail";
     }
