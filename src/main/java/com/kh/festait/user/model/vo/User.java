@@ -1,6 +1,8 @@
 package com.kh.festait.user.model.vo;
 
 
+import com.kh.festait.common.model.vo.Image;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -53,5 +55,6 @@ public class User {
     private String role; //권한
     
     private User2 manager;
-    
+
+    private Image profileImage;
 }

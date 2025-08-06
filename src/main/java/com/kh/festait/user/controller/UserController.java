@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.io.File;
+import java.util.UUID;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +22,34 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.festait.bookmark.model.vo.Bookmark;
 import com.kh.festait.reviewboard.model.vo.ReviewBoard;
+import com.kh.festait.app.service.AppService;
+import com.kh.festait.common.model.vo.Image;
+import com.kh.festait.common.service.ImageService;
 import com.kh.festait.security.model.vo.UserExt;
 import com.kh.festait.user.model.vo.User;
 import com.kh.festait.user.service.UserService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
 @RequestMapping("/user")
 @Slf4j
+@RequiredArgsConstructor
+@Controller
 public class UserController {
 
 	@Autowired
-	private UserService uService;
+	private final UserService uService;
+
+	@Autowired
+	private final ImageService imageService;
+	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
@@ -92,6 +106,22 @@ public class UserController {
 		mv.setViewName("/user/myPage");
 		return mv;
 	}
+		@RequestMapping(value = "/myPage", method = RequestMethod.GET)
+		public ModelAndView myPage(@AuthenticationPrincipal UserExt userDetails,
+				Authentication auth
+				) {
+			
+			User u = (User)auth.getPrincipal();
+			
+			Image img = imageService.getImageByRefNoAndType(u.getUserNo(), "U");
+			u.setProfileImage(img);
+			
+			ModelAndView mv = new ModelAndView();
+			
+			mv.addObject("userInfo", u);
+			mv.setViewName("/user/myPage");
+			return mv;
+		}
 	
 	
 	//아이디 비번찾기창 이동
@@ -166,66 +196,19 @@ public class UserController {
 		mv.setViewName("redirect:/");
 		return mv;
 	}
-	/*
-	//회원 로그인
-	@RequestMapping(value = "/login", method = RequestMethod.POST) 
-	public ModelAndView loginUser(User u, ModelAndView mv ,Model model, HttpServletRequest request, HttpSession session) {
-
-		System.out.println("check1");
-		ModelAndView mav = new ModelAndView();
-		User userInfo = new User();
-
-		Map<String,String> loginMap = uService.loginUser(u);
-		System.out.println("map : "+loginMap.toString());
-		
-		String succesYn = loginMap.get("SUCCES_YN");
-
-		System.out.println("check2");
-		if ("Y".equals(succesYn)) {
-		   userInfo.setRole(loginMap.get("USER_ROLE"));
-		   userInfo.setUserName(loginMap.get("USER_NAME"));
-		   userInfo.setUserId(loginMap.get("USER_ID"));
-		   userInfo.setEnrollDate(loginMap.get("USER_ID"));
-//		   userInfo.setPhone(loginMap.get("PHONE"));
-//		   userInfo.setAddr(loginMap.get("ADDR"));
-//		   userInfo.setEmail(loginMap.get("EMAIL"));
-		   
-//		   userInfo.setUserNo(loginMap.get("USER_NO"))
-//		   userInfo.setUserNo("N");
-		   //session.setAttribute("loginUser", userInfo);
-		   
-		   model.addAttribute("loginUser",userInfo);
-		   mav.setViewName("redirect:/");
-		} else {
-		   mav.addObject("loginSuccesYn", succesYn);
-		   //해당 회원이 없습니다. alert띄워야함
-		   mav.setViewName("/user/login");
-		}
-		
-//		session.setAttribute(succesYn, mav)
-//		session.setAttribute("loginUserRole", "");
-		return mav;
-	}
-		*/
-	
-	
-	
-	//마이페이지 수정 
-	@RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
-	public String updateUserInfo(User u) {
-		
-		int succesYn = uService.updateUser(u);
-		if (u.getProfileName() != null || u.getProfileName() != "") {
-			
-		}
-		return "/user/myPage";
-	}
 	
 	//회원탈퇴
 	@RequestMapping(value = "/updateUserSecession", method = RequestMethod.POST)
-	public String secessionUser(User u) {
+	public String secessionUser(
+			Authentication auth,
+			HttpSession session) {
+		User u = ((User)auth.getPrincipal());
 		int succesYn = uService.updateUser(u);
-		return "/main";
+		
+		if (succesYn >0) {
+			session.invalidate();
+		}
+		return "redirect:/user/logout";
 	}
 	//비밀번호 찾기
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
@@ -294,6 +277,45 @@ public class UserController {
 		log.info("user : {}",encodedPwd);
 		return result > 0 ? "success" : "fail";
  	}
+	
+	//파일 업로드 
+	@ResponseBody
+	@RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
+	public String uploadProfile(@RequestParam("profileImage") MultipartFile file, 
+				//@AuthenticationPrincipal UserExt userDetails,
+				Authentication auth,
+				HttpSession session) {
+		
+		System.out.println("contrer====================");
+		if (file.isEmpty()) {
+			return "fail";
+		}
+		int userNo = ((User)auth.getPrincipal()).getUserNo(); // 이런식으로 가져와야함
+		Image result = uService.uploadProfile(file, userNo);
+		
+		((User)auth.getPrincipal()).setProfileImage(result);
+		//userDetails.setProfileImg(result);
+		session.setAttribute("loginUser", (User)auth.getPrincipal());
+		
+		return "success";
+	}
+
+	//파일 가져오기
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String showMyPage(Model model,
+            				 Authentication auth,
+            				 @AuthenticationPrincipal UserExt userDetails) {
+		
+		String profileImageUrl = userDetails.getProfileImg();
+		
+		if (profileImageUrl != null || profileImageUrl.isEmpty()) {
+			profileImageUrl = "/resources/img/U/default.jpg";
+		}
+		model.addAttribute("profileImageUrl", profileImageUrl);
+		
+		return "user/mypage";
+	}
 	
 }
 

@@ -52,4 +52,8 @@ public interface UserDao {
 	List<Bookmark> selectBookmarkList(Map<String, Object> param);
 
 	List<ReviewBoard> selectReviewList(Map<String, Object> param);
+
+	int insertImage(Map<String, Object> imgMap);
+
+	int updateUserSessuion(User u);
 }
