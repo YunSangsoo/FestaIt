@@ -1,57 +1,3 @@
-/* 기본 초기화 및 폰트 */
-* {
-	box-sizing: border-box;
-}
-
-body {
-	font-family: 'Pretendard', sans-serif;
-	background-color: #FAFAFA;
-	color: #212121;
-	/* 	color: rgb(var(- -bs-tertiary-color-rgb)); */
-}
-
-a {
-	text-decoration: none;
-	color: inherit;
-}
-
-/* 메인 컨테이너 */
-.container {
-	padding: 30px 5%;
-	gap: 40px;
-}
-
-/* 화면 크기에 따른 페이지 컨테이너 사이즈 지정 ------------------------------ 1080 이하 수정 필요 ------------------------- */
-@media ( max-width : 1080px) {
-	#container {
-		max-width: 100%;
-	}
-}
-
-@media ( min-width : 1080px) {
-	#container {
-		max-width: 1040px;
-	}
-	.main-content {
-		margin-right: 40px;
-	}
-}
-
-@media ( min-width : 1200px) {
-	#container {
-		max-width: 1160px;
-	}
-	.main-content {
-		margin-right: 40px;
-	}
-}
-
-.v-line {
-	border-left: 1px solid #DDD;
-	width: 2px;
-	align-items: stretch;
-}
-
 .small-btn {
 	height: 30px !important;
 	padding: 0px 10px !important;
@@ -151,17 +97,9 @@ a {
     z-index: 1060 !important;
 }
 
-/* Bootstrap 폼 컨트롤과 jQuery UI Datepicker 아이콘 간격 조절 (선택 사항) */
 .form-control.hasDatepicker + .ui-datepicker-trigger {
     margin-left: 5px;
 }
-/* 
-.date-btn.selected {
-  background-color: #0d6efd;
-  color: #fff;
-} */
-
-
 
 input[type="checkbox"]{
 	width: 20px;
@@ -189,9 +127,6 @@ input[type="checkbox"]{
 	text-decoration: none;
 	color: gray
 }
-
-
-
 
 /* 섹션 제목 */
 .section-title, .review-title, .today-title, .notice-title {
@@ -305,23 +240,12 @@ input[type="checkbox"]{
 .fc-col-header-cell-cushion {
  color: black;
 }
- 
 .fc-day-sun>*>.fc-col-header-cell-cushion {
  color: red;
 }
 .fc-day-sat>*>.fc-col-header-cell-cushion {
  color: blue;
 }
-
-.fc-daygrid-event {
-	
-}
-
-/* .fc-h-event {
-    background-color: #000000;
-    border: 1px solid #000000;
-    display: block;
-} */
 
 .fc-event-time {
 	display: none;
@@ -337,13 +261,27 @@ input[type="checkbox"]{
 	display:none;
 	padding: 10px;
 }
-
 .thumbcard-img {
 	width: 100%;
 	aspect-ratio: 1/1;
 	margin-bottom: 5px;
 }
-
 .event-org {
 	font-size: 12px;
+}
+
+.fc-prevYear-button, .fc-nextYear-button {
+	background-color: #b481d9 !important;
+	border-color: #6a1b9a !important;
+}
+.fc-prev-button, .fc-next-button {
+	background-color: #b481d9 !important;
+	border-color: #6a1b9a !important;
+}
+
+.fc-event-title {
+	font-color: black !important;
+}
+.fc-daygrid-event-dot {
+	border-color: #b481d9 !important;
 }

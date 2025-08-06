@@ -36,13 +36,17 @@
 	height: 80px;
 	border-radius: 8px;
 }
+
+#profileImage-user {
+	border-radius: 8px;
+}
 </style>
 </head>
 <body>
 	
 	<br><hr>
 	
-	<div class="container my-5">
+	<div class="container my-5" id="review-container">
 		<h2 style="margin-bottom: 20px; font-weight: bold;">리뷰 (총 ${totalCount} 건)</h2>
 		<form action="${pageContext.request.contextPath}/reviewBoard/create"
 			method="post">
@@ -54,9 +58,9 @@
 			<div class="input-group">
 				<!-- 마이페이지 확인 후 수정 ============================================================================================== -->
 				<c:choose>
-				  <c:when test="${not empty loginUser.profileImg}">
-				    <img id="profileImage-user" class="profileImage-user ${empty loginUser.profileImg ? 'd-none' : ''}"
-	            	src="${not empty profileImg ? pageContext.request.contextPath.concat(profileImg) : ''}"
+				  <c:when test="${not empty loginProfileImage}">
+				    <img id="profileImage-user" class="profileImage-user ${empty loginProfileImage ? 'd-none' : ''}"
+	            	src="${not empty loginProfileImage ? pageContext.request.contextPath.concat(loginProfileImage) : ''}"
 	            	width="60" height="60">
 				  </c:when>
 				  <c:otherwise>
@@ -135,7 +139,7 @@
 
 												<!-- 수정/삭제 버튼 -->
 												<div class="btn-edit-delete">
-													<button type="button" class="btn btn-primary btn-sm me-2"
+													<button type="button" class="btn btn-primary btn-sm me-2 btn-edit"
 														data-userno="${review.userNo}"
 														data-comment="${fn:escapeXml(review.comment)}"
 														onclick="handleEditClick(this)">수정</button>
@@ -243,7 +247,7 @@
 				<c:choose>
 					<c:when test="${currentPage > 1}">
 						<li class="page-item"><a class="page-link"
-							href="${pageContext.request.contextPath}/reviewBoard/list?page=${currentPage - 1}">이전</a>
+							href="${pageContext.request.contextPath}/eventBoard/detail?appId=${param.appId}&page=${currentPage - 1}#review-container">이전</a>
 						</li>
 					</c:when>
 					<c:otherwise>
@@ -259,7 +263,7 @@
 						</c:when>
 						<c:otherwise>
 							<li class="page-item"><a class="page-link"
-								href="${pageContext.request.contextPath}/reviewBoard/list?page=${i}">${i}</a>
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${param.appId}&page=${i}#review-container">${i}</a>
 							</li>
 						</c:otherwise>
 					</c:choose>
@@ -269,7 +273,7 @@
 				<c:choose>
 					<c:when test="${currentPage < totalPage}">
 						<li class="page-item"><a class="page-link"
-							href="${pageContext.request.contextPath}/reviewBoard/list?page=${currentPage + 1}">다음</a>
+							href="${pageContext.request.contextPath}/eventBoard/detail?appId=${param.appId}&page=${currentPage + 1}#review-container">다음</a>
 						</li>
 					</c:when>
 					<c:otherwise>
@@ -339,6 +343,12 @@
 	            const btn = row.querySelector('.btn-edit-delete');
 	            if (btn) {
 	                btn.style.display = 'block';
+	            }
+	        }
+	        if (loginUserNo === 126) {
+	            const btn = row.querySelector('.btn-edit');
+	            if (btn) {
+	                btn.style.display = 'none';
 	            }
 	        }
 	    });

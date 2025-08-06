@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kh.festait.common.Pagination;
 import com.kh.festait.common.model.vo.Image;
+import com.kh.festait.common.model.vo.PageInfo;
 import com.kh.festait.common.service.ImageService;
 import com.kh.festait.reviewboard.model.service.ReviewBoardService;
 import com.kh.festait.reviewboard.model.vo.ReviewBoard;
@@ -31,7 +33,8 @@ public class ReviewBoardController {
 	@Autowired
 	private final ImageService imgService;
 	
-	private int loginUserNo;
+	private User loginUser = null;
+	private int loginUserNo = -1;
 	private int reviewIdentifier = 0;
 	private String boardCode = "U";
 
@@ -48,20 +51,14 @@ public class ReviewBoardController {
 	    List<ReviewBoard> list = reviewBoardService.selectReviewList(paramMap);
 	    int totalCount = reviewBoardService.getReviewCount(paramMap);
 
-	    // 페이징 계산
-	    int totalPage = (int) Math.ceil((double) totalCount / limit);
 	    int pageBlock = 5; // 한 번에 보여줄 페이지 번호 개수
-	    int startPage = ((page - 1) / pageBlock) * pageBlock + 1;
-	    int endPage = startPage + pageBlock - 1;
-	    if (endPage > totalPage) endPage = totalPage;
-
+		PageInfo pi = Pagination.getPageInfo(totalCount, page, pageBlock, limit);
+	    
 	    model.addAttribute("reviewBoard", list);
 	    model.addAttribute("totalCount", totalCount);
 	    model.addAttribute("currentPage", page);
 	    model.addAttribute("limit", limit);
-	    model.addAttribute("totalPage", totalPage);
-	    model.addAttribute("startPage", startPage);
-	    model.addAttribute("endPage", endPage);
+	    model.addAttribute("pi", pi);
 
 	    return "review/reviewBoard";
 	}
@@ -74,7 +71,7 @@ public class ReviewBoardController {
     		@RequestParam Map<String, Object> paramMap, 
     		Authentication authentication) {
     	
-    	setloginUserNo(authentication);
+    	setloginUser(authentication);
 		paramMap.put("loginUserNo", loginUserNo);
     	
     	reviewIdentifier = reviewBoardService.setReviewIdentifier(paramMap); // 0이면 리뷰 작성한 적 X
@@ -95,8 +92,13 @@ public class ReviewBoardController {
         int startPage = ((page - 1) / pageBlock) * pageBlock + 1;
         int endPage = startPage + pageBlock - 1;
         if (endPage > totalPage) endPage = totalPage;
-
+        
+        String loginProfileImage = setLoginProfileImage(loginUserNo);
+        
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("loginProfileImage", loginProfileImage);
         model.addAttribute("reviewList", list);
+        model.addAttribute("param", paramMap);
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("currentPage", page);
         model.addAttribute("limit", limit);
@@ -116,7 +118,7 @@ public class ReviewBoardController {
     		RedirectAttributes ra, Authentication authentication,
     		@RequestParam Map<String, Object> paramMap, Model model) {
 		
-		setloginUserNo(authentication);
+		setloginUser(authentication);
     	review.setUserNo(loginUserNo);
     	if(loginUserNo == -1) {
     		ra.addFlashAttribute("msg", "로그인 후 사용할 수 있는 기능입니다.");
@@ -127,7 +129,7 @@ public class ReviewBoardController {
 		
 		int result = reviewBoardService.insertReview(review);
         ra.addFlashAttribute("msg", result > 0 ? "등록 완료" : "등록 실패");
-        return "redirect:/eventBoard/detail?appId="+appId;
+        return "redirect:/eventBoard/detail?appId="+appId+"#review-container";
     }
 	
 	// 수정
@@ -138,20 +140,20 @@ public class ReviewBoardController {
 			RedirectAttributes ra, Authentication authentication,
 			@RequestParam Map<String, Object> paramMap) {
 
-		setloginUserNo(authentication);
+		setloginUser(authentication);
 		
 		review.setAppId(appId);
 		review.setUserNo(userNo);
 		
     	if(loginUserNo == -1) {
     		ra.addFlashAttribute("msg", "로그인 후 사용할 수 있는 기능입니다.");
-    		return "redirect:/eventBoard/detail?appId="+appId;
+    		return "redirect:/eventBoard/detail?appId="+appId+"#review-container";
     	}
     	
 		int result = reviewBoardService.updateReviewByUserNo(review);
 		
 		ra.addFlashAttribute("msg", result > 0 ? "수정 완료" : "수정 실패");
-		return "redirect:/eventBoard/detail?appId="+appId;
+		return "redirect:/eventBoard/detail?appId="+appId+"#review-container";
 	}
 
 	// 삭제
@@ -162,24 +164,29 @@ public class ReviewBoardController {
 			Authentication authentication,
 			RedirectAttributes ra) {
 		
-		setloginUserNo(authentication);
+		setloginUser(authentication);
 		
     	if(loginUserNo == -1) {
     		ra.addFlashAttribute("msg", "로그인 후 사용할 수 있는 기능입니다.");
-    		return "redirect:/eventBoard/detail?appId="+appId;
+    		return "redirect:/eventBoard/detail?appId="+appId+"#review-container";
     	}
 		
     	paramMap.put("appId", appId);
 		paramMap.put("userNo", userNo);
 		int result = reviewBoardService.deleteReviewByUserNo(paramMap);
 		ra.addFlashAttribute("msg", result > 0 ? "삭제 완료" : "삭제 실패");
-		return "redirect:/eventBoard/detail?appId="+appId;
+		
+		if(paramMap.get("admin").equals("true")) {
+			return "redirect:/reviewBoard";
+		}
+		
+		return "redirect:/eventBoard/detail?appId="+appId+"#review-container";
 	}
 	
-	public void setloginUserNo(Authentication authentication) {
+	public void setloginUser(Authentication authentication) {
 		loginUserNo = -1;
 		if (authentication != null && authentication.isAuthenticated()) {
-        	User loginUser = (User) authentication.getPrincipal();
+        	loginUser = (User) authentication.getPrincipal();
         	loginUserNo = loginUser.getUserNo();
         }
 	}
@@ -191,6 +198,14 @@ public class ReviewBoardController {
 				if(profileImage != null) review.setProfileImage(profileImage);
 			}
 		}
+	}
+	
+	public String setLoginProfileImage(int loginUserNo) {
+		if (loginUserNo != -1) {
+			Image profileImage = imgService.getImageByRefNoAndType(loginUserNo, "U");
+			return profileImage == null ? "" : profileImage.getChangeName();
+		}
+		return "";
 	}
 	
 }

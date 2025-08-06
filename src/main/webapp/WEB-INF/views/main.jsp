@@ -13,6 +13,7 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 <link href="${contextPath }/resources/css/mainpage.css" rel="stylesheet">
+<link href="${contextPath }/resources/css/common.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet"
 href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
@@ -26,49 +27,6 @@ href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-u
 <!-- 북마크용 데이터 -->
 <c:set var="loginUser" value="${sessionScope.loginUser}" />
 
-
-<style>
-/* 공지 작성 버튼 스타일 */
-a.btn.lavender-btn {
-	background-color: #b481d9;
-	color: white;
-	border: 1px solid #a069cb;
-	height:fit-content;
-	padding: 3px 10px;
-}
-
-a.btn.lavender-btn:hover {
-	background-color: #a069cb;
-	border-color: #904ebc;
-}
-
-/* 테이블 헤더 스타일 */
-thead.lavender-header th {
-	background-color: #e6ccff;
-	color: #5E2B97;
-}
-
-.btn.white-btn {
-	background-color: #ffffff;
-	color: black;
-	border: 1px solid #000000;
-}
-
-.btn.white-btn:hover {
-	background-color: #ea870e;
-	border-color: #ffffff;
-	color: #ffffff;
-}
-
-.btn.white-btn:active {
-	/* -------------------------------------------------------클릭했을 때 색 */
-	background-color: #ea870e;
-	border-color: #000000;
-	color: #000000;
-}
-</style>
-
-
 </head>
 
 <body>
@@ -76,7 +34,7 @@ thead.lavender-header th {
 	
 	<!-- 메인 페이지 바디 시작 -->
 
-	<div class="container" id="container">
+	<div class="container d-flex justify-content-between flex-wrap" id="container">
 		<div class="top-content">
 
 			<!-- 메인 좌측 -->
