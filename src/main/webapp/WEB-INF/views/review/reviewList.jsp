@@ -61,7 +61,8 @@
 				  <c:when test="${not empty loginProfileImage}">
 				    <img id="profileImage-user" class="profileImage-user ${empty loginProfileImage ? 'd-none' : ''}"
 	            	src="${not empty loginProfileImage ? pageContext.request.contextPath.concat(loginProfileImage) : ''}"
-	            	width="60" height="60">
+	            	width="60" height="60"
+	            	onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
 				  </c:when>
 				  <c:otherwise>
 				    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="gray" class="bi bi-person-square" viewBox="0 0 16 16">
@@ -110,7 +111,8 @@
 											<c:choose>
 											  <c:when test="${not empty review.profileImage.changeName}">
 											    <img id="profileImage" class="profileImage ${empty review.profileImage.changeName ? 'd-none' : ''}"
-								            	src="${not empty review.profileImage.changeName ? pageContext.request.contextPath.concat(review.profileImage.changeName) : ''}">
+								            	src="${not empty review.profileImage.changeName ? pageContext.request.contextPath.concat(review.profileImage.changeName) : ''}"
+								            	onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
 											  </c:when>
 											  <c:otherwise>
 											    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="gray" class="bi bi-person-square" viewBox="0 0 16 16">

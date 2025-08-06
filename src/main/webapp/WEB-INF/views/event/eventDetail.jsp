@@ -28,8 +28,8 @@
     <script>
         var contextPath = "${contextPath}";
         var eventLocation = "${event.location}";
-        var eventAppId = ${not empty event.appId ? event.appId : 'null'};
-        var eventBookmarked = ${event.bookmarked ? 'true' : 'false'};
+        var eventAppId = "${not empty event.appId ? event.appId : 'null'}";
+        var eventBookmarked = "${event.bookmarked ? 'true' : 'false'}";
         var loginMemberUserNo = ${loginUser != null && loginUser.userNo != null ? loginUser.userNo : 0};
     </script>
 	

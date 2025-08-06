@@ -123,9 +123,6 @@ href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-u
 											  <path fill-rule="evenodd"/>
 											</svg>
 									</div>
-									
-
-									
 								</div>
 							</c:forEach>
 						</c:when>
@@ -199,7 +196,8 @@ href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-u
 									  <c:when test="${not empty review.profileImage.changeName}">
 									    <img id="profileImage" class="profileImage ${empty review.profileImage.changeName ? 'd-none' : ''}"
 						            	src="${not empty review.profileImage.changeName ? pageContext.request.contextPath.concat(review.profileImage.changeName) : ''}"
-						            	width="100%" height="100%">
+						            	width="100%" height="100%"
+						            	onerror="this.onerror=null;this.src='https://placehold.co/400x400/e0e0e0/ffffff?text=No+Image';">
 									  </c:when>
 									  <c:otherwise>
 									    <svg xmlns="http://www.w3.org/2000/svg" fill="gray" class="bi bi-person-square" viewBox="0 0 16 16">
