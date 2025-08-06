@@ -153,7 +153,6 @@
             </form>
         </div>
 
-<<<<<<< HEAD
 		<table class="table table-hover">
 				<thead class="lavender-header">
 				    <tr>
@@ -201,59 +200,6 @@
 		        </c:choose>
 		    </tbody>
 		</table>
-=======
-    <table class="table table-hover table-striped">
-        <thead class="lavender-header">
-            <tr>
-                <th class="text-center">번호</th>
-                <th class="text-center">제목</th>
-                <th class="text-center">작성자</th>
-                <th class="text-center">작성일</th>
-                <th class="text-center">조회수</th>
-                <th class="text-center">상태</th>
-                <th class="text-center">관리</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:choose>
-                <c:when test="${empty promoList}">
-                    <tr>
-                        <td colspan="7" class="text-center">조회된 홍보 게시글이 없습니다.</td>
-                    </tr>
-                </c:when>
-                <c:otherwise>
-                    <c:forEach var="promo" items="${promoList}">
-                        <tr onclick="location.href='${contextPath}/promoBoard/detail?promoId=${promo.promoId}'" style="cursor: pointer;">
-                            <td class="text-center"><c:out value="${promo.promoId}" /></td>
-                            <td class="text-center">
-                                <a href="${contextPath}/promoBoard/detail?promoId=${promo.promoId}">
-                                    <c:out value="${promo.promoTitle}" />
-                                </a>
-                            </td>
-                            <td class="text-center"><c:out value="${promo.promoWriter}" /></td>
-                            <td class="text-center"><fmt:formatDate value="${promo.createDate}" pattern="yyyy.MM.dd" /></td>
-                            <td class="text-center"><c:out value="${promo.views}" /></td>
-                            <td class="text-center">
-                                <c:choose>
-                                    <c:when test="${promo.userStatus eq 'T'}">활성</c:when>
-                                    <c:when test="${promo.userStatus eq 'F'}">비활성</c:when>
-                                    <c:otherwise><c:out value="${promo.userStatus}" /></c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td class="text-center">
-                                <form action="${contextPath}/promoAdmin/deletePromoPost" method="post" style="display:inline;">
-                                    <input type="hidden" name="promoId" value="${promo.promoId}" />
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                    <button type="submit" class="btn btn-danger btn-sm" id="deleteForm">삭제</button>
-                                </form>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-        </tbody>
-    </table>
->>>>>>> main
 
         <div class="pagination-area">
             <nav aria-label="Page navigation">
@@ -309,7 +255,6 @@
 <jsp:include page="/WEB-INF/views/common/modal.jsp" />
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<<<<<<< HEAD
 <script>
     const contextPath = "<c:out value='${contextPath}'/>";
     
@@ -361,27 +306,5 @@
 </script>
 <script src="${contextPath}/resources/js/commonModal.js"></script>
 
-=======
-
-<script>
-document.getElementById('deleteForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    
-    let modalTitle = "문의 삭제";
-    let modalContent = "문의 내용을 삭제하시겠습니까?";
-    
-    const result = await window.showCommonModal(
-            modalTitle,
-            modalContent,
-        {
-            cancelButtonText: "아니오",
-            confirmButtonText: "네, 진행합니다"
-    	}
-    );
-    if (result)
-        event.target.submit();
-});
-</script>
->>>>>>> main
 </body>
 </html>
