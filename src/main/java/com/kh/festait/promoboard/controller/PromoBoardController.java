@@ -88,22 +88,39 @@ public class PromoBoardController {
         HttpServletResponse res,
         Authentication authentication
     ) {
-        PromoBoardVo promo = promoService.selectPromoDetail(promoId);
+        UserExt loginUser = getLoginUser(authentication);
+
+        PromoBoardVo promo = null;
+
+        boolean isAdmin = false;
+        if (loginUser != null) {
+            isAdmin = loginUser.getAuthorities().stream()
+                              .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
+        }
+
+        if (isAdmin) {
+            // 관리자면 비활성 상태 포함 상세 조회
+            promo = promoService.selectPromoDetailIncludingInactive(promoId);
+        } else {
+            // 일반사용자면 활성 상태 게시글만 조회
+            promo = promoService.selectPromoDetail(promoId);
+        }
+
         if (promo == null) {
-            ra.addFlashAttribute("alertMsg", "해당 게시물을 찾을 수 없습니다.");
+            ra.addFlashAttribute("alertMsg", "해당 게시물을 찾을 수 없거나 접근 권한이 없습니다.");
             return "redirect:/promoBoard";
         }
 
         Image posterImage = imgService.getImageByRefNoAndType(promoId, boardCode);
-        promo.setPosterImage(posterImage); 
+        promo.setPosterImage(posterImage);
 
-        UserExt loginUser = getLoginUser(authentication);
         if (loginUser != null) {
             model.addAttribute("loginUser", loginUser);
         }
+
         int userNo = (loginUser != null) ? loginUser.getUserNo() : 0;
 
-        // 조회수 증가
+        // 조회수 증가 로직
         if (userNo != 0 && userNo != promo.getWriterUserNo()) {
             boolean increase = false;
 
@@ -131,7 +148,7 @@ public class PromoBoardController {
         return "promotion/promoDetail";
     }
 
-    // 홍보 게시글 작성 페이지 (기존과 동일)
+    // 홍보 게시글 작성 페이지
     @GetMapping("/promoWrite")
     public String promoWriteForm(Model model, RedirectAttributes ra, Authentication authentication) {
         UserExt loginUser = getLoginUser(authentication);

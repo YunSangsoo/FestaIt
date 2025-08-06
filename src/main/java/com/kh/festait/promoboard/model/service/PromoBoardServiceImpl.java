@@ -41,6 +41,11 @@ public class PromoBoardServiceImpl implements PromoBoardService {
     public int increasePromoViews(int promoId) {
         return promoDao.increasePromoViews(promoId);
     }
+    
+    @Override
+    public PromoBoardVo selectPromoDetailIncludingInactive(int promoId) {
+        return promoDao.selectPromoDetailIncludingInactive(promoId);
+    }
 
     @Override
     @Transactional

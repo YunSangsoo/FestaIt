@@ -41,6 +41,12 @@ public class PromoBoardDaoImpl implements PromoBoardDao {
     }
 
     @Override
+    public PromoBoardVo selectPromoDetailIncludingInactive(int promoId) {
+        return sqlSession.selectOne(NAMESPACE + ".selectPromoDetailIncludingInactive", promoId);
+    }
+
+    
+    @Override
     public List<PromoBoardVo> selectSearchPromo(String searchKeyword, PageInfo pi) {
         int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
         RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());

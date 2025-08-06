@@ -12,6 +12,10 @@ public interface PromoBoardDao {
 
     int insertPromo(PromoBoardVo promo);
     PromoBoardVo selectPromoDetail(int promoId);
+    
+    // 추가: 비활성 포함 상세 조회
+    PromoBoardVo selectPromoDetailIncludingInactive(int promoId);
+    
     int increasePromoViews(int promoId);
     Integer selectWriterUserNoByPromoId(int promoId); 
     List<PromoBoardVo> selectUserEventApplications(int userNo);
