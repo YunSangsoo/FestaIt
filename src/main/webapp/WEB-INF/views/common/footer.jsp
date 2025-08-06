@@ -47,10 +47,7 @@
 <body>
 	<div id="footer">
         <div id="footer-1">
-            <a href="${pageContext.request.contextPath}/intro">Intro</a> | 
-            <a href="#">나머지는</a> | 
-            <a href="#">뭐를 넣어야</a> | 
-            <a href="#">예쁘려나</a>
+            <a href="${pageContext.request.contextPath}/intro">Intro</a> 
         </div>
 
         <div id="footer-2">

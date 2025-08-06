@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <title>헤더</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 /* 기존 스타일 유지 */
@@ -18,8 +19,9 @@
 	padding-bottom: 12px;
 }
 .navbar-brand {
+	font-family: 'Courgette', cursive;
 	font-size: 24px;
-	font-weight: bold;
+	font-weight: bold;<link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
 	color: white !important;
 }
 .nav-link {
@@ -85,7 +87,7 @@
 					<li class="nav-item separator">|</li>
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 					<li class="nav-item separator">|</li>
-					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">QNA</a></li>
+					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">QnA</a></li>
 					<li class="nav-item separator">|</li>
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/reviewBoard">리뷰</a></li>
 					<li class="nav-item separator">|</li>
@@ -98,7 +100,7 @@
 					<li class="nav-item separator">|</li>
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 					<li class="nav-item separator">|</li>
-					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">QNA</a></li>
+					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">QnA</a></li>
 				</sec:authorize>
 				<sec:authorize access="isAnonymous()">
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/eventBoard/list">행사</a></li>
@@ -107,7 +109,7 @@
 					<li class="nav-item separator">|</li>
 					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/noticeBoard">공지</a></li>
 					<li class="nav-item separator">|</li>
-					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">QNA</a></li>
+					<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/qnaBoard">QnA</a></li>
 				</sec:authorize>
 			</ul>
 			<!-- 로그인/회원가입 or 마이페이지 -->

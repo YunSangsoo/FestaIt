@@ -28,8 +28,27 @@ a.btn.lavender-btn:hover {
 
 /* 테이블 헤더 스타일 */
 thead.lavender-header th {
-	background-color: #e6ccff;
+	background-color: #eedbfd;
 	color: #5E2B97;
+}
+
+/* 기본 숫자 링크 컬러 조정 */
+.pagination .page-link {
+  color: #7b4bb7; /* 원하는 색상 */
+}
+
+/* hover 시 */
+.pagination .page-link:hover {
+  color: #212529;
+  background-color: #e9ecef;
+  border-color: #904ebc;
+}
+
+/* 활성화된 페이지 번호 */
+.pagination .page-item.active .page-link {
+  background-color: #b481d9;
+  border-color: #a069cb;
+  color: white;
 }
 </style>
 </head>

@@ -12,6 +12,7 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <style>
 .container {
 	max-width: 900px;
@@ -21,6 +22,111 @@
 .table th, .table td {
 	vertical-align: middle;
 }
+
+.pagination .page-link {
+	color: #7B4BB7;
+}
+
+.pagination .page-link:hover {
+	color: #212529;
+	background-color: #E9ECEF;
+	border-color: #904EBC;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #B481D9;
+	border-color: #A069CB;
+	color: white;
+}
+
+.custom-btn-primary {
+	background-color: #b481d9 !important;
+	border-color: #b481d9 !important;
+	color: white !important;
+}
+
+.custom-btn-primary:hover {
+	background-color: #b481d9 !important;
+	border-color: #b481d9 !important;
+	color: white !important;
+}
+
+.custom-btn-outline-primary {
+  color: #b481d9 !important;
+  border: 1px solid #d1d1d1 !important;
+  background-color: transparent !important;
+}
+
+.custom-btn-outline-primary:hover {
+  background-color: #b481d9 !important;
+  color: white !important;
+}
+
+/* 문의 게시판 테이블 스타일을 공지게시판처럼 심플하게 변경 */
+.table thead th{
+    background-color: #eedbfd;  /* 연보라색 헤더 */
+    color: #5E2B97;
+    font-weight: bold;
+    border-top: 2px solid #e8d6ff;
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:hover {
+    background-color: #f9f7ff; /* 행 호버 시 연한 보라빛 배경 */
+    cursor: pointer;
+}
+
+/* 테이블 전체에 테두리 선 제거하고 라인으로 구분 */
+.table {
+    border-collapse: collapse;
+}
+
+.table td, .table th {
+    border: none;            /* 부트스트랩 기본 테두리 제거 */
+    border-bottom: 1px solid #eee; /* 밑줄로 구분만 */
+    vertical-align: middle;
+}
+
+/* 번호, 문의 종류 등 좌우 공간 확보 */
+.table td, .table th {
+    padding: 12px 10px;
+}
+
+/* 답변 상태 뱃지 스타일 수정 */
+.badge.bg-success {
+    background-color: #28a745; /* 완료: 초록 */
+    font-size: 0.85rem;
+    padding: 5px 10px;
+}
+
+.badge.bg-secondary {
+    background-color: #6c757d; /* 검토중: 회색 */
+    font-size: 0.85rem;
+    padding: 5px 10px;
+}
+
+h2.fw-bold {
+  margin-bottom: 30px;
+}
+
+.card-header {
+  background-color: #eedbfd !important; /* 연보라색 */
+  color: #5E2B97 !important;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body > .container {
+    flex: 1;
+}
+
+
+
 </style>
 </head>
 <body>
@@ -28,7 +134,7 @@
 
 	<div class="container">
 
-		<h3 class="mb-4">문의 게시판</h3>
+		<h2 class="fw-bold">문의 게시판</h2>
 
 		<!-- 문의 작성 폼 -->
 		<sec:authorize access="isAuthenticated()">
@@ -91,32 +197,40 @@
 					<div class="d-flex gap-2">
 						<a
 							href="${pageContext.request.contextPath}/qnaBoard?action=list&view=all"
-							class="btn ${viewMode eq 'all' ? 'btn-primary' : 'btn-outline-primary'} btn-sm">전체
+							class="btn ${viewMode eq 'all' ? 'custom-btn-primary' : 'custom-btn-outline-primary'} btn-sm">전체
 							문의보기</a> <a
 							href="${pageContext.request.contextPath}/qnaBoard?action=list&view=mine"
-							class="btn ${viewMode eq 'mine' ? 'btn-primary' : 'btn-outline-primary'} btn-sm">내
+							class="btn ${viewMode eq 'mine' ? 'custom-btn-primary' : 'custom-btn-outline-primary'} btn-sm">내
 							문의보기</a>
+
 					</div>
 				</div>
 
-				<table class="table table-bordered table-hover">
-					<thead class="table-light">
+				<table class="table table-hover">
+					<thead>
 						<tr>
-							<th style="width: 60px;">번호</th>
-							<th style="width: 120px;">문의 종류</th>
+							<th style="width: 60px; text-align: center;">번호</th>
+							<th style="width: 140px; text-align: center;">문의 종류</th>
 							<th style="width: 100px;">답변 상태</th>
-							<th>제목</th>
-							<th style="width: 120px;">문의자</th>
-							<th style="width: 120px;">등록일</th>
+							<th style="text-align: center;">제목</th>
+							<th style="width: 120px; text-align: center;">문의자</th>
+							<th style="width: 120px; text-align: center;">등록일</th>
 						</tr>
 					</thead>
 					<tbody>
+						<c:if test="${empty qnaList}">
+							<tr>
+								<td colspan="6" class="text-center">등록된 문의가 없습니다.</td>
+							</tr>
+						</c:if>
+
+
 						<c:forEach var="qna" items="${qnaList}">
 							<tr
 								onclick="location.href='${pageContext.request.contextPath}/qnaBoard?action=detail&id=${qna.qnaId}'"
 								style="cursor: pointer;">
-								<td>${qna.qnaId}</td>
-								<td>${qna.qnaType}</td>
+								<td style="text-align: center;">${qna.qnaId}</td>
+								<td class="text-center">${qna.qnaType}</td>
 								<td><c:choose>
 										<c:when test="${not empty qna.answerDetail}">
 											<span class="badge bg-success">답변완료</span>
@@ -127,11 +241,11 @@
 									</c:choose></td>
 								<!-- 비밀글 표시 추가 -->
 								<td><c:if test="${qna.isPrivate == 'Y'}">
-										<span class="badge bg-warning text-dark">비밀글</span>
-									</c:if> ${qna.qnaTitle}</td>
+  								<i class="bi bi-lock-fill text-secondary me-1" title="비밀글"></i>
+								</c:if> ${qna.qnaTitle}</td>
 								<!-- 링크 제거 -->
-								<td><c:out value="${qna.userId}" /></td>
-								<td><fmt:formatDate value="${qna.createDate}"
+								<td class="text-center"><c:out value="${qna.userId}" /></td>
+								<td class="text-center"><fmt:formatDate value="${qna.createDate}"
 										pattern="yyyy.MM.dd" /></td>
 							</tr>
 						</c:forEach>
@@ -168,7 +282,9 @@
 				<c:if test="${not empty qna}">
 					<div class="card mb-3">
 						<div class="card-header">
-							<h5><c:out value="${qna.qnaTitle}" /></h5>
+							<h5>
+								<c:out value="${qna.qnaTitle}" />
+							</h5>
 							<small class="text-muted"> 문의 종류: ${qna.qnaType} | 작성자:
 								${qna.userId} | 작성일: <fmt:formatDate value="${qna.createDate}"
 									pattern="yyyy.MM.dd" />
