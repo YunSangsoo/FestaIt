@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -11,46 +12,31 @@
 
 <body>
 	<h2 class="hadename">마이페이지</h2>
-	<div class="mypagehead">
-		<h1 class="grade"> ${userInfo.userType}  (회원등급)</h1>
-		<div class="profile" id="profilePreview"></div>
-		<input type="file" id="profileInput" accept="image/*"
-			style="display: none;">
+	<div class="mypagehead" id="mypagehead">
+		<h1 class="grade">
+		<c:choose>
+			<c:when test="${not empty manager}">
+			사업자
+			</c:when>
+			<c:otherwise>
+			개인회원
+			</c:otherwise>
+		</c:choose>
+		</h1>
+		<div type="file" class="profile" id="profileImageInput"></div>
+		<input type="file" class="profile2" id="profileImageInput" accept="image/*">
 		<div>
 			<p class="secondname">이름 ${userInfo.userName}</p>
 			<p class="idName">(아이디) ${userInfo.userId}</p>
 			<p class="joinDate">가입일 ${userInfo.enrollDate}</p>
 
 			<hr class="line">
-			<p class="phone">전화번호 ${userInfo.phone}</p>
-			<p class="email">이메일 ${userInfo.email}</p>
-			<p class="adress">주소 ${userInfo.addr}</p>
-
-			<div id="modalContainer" class="hidden">
-				<div id="modalContent">
-					<div class="nickchange">
-						<h2>비밀번호 변경</h2>
-						<button id="modalCloseButton" class="modalCloseButton">닫기</button>
-						<hr>
-						<br>
-						<form id="passwordForm">
-							<input type="password" id="currentPassword"
-								class="change-box__input2" placeholder="현재 비밀번호 입력" required>
-							<input type="password" id="newPassword"
-								class="change-box__input2" placeholder="변경할 비밀번호 입력" required>
-							<small class="errMsg" id="pwMsg"></small> <input type="password"
-								id="confirmPassword" class="change-box__input2"
-								placeholder="비밀번호 확인" required> <small class="errMsg"
-								id="confirmMsg"></small> <br>
-							<br>
-							<br> <input type="submit" class="commit" value="비밀번호 변경">
-						</form>
-					</div>
-				</div>
-			</div>
-			<button class="changepw" id="modalOpenButton">비밀번호수정</button>
-
-			<button class="changenick" id="updateBtn">수정하기</button>
+			<p class="phone">전화번호: ${userInfo.phone}</p>
+			<p class="email">이메일: ${userInfo.email}</p>
+			<p class="adress">주소: ${userInfo.addr}</p>
+            
+			<a class="changepw" id="changepw" href="${pageContext.request.contextPath}/user/mypage_nickPw">개인정보수정</a>
+            
 		</div>
 	</div>
 
@@ -68,26 +54,23 @@
 			</h2>
 			<hr style="width: 600px;">
 			<div class="a2">
-				<div class="titlename">
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-				</div>
-				<div>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-				</div>
+				<c:choose>
+					<c:when test="${not empty bookmarkList}">
+						<c:forEach var="bookmark" items="${bookmarkList}">
+							<a
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${bookmark.appId}"
+								class="text-decoration-none text-dark titlename">
+								<div class="conname">${bookmark.appTitle}</div>
+								<div class="conname" style="text-align: right; margin-right: 30px;">
+									<fmt:formatDate value="${bookmark.createDate}" pattern="yyyy.MM.dd"/>
+								</div>
+							</a>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div>등록한 리뷰가 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 		<hr>
@@ -104,26 +87,23 @@
 			</h2>
 			<hr style="width: 600px;">
 			<div class="a2">
-				<div class="titlename">
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-				</div>
-				<div>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-				</div>
+				<c:choose>
+					<c:when test="${not empty reviewList}">
+						<c:forEach var="review" items="${reviewList}">
+							<a
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container"
+								class="text-decoration-none text-dark titlename">
+								<div class="conname">${review.appTitle}</div>
+								<div class="conname" style="text-align: right; margin-right: 30px;">
+									<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd"/>
+								</div>
+							</a>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div>등록한 리뷰가 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	</div>
@@ -151,8 +131,9 @@
     </div>
     끝-->
 
+
 	<button type="button" class="secessionBtn" onclick="secession()">탈퇴하기</button>
-	<!--프로필사진 스크립트-->
+	<!--프로필사진 스크립트
 	<script>
         const profileDiv = document.getElementById('profilePreview');
         const profileInput = document.getElementById('profileInput');
@@ -172,8 +153,44 @@
             }
         });
     </script>
-	<!--비번변경 모달창 여는 스크립트-->
+	-->
+	<!-- 진짜 프로필 스크립 -->
 	<script>
+		document.getElementById("profileImageInput").addEventListener("change",function(){
+			const file = this.files[0];
+			if (!file) return;
+
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				const preview = document.getElementById("profilePreview");
+				preview.style.backgroundImage = `url('${e.target.result}')`;
+				preview.style.backgroundSize = 'cover';
+				preview.style.backgroundPosition = 'center';
+			};
+			reader.readAsDataURL(file);
+
+			const formData = new FormData();
+			formData.append("profileImage",file);
+
+			$.ajax({
+				url: "/user/uploadProfile",
+				type: "POST",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(response) {
+					alert("프로필 이미지 업로드 완료");
+				},
+				error: function(){
+					alert("이미지 업로드 실패");
+				}
+			});
+		});
+
+	</script>
+	
+	<!--비번변경 모달창 여는 스크립트-->
+	<!-- <script>
         const modalOpenButton = document.getElementById('modalOpenButton');
         const modalCloseButton = document.getElementById('modalCloseButton');
         const modal = document.getElementById('modalContainer');
@@ -185,7 +202,7 @@
         modalCloseButton.addEventListener('click', () => {
             modal.classList.add('hidden');
         });
-    </script>
+    </script> -->
 
 	<!--닉네임변경 모달창 여는 스크립트
     <script>

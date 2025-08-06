@@ -15,56 +15,13 @@
 	rel="stylesheet">
 <c:set var="contextPath" value="${pageContext.request.contextPath}"
 	scope="application" />
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="${contextPath}/resources/js/event/calendar.js"></script>
-<link href="${contextPath}/resources/css/eventboard.css"
-	rel="stylesheet">
-
-
 <link rel="stylesheet"
 	href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="${contextPath}/resources/js/event/calendar.js"></script>
+<link href="${contextPath}/resources/css/eventboard.css" rel="stylesheet">
+<link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
-
-
-
-<style>
-/* 공지 작성 버튼 스타일 */
-a.btn.lavender-btn {
-	background-color: #b481d9;
-	color: white;
-	border: 1px solid #a069cb;
-}
-
-a.btn.lavender-btn:hover {
-	background-color: #a069cb;
-	border-color: #904ebc;
-}
-
-/* 테이블 헤더 스타일 */
-thead.lavender-header th {
-	background-color: #e6ccff;
-	color: #5E2B97;
-}
-
-.btn.white-btn {
-	background-color: #ffffff;
-	color: black;
-	border: 1px solid #000000;
-}
-
-.btn.white-btn:hover {
-	background-color: #ea870e;
-	border-color: #ffffff;
-	color: #ffffff;
-}
-
-.btn.white-btn:active {
-	/* -------------------------------------------------------클릭했을 때 색 */
-	background-color: #ea870e;
-	border-color: #000000;
-	color: #000000;
-}
-</style>
 </head>
 
 <body>
@@ -81,7 +38,7 @@ thead.lavender-header th {
 
 		<!-- 검색 영역 -->
 		<form:form modelAttribute="eventSearch"
-			action="${pageContext.request.contextPath}/eventBoard/calendar"
+			action="${pageContext.request.contextPath}/eventBoard/list"
 			method="get">
 			<div class="search-section">
 				<div class="search-grid date">
@@ -133,15 +90,12 @@ thead.lavender-header th {
 						</form:select>
 
 						<input type="search" name="keyword" value="${param.keyword}"
-							class="form-search" />
+							class="form-search" placeholder="search"/>
 						<button type="submit" class="btn white-btn small-btn">검색</button>
 					</div>
 
 					<div class="flex-area stretch">
 						<div class="search-option">카테고리</div>
-
-
-
 						<button
 							class="btn btn-light rounded-pill px-3 btn-category ${param.eventCode.contains('L') ? 'selected active' : ''}"
 							type="button" id="btn-search" value="L">지역행사</button>
@@ -157,43 +111,44 @@ thead.lavender-header th {
 
 						<input type="hidden" name="eventCode" id="eventCode"
 							value="${param.eventCode}" />
-
-						<!-- 권한 부여 후 북마크 설정 추가해야 함 ============================================================ -->
-
-						<%-- 
-							<form:checkbox path="bookmark" name="bookmark-check" class="bookmark-check"/>
-							 --%>
-
-						<input type="checkbox" name="bookmark-check"
-							class="bookmark-check" />
-						<div class="search-option bookmark">북마크한 행사</div>
+							
+						<div class="d-flex flex-center">
+						<input type="checkbox" name="bookmark" class="bookmark-check" ${param.bookmark eq 'on' ? 'checked' : ''} />
+						<div class="search-option bookmark-option">북마크한 행사</div>
+						</div>
 					</div>
 
 				</div>
 			</div>
+
 		</form:form>
 
 
 
 		<div class="flex-area result-inform">
 			<div class="flex-area view-format flex-center">
-				<a href="${pageContext.request.contextPath}/myEventApp"
-					class="btn lavender-btn">행사 신청 현황</a>
-				<!-- 경로 수정 필요, 권한 부여 시 a 태그만 hide -->
+				<div class="total-num">총 ${pi.totalCount}건</div>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<a href="${pageContext.request.contextPath}/myEventApp"
+						class="btn lavender-btn">행사 신청 현황</a>
+					<!-- 경로 수정 필요 -->
+				</sec:authorize>
 			</div>
 
 			<div class="flex-area view-format">
 				<a class="view-button list"
-					href="${pageContext.request.contextPath}/eventBoard/list/#;">리스트형</a>
+					href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage}${searchParam}">리스트형</a>
 				<div class="v-line"></div>
 				<a class="view-button calendar"
-					href="${pageContext.request.contextPath}/eventBoard/calendar">캘린더형</a>
+					href="${pageContext.request.contextPath}/eventBoard/calendar?${searchParam}#;"
+					style="color:black; font-weight:bold;">캘린더형</a>
 			</div>
 		</div>
 
 
 		<div id="calendar"></div>
-
+		
+		<!-- 마우스오버 시 썸네일 카드-->
 		<div class="event-hover-thumbcard" id="event-hover-thumbcard">
 			<a href="${pageContext.request.contextPath}/eventBoard/detail?appId=${event.appId}"
 				class="text-decoration-none text-dark">
@@ -263,18 +218,46 @@ thead.lavender-header th {
 				eventDidMount: function (info) {
 					
 					const eventEl = info.el;
+					const eventName = info.event.extendedProps.eventName;
+					let bgColor;
+					let bdColor;
+					
+					switch (eventName) {
+						case '지역 행사':
+							bgColor = '#e8e8fc';
+							bdColor = '#a4a4f3';
+							break;
+						case '박람회':
+							bgColor = '#fae7fd';
+							bdColor = '#daa8ef';
+							break;
+						case '전시회':
+							bgColor = '#fde2d7';
+							bdColor = '#db7e56';
+							break;
+						case '기타':
+							bgColor = '#fceed9';
+							bdColor = '#ddae68';
+							break;
+						default:
+							bgColor = '#ccc'; // 기본 색상
+					}
+					eventEl.style.backgroundColor = bgColor;
+					eventEl.style.borderColor = bdColor;
+					
+
+					const titleEl = eventEl.querySelector('.fc-event-title');
+					if (titleEl) {
+				        titleEl.style.color = 'black';
+				    }
 					
 					eventEl.addEventListener('mouseenter', function () { // mousemove도 소용 없음...
-						const eventName = info.event.extendedProps.eventName;
+						/* const eventName = info.event.extendedProps.eventName; */
 						const title = info.event.title;
 						const appOrg = info.event.extendedProps.appOrg;
 						const startDateText = info.event.extendedProps.startDateText;
 						const endDateText = info.event.extendedProps.endDateText;
 						const thumb = info.event.extendedProps.thumb;
-						
-						console.log("이벤트 정보:", title, startDateText, eventName); // 각 값이 비어 있는지 확인
-						console.log("typeof title:", typeof title, "| title 값:", title); // string 맞음
-						
 						
 						document.getElementById("tag").textContent = `\${eventName}`;
 						document.getElementById("event-name-thumb").textContent = `\${title}`;
@@ -288,9 +271,7 @@ thead.lavender-header th {
 		});
 	</script>
 
-
-	<script
-		src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
+	<script src="<%=request.getContextPath()%>/resources/js/event/search.js"></script>
 	<script src="<%=request.getContextPath()%>/resources/js/event/event.js"></script>
 
 

@@ -12,7 +12,7 @@ public interface ReviewBoardDao {
 
 	List<ReviewBoard> selectReviewListWithPaging(Map<String, Object> paramMap);
 
-	int getReviewCount();
+	int getReviewCount(Map<String, Object> paramMap);
 	
 	int setReviewIdentifier(Map<String, Object> paramMap);
 

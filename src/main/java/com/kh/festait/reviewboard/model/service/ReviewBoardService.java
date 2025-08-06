@@ -9,9 +9,9 @@ import com.kh.festait.reviewboard.model.vo.ReviewBoard;
 
 public interface ReviewBoardService {
 
-	List<ReviewBoard> selectReviewList(int offset, int limit);
+	List<ReviewBoard> selectReviewList(Map<String, Object> paramMap);
 
-	int getReviewCount();
+	int getReviewCount(Map<String, Object> paramMap);
 	
 	int setReviewIdentifier(Map<String, Object> paramMap);
 

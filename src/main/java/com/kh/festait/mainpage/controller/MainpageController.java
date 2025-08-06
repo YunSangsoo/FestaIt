@@ -15,6 +15,7 @@ import com.kh.festait.eventboard.model.vo.EventBoard;
 import com.kh.festait.mainpage.model.service.MainpageService;
 import com.kh.festait.noticeboard.model.vo.NoticeBoard;
 import com.kh.festait.promoboard.model.vo.PromoBoardVo;
+import com.kh.festait.reviewboard.controller.ReviewBoardController;
 import com.kh.festait.reviewboard.model.vo.ReviewBoard;
 import com.kh.festait.user.model.vo.User;
 
@@ -27,7 +28,9 @@ public class MainpageController {
 	@Autowired
 	private MainpageService mainpageService;
 	@Autowired
-	private BookmarkController bc;
+	private BookmarkController bCon;
+	@Autowired
+	private ReviewBoardController rbCon;
 	@Autowired
 	private final ImageService imgService;
 	
@@ -60,7 +63,7 @@ public class MainpageController {
         	User loginUser = (User) authentication.getPrincipal();
             userNo = loginUser.getUserNo();
         }
-    	bc.setBookmark(eventList, userNo);
+    	bCon.setBookmark(eventList, userNo);
 	    
 	    EventBoardController.setRegion(eventList);
 	    model.addAttribute("eventList", eventList);
@@ -81,6 +84,7 @@ public class MainpageController {
 		
 		int limit = 9;
 	    List<ReviewBoard> reviewList = mainpageService.selectReviewList(limit);
+	    rbCon.setProfileImage(reviewList);
 	    model.addAttribute("reviewList", reviewList);
 		
 	}

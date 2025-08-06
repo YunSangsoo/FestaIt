@@ -20,53 +20,14 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"
 	scope="application" />
 <link href="${contextPath}/resources/css/eventboard.css" rel="stylesheet">
+<link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 	
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
-
-<style>
-/* 공지 작성 버튼 스타일 */
-a.btn.lavender-btn {
-	background-color: #b481d9;
-	color: white;
-	border: 1px solid #a069cb;
-}
-
-a.btn.lavender-btn:hover {
-	background-color: #a069cb;
-	border-color: #904ebc;
-}
-
-/* 테이블 헤더 스타일 */
-thead.lavender-header th {
-	background-color: #e6ccff;
-	color: #5E2B97;
-}
-
-.btn.white-btn {
-	background-color: #ffffff;
-	color: black;
-	border: 1px solid #000000;
-}
-
-.btn.white-btn:hover {
-	background-color: #ea870e;
-	border-color: #ffffff;
-	color: #ffffff;
-}
-
-.btn.white-btn:active {
-	/* -------------------------------------------------------클릭했을 때 색 */
-	background-color: #ea870e;
-	border-color: #000000;
-	color: #000000;
-}
-</style>
 </head>
 
 <body>
-
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 	<c:if test="${not empty param}">
@@ -134,7 +95,7 @@ thead.lavender-header th {
 						</form:select>
 
 						<input type="search" name="keyword" value="${param.keyword}"
-							class="form-search" />
+							class="form-search" placeholder="search"/>
 						<button type="submit" class="btn white-btn small-btn">검색</button>
 					</div>
 
@@ -155,15 +116,12 @@ thead.lavender-header th {
 
 						<input type="hidden" name="eventCode" id="eventCode"
 							value="${param.eventCode}" />
-
-						<!-- 권한 부여 후 북마크 설정 추가해야 함 ============================================================ -->
-
-						<%-- 
-							<form:checkbox path="bookmark" name="bookmark-check" class="bookmark-check"/>
-							 --%>
-
+						
+						<div class="d-flex flex-center">
 						<input type="checkbox" name="bookmark" class="bookmark-check" ${param.bookmark eq 'on' ? 'checked' : ''} />
 						<div class="search-option bookmark-option">북마크한 행사</div>
+						</div>
+						
 					</div>
 
 				</div>
@@ -184,7 +142,8 @@ thead.lavender-header th {
 
 			<div class="flex-area view-format">
 				<a class="view-button list"
-					href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage}${searchParam}#;">리스트형</a>
+					href="${pageContext.request.contextPath}/eventBoard/list?page=${pi.currentPage}${searchParam}#;"
+					style="color:black; font-weight:bold;">리스트형</a>
 				<div class="v-line"></div>
 				<a class="view-button calendar"
 					href="${pageContext.request.contextPath}/eventBoard/calendar?${searchParam}">캘린더형</a>

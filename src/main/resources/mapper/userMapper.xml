@@ -112,7 +112,7 @@
 	<update id="updatePasswordByEmail" parameterType="map">
 		UPDATE USERS
 		SET USER_PWD = #{userPwd}
-		WHERE EMAIL = #{email}
+		WHERE EMAIL = #{email} <!-- 이메일 말고 아이디로 바꿔야함 -->
 	</update>
 	
 	<!-- 마이페이지 관련 -->
@@ -133,6 +133,18 @@
 	        AND STATUS = 'Y'   
 	</select>
 	
+	<!-- 닉변 -->
+	<update id="updateNickname" parameterType="map">
+		UPDATE USERS SET NICKNAME = #{nickname}
+		WHERE USER_ID = #{userId}
+	</update>
+	
+	<!-- 마이페이지에서 비번변경 -->
+	<update id="updatePassword" parameterType="map">
+		UPDATE USERS SET USER_PWD = #{userPwd}
+		WHERE USER_ID = #{userId}
+	</update>
+	
 	<select id="myPageUserBookMark" resultType="user" parameterType="user">
 		  SELECT USER_NO 
                , APP_ID 
@@ -140,6 +152,7 @@
  		   FROM BOOKMARK    
  		   WHERE USER_NO = #{userNo}        
 	</select>
+	
 	
 	
 	<select id="myPageUserReview" resultType="user" parameterType="user">
@@ -192,6 +205,24 @@
 		FROM USERS
 		WHERE USER_ID = #{userId}
 		AND USER_PWD = #{userPwd}
+	</select>
+	
+	<select id="selectBookmarkList" parameterType="map" resultType="com.kh.festait.bookmark.model.vo.Bookmark">
+		SELECT B.USER_NO, B.APP_ID, B.CREATE_DATE, APP.APP_TITLE
+		FROM BOOKMARK B
+		JOIN EVENT_APPLICATION APP ON B.APP_ID = APP.APP_ID
+		WHERE B.USER_NO = #{userNo}        
+	</select>
+	
+	<select id="selectReviewList" parameterType="map" resultType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
+		SELECT R.USER_NO, R.APP_ID, R."COMMENT",
+			R.RATING, R.CREATE_DATE, R.UPDATE_DATE,
+			U.USER_ID, U.USER_NAME, U.NICKNAME, APP.APP_TITLE
+		FROM REVIEW R
+		JOIN USERS U ON R.USER_NO = U.USER_NO
+		JOIN EVENT_APPLICATION APP ON R.APP_ID = APP.APP_ID
+		WHERE R.USER_NO = #{userNo}
+		ORDER BY R.CREATE_DATE DESC   
 	</select>
 	
 </mapper>
