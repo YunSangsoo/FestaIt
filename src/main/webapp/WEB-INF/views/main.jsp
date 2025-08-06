@@ -84,7 +84,7 @@ href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-u
 						<div class="section-title">진행 중인 행사</div>
 					</a>
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
-						<a href="${pageContext.request.contextPath}/myEventApp"
+						<a href="${pageContext.request.contextPath}/eventApp"
 							class="btn lavender-btn">행사 관리</a>
 					</sec:authorize>
 					

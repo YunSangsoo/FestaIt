@@ -20,6 +20,7 @@
     <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bc4b58676401783f2a8902047f4150c4&libraries=services"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -31,7 +32,12 @@
         var eventBookmarked = ${event.bookmarked ? 'true' : 'false'};
         var loginMemberUserNo = ${loginUser != null && loginUser.userNo != null ? loginUser.userNo : 0};
     </script>
-
+	
+	<style>
+	.category{
+	padding-top: 10px;
+	}
+	</style>
 </head>
 <body>
     <%@ include file="/WEB-INF/views/common/header.jsp" %>
@@ -60,9 +66,9 @@
                     <div class="content-header">
                         <span class="category">
                             <c:choose><c:when test="${not empty event.eventCategoryName}">
-                                [${event.eventCategoryName}]
+                                ${event.eventCategoryName}
                             </c:when><c:otherwise>
-                                [카테고리 없음]
+                                카테고리 없음
                             </c:otherwise></c:choose>
                         </span>
 

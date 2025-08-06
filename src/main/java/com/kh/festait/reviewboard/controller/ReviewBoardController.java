@@ -176,10 +176,6 @@ public class ReviewBoardController {
 		int result = reviewBoardService.deleteReviewByUserNo(paramMap);
 		ra.addFlashAttribute("msg", result > 0 ? "삭제 완료" : "삭제 실패");
 		
-		if(paramMap.get("admin").equals("true")) {
-			return "redirect:/reviewBoard";
-		}
-		
 		return "redirect:/eventBoard/detail?appId="+appId+"#review-container";
 	}
 	
@@ -207,5 +203,4 @@ public class ReviewBoardController {
 		}
 		return "";
 	}
-	
 }

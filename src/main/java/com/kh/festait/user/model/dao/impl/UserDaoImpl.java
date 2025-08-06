@@ -7,6 +7,9 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.kh.festait.bookmark.model.vo.Bookmark;
+import com.kh.festait.reviewboard.model.vo.ReviewBoard;
 import com.kh.festait.user.model.dao.UserDao;
 import com.kh.festait.user.model.vo.MyPageBookmark;
 import com.kh.festait.user.model.vo.User;
@@ -140,6 +143,16 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public int updatePassword(Map<String, Object> param) {
 		return sqlSession.update("updatePassword", param);
+	}
+
+	@Override
+	public List<Bookmark> selectBookmarkList(Map<String, Object> param) {
+		return sqlSession.selectList("user.selectBookmarkList", param);
+	}
+
+	@Override
+	public List<ReviewBoard> selectReviewList(Map<String, Object> param) {
+		return sqlSession.selectList("user.selectReviewList", param);
 	}
 
 }

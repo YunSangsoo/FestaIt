@@ -1,7 +1,8 @@
 package com.kh.festait.user.controller;
 
-import java.io.File;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kh.festait.bookmark.model.vo.Bookmark;
+import com.kh.festait.reviewboard.model.vo.ReviewBoard;
 import com.kh.festait.security.model.vo.UserExt;
 import com.kh.festait.user.model.vo.User;
 import com.kh.festait.user.service.UserService;
@@ -63,7 +65,7 @@ public class UserController {
 	//마이페이지 이동
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
 	public ModelAndView myPage(@AuthenticationPrincipal UserExt userDetails,
-			Authentication auth
+			Authentication auth, Model model
 			) {
 		
 		User u = (User)auth.getPrincipal();
@@ -75,6 +77,16 @@ public class UserController {
 		
 		User u = uService.myPageUserInfo(userId);
 		System.out.println("u : "+u.toString());*/
+		
+		// 북마크 리스트 가져오기
+		Map<String,Object> param = new HashMap<>();
+		param.put("userNo", u.getUserNo());
+		List<Bookmark> bookmarkList = uService.selectBookmarkList(param);
+	    model.addAttribute("bookmarkList", bookmarkList);
+		
+		// 리뷰 리스트 가져오기
+	    List<ReviewBoard> reviewList = uService.selectReviewList(param);
+	    model.addAttribute("reviewList", reviewList);
 		
 		mv.addObject("userInfo", u);
 		mv.setViewName("/user/myPage");
@@ -282,30 +294,6 @@ public class UserController {
 		log.info("user : {}",encodedPwd);
 		return result > 0 ? "success" : "fail";
  	}
-	@ResponseBody
-	@RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
-	public String uploadProfile(@RequestParam("profileImage") MultipartFile file,
-			HttpSession session) {
-			if (file.isEmpty()) {
-				return "fail";
-			}
-			try {
-				String uploadDir = "C:/"; // 저장경로
-				String originalFilename = file.getOriginalFilename();
-				
-				String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFilename;
-				
-				File savaFile = new File(uploadDir + uniqueFileName);
-				file.transferTo(saveFile);
-				
-				String userId = (String) session.getAttribute("loginUserId");
-				
-				return "success";
-				} catch (Exception e) {
-					e.printStackTrace();
-					return "fail";
-				}
-	}
 	
 }
 

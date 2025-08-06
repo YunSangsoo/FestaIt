@@ -31,7 +31,7 @@
 
 .search-btn {
 	width: 100px;
-	height: 100%;
+	height: 38px !important;
 }
 
 </style>
@@ -42,7 +42,7 @@
 	</c:if>
 
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
-	<div class="container my-5" style="min-height: 600px;">
+	<div class="container" style="min-height: 600px;">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="fw-bold">리뷰 관리</h2>
@@ -92,12 +92,12 @@
                     <c:when test="${not empty reviewBoard}">
                         <c:forEach var="review" items="${reviewBoard}">
                             <tr>
-                                <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}'" style="cursor: pointer;">${review.userName}</td>
-                                <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}'" style="cursor: pointer;">${review.userId}</td>
-                                <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}'" style="cursor: pointer;">${review.nickname}</td>
-                                <td class="text-start over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}'" style="cursor: pointer;">${review.appTitle}</td>
-                                <td class="text-start over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}'" style="cursor: pointer;">${review.comment}</td>
-                                <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}'" style="cursor: pointer;">
+                                <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.userName}</td>
+                                <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.userId}</td>
+                                <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.nickname}</td>
+                                <td class="text-start over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.appTitle}</td>
+                                <td class="text-start over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.comment}</td>
+                                <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">
                                     <fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd HH:mm:ss" />
                                 </td>
                                 <td>

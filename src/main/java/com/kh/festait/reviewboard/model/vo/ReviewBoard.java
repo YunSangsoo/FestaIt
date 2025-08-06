@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ReviewBoard {
+	private int rnum;
 	private int userNo;
 	private int appId;
 	private String comment;

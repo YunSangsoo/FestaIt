@@ -1,12 +1,15 @@
 package com.kh.festait.user.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.kh.festait.bookmark.model.vo.Bookmark;
+import com.kh.festait.reviewboard.model.vo.ReviewBoard;
 import com.kh.festait.user.model.dao.UserDao;
 import com.kh.festait.user.model.vo.User;
 import com.kh.festait.user.service.UserService;
@@ -123,6 +126,16 @@ public class UserServiceImpl implements UserService{
 		param.put("userPwd", newPassword);
 		
 		return uDao.updatePassword(param);
+	}
+
+	@Override
+	public List<Bookmark> selectBookmarkList(Map<String,Object> param) {
+		return uDao.selectBookmarkList(param);
+	}
+
+	@Override
+	public List<ReviewBoard> selectReviewList(Map<String,Object> param) {
+		return uDao.selectReviewList(param);
 	}
 
 
