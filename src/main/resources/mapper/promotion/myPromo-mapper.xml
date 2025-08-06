@@ -2,9 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mypromoMapper">
 
-<!-- MyPromoVo와 DB 컬럼 매핑 -->
     <resultMap id="myPromoResultMap" type="com.kh.festait.mypromo.model.vo.MyPromoVo">
-        <!-- EVENT_PROMOTION 테이블의 실제 컬럼 -->
+
         <id property="promoId" column="PROM_ID"/>
         <result property="eventId" column="EVENT_CODE"/> 
         <result property="promoTitle" column="PROM_TITLE"/>
@@ -34,7 +33,7 @@
         <result property="eventAppName" column="APP_TITLE"/>
     </resultMap>
 
-    <!-- 내 홍보 게시글 전체 수 조회 (검색 조건 추가) -->
+    <!-- 내 홍보 게시글 전체 수 조회 -->
     <select id="selectListCount" parameterType="map" resultType="int">
         SELECT COUNT(*)
         FROM EVENT_PROMOTION EP
@@ -52,7 +51,7 @@
         </if>
     </select>
 
-    <!-- 내 홍보 게시글 목록 조회 (페이징 및 검색 조건 추가) -->
+    <!-- 내 홍보 게시글 목록 조회 -->
     <select id="selectMyPromoList" parameterType="map" resultMap="myPromoResultMap">
         SELECT
             EP.PROM_ID,
@@ -88,7 +87,6 @@
         ORDER BY EP.CREATE_DATE DESC
     </select>
 
-    <!-- 특정 사용자의 (승인된) 행사 신청 목록 조회 -->
     <select id="selectUserEventApplications" parameterType="_int" resultMap="eventAppIdResultMap">
         SELECT
             EA.APP_ID,

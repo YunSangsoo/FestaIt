@@ -1,4 +1,4 @@
-/* 기본 스타일 */
+/* 기본 바디 설정 */
 body {
     font-family: 'Noto Sans KR', sans-serif;
     background-color: #f4f7f6;
@@ -8,7 +8,7 @@ body {
 }
 
 .top-spacer {
-    height: 80px; 
+    height: 80px;
 }
 
 .page-wrapper {
@@ -20,25 +20,24 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.promo-write-title {
+.promo-form-title {
     text-align: center;
-    color: #4CAF50;
+    color: #000000;
     margin-bottom: 30px;
     font-size: 2em;
     font-weight: 700;
 }
 
-/* 폼 그룹 스타일 */
 .form-group {
     margin-bottom: 25px;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
-    font-size: 1.1em;
+label.form-label {
+    display: block !important;
+    margin-bottom: 8px !important;
+    font-weight: 600 !important;
+    color: #000000 !important;
+    font-size: 1em !important;
 }
 
 .form-control {
@@ -52,17 +51,18 @@ body {
 }
 
 .form-control:focus {
-    border-color: #88B04B; 
+    border-color: #88B04B;
     box-shadow: 0 0 0 0.2rem rgba(136, 176, 75, 0.25);
     outline: none;
 }
 
 textarea.form-control {
-    resize: vertical; 
+    resize: vertical;
     min-height: 150px;
 }
 
-/* 파일 입력 그룹 스타일 */
+/* 파일 입력 관련 스타일 */
+
 .file-input-group {
     margin-top: 30px;
 }
@@ -73,30 +73,42 @@ textarea.form-control {
     gap: 10px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 8px; 
+    padding: 8px;
     background-color: #f9f9f9;
+    position: relative;
+    overflow: hidden;
 }
 
-/* 기본 파일 입력 필드 숨기기 */
-#promoPoster {
-    display: none;
-}
-
-/* 커스텀 파일 선택 버튼 스타일 (label 태그) */
-.file-upload-button {
-    background-color: #6A1B9A;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
     cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 1;
+}
+
+.file-upload-button {
+    background-color: #A069CB;
+    border: 1.5px solid #904EBC;
+    color: #E9ECEF;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
     white-space: nowrap;
     flex-shrink: 0;
+    z-index: 2;
+    box-shadow: none;
 }
 
 .file-upload-button:hover {
-    background-color: #5A1580;
+    background-color: #d7d8db; 
+    color: #6F3B89;
     transform: translateY(-1px);
 }
 
@@ -106,30 +118,28 @@ textarea.form-control {
     background-color: #e9ecef;
     border-radius: 5px;
     color: #555;
-    font-size: 0.9em;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-/* 이미지 미리보기 영역 */
 .image-preview {
-    width: 200px; 
-    height: 200px; 
+    width: 200px;
+    height: 200px;
     border: 1px dashed #ccc;
     border-radius: 8px;
     margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; 
+    overflow: hidden;
     background-color: #f0f0f0;
 }
 
 .image-preview img {
     width: 100%;
     height: 100%;
-    object-fit: cover; 
+    object-fit: cover;
     border-radius: 8px;
 }
 
@@ -138,11 +148,12 @@ textarea.form-control {
     font-size: 0.9em;
 }
 
-/* 버튼 그룹 */
+/* 버튼 그룹 스타일 */
+
 .button-group {
     display: flex;
     justify-content: center;
-    gap: 20px; 
+    gap: 20px;
     margin-top: 40px;
 }
 
@@ -153,7 +164,8 @@ textarea.form-control {
     font-size: 1.1em;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transform: none !important;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease !important;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -164,7 +176,6 @@ textarea.form-control {
 
 .submit-btn:hover {
     background-color: #45a049;
-    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -175,57 +186,57 @@ textarea.form-control {
 
 .cancel-btn:hover {
     background-color: #da190b;
-    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* 반응형 디자인 */
+.btn-group .btn:hover,
+.btn-group .btn:focus,
+.btn-group .btn:active {
+    transform: none !important;
+    box-shadow: none !important;
+    top: auto !important;
+    position: relative !important;
+}
+
+/* 반응형 */
+
 @media (max-width: 768px) {
     .page-wrapper {
         margin: 20px auto;
         padding: 20px;
     }
-
-    .promo-write-title {
+    .promo-form-title {
         font-size: 1.8em;
     }
-
-    .form-group label {
-        font-size: 1em;
+    label.form-label {
+        font-size: 1em !important;
     }
-
     .form-control {
         padding: 10px 12px;
         font-size: 0.95em;
     }
-
     .file-input-wrapper {
-        flex-direction: column; 
+        flex-direction: column;
         align-items: flex-start;
         padding: 10px;
     }
-
     .file-upload-button {
         width: 100%;
         text-align: center;
         margin-bottom: 10px;
     }
-
     .file-name-display {
         width: 100%;
         text-align: center;
     }
-
     .image-preview {
         width: 150px;
         height: 150px;
     }
-
     .button-group {
         flex-direction: column;
         gap: 15px;
     }
-
     .submit-btn, .cancel-btn {
         width: 100%;
         padding: 10px 20px;

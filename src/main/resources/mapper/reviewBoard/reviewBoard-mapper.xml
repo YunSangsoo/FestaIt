@@ -4,15 +4,54 @@
 
 <mapper namespace="reviewMapper">
 
+	<sql id="commonSelect">
+	    SELECT R.USER_NO, R.APP_ID, R."COMMENT",
+    		R.RATING, R.CREATE_DATE, R.UPDATE_DATE,
+    		U.USER_ID, U.USER_NAME, U.NICKNAME,
+    		APP.APP_TITLE
+		FROM REVIEW R
+		JOIN USERS U ON R.USER_NO = U.USER_NO
+		JOIN EVENT_APPLICATION APP ON R.APP_ID = APP.APP_ID
+		WHERE 1 = 1
+		<if test="appId != null and appId != ''">
+		  	AND R.APP_ID = #{appId}
+		</if>
+       	<if test="keyword != null and keyword != ''">
+			AND
+			<choose>
+				<when test="search == null or search == ''">
+					(
+					U.USER_NAME LIKE '%' || #{keyword} || '%' OR
+					U.USER_ID LIKE '%' || #{keyword} || '%' OR 
+					U.NICKNAME LIKE '%' || #{keyword} || '%' OR
+					APP.APP_TITLE LIKE '%' || #{keyword} || '%' OR
+					R."COMMENT" LIKE '%' || #{keyword} || '%'
+					)
+				</when>
+				<when test="search.equals('name')">
+					U.USER_NAME LIKE '%' || #{keyword} || '%'
+				</when>
+				<when test="search.equals('id')">
+					U.USER_ID LIKE '%' || #{keyword} || '%'
+				</when>
+				<when test="search.equals('nickname')">
+					U.NICKNAME LIKE '%' || #{keyword} || '%'
+				</when>
+				<when test="search.equals('title')">
+					APP.APP_TITLE LIKE '%' || #{keyword} || '%'
+				</when>
+				<when test="search.equals('content')">
+					R."COMMENT" LIKE '%' || #{keyword} || '%'
+				</when>
+			</choose>
+		</if>
+		ORDER BY R.CREATE_DATE DESC
+	</sql>
+
 	<select id="selectReviewListWithPaging" parameterType="map" resultType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
         SELECT * FROM (
             SELECT ROWNUM RNUM, A.* FROM (
-            	SELECT R.USER_NO, R.APP_ID, R."COMMENT",
-            		R.RATING, R.CREATE_DATE, R.UPDATE_DATE,
-            		U.USER_ID, U.USER_NAME, U.NICKNAME
-				FROM REVIEW R
-				JOIN USERS U ON R.USER_NO = U.USER_NO
-				ORDER BY R.CREATE_DATE DESC
+            	<include refid="commonSelect" />
 			) A
             WHERE ROWNUM &lt;= #{endRow}
         )
@@ -20,12 +59,13 @@
     </select>
 
 	<select id="getReviewCount" resultType="int">
-    	SELECT COUNT(*) FROM REVIEW
+    	SELECT COUNT(*)
+    	FROM (<include refid="commonSelect" />)
 	</select>
 
 	<select id="setReviewIdentifier" resultType="int">
     	SELECT COUNT(*) FROM REVIEW
-    	WHERE USER_NO = #{userNo} AND APP_ID = #{appId}
+    	WHERE USER_NO = #{loginUserNo} AND APP_ID = #{appId}
 	</select>
 
 	<!-- 등록 -->

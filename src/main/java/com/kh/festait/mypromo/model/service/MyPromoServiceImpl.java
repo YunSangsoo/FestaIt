@@ -23,7 +23,7 @@ public class MyPromoServiceImpl implements MyPromoService {
         return promoDao.selectListCount(paramMap);
     }
 
-    // 로그인 사용자의 게시글 목록 조회 (페이징 포함)
+    // 로그인 사용자의 게시글 목록 조회 
     @Override
     public List<MyPromoVo> selectMyPromoList(Map<String, Object> paramMap, PageInfo pi) {
         int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();

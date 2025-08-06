@@ -1,7 +1,6 @@
 package com.kh.festait.promoboard.model.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -41,6 +40,12 @@ public class PromoBoardDaoImpl implements PromoBoardDao {
         return sqlSession.selectOne(NAMESPACE + ".selectSearchPromoCount", searchKeyword);
     }
 
+    @Override
+    public PromoBoardVo selectPromoDetailIncludingInactive(int promoId) {
+        return sqlSession.selectOne(NAMESPACE + ".selectPromoDetailIncludingInactive", promoId);
+    }
+
+    
     @Override
     public List<PromoBoardVo> selectSearchPromo(String searchKeyword, PageInfo pi) {
         int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
