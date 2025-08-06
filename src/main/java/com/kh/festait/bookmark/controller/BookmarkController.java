@@ -26,11 +26,6 @@ public class BookmarkController {
     @PostMapping("/add")
     public ResponseEntity<?> addBookmark(@RequestParam("appId") int appId,
                                          Authentication authentication) {
-    	
-    	if (authentication == null || !authentication.isAuthenticated()) {
-    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인하지 않은 사용자입니다.");
-        }
-    	
     	User loginUser = (User) authentication.getPrincipal();
     	int userNo = loginUser.getUserNo();
         

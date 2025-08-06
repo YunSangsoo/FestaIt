@@ -47,22 +47,17 @@
         console.log("Promise 결과: 알림 모달 닫힘. 결과:", result ? "확인" : "취소/닫기");
     });
 
-    document.getElementById('showConfirmModalBtn').addEventListener('click', async () => {
+    document.getElementById('showConfirmModalBtn').addEventListener('click', async (event) => {
         const result = await window.showCommonModal(
             "선택 확인",
             "계속 진행하시겠습니까?<br>이 작업은 중요합니다.",
             {
-                cancelButtonText: "아니오",
-                confirmButtonText: "네, 진행합니다",
-                onConfirm: () => {
-                    console.log("콜백: 진행합니다!");
-                },
-                onCancel: () => {
-                    console.log("콜백: 취소합니다.");
-                }
+                cancelButtonText: "취소",
+                confirmButtonText: "제출"
             }
         );
         if (result) {
+            event.target.submit();
             console.log("Promise 결과: 사용자가 '네, 진행합니다'를 선택했습니다.");
             // 다음 작업 수행
         } else {

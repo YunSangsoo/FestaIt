@@ -1,12 +1,11 @@
 package com.kh.festait.app.controller;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,6 +51,11 @@ public class AppController {
 	 */
 	private String boardCode = "A";
     
+	@GetMapping("/test")
+	public String testPage(Model model) {
+		return "/test/main";
+	}
+	
 	//신청서 신규 작성 페이지 GetMapping
 	@GetMapping("/appWrite")
 	public String appWrite(Model model) {
@@ -94,11 +98,11 @@ public class AppController {
 			//BindingResult bindingResult, 유효성 결과
 			Model model,
 			Authentication auth,
-			@RequestParam("action") String action,
+			@RequestParam(value="action" , defaultValue = "default" , required = false) String action,
 			RedirectAttributes ra,
-			//@RequestParam(value="inputPoster",required=false) List<MultipartFile> upfiles, // inputPoster의 name 속성과 일치
+			@RequestParam(value="inputPoster",required=false) List<MultipartFile> upfiles, // inputPoster의 name 속성과 일치
 			@RequestParam(value="inputPoster",required=false) MultipartFile upfile, // inputPoster의 name 속성과 일치
-			@RequestParam(value="existingImgNo", required=false, defaultValue="0") int existingImgNo // JSP에서 hidden 필드로 전달된 기존 이미지 번호
+			@RequestParam(value="existingImgNo", required=false, defaultValue="0") int existingImgNo // JSP에서 hidden 필드로 전달된 기존 이미지 번호,
 			) {
 		
 		//사용자가 업로드한 새로운 이미지 파일이 들어갈 객체
@@ -170,13 +174,12 @@ public class AppController {
 			return "redirect:/myEventApp";
 	}
 
-	@PreAuthorize("hasRole('MANAGER')")
 	@GetMapping("")
 	public String appList(@RequestParam(value = "page", defaultValue = "1") int page,
 			Authentication auth,
 			Model model) {
-		System.out.println("Authorities: " + auth.getAuthorities());
 		int userNo = ((User)auth.getPrincipal()).getUserNo(); 
+		log.info("userData : {}",((User)auth.getPrincipal()).getCompId());
 		int totalCount = appService.selectAppListCount(userNo);
 		int limit = 10; // 한 페이지 하단에 보여질 페이지 목록 수
         int pageBlock = 10; // 한 페이지에 보여질 게시글 수
