@@ -134,7 +134,6 @@ public class AppController {
         } else { // 2. 새로운 파일이 업로드되지 않은 경우
             if (existingImgNo != 0) { // 기존 이미지 번호가 0이 아니면 (기존 이미지가 있었음)
                 if (existingImgNo == -1) { // -1은 JSP에서 삭제 요청으로 약속
-                	System.out.println("check");
                     posterImage = new Image();
                     posterImage.setImgNo(-1); // 삭제 요청임을 Service에 알림
                 } else {
@@ -209,7 +208,6 @@ public class AppController {
 			) {
 		
 		Image posterImage = null;
-		System.out.println(existingImgNo);
 		if (existingImgNo != 0) { // 기존 이미지 번호가 0이 아니면 (기존 이미지가 있었음)
             posterImage = new Image();
             posterImage.setImgNo(-1); // 삭제 요청임을 Service에 알림

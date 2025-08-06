@@ -129,12 +129,10 @@ tbody tr:hover {
 						<td>
 							<form
 								action="${pageContext.request.contextPath}/memberBoard/deleteUser"
-								method="post" style="margin: 0;">
-								<input type="hidden" name="userNo" value="${user.userNo}" /> <input
-									type="hidden" name="${_csrf.parameterName}"
-									value="${_csrf.token}" />
-								<button type="submit" class="btn-gray"
-									onclick="event.stopPropagation(); return confirm('정말 삭제하시겠습니까?');">삭제</button>
+								method="post" style="margin: 0;" class="deleteForm">
+								<input type="hidden" name="userNo" value="${user.userNo}" />
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+								<button type="submit" class="btn-gray" onclick="event.stopPropagation()">삭제</button>
 							</form>
 						</td>
 					</tr>
@@ -194,6 +192,41 @@ tbody tr:hover {
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		
+		<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		    // 모든 'delete-form' 클래스를 가진 폼 요소를 선택
+		    const deleteForms = document.querySelectorAll('.deleteForm');
+
+		    // 선택된 각 폼에 이벤트 리스너를 추가
+		    deleteForms.forEach(form => {
+		        form.addEventListener('submit', async (event) => {
+		            // 이벤트 버블링은 버튼에서 막았지만, 혹시 모를 경우를 대비해 한 번 더 막습니다.
+		            event.preventDefault();
+
+		            let modalTitle = "회원 삭제";
+		            let modalContent = "회원을 삭제하시겠습니까?<br>삭제 된 회원의 게시글들은 일정 기간 남아있습니다.";
+
+		            const result = await window.showCommonModal(
+		                modalTitle,
+		                modalContent,
+		                {
+		                    cancelButtonText: "아니오",
+		                    confirmButtonText: "네, 진행합니다"
+		                }
+		            );
+
+		            if (result) {
+		                // 로딩 모달을 띄우고
+		                window.showLoadingModal();
+		                // 현재 폼을 제출
+		                event.target.submit();
+		            }
+		        });
+		    });
+		});
+		
+		</script>
 </body>
 
 </html>

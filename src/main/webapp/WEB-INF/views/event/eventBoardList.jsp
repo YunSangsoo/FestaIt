@@ -135,6 +135,11 @@
 				<div class="total-num">총 ${pi.totalCount}건</div>
 				<sec:authorize access="hasRole('ROLE_MANAGER')">
 					<a href="${pageContext.request.contextPath}/myEventApp"
+						class="btn lavender-btn">행사 신청하기</a>
+					<!-- 경로 수정 필요 -->
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<a href="${pageContext.request.contextPath}/eventApp"
 						class="btn lavender-btn">행사 신청 현황</a>
 					<!-- 경로 수정 필요 -->
 				</sec:authorize>

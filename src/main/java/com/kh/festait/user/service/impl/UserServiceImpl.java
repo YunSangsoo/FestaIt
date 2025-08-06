@@ -10,6 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.kh.festait.bookmark.model.vo.Bookmark;
 import com.kh.festait.reviewboard.model.vo.ReviewBoard;
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.kh.festait.common.Utils;
+import com.kh.festait.common.model.vo.Image;
 import com.kh.festait.user.model.dao.UserDao;
 import com.kh.festait.user.model.vo.User;
 import com.kh.festait.user.service.UserService;
@@ -19,6 +28,9 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserDao uDao;
+
+	@Autowired
+	private ServletContext app;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -62,11 +74,6 @@ public class UserServiceImpl implements UserService{
 		return result;
 	}
 
-	@Override
-	//회원정보 수정
-	public int updateUser(User u) {
-		return uDao.updateUser(u);
-	}
 
 	@Override
 	public void updateUserChagePwd() {
@@ -138,5 +145,42 @@ public class UserServiceImpl implements UserService{
 		return uDao.selectReviewList(param);
 	}
 
+	//파일 업로드 
+		@Override
+		public Image uploadProfile(MultipartFile file, int userNo) {
+			
+			String result = "fail";
+			Image img=null;
+			
+			System.out.println("service : "+file.toString());
+			String profileCode = "U"; //USER라서 U넘김(임시)
+			String savedFileName = Utils.saveFile(file, app, profileCode);
+			
+	    	//savedFileName = Utils.saveFile(file, app, profileCode); //파일,
+	    	
+	    	if (savedFileName != null) {
+	    	    img = new Image();
+	            //img.setRefNo(); // 공지 ID 넣기
+	            img.setImgType("U"); // notice 타입 지정
+	            img.setOriginName(file.getName());	
+	    	    img.setChangeName(savedFileName);
+	    
+	    	   Map<String, Object> imgMap =  new HashMap<String,Object>();
+	    	   imgMap.put("imgType", "U");
+	    	   imgMap.put("originName", file.getOriginalFilename());
+	    	   imgMap.put("changeName", savedFileName);
+	    	   imgMap.put("refNo", userNo);
+	    	   uDao.insertImage(imgMap);
+	    	   
+	    	}
+	    	result = "succes";
+	    	
+			return img;
+		}
+		// 회원탈퇴
+		@Override
+		public int updateUser(User u) {
+			return uDao.updateUserSessuion(u);
+		}
 
 }

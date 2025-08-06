@@ -194,6 +194,21 @@
 	</select>
 	
 	<select id="selectAppAllListCount" parameterType="map" resultType="int">
+    SELECT COUNT(*) 
+    FROM EVENT_APPLICATION ea
+    LEFT JOIN USERS u ON ea.USER_NO = u.USER_NO
+    LEFT JOIN APP_MANAGER am ON ea.APP_ID = am.APP_ID
+    LEFT JOIN EVENT_CATEGORY ec ON ea.EVENT_CODE = ec.EVENT_CODE
+    LEFT JOIN APP_STATUS aps ON ea.STAT_CODE = aps.STAT_CODE
+    <where>
+        ea.STAT_CODE != 'P'
+        AND u.STATUS = 'T'
+        <include refid="searchConditions"/>
+    </where>
+</select>
+	
+	
+	<select id="selectAppAllListCount1" parameterType="map" resultType="int">
     	SELECT COUNT(*) FROM EVENT_APPLICATION ea
         LEFT JOIN APP_MANAGER am ON ea.APP_ID = am.APP_ID
         LEFT JOIN EVENT_CATEGORY ec ON ea.EVENT_CODE = ec.EVENT_CODE
@@ -217,9 +232,8 @@
         WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
     </select>
     
-    
      <select id="selectAppAllList" parameterType="map" resultMap="eventApplicationMap">
-        SELECT ea.*, am.APP_ID, am.MANAGER_NAME, am.EMAIL, am.TEL, am.FAX
+        SELECT ea.*, am.APP_ID, am.MANAGER_NAME, am.EMAIL, am.TEL, am.FAX, u.STATUS, u.USER_ID
     	FROM (
 	    	SELECT EA.*, ROWNUM RNUM
 		    FROM (
@@ -231,24 +245,11 @@
    		LEFT JOIN APP_MANAGER am ON ea.APP_ID = am.APP_ID
      		LEFT JOIN EVENT_CATEGORY ec ON ea.EVENT_CODE = ec.EVENT_CODE
       		LEFT JOIN APP_STATUS aps ON ea.STAT_CODE = aps.STAT_CODE
-       	WHERE ea.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
+      		LEFT JOIN USERS u ON ea.USER_NO = u.USER_NO
+       	WHERE u.STATUS='T' AND
+       	ea.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
         <include refid="searchConditions"/>
     </select>
-    
-   	<select id="selectAppAllList1" resultMap="eventApplicationMap">
-		SELECT A.*, B.APP_ID, B.MANAGER_NAME, B.EMAIL, B.TEL, B.FAX
-    	FROM (
-	    	SELECT EA.*, ROWNUM RNUM
-		    FROM (
-		        SELECT * FROM EVENT_APPLICATION
-		        WHERE STAT_CODE != 'P'
-		        ORDER BY CREATE_DATE DESC
-	    	) EA
-    	) A LEFT JOIN APP_MANAGER B
-    	ON A.APP_ID = B.APP_ID
-        WHERE A.RNUM BETWEEN #{offset} + 1 AND #{offset} + #{offset} + #{limit}
-    </select>
-    
     
     <update id="approvingApp">
     	UPDATE EVENT_APPLICATION SET

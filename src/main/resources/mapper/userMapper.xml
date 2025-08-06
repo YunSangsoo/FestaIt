@@ -35,7 +35,7 @@
 	
 
 	<!-- 회원가입 -->
-	<insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userNo" keyColumn="USER_NO">
+	<insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userId" keyColumn="USER_ID">
 	 INSERT INTO USERS ( COMP_ID
                          , USER_ID 
                          , USER_NAME 
@@ -153,6 +153,11 @@
  		   WHERE USER_NO = #{userNo}        
 	</select>
 	
+	<update id="updateUserSecession" parameterType="user">
+		UPDATE USERS
+		SET STATUS = 'N'
+		WHERE USER_NO = #{userNo}
+	</update>
 	
 	
 	<select id="myPageUserReview" resultType="user" parameterType="user">
@@ -224,5 +229,10 @@
 		WHERE R.USER_NO = #{userNo}
 		ORDER BY R.CREATE_DATE DESC   
 	</select>
-	
+
+	<insert id="insertProfile" parameterType="map">
+		INSERT INTO IMAGE (IMG_TYPE , ORIGIN_NAME , CHANGE_NAME , IMG_ORDER , REF_NO) 
+			VALUES ('U',#{originName},#{changeName} , 1 , #{refNo})
+	</insert>
+
 </mapper>

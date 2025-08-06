@@ -9,8 +9,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Service;
@@ -34,6 +38,21 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         } else if (exception instanceof CredentialsExpiredException) {
             errorMessage = "비밀번호 유효기간이 만료되었습니다.";
             errorCode = "CREDENTIALS_EXPIRED";
+        } else if(exception instanceof AccountExpiredException) {
+        	errorMessage = "탈퇴처리가 된 계정입니다.";
+        	errorCode = "ACCOUNT_EXPIRED";
+        }else if (exception instanceof DisabledException) {
+            // 계정이 비활성화된 경우
+            errorMessage = "비활성화된 계정입니다. 관리자에게 문의하세요.";
+            errorCode = "ACCOUNT_DISABLED";
+        } else if (exception instanceof LockedException) {
+            // 계정이 잠긴 경우 (예: 비밀번호 5회 실패)
+            errorMessage = "계정이 잠겨있습니다. 잠시 후 다시 시도하세요.";
+            errorCode = "ACCOUNT_LOCKED";
+        } else if (exception instanceof AuthenticationServiceException) {
+            // 사용자 이름이 존재하지 않는 등 인증 서비스 오류
+            errorMessage = "로그인 처리 중 오류가 발생했습니다.";
+            errorCode = "AUTH_SERVICE_ERROR";
         }
         // 그 외 여러 예외 클래스를 추가할 수 있습니다. (e.g., DisabledException, LockedException 등)
 
