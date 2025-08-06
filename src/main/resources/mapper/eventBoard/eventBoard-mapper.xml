@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="eventMapper">
-	
+
 	<sql id="commonSelect">
 	    SELECT
             APP_ID, 
@@ -16,11 +16,9 @@
             SUBSTR(LOCATION, 0, 2) REGION,
             START_DATE, 
             END_DATE,
-            APP_ORG,
-            CHANGE_NAME
+            APP_ORG
         FROM EVENT_APPLICATION
         JOIN EVENT_CATEGORY USING(EVENT_CODE)
-        JOIN IMAGE I ON APP_ID = REF_NO AND I.IMG_TYPE = 'A'
         WHERE STAT_CODE = 'A'
         	AND (APP_TITLE LIKE '%' || #{keyword} || '%')
         	<if test="region != null and region != ''">

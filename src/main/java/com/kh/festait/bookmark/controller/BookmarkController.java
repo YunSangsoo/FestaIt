@@ -28,7 +28,13 @@ public class BookmarkController {
                                          Authentication authentication) {
     	User loginUser = (User) authentication.getPrincipal();
     	int userNo = loginUser.getUserNo();
-        
+    	
+    	List<Bookmark> bookmarkList = bookmarkService.getBookmarkList(userNo);
+    	for (Bookmark bookmark : bookmarkList) {
+    		if(bookmark.getAppId() == appId) {
+    			return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 북마크한 행사입니다.");
+    		}
+    	}
         bookmarkService.addBookmark(userNo, appId);
         return ResponseEntity.ok().build();
     }
