@@ -35,7 +35,8 @@ public class MemberBoardDaoImpl implements MemberBoardDao {
 
 	@Override
 	public void deleteUser(Long userNo) {
-		sqlSession.delete("memberBoardMapper.deleteUser", userNo);
+		//sqlSession.delete("memberBoardMapper.deleteUser", userNo);
+		sqlSession.update("memberBoardMapper.deleteUser",userNo);
 		
 	}
 

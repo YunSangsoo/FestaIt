@@ -35,7 +35,7 @@
 	
 
 	<!-- 회원가입 -->
-	<insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userNo" keyColumn="USER_NO">
+	<insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyProperty="userId" keyColumn="USER_ID">
 	 INSERT INTO USERS ( COMP_ID
                          , USER_ID 
                          , USER_NAME 

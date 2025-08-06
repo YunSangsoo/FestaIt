@@ -102,7 +102,7 @@ public class AppServiceImple implements AppService {
                     // Utils.deleteFile 함수 호출
                     boolean isDeleted = Utils.deleteFile(existingPoster.getChangeName(), app, "eventPoster");
                     if (!isDeleted) {
-                    	log.error("물리 파일 삭제 : {}",existingPoster.getChangeName());
+                    	log.error("물리 파일 삭제 실패 : {}",existingPoster.getChangeName());
                         // 파일 삭제 실패 시에도 트랜잭션 롤백 여부는 비즈니스 로직에 따라 결정
                         // 여기서는 DB는 삭제되었으므로 성공으로 간주하지만, 로그는 남김
                     }

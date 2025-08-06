@@ -146,7 +146,7 @@ button, .btn {
 			    event.preventDefault();
 			    
 			    let modalTitle = "회원 삭제";
-			    let modalContent = "회원을 삭제하시겠습니까?";
+			    let modalContent = "삭제를 진행하시겠습니까?";
 			    
 			    const result = await window.showCommonModal(
 			            modalTitle,
@@ -156,8 +156,10 @@ button, .btn {
 			            confirmButtonText: "네, 진행합니다"
 		        	}
 		        );
-			    if (result)
+			    if (result){
+			    	window.showLoadingModal();
 			        event.target.submit();
+			    }
 			});
 		</script>
 </body>

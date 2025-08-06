@@ -234,7 +234,6 @@ new daum.Postcode({
 }).open();
 }
 
-
 document.getElementById('appForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     
@@ -246,6 +245,7 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
         return;
     }
     
+    
     const actionValue = submitter.value;
     let modalTitle = "";
     let modalContent = "";
@@ -255,9 +255,13 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
     if (actionValue === 'save') {
         modalTitle = "임시 저장";
         modalContent = "작업 내용을 임시로 저장하시겠습니까?";
+    } else if (actionValue === 'edit') {
+        modalTitle = "행사 수정";
+        modalContent = "행사를 수정하시겠습니까?<br>제출 후에는 수정할 수 없습니다.";
+    	actionUrl = submitter.getAttribute('formaction');
     } else if (actionValue === 'submit') {
         modalTitle = "최종 제출";
-        modalContent = "작업을 최종 제출하시겠습니까?<br>제출 후에는 수정할 수 없습니다.";
+        modalContent = "신청서를 최종 제출하시겠습니까?<br>제출 후에는 수정할 수 없습니다.";
     } else if (actionValue == 'approval') {
     	modalTitle = "결재 처리";
     	approval = true;
@@ -277,9 +281,10 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
         	}
         );
 	    if (result) {
+	    	window.showLoadingModal();
+	    	
 	        document.getElementById('actionHiddenInput').value = actionValue;
-	        if(actionValue=='delete'){
-	        	console.log(actionUrl);
+	        if(actionValue=='delete'||actionValue=='edit'){
 	        	document.getElementById('appForm').action=actionUrl;
         	}
 	        event.target.submit();
@@ -298,8 +303,13 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
 	        }
 	    );
 	    if (result) {
+	    	window.showLoadingModal();
 		    document.getElementById('actionHiddenInput').value = 'A';
-	        formElement.submit();
+	        event.target.submit();
+	        
+	        
+	    	window.hideLoadingModal();
+	    	console.log("check");
 	    } else {
 	    	const rejectReasonResult = await window.showCommonModal(
 		        '반려 사유 입력',
@@ -316,12 +326,14 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
                     showCancelButton: false,
                     confirmButtonText: '확인'
                 	});
-            	}
-	        } else {
+            	}else {
+	    		window.showLoadingModal();
 	            document.getElementById('actionHiddenInput').value = 'R';
 	            document.getElementById('reasonHiddenInput').value = reasonText;
 	           	event.target.submit(); // 폼 제출
+	           	window.hideLoadingModal();
 	        }
+	        } 
     	}
     }
 });

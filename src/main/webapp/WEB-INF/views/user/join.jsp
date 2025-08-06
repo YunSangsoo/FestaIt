@@ -6,12 +6,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="${pageContext.request.contextPath}/resources/css/join.css"
-	rel="stylesheet" />
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/join.css"
+	rel="stylesheet" />
 
 <title>Insert title here</title>
 </head>
@@ -161,6 +163,10 @@
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js">
 	//카카오 주소검색으로 가져옴
 	</script> 
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <jsp:include page="/WEB-INF/views/common/modal.jsp" />
+    <script src="${pageContext.request.contextPath}/resources/js/commonModal.js"></script>
 
 	<!--!!!비밀번호 검사 스크립트!!! 실수하면 고치기 힘듦 !!!!-->
 	<script>
@@ -279,8 +285,66 @@
           
        //추가기능 2.중복확인 통과 값만 회원가입 가능하게 체크하는 기능
       
+       
+    function checkId() {
+    let userId = $('input[name=userId]').val(); //입력한 아이디값
+
+    const idRegex = /^[a-z0-9]{5,12}$/; // 정규식
+
+    // 만약 위 조건에 만족하지 못한다면 아래 내용 출력
+    if (!idRegex.test(userId)) {
+        window.showCommonModal('알림', '아이디는 5~12자의 영문 소문자 및 숫자만 사용 가능합니다.', {
+            showCancelButton: false,
+            confirmButtonText: '확인'
+        });
+        idDupChkVal = false;
+        return;
+    }
+
+    // AJAX 요청 시작 전에 로딩 모달 표시
+    window.showLoadingModal();
+
+    $.ajax({
+        url: '${pageContext.request.contextPath}/user/idChecker', //컨트롤러 
+        type: 'POST', //GET,POST인지
+        async: true,
+        data: {
+            userId: userId //DATA필드
+        },
+        beforeSend: function(xhr) {
+            if (header && token) { // 토큰이 존재하는 경우에만 헤더 추가
+                xhr.setRequestHeader(header, token);
+            }
+        },
+        success: function(data) { //성공시
+            // 로딩 모달 숨기기
+            window.hideLoadingModal();
+            if (data.cnt > 0) {
+                window.showCommonModal('알림', '동일한 아이디가 존재합니다.', {
+                    showCancelButton: false,
+                    confirmButtonText: '확인'
+                });
+                idDupChkVal = false;
+            } else {
+                window.showCommonModal('알림', '사용가능한 아이디입니다.', {
+                    showCancelButton: false,
+                    confirmButtonText: '확인'
+                });
+                idDupChkVal = true;
+            }
+        },
+        error: function(e) { // 오우 쉣
+            // 로딩 모달 숨기기
+            window.hideLoadingModal();
+            window.showCommonModal('알림', '중복확인중 에러가 발생하였습니다.', {
+                showCancelButton: false,
+                confirmButtonText: '확인'
+            });
+        }
+    });
+}
             
-      function checkId(){
+/*       function checkId(){
       	
       	let userId = $('input[name=userId]').val(); //입력한 아이디값
       	
@@ -319,7 +383,7 @@
       		}
       	});
       	
-       }
+       } */
        
        function validateForm() {
 		if(!idDupChkVal){
@@ -339,8 +403,70 @@
         
         
         function checkNick() {
+            const nickName = $('input[name=nickname]').val().trim();
+            const nickRegex = /^[가-힣a-zA-Z0-9]{2,8}$/; // 닉네임 정규식
+            nickDupChkVal = false; // 초기화
+
+            if (nickName === "") {
+                window.showCommonModal('알림', "닉네임을 입력해주세요.", {
+                    showCancelButton: false,
+                    confirmButtonText: '확인'
+                });
+                return;
+            }
+
+            if (!nickRegex.test(nickName)) {
+                window.showCommonModal('알림', "닉네임은 2~8자의 한글, 영문, 숫자만 사용할 수 있습니다.", {
+                    showCancelButton: false,
+                    confirmButtonText: '확인'
+                });
+                return;
+            }
+
+            // AJAX 요청 시작 전에 로딩 모달 표시
+            window.showLoadingModal();
+
+            $.ajax({
+                url: `${pageContext.request.contextPath}/user/nickChecker`,
+                type: 'POST',
+                data: {
+                    nickName: nickName
+                },
+                beforeSend: function(xhr) {
+                    if (header && token) {
+                        xhr.setRequestHeader(header, token);
+                    }
+                },
+                success: function(data) {
+                    // 로딩 모달 숨기기
+                    window.hideLoadingModal();
+                    if (data.cnt > 0) {
+                        window.showCommonModal('알림', "동일한 닉네임이 존재합니다.", {
+                            showCancelButton: false,
+                            confirmButtonText: '확인'
+                        });
+                    } else {
+                        window.showCommonModal('알림', "사용 가능한 닉네임입니다.", {
+                            showCancelButton: false,
+                            confirmButtonText: '확인'
+                        });
+                        nickDupChkVal = true;
+                    }
+                },
+                error: function() {
+                    // 로딩 모달 숨기기
+                    window.hideLoadingModal();
+                    window.showCommonModal('알림', "중복확인 중 에러가 발생하였습니다.", {
+                        showCancelButton: false,
+                        confirmButtonText: '확인'
+                    });
+                }
+            });
+        }
+        
+        
+        /* function checkNick() {
         	
-        	alert("ㅇㅅㅇ");
 			const nickName = $('input[name=nickname]').val().trim();
 			
 			const nickRegex = /^[가-힣a-zA-Z0-9]{2,8}$/; // 닉 정규식
@@ -381,7 +507,7 @@
 					nickDupChkVal = false;
 				}
 			});
-		}
+		} */
         
         $(document).ready(function() {
 			$('input[name=nickName]').on('input',function(){
@@ -438,7 +564,60 @@
             element.textContent = `남은 시간: \${min}:\${sec < 10 ? '0' + sec : sec}`; // 시간표현식
         }
 
-		function sendCode() {		
+        function sendCode() {
+            const email = document.getElementById("email").value.trim();
+
+            if (!email) {
+                window.showCommonModal('알림', "이메일을 입력해주세요.", {
+                    showCancelButton: false,
+                    confirmButtonText: '확인'
+                });
+                return;
+            }
+
+            // 로딩 모달 표시
+            window.showLoadingModal1();
+
+            fetch(contextPath + "/email/sendCode", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        [header]: token
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    }),
+                })
+                .then((res) => res.text())
+                .then((result) => {
+                    // 로딩 모달 숨기기
+					window.hideLoadingModal1();
+                    if (result === "ok") {
+                        window.showCommonModal('알림', "인증번호 전송이 완료되었습니다.", {
+                            showCancelButton: false,
+                            confirmButtonText: '확인'
+                        });
+                        startTimer(180); // 타이머 3분
+                    } else {
+                        window.showCommonModal('알림', "인증번호 전송에 실패했습니다. 다시 시도해주세요.", {
+                            showCancelButton: false,
+                            confirmButtonText: '확인'
+                        });
+                    }
+                })
+                .catch((err) => {
+                    // 로딩 모달 숨기기
+					window.hideLoadingModal1();
+                    console.error("Fetch Error: ", err);
+                    window.showCommonModal('알림', "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", {
+                        showCancelButton: false,
+                        confirmButtonText: '확인'
+                    });
+                });
+        }
+        
+        
+/* 		function sendCode() {		
 			
 			const email = document.getElementById("email").value.trim();
 			
@@ -469,10 +648,10 @@
 					console.log(err);
 					alert("서버오류발생!"); // 진짜 ㅈ됨
 				});
-		}
+		} */
 		
 		//아래서부터 인증코드 확인 함수
-		function verifyCode() {
+		/* function verifyCode() {
 			const code = document.getElementById("code").value.trim();
 			
 			if (!code) { // 코트 텍스트창이 공백일때
@@ -497,6 +676,58 @@
 				}
 			})
 			.catch(() => alert("서버 오류발생!")); //이건제발 안나오길
+		} */
+		function verifyCode() {
+		    const code = document.getElementById("code").value.trim();
+
+		    if (!code) {
+		        window.showCommonModal('알림', "인증번호를 입력해주세요.", {
+		            showCancelButton: false,
+		            confirmButtonText: '확인'
+		        });
+		        return;
+		    }
+
+		    // 로딩 모달 표시
+
+		    fetch(contextPath + "/email/verifyCode", {
+		            method: "POST", // GET or Post
+		            headers: {
+		                "Content-Type": "application/json",
+		                [header]: token
+		            },
+		            body: JSON.stringify({
+		                code: code
+		            }),
+		        })
+		        .then(res => res.text())
+		        .then(result => {
+		            // 로딩 모달 숨기기
+		            
+		            if (result === "success") {
+		                window.showCommonModal('알림', "인증에 성공했습니다.", {
+		                    showCancelButton: false,
+		                    confirmButtonText: '확인'
+		                });
+		            } else if (result === "timeout") {
+		                window.showCommonModal('알림', "인증 시간이 초과되었습니다.", {
+		                    showCancelButton: false,
+		                    confirmButtonText: '확인'
+		                });
+		            } else {
+		                window.showCommonModal('알림', "인증에 실패했습니다. 인증번호를 다시 확인해주세요.", {
+		                    showCancelButton: false,
+		                    confirmButtonText: '확인'
+		                });
+		            }
+		        })
+		        .catch(() => {
+		            // 로딩 모달 숨기기
+		            window.showCommonModal('알림', "서버 오류가 발생했습니다.", {
+		                showCancelButton: false,
+		                confirmButtonText: '확인'
+		            });
+		        });
 		}
 		
 		$(document).ready(function() {

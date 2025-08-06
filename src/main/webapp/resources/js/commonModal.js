@@ -4,6 +4,12 @@ let commonModal = null;
 let commonModalTitle = null;
 let commonModalBody = null;
 let commonModalFooter = null;
+let loadingModal = null;
+let loadingModalBody = null;
+
+
+// 로딩 모달 인스턴스를 저장할 전용 변수
+let loadingModalElement = document.getElementById('loadingModal');;
 
 // DOMContentLoaded 이후에 Bootstrap 모달 인스턴스를 초기화 (안정성 강화)
 document.addEventListener('DOMContentLoaded', () => {
@@ -26,10 +32,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-
     } else {
         console.error("Error: The commonModal HTML structure (ID 'commonModal') was not found. Please ensure commonModal.jsp is included.");
     }
+    
+    if (loadingModalElement) {
+        loadingModal = new bootstrap.Modal(loadingModalElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+    } else {
+        console.error("Error: The commonModal HTML structure (ID 'loadingModal') was not found. Please ensure commonModal.jsp is included.");
+    }
+    
 });
 
 
@@ -157,3 +172,35 @@ $(document).ready(function() {
         }
     });
 });
+
+window.showLoadingModal1 = function(){
+	loadingModal.show();
+};
+
+window.hideLoadingModal1 = function(){
+	loadingModal.hide();
+};
+
+window.showLoadingModal = function(){
+	window.showCommonModal(
+        '처리 중...',
+        `<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">잠시만 기다려주세요...</p></div>`,
+        {
+            showCancelButton: false,
+            confirmButtonText: '확인',
+            disableButtons: true,
+            showCloseButton: false
+        }
+    );
+};
+
+window.hideLoadingModal = function() {
+    // Bootstrap Modal 객체를 직접 제어하여 모달을 닫는 함수
+    const loadingModalElement = document.getElementById('commonModal');
+    const modal = bootstrap.Modal.getInstance(loadingModalElement);
+    if (modal) {
+        modal.hide();
+    }
+};
+
+
