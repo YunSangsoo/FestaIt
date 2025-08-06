@@ -20,16 +20,13 @@ public class ReviewBoardServiceImpl implements ReviewBoardService {
 	private final ReviewBoardDao reviewBoardDao;
 
 	@Override
-	public List<ReviewBoard> selectReviewList(int offset, int limit) {
-		Map<String, Object> paramMap = new HashMap<>();
-	    paramMap.put("startRow", offset);
-	    paramMap.put("endRow", offset + limit);
+	public List<ReviewBoard> selectReviewList(Map<String, Object> paramMap) {
 	    return reviewBoardDao.selectReviewListWithPaging(paramMap);
 	}
 
 	@Override
-	public int getReviewCount() {
-		return reviewBoardDao.getReviewCount();
+	public int getReviewCount(Map<String, Object> paramMap) {
+		return reviewBoardDao.getReviewCount(paramMap);
 	}
 	
 	@Override

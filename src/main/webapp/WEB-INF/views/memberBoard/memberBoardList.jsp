@@ -1,7 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -28,8 +29,24 @@ a.btn.lavender-btn:hover, button.lavender-btn:hover {
 	color: white;
 }
 
+/* 회색 버튼 (삭제용) */
+button.btn-gray {
+	background-color: #E9ECEF; /* Bootstrap의 회색 */
+	color: rgb(0, 0, 0);
+	border: 1px solid #b9b9b9;
+	padding: 5px 10px;
+	border-radius: 3px;
+	font-size: 0.9em;
+}
+
+button.btn-gray:hover {
+	background-color: #dc3545;
+	border-color: #dc3545;
+	color: white;
+}
+
 thead.lavender-header th {
-	background-color: #e6ccff;
+	background-color: #eedbfd;;
 	color: #5E2B97;
 	cursor: pointer;
 	padding: 10px 5px;
@@ -48,6 +65,22 @@ tbody tr:hover {
 /* 검색폼 아래 간격 조정 */
 .search-form {
 	margin-bottom: 20px;
+}
+
+.pagination .page-link {
+	color: #7B4BB7;
+}
+
+.pagination .page-link:hover {
+	color: #212529;
+	background-color: #E9ECEF;
+	border-color: #904EBC;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #B481D9;
+	border-color: #A069CB;
+	color: white;
 }
 </style>
 </head>
@@ -99,7 +132,7 @@ tbody tr:hover {
 								method="post" style="margin: 0;" class="deleteForm">
 								<input type="hidden" name="userNo" value="${user.userNo}" />
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-								<button type="submit" class="lavender-btn" onclick="event.stopPropagation()">삭제</button>
+								<button type="submit" class="btn-gray" onclick="event.stopPropagation()">삭제</button>
 							</form>
 						</td>
 					</tr>

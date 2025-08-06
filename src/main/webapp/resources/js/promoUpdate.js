@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const editableFields = [promoTitleInput, promoDetailTextarea, promotionPageUrlInput];
 
-    // 원본 값 저장 (복원용)
+    // 원본 값 저장
     const originalValues = {
         promoTitle: promoTitleInput ? promoTitleInput.value : '',
         promoDetail: promoDetailTextarea ? promoDetailTextarea.value : '',
@@ -156,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-});
 
 document.getElementById('promoUpdateForm').addEventListener('submit', async (event) => {
 		    event.preventDefault();

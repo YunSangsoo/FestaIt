@@ -20,6 +20,7 @@
     <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bc4b58676401783f2a8902047f4150c4&libraries=services"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -31,11 +32,16 @@
         var eventBookmarked = ${event.bookmarked ? 'true' : 'false'};
         var loginMemberUserNo = ${loginUser != null && loginUser.userNo != null ? loginUser.userNo : 0};
     </script>
-
+	
+	<style>
+	.category{
+	padding-top: 10px;
+	}
+	</style>
 </head>
 <body>
     <%@ include file="/WEB-INF/views/common/header.jsp" %>
-
+    
     <main class="container">
         <c:if test="${empty event}">
             <p style="text-align: center; margin-top: 50px;">행사 정보를 찾을 수 없습니다.</p>
@@ -47,7 +53,7 @@
                     <div class="poster-section">
                         <img src="${contextPath}${event.posterImage.changeName}" alt="행사 포스터" class="event-poster-img">
                         <c:if test="${not empty event.website}">
-                            <a href="${event.website}" target="_blank" class="homepage-link">홈페이지 바로가기</a>
+                            <a href="${event.website}" class="homepage-link">홈페이지 바로가기</a>
                         </c:if>
                     </div>
 
@@ -60,9 +66,9 @@
                     <div class="content-header">
                         <span class="category">
                             <c:choose><c:when test="${not empty event.eventCategoryName}">
-                                [${event.eventCategoryName}]
+                                ${event.eventCategoryName}
                             </c:when><c:otherwise>
-                                [카테고리 없음]
+                                카테고리 없음
                             </c:otherwise></c:choose>
                         </span>
 
@@ -138,13 +144,11 @@
                 <div class="bottom-left-buttons">
                     <button class="btn list-btn" onclick="location.href='${contextPath}/eventBoard/list'">목록 보기</button>
                 </div>
-                <div class="bottom-right-buttons">
-                    <sec:authorize access="hasRole('ROLE_MANAGER')">
-                        <button class="btn promote-btn">게시물 홍보하기</button>
-                    </sec:authorize>
-                </div>
             </div>
         </c:if>
+        
+        
+        <jsp:include page="/WEB-INF/views/review/reviewList.jsp" />
     </main>
 
     <%@ include file="/WEB-INF/views/common/footer.jsp" %>

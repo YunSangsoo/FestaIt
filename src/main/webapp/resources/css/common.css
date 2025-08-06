@@ -1,1 +1,149 @@
 /*공통 스타일 - 필요시 생성 */
+/* 기본 초기화 및 폰트 */
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Pretendard', sans-serif;
+	background-color: #FAFAFA;
+	color: #212121;
+	/* 	color: rgb(var(- -bs-tertiary-color-rgb)); */
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+/* 메인 컨테이너 ====================================================== */
+.container {
+	padding: 30px 5%;
+	gap: 40px;
+}
+
+/* 화면 크기에 따른 페이지 컨테이너 사이즈 지정 ------------------------------ 1080 이하 수정 필요 ------------------------- */
+@media ( max-width : 1080px) {
+	#container {
+		max-width: 100%;
+	}
+}
+
+@media ( min-width : 1080px) {
+	#container {
+		max-width: 1040px;
+	}
+	.main-content {
+		margin-right: 40px;
+	}
+}
+
+@media ( min-width : 1200px) {
+	#container {
+		max-width: 1160px;
+	}
+	.main-content {
+		margin-right: 40px;
+	}
+}
+
+.v-line {
+	border-left: 1px solid #DDD;
+	width: 2px;
+	align-items: stretch;
+}
+
+/* 줄바꿈 ... 설정 */
+.overflow-hidden {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
+}
+
+/* 페이지네이션 ====================================================== */
+.pagination .page-link {
+  color: #7B4BB7;
+}
+.pagination .page-link:hover {
+  color: #212529;
+  background-color: #E9ECEF;
+  border-color: #904EBC;
+}
+.pagination .page-item.active .page-link {
+  background-color: #B481D9;
+  border-color: #A069CB;
+  color: white;
+}
+
+/* 버튼 ====================================================== */
+/* 흰색-주황색 */
+.btn.white-btn {
+	background-color: #ffffff;
+	color: black;
+	border: 1px solid #000000;
+}
+.btn.white-btn:hover {
+	background-color: #ea870e;
+	border-color: #ffffff;
+	color: #ffffff;
+}
+
+/* 회색-빨강 */
+button.btn-gray {
+	background-color: #E9ECEF;
+	color: rgb(0, 0, 0);
+	border: 1px solid #B9B9B9;
+	padding: 5px 10px;
+	border-radius: 3px;
+	font-size: 0.9em;
+}
+button.btn-gray:hover {
+	background-color: #FF0000;
+	border-color: #FF0000;
+	color: white;
+}
+
+/* 라벤더 */
+.btn.lavender-btn {
+	background-color: #b481d9;
+	color: white;
+	border: 1px solid #a069cb;
+	height:fit-content;
+	padding: 3px 10px;
+}
+.btn.lavender-btn:hover {
+	background-color: #a069cb;
+	border-color: #904ebc;
+}
+
+
+
+/* 테이블 ====================================================== */
+thead.lavender-header th {
+	background-color: #e6ccff;
+	color: #5E2B97;
+}
+td.over-hidden {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const bookmarkIcon = document.getElementById('bookmarkIcon');
 const bookmarkText = document.getElementById('bookmarkText');
 
-// CSRF 토큰 가져오기 (JSP head에 meta 태그가 있는지 확인)
+// CSRF 토큰 가져오기
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
@@ -19,40 +19,35 @@ if (bookmarkIcon && loginMemberUserNo !== 0) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                [csrfHeader]: csrfToken // CSRF 토큰 헤더에 추가
+                [csrfHeader]: csrfToken
             },
             body: `appId=${eventAppId}`
         })
         .then(response => {
-            // ⭐⭐⭐ 중요 수정: response.json() 호출 제거 ⭐⭐⭐
-            // BookmarkController가 JSON 응답을 보내지 않으므로, HTTP 상태 코드만 확인합니다.
-            if (response.ok) { // HTTP 상태 코드가 200-299 범위인 경우
-                return true; // 성공
+            if (response.ok) { 
+                return true; 
             } else {
-                return false; // 실패 (예: 4xx, 5xx 에러)
+                return false; 
             }
         })
         .then(isSuccess => {
             if (isSuccess) {
-                // 북마크 상태 토글 (JSP 변수 업데이트)
                 eventBookmarked = eventBookmarked === 'true' ? 'false' : 'true';
 
-                // 아이콘과 텍스트 업데이트
                 if (eventBookmarked === 'true') {
                     bookmarkIcon.classList.remove('bi-bookmark');
                     bookmarkIcon.classList.add('bi-bookmark-star-fill');
                     bookmarkText.textContent = '북마크됨';
-                    alert("북마크에 추가되었습니다."); // 사용자에게 알림
+                    alert("북마크에 추가되었습니다.");
                 } else {
                     bookmarkIcon.classList.remove('bi-bookmark-star-fill');
                     bookmarkIcon.classList.add('bi-bookmark');
                     bookmarkText.textContent = '북마크';
-                    alert("북마크가 제거되었습니다."); // 사용자에게 알림
+                    alert("북마크가 제거되었습니다.");
                 }
             } else {
-                // 서버에서 200번대 상태 코드를 보내지 않은 경우 (오류 상황)
                 alert("북마크 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
-                console.error("서버에서 북마크 요청 실패 (HTTP Status NOT OK)");
+                console.error("서버에서 북마크 요청 실패");
             }
         })
         .catch(error => {
@@ -60,9 +55,8 @@ if (bookmarkIcon && loginMemberUserNo !== 0) {
             alert("북마크 요청 중 네트워크 오류가 발생했습니다. 인터넷 연결을 확인하거나 관리자에게 문의하세요.");
         });
     });
-} else if (bookmarkIcon) { // 비로그인 상태일 때
+} else if (bookmarkIcon) { 
     bookmarkIcon.style.cursor = 'default';
-    // Jsp에서 이미 title 속성을 설정했으므로 추가적인 JavaScript 설정은 불필요.
 }
 
     // 카카오맵 초기화 및 마커 표시

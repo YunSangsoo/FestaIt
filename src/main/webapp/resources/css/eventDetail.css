@@ -61,7 +61,7 @@ body {
 .event-poster-img {
     width: 100%;
     height: 450px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 8px;
     display: block;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -242,22 +242,20 @@ body {
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
-/* "목록 보기" 버튼 스타일 */
 .list-btn {
     margin: 0 auto !important; 
     display: block !important; 
     background-color: #fff !important; 
-    color: black !important;
+    color: #6c757d !important;
     border: 1px solid #000 !important; 
 }
 
 .list-btn:hover {
-    background-color: #FFD700 !important;
-    color: black !important;
+    background-color: #6c757d !important;
+    color: #fff !important;
     border-color: black !important; 
 }
 
-/* "게시물 홍보하기" 버튼 스타일 */
 .promote-btn {
     background-color: #fff !important;
     color: black !important;

@@ -153,6 +153,11 @@
  		   WHERE USER_NO = #{userNo}        
 	</select>
 	
+	<update id="updateUserSecession" parameterType="user">
+		UPDATE USERS
+		SET STATUS = 'N'
+		WHERE USER_NO = #{userNo}
+	</update>
 	
 	
 	<select id="myPageUserReview" resultType="user" parameterType="user">
@@ -207,4 +212,27 @@
 		AND USER_PWD = #{userPwd}
 	</select>
 	
+	<select id="selectBookmarkList" parameterType="map" resultType="com.kh.festait.bookmark.model.vo.Bookmark">
+		SELECT B.USER_NO, B.APP_ID, B.CREATE_DATE, APP.APP_TITLE
+		FROM BOOKMARK B
+		JOIN EVENT_APPLICATION APP ON B.APP_ID = APP.APP_ID
+		WHERE B.USER_NO = #{userNo}        
+	</select>
+	
+	<select id="selectReviewList" parameterType="map" resultType="com.kh.festait.reviewboard.model.vo.ReviewBoard">
+		SELECT R.USER_NO, R.APP_ID, R."COMMENT",
+			R.RATING, R.CREATE_DATE, R.UPDATE_DATE,
+			U.USER_ID, U.USER_NAME, U.NICKNAME, APP.APP_TITLE
+		FROM REVIEW R
+		JOIN USERS U ON R.USER_NO = U.USER_NO
+		JOIN EVENT_APPLICATION APP ON R.APP_ID = APP.APP_ID
+		WHERE R.USER_NO = #{userNo}
+		ORDER BY R.CREATE_DATE DESC   
+	</select>
+
+	<insert id="insertProfile" parameterType="map">
+		INSERT INTO IMAGE (IMG_TYPE , ORIGIN_NAME , CHANGE_NAME , IMG_ORDER , REF_NO) 
+			VALUES ('U',#{originName},#{changeName} , 1 , #{refNo})
+	</insert>
+
 </mapper>

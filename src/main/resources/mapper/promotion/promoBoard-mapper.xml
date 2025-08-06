@@ -3,7 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="promoBoardMapper">
 
-    <!-- 기본 PromoBoard 매핑 -->
 <resultMap id="promoBoardResultMap" type="com.kh.festait.promoboard.model.vo.PromoBoardVo">
         <id property="promoId" column="PROM_ID"/>
         <result property="promoTitle" column="PROM_TITLE"/>
@@ -136,6 +135,21 @@
         WHERE EP.PROM_ID = #{promoId}
           AND U.STATUS = 'T'
     </select>
+
+	<select id="selectPromoDetailIncludingInactive" parameterType="int" resultMap="promoBoardResultMap">
+	    SELECT
+	        EP.PROM_ID, EP.PROM_TITLE, EP.PROM_DETAIL,
+	        EP.CREATE_DATE, EP.UPDATE_DATE, EP.VIEWS,
+	        I.CHANGE_NAME, I.ORIGIN_NAME, I.IMG_NO, I.IMG_TYPE, I.IMG_ORDER, I.CREATE_DATE AS IMG_CREATE_DATE, I.REF_NO, EA.WEBSITE, AS2.STAT_CODE, EA.APP_ID,
+	        U.NICKNAME, U.USER_NO,
+	        EA.START_DATE, EA.END_DATE, EA.APP_TITLE
+	    FROM EVENT_PROMOTION EP
+	    JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
+	    LEFT JOIN APP_STATUS AS2 ON EA.STAT_CODE = AS2.STAT_CODE
+	    LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+	    LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+	    WHERE EP.PROM_ID = #{promoId}
+	</select>
 
     <update id="increasePromoViews">
         UPDATE EVENT_PROMOTION

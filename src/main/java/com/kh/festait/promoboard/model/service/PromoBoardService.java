@@ -24,6 +24,8 @@ public interface PromoBoardService {
 
     // 게시글 상세 조회
     PromoBoardVo selectPromoDetail(int promoId);
+    
+    PromoBoardVo selectPromoDetailIncludingInactive(int promoId);
 
     // 조회수 증가
     int increasePromoViews(int promoId);

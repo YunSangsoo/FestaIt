@@ -43,13 +43,13 @@ public class PromoBoardController {
     private ServletContext application; 
 
     /*
-     * 홍보 게시판의 BoardCode는 P (Promotion)이다.
+     * 홍보 게시판의 BoardCode는 P (Promotion)
      * 이미지는 모두 한 테이블에 저장되기 때문에,
      * 어느 페이지에서 사용된 이미지인지 분류하기 위해 사용
      */
     private String boardCode = "P";
 
-    // 홍보 게시글 목록 및 검색 (기존과 동일)
+    // 홍보 게시글 목록 및 검색
     @GetMapping
     public String selectPromotionList(
         @RequestParam(value = "cpage", defaultValue = "1") int currentPage,
@@ -63,11 +63,11 @@ public class PromoBoardController {
 
         if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
             int listCount = promoService.selectSearchPromoCount(searchKeyword);
-            pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+            pi = Pagination.getPageInfo(listCount, currentPage, 12, 12);
             list = promoService.selectSearchPromo(searchKeyword, pi);
         } else {
             int listCount = promoService.selectPromoCount();
-            pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+            pi = Pagination.getPageInfo(listCount, currentPage, 12, 12);;
             list = promoService.selectPromoList(pi);
         }
 
@@ -88,24 +88,39 @@ public class PromoBoardController {
         HttpServletResponse res,
         Authentication authentication
     ) {
-    	log.info("PromoBoardController.selectPromoDetail 호출, promoId={}", promoId);
-        PromoBoardVo promo = promoService.selectPromoDetail(promoId);
+        UserExt loginUser = getLoginUser(authentication);
+
+        PromoBoardVo promo = null;
+
+        boolean isAdmin = false;
+        if (loginUser != null) {
+            isAdmin = loginUser.getAuthorities().stream()
+                              .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()));
+        }
+
+        if (isAdmin) {
+            // 관리자면 비활성 상태 포함 상세 조회
+            promo = promoService.selectPromoDetailIncludingInactive(promoId);
+        } else {
+            // 일반사용자면 활성 상태 게시글만 조회
+            promo = promoService.selectPromoDetail(promoId);
+        }
+
         if (promo == null) {
-            ra.addFlashAttribute("alertMsg", "해당 게시물을 찾을 수 없습니다.");
+            ra.addFlashAttribute("alertMsg", "해당 게시물을 찾을 수 없거나 접근 권한이 없습니다.");
             return "redirect:/promoBoard";
         }
 
-        // AppController에서와 유사하게 이미지 조회 로직 추가
         Image posterImage = imgService.getImageByRefNoAndType(promoId, boardCode);
-        promo.setPosterImage(posterImage); 
+        promo.setPosterImage(posterImage);
 
-        UserExt loginUser = getLoginUser(authentication);
         if (loginUser != null) {
             model.addAttribute("loginUser", loginUser);
         }
+
         int userNo = (loginUser != null) ? loginUser.getUserNo() : 0;
 
-        // 조회수 증가
+        // 조회수 증가 로직
         if (userNo != 0 && userNo != promo.getWriterUserNo()) {
             boolean increase = false;
 
@@ -133,7 +148,7 @@ public class PromoBoardController {
         return "promotion/promoDetail";
     }
 
-    // 홍보 게시글 작성 페이지 (기존과 동일)
+    // 홍보 게시글 작성 페이지
     @GetMapping("/promoWrite")
     public String promoWriteForm(Model model, RedirectAttributes ra, Authentication authentication) {
         UserExt loginUser = getLoginUser(authentication);
@@ -147,7 +162,7 @@ public class PromoBoardController {
         List<PromoBoardVo> eventApps = promoService.selectUserEventApplications(userNo);
         model.addAttribute("eventApplications", eventApps);
         if (eventApps.isEmpty()) {
-            model.addAttribute("infoMsg", "승인된 행사 신청이 없습니다.");
+            model.addAttribute("infoMsg", "등록된 행사가 없습니다.");
         }
 
         if (!model.containsAttribute("promo")) {
@@ -236,7 +251,7 @@ public class PromoBoardController {
             return "redirect:/promoBoard/detail?promoId=" + promoId;
         }
 
-        // 이미지 조회 로직 추가
+        // 이미지 조회
         Image posterImage = imgService.getImageByRefNoAndType(promoId, boardCode);
         promo.setPosterImage(posterImage); 
 
@@ -247,7 +262,7 @@ public class PromoBoardController {
         List<PromoBoardVo> apps = promoService.selectUserEventApplications(loginUser.getUserNo());
         model.addAttribute("eventApplications", apps);
         if (apps.isEmpty()) {
-            model.addAttribute("infoMsg", "작성 가능한 승인된 신청이 없습니다.");
+            model.addAttribute("infoMsg", "작성 가능한 행사가 없습니다.");
         }
 
         return "promotion/promoUpdate";
@@ -319,7 +334,6 @@ public class PromoBoardController {
                 return "redirect:/promoBoard/detail?promoId=" + promo.getPromoId();
             }
 
-            // 서비스 호출 시 PromoBoardVo와 이미지 관련 정보(posterImage)만 전달.
             int result = promoService.updatePromo(promo, posterImage);
 
             if (result > 0) {
@@ -364,7 +378,7 @@ public class PromoBoardController {
             return ResponseEntity.status(403).body(response);
         }
         
-        // 1. DB에서 이미지 정보 조회 (삭제할 파일의 changeName 가져오기 위함)
+        // 1. DB에서 이미지 정보 조회
         PromoBoardVo promoToDelete = promoService.selectPromoDetail(promoId);
         String changeNameToDelete = null;
         if (promoToDelete != null && promoToDelete.getPosterImage() != null) {
@@ -410,9 +424,8 @@ public class PromoBoardController {
         String serverFilePath = application.getRealPath(fullWebPathToDelete);
 
         if (serverFilePath == null) {
-            log.error("ServletContext.getRealPath(\"{}\")가 null을 반환했습니다. 파일을 삭제할 수 없습니다. 배포 환경 확인 필요.", fullWebPathToDelete);
             return; 
-        } 
+        }
 
         File fileToDelete = new File(serverFilePath);
 

@@ -1,6 +1,5 @@
 package com.kh.festait.reviewboard.model.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,8 +21,8 @@ public class ReviewBoardDaoImpl implements ReviewBoardDao {
 	}
 
 	@Override
-	public int getReviewCount() {
-		return sqlSession.selectOne("reviewMapper.getReviewCount");
+	public int getReviewCount(Map<String, Object> paramMap) {
+		return sqlSession.selectOne("reviewMapper.getReviewCount", paramMap);
 	}
 	
 	@Override

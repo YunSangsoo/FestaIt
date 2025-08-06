@@ -10,15 +10,22 @@
     <title>홍보 게시글 수정/삭제</title>
     <c:set var="contextPath" value="${pageContext.request.contextPath}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="${contextPath}/resources/css/promoUpdate.css" />
+    
+    <link rel="stylesheet" href="${contextPath}/resources/css/promoForm.css" />
+
+    <style>
+        .page-wrapper {
+            background-color: #e0ffe0 !important;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <div class="top-spacer"></div>
 
-<div class="container bg-white p-4 shadow-sm rounded">
-    <h4 class="border-bottom pb-2">홍보 게시글 수정/삭제</h4>
+<div class="page-wrapper container bg-white p-4 shadow-sm rounded">
+    <h4 class="promo-form-title border-bottom pb-2">홍보 게시글 수정/삭제</h4>
 
     <c:if test="${not empty alertMsg}">
         <div class="alert alert-info">${alertMsg}</div>
@@ -57,31 +64,35 @@
             <form:textarea path="promoDetail" cssClass="form-control" rows="10" readonly="true" id="promoDetail" />
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">홍보 URL</label>
-            <form:input path="promotionPageUrl" cssClass="form-control" type="url" readonly="true" id="promotionPageUrl" />
+		<!-- 홍보 URL -->
+		<div class="form-group mb-3">
+		    <label class="form-label">홍보 URL (선택 사항)</label>
+            <form:input path="promotionPageUrl" id="promotionPageUrl" cssClass="form-control" placeholder="http:// 또는 https:// 로 시작하는 URL 입력" type="url" />
+            <form:errors path="promotionPageUrl" cssClass="text-danger mt-1" />
+		</div>
+		
+		<!-- 포스터 이미지 -->
+		<div class="form-group file-input-group mb-3">
+		    <label class="form-label">포스터 이미지</label>
+		    <div class="file-input-wrapper">
+		        <input type="file" id="promoPoster" name="promoPoster" accept="image/*" class="form-control-file" disabled />
+		        <label for="promoPoster" class="file-upload-button">파일 선택</label>
+		        <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
+		    </div>
+		</div>
+
+        <div class="image-preview" id="imagePreview">
+            <c:choose>
+                <c:when test="${not empty promo.posterImage.changeName}">
+                    <img src="${contextPath}${promo.posterImage.changeName}" alt="포스터 이미지"
+                        onerror="this.onerror=null;this.src='https://placehold.co/600x600/e0e0e0/ffffff?text=No+Image';" />
+                </c:when>
+                <c:otherwise>
+                    <span class="no-image-text">이미지 미리보기</span>
+                </c:otherwise>
+            </c:choose>
         </div>
 
-        <div class="form-group file-input-group">
-            <label for="promoPoster">포스터 이미지</label>
-            <div class="file-input-wrapper">
-                <input type="file" id="promoPoster" name="promoPoster" accept="image/*" disabled />
-                <label for="promoPoster" class="file-upload-button">파일 선택</label>
-                <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
-            </div>
-            <div class="image-preview" id="imagePreview">
-                <c:choose>
-                    <%-- ⭐️⭐️ 이 부분을 수정했습니다: promo.posterPath -> promo.posterImage.changeName ⭐️⭐️ --%>
-                    <c:when test="${not empty promo.posterImage.changeName}">
-                        <img src="${contextPath}${promo.posterImage.changeName}" alt="포스터 이미지"
-                            onerror="this.onerror=null;this.src='https://placehold.co/600x600/e0e0e0/ffffff?text=No+Image';" />
-                    </c:when>
-                    <c:otherwise>
-                        <span class="no-image-text">이미지 미리보기</span>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </div>
 
         <div class="d-flex justify-content-end mt-4 align-items-center gap-2">
             <sec:authorize access="isAuthenticated()">

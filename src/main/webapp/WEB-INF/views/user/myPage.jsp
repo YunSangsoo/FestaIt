@@ -1,11 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="profileImageUrl" value="${empty profileImageUrl ? '/resources/img/U/default.jpg' : profileImageUrl}" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <link href="${pageContext.request.contextPath}/resources/css/myPage.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <title>마이페이지</title>
 </head>
 
@@ -22,11 +27,17 @@
 			</c:otherwise>
 		</c:choose>
 		</h1>
-		<div type="file" class="profile" id="profileImageInput"></div>
-		<input type="file" class="profile2" id="profileImageInput" accept="image/*">
+		<c:if test="${ userInfo.profileImage == null}">
+		<div type="file" class="profile" id="profilePreview" data-url="${profileImageUrl}"></div>
+		</c:if>
+		<c:if test="${ userInfo.profileImage != null}">
+			<img id="profilePreview" class="profile object-fit-contain"
+	            src="${pageContext.request.contextPath.concat( userInfo.profileImage.changeName )}"
+	            alt="업로드된 이미지">
+		</c:if>
 		<div>
 			<p class="secondname">이름 ${userInfo.userName}</p>
-			<p class="idName">(아이디) ${userInfo.userId}</p>
+			<p class="idName">아이디 ${userInfo.userId}</p>
 			<p class="joinDate">가입일 ${userInfo.enrollDate}</p>
 
 			<hr class="line">
@@ -34,6 +45,9 @@
 			<p class="email">이메일: ${userInfo.email}</p>
 			<p class="adress">주소: ${userInfo.addr}</p>
             
+
+		<input type="file" class="profile2" id="profileImageInput" accept="image/*" onchange="fileChange(this)" hidden>
+		<label for="profileImageInput" class="custom-file-btn">프로필 사진 선택</label>		
 			<a class="changepw" id="changepw" href="${pageContext.request.contextPath}/user/mypage_nickPw">개인정보수정</a>
             
 		</div>
@@ -53,26 +67,23 @@
 			</h2>
 			<hr style="width: 600px;">
 			<div class="a2">
-				<div class="titlename">
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-				</div>
-				<div>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-				</div>
+				<c:choose>
+					<c:when test="${not empty bookmarkList}">
+						<c:forEach var="bookmark" items="${bookmarkList}">
+							<a
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${bookmark.appId}"
+								class="text-decoration-none text-dark titlename">
+								<div class="conname">${bookmark.appTitle}</div>
+								<div class="conname" style="text-align: right; margin-right: 30px;">
+									<fmt:formatDate value="${bookmark.createDate}" pattern="yyyy.MM.dd"/>
+								</div>
+							</a>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div>등록한 리뷰가 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 		<hr>
@@ -89,97 +100,71 @@
 			</h2>
 			<hr style="width: 600px;">
 			<div class="a2">
-				<div class="titlename">
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-					<h2 class="conname">게시물 이름</h2>
-				</div>
-				<div>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-					<h2 class="conname" style="text-align: right; margin-right: 30px;">작성날짜</h2>
-				</div>
+				<c:choose>
+					<c:when test="${not empty reviewList}">
+						<c:forEach var="review" items="${reviewList}">
+							<a
+								href="${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container"
+								class="text-decoration-none text-dark titlename">
+								<div class="conname">${review.appTitle}</div>
+								<div class="conname" style="text-align: right; margin-right: 30px;">
+									<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd"/>
+								</div>
+							</a>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<div>등록한 리뷰가 없습니다.</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	</div>
 	<br>
-	<!--비밀번호찾기 모달창-->
-
-	<!--모달 끝-->
-
-	<!--닉변 
-    <div id="modalContainer2" class="hidden2">
-        <div id="modalContent2">
-            <div class="nickchange2">
-                <h2>닉네임 변경</h2><button id="modalCloseButton2" class="modalCloseButton2">닫기</button>
-                <hr><br><br><br>
-                <form id="nicknameForm" class="change-box">
-                    <input type="text" id="nickname" class="change-box__input" placeholder="변경할 닉네임 입력" size="30">
-                    <button type="button" class="change-box__button" id="checkDuplicateBtn">중복확인</button>
-                    <br><br><br><br>
-                    <input type="submit" class="commit" value="닉네임 변경">
-                </form>
-                <br>
-                <br><br><br><br><br>
-            </div>
-        </div>
-    </div>
-    끝-->
-
-
-	<button type="button" class="secessionBtn" onclick="secession()">탈퇴하기</button>
-	<!--프로필사진 스크립트
-	<script>
-        const profileDiv = document.getElementById('profilePreview');
-        const profileInput = document.getElementById('profileInput');
-
-        profileDiv.addEventListener('click', () => {
-            profileInput.click();
-        });
-
-        profileInput.addEventListener('change', function () {
-            const file = this.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    profileDiv.style.backgroundImage = `url(${e.target.result})`;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
-	-->
+	<form id="secessionForm" action="${pageContext.request.contextPath}/user/updateUserSecession" method="post">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		        <!-- input type="hidden" name="userNo" value="${userInfo.userNo}" />  -->
+		<button type="button" class="secessionBtn" onclick="confirmSecession()">탈퇴하기</button>
+	</form>
 	<!-- 진짜 프로필 스크립 -->
 	<script>
-		document.getElementById("profileImageInput").addEventListener("change",function(){
-			const file = this.files[0];
+		const token = $("meta[name='_csrf']").attr("content");
+		const header = $("meta[name='_csrf_header']").attr("content"); 
+	
+		 function fileChange(thisFile){
+		<!-- document.getElementById("profileImageInput").addEventListener("change",function(){ -->
+			
+			const file = thisFile.files[0];
+			
+			
 			if (!file) return;
 
 			const reader = new FileReader();
 			reader.onload = function (e) {
 				const preview = document.getElementById("profilePreview");
-				preview.style.backgroundImage = `url('${e.target.result}')`;
+		       
+				preview.style.backgroundImage = "url('" + e.target.result + "')";
 				preview.style.backgroundSize = 'cover';
 				preview.style.backgroundPosition = 'center';
 			};
+			
 			reader.readAsDataURL(file);
-
+			
 			const formData = new FormData();
-			formData.append("profileImage",file);
-
+			formData.append("profileImage",thisFile.files[0]);
+			
+			for (const x of formData) {
+				 console.log(x);
+			};
+				
 			$.ajax({
-				url: "/user/uploadProfile",
-				type: "POST",
+				url: '${pageContext.request.contextPath}/user/updateProfile',
+				beforeSend: function(xhr) {
+	            				if (header && token) { // 토큰이 존재하는 경우에만 헤더 추가
+	                    			xhr.setRequestHeader(header, token);
+	                			}
+	            },
+				type: 'POST',
 				data: formData,
 				processData: false,
 				contentType: false,
@@ -190,40 +175,21 @@
 					alert("이미지 업로드 실패");
 				}
 			});
-		});
+		};
 
 	</script>
 	
-	<!--비번변경 모달창 여는 스크립트-->
-	<!-- <script>
-        const modalOpenButton = document.getElementById('modalOpenButton');
-        const modalCloseButton = document.getElementById('modalCloseButton');
-        const modal = document.getElementById('modalContainer');
-
-        modalOpenButton.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-
-        modalCloseButton.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
-    </script> -->
-
-	<!--닉네임변경 모달창 여는 스크립트
-    <script>
-        const modalOpenButton2 = document.getElementById('modalOpenButton2');
-        const modalCloseButton2 = document.getElementById('modalCloseButton2');
-        const modal2 = document.getElementById('modalContainer2');
-
-        modalOpenButton2.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-
-        modalCloseButton2.addEventListener('click', () => {
-            modal2.classList.add('hidden');
-        });
-    </script>
--->
+	<script>
+		window.addEventListener('DOMContentLoaded', function() {
+			const preview = document.getElementById('profilePreview');
+			const imageUrl = priview.dataset.url;
+			preview.style.backgroundImage = `url('${imageUrl}')`;
+			preview.style.backgroundSize = 'cover';
+			preview.style.backgroundPosition = 'center';
+		});
+	</script>
+	
+	
 	<!-- 비밀번호 검사 스크립트-->
 	<script>
 
@@ -279,5 +245,17 @@
 		}
 	
     </script>
+    <script>
+    	function confirmSecession() {
+    		const token = $("meta[name='_csrf']").attr("content");
+    		const header = $("meta[name='_csrf_header']").attr("content"); 
+			const confirmResult = confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다");
+			
+			if (confirmResult) {
+				document.getElementById("secessionForm").submit();
+				}
+			}
+    </script>
+    
 </body>
 </html>

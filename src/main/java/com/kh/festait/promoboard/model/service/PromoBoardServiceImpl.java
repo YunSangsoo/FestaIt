@@ -3,17 +3,15 @@ package com.kh.festait.promoboard.model.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j; // SLF4J 로거 사용
+import lombok.extern.slf4j.Slf4j;
 
 import com.kh.festait.common.model.vo.Image;
 import com.kh.festait.common.model.dao.ImageDao;
 import com.kh.festait.promoboard.model.dao.PromoBoardDao;
 import com.kh.festait.promoboard.model.vo.PromoBoardVo;
-import com.kh.festait.common.Pagination;
 import com.kh.festait.common.model.vo.PageInfo;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -43,6 +41,11 @@ public class PromoBoardServiceImpl implements PromoBoardService {
     public int increasePromoViews(int promoId) {
         return promoDao.increasePromoViews(promoId);
     }
+    
+    @Override
+    public PromoBoardVo selectPromoDetailIncludingInactive(int promoId) {
+        return promoDao.selectPromoDetailIncludingInactive(promoId);
+    }
 
     @Override
     @Transactional
@@ -70,7 +73,6 @@ public class PromoBoardServiceImpl implements PromoBoardService {
             throw new RuntimeException("게시글 업데이트 실패: promoId=" + promo.getPromoId());
         }
 
-        // EVENT_APPLICATION 테이블 URL 업데이트 추가
         int urlUpdateResult = promoDao.updateEventApplicationWebsite(promo);
 
         if (urlUpdateResult == 0) {
@@ -82,9 +84,6 @@ public class PromoBoardServiceImpl implements PromoBoardService {
         if (newOrExistingPosterImage != null) {
             int deleteCount = imageDao.deleteImageByRefNoAndType(promo.getPromoId(), newOrExistingPosterImage.getImgType());
             if (deleteCount > 0) {
-                log.debug("Service: 기존 이미지 DB에서 " + deleteCount + "개 삭제 완료 (refNo: " + promo.getPromoId() + ", type: " + newOrExistingPosterImage.getImgType() + ")");
-            } else {
-                log.debug("Service: 기존 이미지 DB에서 삭제할 항목이 없거나 이미 삭제됨 (refNo: " + promo.getPromoId() + ", type: " + newOrExistingPosterImage.getImgType() + ")");
             }
 
             if (newOrExistingPosterImage.getImgNo() != -1) {
