@@ -92,12 +92,13 @@
         WHERE EP.PROM_ID = #{promoId}
     </select>
 
-    <select id="selectUserEventApplications" parameterType="_int" resultMap="eventAppIdResultMap">
-        SELECT EA.APP_ID, EA.APP_TITLE
-        FROM EVENT_APPLICATION EA
-        WHERE EA.USER_NO = #{userNo}
-        ORDER BY EA.CREATE_DATE DESC
-    </select>
+	<select id="selectUserEventApplications" parameterType="_int" resultMap="eventAppIdResultMap">
+	    SELECT EA.APP_ID, EA.APP_TITLE
+	    FROM EVENT_APPLICATION EA
+	    WHERE EA.USER_NO = #{userNo}
+	      AND EA.STAT_CODE = 'A'
+	    ORDER BY EA.CREATE_DATE DESC
+	</select>
 
     <insert id="insertPromo" parameterType="com.kh.festait.promoboard.model.vo.PromoBoardVo">
         INSERT INTO EVENT_PROMOTION (
