@@ -42,4 +42,5 @@ public interface UserService {
 
 	User myPageUserInfo(String userId, String name);
 	
+	
 }

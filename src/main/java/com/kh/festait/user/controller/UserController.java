@@ -79,9 +79,12 @@ public class UserController {
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
 	public ModelAndView myPage(@AuthenticationPrincipal UserExt userDetails, Authentication auth, Model model) {
 		User u = (User) auth.getPrincipal();
+		//프로필 이미지 설정
 		Image img = imageService.getImageByRefNoAndType(u.getUserNo(), "U");
 		u.setProfileImage(img);
-		ModelAndView mv = new ModelAndView();
+		//유저 유형 가져오기
+		boolean isManager = u.getCompId() != null;
+		
 		// 북마크 리스트 가져오기
 		Map<String, Object> param = new HashMap<>();
 		param.put("userNo", u.getUserNo());
@@ -90,8 +93,11 @@ public class UserController {
 		// 리뷰 리스트 가져오기
 		List<ReviewBoard> reviewList = uService.selectReviewList(param);
 		model.addAttribute("reviewList", reviewList);
+		
+		ModelAndView mv = new ModelAndView();
 		mv.addObject("userInfo", u);
 		mv.setViewName("/user/myPage");
+		mv.addObject("isManager",isManager);
 		return mv;
 	}
 

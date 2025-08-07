@@ -170,4 +170,6 @@ public class UserDaoImpl implements UserDao{
 	public int updateUserSessuion(User u) {
 		return sqlSession.update("user.updateUserSecession", u);
 	}
+	
+	
 }
