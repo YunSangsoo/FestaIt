@@ -35,6 +35,8 @@
 			access='permitAll' />
 		
 		<intercept-url pattern="/user/Idpw" access="permitAll" />
+		<intercept-url pattern="/user/findIdEmail" access="permitAll" />
+		<intercept-url pattern="/user/resetPassword" access="permitAll" />
 
 		<!-- 관리자와 관련된 URL은 관리자 권한을 가지고 있어야만 접근가능하도록 제한 -->
 

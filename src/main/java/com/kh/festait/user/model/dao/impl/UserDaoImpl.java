@@ -125,8 +125,12 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	// 이메일로 아이디 찾기
-	public String findUserIdEmail(String email) {
-		return sqlSession.selectOne("user.findUserEmail",email);
+	public String findUserIdEmail(String email, String name) {
+		Map<String, String> params = new HashMap<>();
+		params.put("email", email);
+		params.put("name", name);
+		
+		return sqlSession.selectOne("user.findUserEmail",params);
 	}
 
 	@Override

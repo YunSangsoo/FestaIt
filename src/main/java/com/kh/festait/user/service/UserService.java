@@ -26,9 +26,9 @@ public interface UserService {
 
 	User login(User u);
 	
-	String findUserIdEmail(String email);
+	String findUserIdEmail(String email, String name);
 
-	int updatePasswordByEmail(String email, String newPassword);
+	int updatePasswordByEmail(String userId, String newPassword);
 
 	int updateNick(String userId, String nickname);
 
@@ -39,5 +39,7 @@ public interface UserService {
 	List<ReviewBoard> selectReviewList(Map<String,Object> param);
 
 	Image uploadProfile(MultipartFile file, int userNo);
+
+	User myPageUserInfo(String userId, String name);
 	
 }

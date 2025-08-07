@@ -54,7 +54,7 @@ h3 {
     border-color: rgb(63, 63, 63);
     cursor : pointer;
     border: none;
-
+	font-size: small;
 }
 
 .but2{
@@ -106,6 +106,7 @@ h3 {
     border-radius: 5px;
     float: left;
     height: 25px;
+    font-size: small;
 }
 
 small { /*비밀번호, 아이디 에러 메세지*/

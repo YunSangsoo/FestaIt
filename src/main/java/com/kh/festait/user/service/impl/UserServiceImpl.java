@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	//마이페이지 회원정보 조회
-	public User myPageUserInfo(String userId) {
+	public User myPageUserInfo(String userId, String name) {
 		return uDao.myPageUserInfo(userId);
 	}
 
@@ -98,14 +98,14 @@ public class UserServiceImpl implements UserService{
 	}
 
 	// 이메일확인을 통한 아이디찾기
-	public String findUserIdEmail(String email) {
-		return uDao.findUserIdEmail(email);
+	public String findUserIdEmail(String email, String name) {
+		return uDao.findUserIdEmail(email, name);
 	}
 	//비번찾기
 	@Override
-	public int updatePasswordByEmail(String email, String newPassword) {
+	public int updatePasswordByEmail(String userId, String newPassword) {
 		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("email", email);
+		paramMap.put("userId", userId);
 		paramMap.put("userPwd", newPassword);
 		
 		return uDao.updatePasswordByEmail(paramMap);
@@ -182,5 +182,13 @@ public class UserServiceImpl implements UserService{
 		public int updateUser(User u) {
 			return uDao.updateUserSessuion(u);
 		}
+
+		@Override
+		public User myPageUserInfo(String userId) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		
 
 }

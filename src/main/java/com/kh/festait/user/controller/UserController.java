@@ -106,9 +106,10 @@ public class UserController {
 	// 이거 유저 api컨트롤러로 옮겨야함
 	@RequestMapping(value = "/findIdEmail", method = RequestMethod.GET)
 	@ResponseBody
-	public String findIdEmail(@RequestParam("email") String email) {
+	public String findIdEmail(@RequestParam("email") String email,
+							  @RequestParam("name") String name) {
 
-		String userId = uService.findUserIdEmail(email);
+		String userId = uService.findUserIdEmail(email, name);
 		System.out.println("userId : " + userId);
 
 		if (userId != null) {
@@ -183,7 +184,7 @@ public class UserController {
 
 	// 비밀번호 찾기
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
-	public String resetPassword(@RequestParam("email") String email, @RequestParam("newPassword") String newPassword,
+	public String resetPassword(@RequestParam("userId") String userId, @RequestParam("newPassword") String newPassword,
 			@RequestParam("confirmPassword") String confirmPassword, RedirectAttributes redirectAttributes) {
 
 		if (!newPassword.equals(confirmPassword)) {
@@ -191,9 +192,9 @@ public class UserController {
 			return "redirect:/user/Idpw";
 		}
 
-		System.out.println("업데이트 결과: " + email + " " + newPassword); // 테스트용
+		System.out.println("업데이트 결과: " + userId + " " + newPassword); // 테스트용
 		String encodedPwd = passwordEncoder.encode(newPassword);
-		int result = uService.updatePasswordByEmail(email, encodedPwd);
+		int result = uService.updatePasswordByEmail(userId, encodedPwd);
 		System.out.println("업데이트 결과: " + result); // 테스트용
 
 		if (result > 0) { // 성공시
