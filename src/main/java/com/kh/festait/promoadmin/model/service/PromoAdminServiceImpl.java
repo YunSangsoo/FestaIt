@@ -1,3 +1,5 @@
+// 경로: com.kh.festait.promoadmin.model.service.PromoAdminServiceImpl.java
+
 package com.kh.festait.promoadmin.model.service;
 
 import java.util.List;
@@ -8,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.festait.promoadmin.model.dao.PromoAdminDao;
 import com.kh.festait.promoadmin.model.vo.PromoAdminVo;
+import com.kh.festait.common.model.vo.Image; 
+import com.kh.festait.common.service.ImageService; 
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PromoAdminServiceImpl implements PromoAdminService {
 
     private final PromoAdminDao promoAdminDao;
-
+    private final ImageService imageService; 
     @Override
     public int getTotalPromoPostsCount(Map<String, Object> paramMap) {
         return promoAdminDao.getTotalPromoPostsCount(paramMap);
@@ -40,6 +44,14 @@ public class PromoAdminServiceImpl implements PromoAdminService {
 
     @Override
     public PromoAdminVo selectPromoDetail(int promoId) {
-        return promoAdminDao.selectPromoDetail(promoId);
+        PromoAdminVo promo = promoAdminDao.selectPromoDetail(promoId);
+        
+        if (promo != null) {
+            Image posterImage = imageService.getImageByRefNoAndType(promoId, "P");
+
+            promo.setPosterImage(posterImage);
+        }
+        
+        return promo;
     }
 }

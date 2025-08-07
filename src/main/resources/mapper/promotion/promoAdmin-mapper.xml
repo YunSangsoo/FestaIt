@@ -25,56 +25,54 @@
         <result property="appTitle" column="APP_TITLE"/>
     </resultMap>
 
-    <select id="getTotalPromoPostsCount" parameterType="map" resultType="_int">
-        SELECT COUNT(*)
-        FROM EVENT_PROMOTION EP
-        LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
-        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
-        WHERE 1=1
-        
+<select id="getTotalPromoPostsCount" parameterType="map" resultType="_int">
+    SELECT COUNT(*)
+    FROM EVENT_PROMOTION EP
+    LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+    WHERE 1=1
+    
+    <if test="keyword != null and keyword != ''">
+        <choose>
+            <when test="searchType == 'title'">
+                AND EP.PROM_TITLE LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'writer'">
+                AND U.NICKNAME LIKE '%' || #{keyword} || '%'
+            </when>
+            <otherwise>
+                AND (EP.PROM_TITLE LIKE '%' || #{keyword} || '%' OR EP.PROM_DETAIL LIKE '%' || #{keyword} || '%')
+            </otherwise>
+        </choose>
+    </if>
+</select>
+
+    <select id="selectPromoPostsList" parameterType="map" resultMap="promoAdminResultMap">
+    SELECT
+        EP.PROM_ID, EP.PROM_TITLE, EP.PROM_DETAIL, EP.CREATE_DATE, EP.UPDATE_DATE, EP.VIEWS,
+        U.NICKNAME AS PROMO_WRITER, NVL(U.STATUS, 'F') AS USER_ACCOUNT_STATUS, U.USER_NO AS WRITER_USER_NO,
+        I.IMG_NO, I.CHANGE_NAME AS POSTER_PATH, I.ORIGIN_NAME AS ORIGINAL_FILENAME,
+        EA.WEBSITE AS PROMOTION_PAGE_URL, EA.STAT_CODE AS IS_PROMOTED,
+        EA.START_DATE, EA.END_DATE, EA.APP_TITLE
+    FROM EVENT_PROMOTION EP
+    LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+    LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+    <where>
         <if test="keyword != null and keyword != ''">
             <choose>
                 <when test="searchType == 'title'">
-                    AND EP.PROM_TITLE LIKE '%' || #{keyword} || '%'
+                    EP.PROM_TITLE LIKE '%' || #{keyword} || '%'
                 </when>
                 <when test="searchType == 'writer'">
-                    AND U.NICKNAME LIKE '%' || #{keyword} || '%'
+                    U.NICKNAME LIKE '%' || #{keyword} || '%'
                 </when>
-                <otherwise>  
-                    AND (EP.PROM_TITLE LIKE '%' || #{keyword} || '%' OR EP.PROM_DETAIL LIKE '%' || #{keyword} || '%')
+                <otherwise>
+                    EP.PROM_TITLE LIKE '%' || #{keyword} || '%' OR EP.PROM_DETAIL LIKE '%' || #{keyword} || '%'
                 </otherwise>
             </choose>
         </if>
-    </select>
-
-    <select id="selectPromoPostsList" parameterType="map" resultMap="promoAdminResultMap">
-        SELECT
-            EP.PROM_ID, EP.PROM_TITLE, EP.PROM_DETAIL, EP.CREATE_DATE, EP.UPDATE_DATE, EP.VIEWS,
-            U.NICKNAME AS PROMO_WRITER, NVL(U.STATUS, 'F') AS USER_ACCOUNT_STATUS, U.USER_NO AS WRITER_USER_NO,
-            I.IMG_NO, I.CHANGE_NAME AS POSTER_PATH, I.ORIGIN_NAME AS ORIGINAL_FILENAME,
-            EA.WEBSITE AS PROMOTION_PAGE_URL, EA.STAT_CODE AS IS_PROMOTED,
-            EA.START_DATE, EA.END_DATE, EA.APP_TITLE
-        FROM EVENT_PROMOTION EP
-        LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
-        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
-        LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
-        <where>
-            <if test="keyword != null and keyword != ''">
-                <choose>
-                    <when test="searchType == 'title'">
-                        EP.PROM_TITLE LIKE '%' || #{keyword} || '%'
-                    </when>
-                    <when test="searchType == 'writer'">
-                        U.NICKNAME LIKE '%' || #{keyword} || '%'
-                    </when>
-                    <otherwise>
-                        EP.PROM_TITLE LIKE '%' || #{keyword} || '%' OR EP.PROM_DETAIL LIKE '%' || #{keyword} || '%'
-                    </otherwise>
-                </choose>
-            </if>
-        </where>
-        ORDER BY EP.PROM_ID DESC
-    </select>
+    </where>
+    ORDER BY EP.PROM_ID DESC
+</select>
 
     <delete id="deletePromoPost" parameterType="_int">
         DELETE FROM EVENT_PROMOTION
@@ -82,29 +80,28 @@
     </delete>
 
     <select id="selectPromoDetail" parameterType="_int" resultMap="promoAdminResultMap">
-        SELECT
-            EP.PROM_ID,
-            EP.APP_ID,
-            EP.PROM_TITLE,
-            EP.PROM_DETAIL,
-            EP.CREATE_DATE,
-            EP.UPDATE_DATE,
-            EP.VIEWS,
-            U.NICKNAME AS PROMO_WRITER,
-            U.STATUS AS USER_ACCOUNT_STATUS,
-            EA.USER_NO AS WRITER_USER_NO,
-            I.IMG_NO,
-            I.CHANGE_NAME AS POSTER_PATH,
-            I.ORIGIN_NAME AS ORIGINAL_FILENAME,
-            EA.WEBSITE AS PROMOTION_PAGE_URL,
-            EA.STAT_CODE AS IS_PROMOTED,  
-            EA.START_DATE,
-            EA.END_DATE,
-            EA.APP_TITLE AS APP_TITLE
-        FROM EVENT_PROMOTION EP
-        LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID
-        LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
-        LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
-        WHERE EP.PROM_ID = #{promoId}
-    </select>
+	    SELECT
+	        EP.PROM_ID,
+	        EP.APP_ID,
+	        EP.PROM_TITLE,
+	        EP.PROM_DETAIL,
+	        EP.CREATE_DATE,
+	        EP.UPDATE_DATE,
+	        EP.VIEWS,
+	        U.NICKNAME AS PROMO_WRITER,
+	        U.STATUS AS USER_ACCOUNT_STATUS,
+	        EA.USER_NO AS WRITER_USER_NO,
+	        I.IMG_NO,
+	        I.CHANGE_NAME AS POSTER_PATH,
+	        I.ORIGIN_NAME AS ORIGINAL_FILENAME,
+	        EA.WEBSITE AS PROMOTION_PAGE_URL,
+	        EA.STAT_CODE AS IS_PROMOTED,  
+	        EA.START_DATE,
+	        EA.END_DATE,
+	        EA.APP_TITLE AS APP_TITLE
+	    FROM EVENT_PROMOTION EP
+	    LEFT JOIN EVENT_APPLICATION EA ON EP.APP_ID = EA.APP_ID  LEFT JOIN USERS U ON EA.USER_NO = U.USER_NO
+	    LEFT JOIN IMAGE I ON EP.PROM_ID = I.REF_NO AND I.IMG_TYPE = 'P'
+	    WHERE EP.PROM_ID = #{promoId}
+	</select>
 </mapper>
