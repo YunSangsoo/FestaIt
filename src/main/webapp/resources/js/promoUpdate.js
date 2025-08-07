@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-
+});
 document.getElementById('promoUpdateForm').addEventListener('submit', async (event) => {
 		    event.preventDefault();
 		    
