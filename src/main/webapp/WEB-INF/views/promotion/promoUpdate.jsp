@@ -3,6 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,7 +12,6 @@
     <title>홍보 게시글 수정/삭제</title>
     <c:set var="contextPath" value="${pageContext.request.contextPath}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    
     <link rel="stylesheet" href="${contextPath}/resources/css/promoForm.css" />
 
     <style>
@@ -61,25 +62,24 @@
 
         <div class="mb-3">
             <label class="form-label"><strong>내용</strong></label>
+            <%-- ⭐ 핵심 수정: <form:textarea> 태그 내부를 비우고 단일 태그로 사용 ⭐ --%>
             <form:textarea path="promoDetail" cssClass="form-control" rows="10" readonly="true" id="promoDetail" />
         </div>
 
-		<!-- 홍보 URL -->
-		<div class="form-group mb-3">
-		    <label class="form-label">홍보 URL (선택 사항)</label>
+        <div class="form-group mb-3">
+            <label class="form-label">홍보 URL (선택 사항)</label>
             <form:input path="promotionPageUrl" id="promotionPageUrl" cssClass="form-control" placeholder="http:// 또는 https:// 로 시작하는 URL 입력" type="url" />
             <form:errors path="promotionPageUrl" cssClass="text-danger mt-1" />
-		</div>
-		
-		<!-- 포스터 이미지 -->
-		<div class="form-group file-input-group mb-3">
-		    <label class="form-label">포스터 이미지</label>
-		    <div class="file-input-wrapper">
-		        <input type="file" id="promoPoster" name="promoPoster" accept="image/*" class="form-control-file" disabled />
-		        <label for="promoPoster" class="file-upload-button">파일 선택</label>
-		        <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
-		    </div>
-		</div>
+        </div>
+        
+        <div class="form-group file-input-group mb-3">
+            <label class="form-label">포스터 이미지</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="promoPoster" name="promoPoster" accept="image/*" class="form-control-file" disabled />
+                <label for="promoPoster" class="file-upload-button">파일 선택</label>
+                <span id="fileNameDisplay" class="file-name-display">선택된 파일 없음</span>
+            </div>
+        </div>
 
         <div class="image-preview" id="imagePreview">
             <c:choose>
@@ -127,7 +127,7 @@
                                     <input type="hidden" name="promoId" value="${promo.promoId}" />
                                     <input type="hidden" name="appId" value="${promo.appId}" />
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                    <button type="button" class="btn btn-danger deleteButton">삭제</button>
+                                    <button type="button" class="btn btn-danger deleteButton">취소</button>
                                 </form>
                             </div>
                         </sec:authorize>

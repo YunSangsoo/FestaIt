@@ -199,20 +199,19 @@ body {
     z-index: 10;
 }
 
-/* 제목 */
 .post-title {
     font-size: 16px !important;
     font-weight: 700;
     padding: 15px 15px 5px !important;
     color: #333;
     line-height: 1.5 !important;
-    max-height: 4.25em !important;
+    height: 68px;     
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
-
 /* 이벤트 날짜 */
 .post-date {
     font-size: 14px;
