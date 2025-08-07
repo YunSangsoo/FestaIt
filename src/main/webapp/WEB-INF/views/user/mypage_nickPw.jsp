@@ -50,6 +50,8 @@
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						
                         <div id="chPw">
+                        	<h3>아이디를 입력해 주세요</h3>
+                        	<input id="userId" name="userId" type="text" class="pwtext" maxlength="15" required>
                             <h3>변경할 비밀번호를 입력해주세요</h3>
                             <input id="password" name="newPassword" type="password" class="pwtext" maxlength="15" required>
                             <small class="errMsg" id="pwMsg"></small>
@@ -80,7 +82,7 @@
         function checkNick() {
         	
         	
-        	alert("ㅇㅅㅇ");
+        	
 			const nickName = $('input[name=nickInput]').val().trim();
 			
 			const nickRegex = /^[가-힣a-zA-Z0-9]{2,8}$/; // 닉 정규식
@@ -184,7 +186,7 @@
                 pwMsg.textContent = "사용 가능한 비밀번호입니다.";
                 pwMsg.style.color = "green"; 
             } else {
-                pwMsg.textContent = "영문 대/소문자를 포함한 1~15자리여야 합니다.";
+                pwMsg.textContent = "영문 대/소문자를 포함한 8~15자리여야 합니다.";
                 pwMsg.style.color = "red";	
             }
 
@@ -210,8 +212,10 @@
             passwordConfirm.addEventListener("input", validatePasswordMatch);  
             
             window.updatePassword = function() {
+            	
 				const newPassword = password.value.trim();
 				const confirmPassword = passwordConfirm.value.trim();
+				
 				
 				if (!rwRegex.test(newPassword)) {
 					alert("비밀번호 조건에 맞게 입력해주세요,");

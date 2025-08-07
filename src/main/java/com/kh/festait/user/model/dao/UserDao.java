@@ -41,7 +41,7 @@ public interface UserDao {
 
 	User getUserByUser(User u);
 
-	String findUserIdEmail(String email);
+	String findUserIdEmail(String email, String name);
 
 	int updatePasswordByEmail(Map<String, Object> paramMap);
 

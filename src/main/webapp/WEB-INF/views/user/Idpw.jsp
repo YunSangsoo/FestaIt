@@ -27,7 +27,10 @@
                 <div class="container">
                     <h2 style="font-size: 40px; color: #6A1B9A;" >아이디 찾기</h2>
                     <form method="post" id="login-form1">
+                    	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <div class="login_input">
+                        	<h3>이름을 입력해주세요</h3>
+                            <input type="text" class="input2" name="userName" id="name_id" placeholder=" 이름 입력" required />
                             <h3>이메일을 입력해주세요</h3>
                             <input type="text" name="email" id="email_id" placeholder=" 이메일 입력" required />
                             <!-- 여기에 입력받은 이메일을 가지고 디비에서 해당 이메일을 사용하는 아이디를 출력하게 할거임 -->
@@ -65,8 +68,9 @@
                         <div id="timer" style="display: none; margin-top: 10px; color: gray;"></div> 
                          <button id="submitbtn_pw" class="bt1" type="button" onclick="showChangePw()" disabled><span class="tx1">비밀번호찾기</span></button>
 							
-							
                         <div id="chPw">
+                        	<h3>아이디를 입력해 주세요</h3>
+                            <input id="userId" name="userId" type="text" class="pwtext" maxlength="15" required>
                             <h3>변경할 비밀번호를 입력해주세요</h3>
                             <input id="password" name="newPassword" type="password" class="pwtext" maxlength="15" required>
                             <small class="errMsg" id="pwMsg"></small>
@@ -220,17 +224,27 @@
 				
 				console.log("경과3"); // 체크용
 				const email = document.getElementById("email_id").value.trim();	// 이 함수는 id찾기에서만 사용하니까 pw은 안넣어도됨	
+				const name = document.getElementById("name_id").value.trim();
+				
+				if (!email || !name) {
+					alert("이메일과 이름을 모두 입력하세요");
+					return;
+				}
+				
 				$.ajax({
 					url: "${pageContext.request.contextPath}/user/findIdEmail",
 					method: "GET",
 					contentType : "application/json; charset=UTF-8", //
-					data:{ email: email},
+					data:{ 
+						email: email,
+						name: name	
+					},
 					success: function(userId) {
 						if(userId) {
 							alert(`해당 이메일로 가입된 아이디: \${userId}`); // \이스케이프 사용해야 제대로 보임
 							document.getElementById("nextbtn").style.display = "inline-block"; // 알럿창에서 확인 누르면 html에서 가려진 버튼 출력
 						}else {
-							alert("해당 이메일로 가입된 아이디가 없습니다");
+							alert("해당 이메일과 이름으로 가입된 아이디가 없습니다");
 						}
 					},
 					error: function() {

@@ -64,6 +64,15 @@ input{
     font-size: 15px;
 }
 
+.input2{
+	width: 400px;
+    height: 40px;
+    margin-top: 10px;
+    border: solid 1px;
+    border-radius: 3px;
+    font-size: 15px;
+}
+
 button{
     width: 405px;
     height: 40px;
