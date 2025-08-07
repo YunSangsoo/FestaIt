@@ -15,11 +15,12 @@
 </head>
 
 <body>
+	<input class="backbtn" onclick="history.back()" type="button" value="뒤로가기">
 	<h2 class="hadename">마이페이지</h2>
 	<div class="mypagehead" id="mypagehead">
 		<h1 class="grade">
 		<c:choose>
-			<c:when test="${not empty manager}">
+			<c:when test="${isManager}">
 			사업자
 			</c:when>
 			<c:otherwise>
@@ -121,11 +122,13 @@
 		</div>
 	</div>
 	<br>
+	
 	<form id="secessionForm" action="${pageContext.request.contextPath}/user/updateUserSecession" method="post">
 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		        <!-- input type="hidden" name="userNo" value="${userInfo.userNo}" />  -->
 		<button type="button" class="secessionBtn" onclick="confirmSecession()">탈퇴하기</button>
 	</form>
+		
 	<!-- 진짜 프로필 스크립 -->
 	<script>
 		const token = $("meta[name='_csrf']").attr("content");

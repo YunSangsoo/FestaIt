@@ -134,6 +134,7 @@
 	        AND STATUS = 'Y'   
 	</select>
 	
+	
 	<!-- 닉변 -->
 	<update id="updateNickname" parameterType="map">
 		UPDATE USERS SET NICKNAME = #{nickname}

@@ -185,9 +185,10 @@ public class UserServiceImpl implements UserService{
 
 		@Override
 		public User myPageUserInfo(String userId) {
-			// TODO Auto-generated method stub
 			return null;
 		}
+
+		
 
 		
 

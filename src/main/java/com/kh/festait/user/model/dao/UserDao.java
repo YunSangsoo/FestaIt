@@ -56,4 +56,8 @@ public interface UserDao {
 	int insertImage(Map<String, Object> imgMap);
 
 	int updateUserSessuion(User u);
+	
+	
+
+	
 }
