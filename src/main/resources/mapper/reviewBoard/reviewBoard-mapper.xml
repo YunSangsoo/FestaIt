@@ -53,9 +53,13 @@
             SELECT ROWNUM RNUM, A.* FROM (
             	<include refid="commonSelect" />
 			) A
-            WHERE ROWNUM &lt;= #{endRow}
+			<if test="endRow != null and endRow != ''">
+	            WHERE ROWNUM &lt;= #{endRow}
+			</if>
         )
-        WHERE RNUM &gt; #{startRow}
+        <if test="startRow != null and startRow != ''">
+	        WHERE RNUM &gt; #{startRow}
+		</if>
     </select>
 
 	<select id="getReviewCount" resultType="int">
