@@ -80,6 +80,11 @@ public class NoticeBoardController {
     public String noticeDetail(@RequestParam("noticeId") int noticeId, Model model) {
         NoticeBoard notice = noticeBoardService.selectNoticeById(noticeId);
         
+        if (notice.getNoticeDetail() != null) {
+            notice.setNoticeDetail(notice.getNoticeDetail().replace("<br>", "\n"));
+            log.info("noticeDetail after replace: {}", notice.getNoticeDetail());
+        }
+        
         // 이미지 정보 조회 (refNo = noticeId, type = "N")
         Image noticeImage = imageDao.getImageByRefNoAndType(noticeId, "N");
         model.addAttribute("notice", notice);

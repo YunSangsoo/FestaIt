@@ -26,7 +26,7 @@
 			<div class="mb-3">
 				<label for="noticeTitle" class="form-label fw-semibold">제목</label>
 				<form:input path="noticeTitle" id="noticeTitle" class="form-control"
-					placeholder="제목을 입력해주세요." />
+					placeholder="제목을 입력해주세요." maxlength="50"/>
 			</div>
 
 			<!-- 내용 -->
