@@ -86,7 +86,6 @@ public class EventDetailController {
         model.addAttribute("event", event); 
         model.addAttribute("loginUser", loginUserForJsp);
         
-        // 리뷰 리스트 출력
         rbCon.reviewList(appId, page, model, paramMap, authentication);
         
         model.addAttribute("param", paramMap);

@@ -120,6 +120,7 @@ public class EventBoardController {
 		PageInfo pi = Pagination.getPageInfo(totalEventCount, currentPage, pageBlock, limit);
 		
 	    List<EventBoard> eventList = eventBoardService.selectEventList(pi, paramMap);
+	    setPosterImage(eventList);
 	    
 	    if (eventList != null) {
 	    	setRegion(eventList);
