@@ -2,8 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -166,7 +166,7 @@ body > .container {
 
 						<div class="col-auto flex-grow-1">
 							<input type="text" name="qnaTitle" class="form-control"
-								placeholder="제목을 입력해주세요." required />
+								placeholder="제목을 입력해주세요." required maxlength="40"/>
 						</div>
 						<div class="col-auto">
 							<button type="submit" class="btn btn-primary">문의하기</button>
@@ -300,7 +300,7 @@ body > .container {
 									<p class="text-muted">비밀글입니다. 작성자와 관리자만 내용 확인이 가능합니다.</p>
 								</c:when>
 								<c:otherwise>
-									<p style="white-space: pre-wrap;"><c:out value="${qna.qnaDetail}" /></p>
+									<p><c:out value="${qna.qnaDetail}" escapeXml="false" /></p>
 								</c:otherwise>
 							</c:choose>
 

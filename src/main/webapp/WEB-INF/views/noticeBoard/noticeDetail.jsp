@@ -54,9 +54,8 @@
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label"><strong>내용</strong></label>
-				<form:textarea path="noticeDetail" cssClass="form-control" rows="10"
-					readonly="true" />
+    			<label class="form-label"><strong>내용</strong></label>
+    			<form:textarea path="noticeDetail" cssClass="form-control" rows="10" readonly="true" />
 			</div>
 
 			<!-- 첨부파일 표시 및 수정 -->
@@ -136,31 +135,29 @@
 
 	<script>
 		function enableEdit() {
-			document.querySelector('[name="noticeTitle"]').removeAttribute(
-					'readonly');
-			document.querySelector('[name="noticeDetail"]').removeAttribute(
-					'readonly');
+	    // 제목 수정 가능하게
+	    	document.querySelector('[name="noticeTitle"]').removeAttribute('readonly');
 
-			// 첨부파일 영역 보여주기
-			document.getElementById("fileEditArea").style.display = "block";
+	    	// 공지 내용: div 숨기고 textarea 보이기
+	    	document.querySelector('[name=noticeDetail]').removeAttribute('readonly');
 
-			// 파일 input 활성화
-			const fileInput = document
-					.querySelector('input[name="noticeFile"]');
-			if (fileInput)
-				fileInput.removeAttribute('disabled');
+	    	// 첨부파일 영역 보여주기
+	    	document.getElementById("fileEditArea").style.display = "block";
 
-			// 삭제 체크박스 활성화
-			const deleteCheckbox = document
-					.querySelector('input[name="deleteFile"]');
-			if (deleteCheckbox)
-				deleteCheckbox.removeAttribute('disabled');
+	    	// 파일 input 활성화
+	    	const fileInput = document.querySelector('input[name="noticeFile"]');
+	    	if (fileInput) fileInput.removeAttribute('disabled');
 
-			document.getElementById("adminButtons").style.display = "none";
-			document.getElementById("editButtons").style.display = "flex";
+	    	// 삭제 체크박스 활성화
+	    	const deleteCheckbox = document.querySelector('input[name="deleteFile"]');
+	    	if (deleteCheckbox) deleteCheckbox.removeAttribute('disabled');
 
-			// 삭제 버튼 숨기기 (선택 사항)
-			document.querySelector('form[action$="/noticeBoard/delete"]').style.display = "none";
+	    	// 버튼 전환
+	    	document.getElementById("adminButtons").style.display = "none";
+	    	document.getElementById("editButtons").style.display = "flex";
+
+	    	// 삭제 버튼 숨기기
+	    	document.querySelector('form[action$="/noticeBoard/delete"]').style.display = "none";
 		}
 
 		function cancelEdit() {
