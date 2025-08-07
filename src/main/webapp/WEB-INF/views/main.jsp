@@ -210,7 +210,7 @@ href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-u
 								</div>
 								<div class="review-info">
 									<div>
-										<strong>${review.appTitle}</strong>
+										<strong class="review-app-title">${review.appTitle}</strong>
 									</div>
 									<div class="review-content">${review.comment}</div>
 								</div>
@@ -255,7 +255,7 @@ href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-u
 								<tr style="cursor: pointer;"
 									onclick="location.href='${pageContext.request.contextPath}/noticeBoard/detail?noticeId=${notice.noticeId}'">
 									<td>${notice.noticeId}</td>
-									<td class="text-start">${notice.noticeTitle}</td>
+									<td class="text-start over-hidden">${notice.noticeTitle}</td>
 									<td><fmt:formatDate value="${notice.createDate}"
 											pattern="yyyy.MM.dd HH:mm" /></td>
 								</tr>
