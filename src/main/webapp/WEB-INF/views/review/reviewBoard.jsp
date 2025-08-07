@@ -95,8 +95,26 @@
                                 <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.userName}</td>
                                 <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.userId}</td>
                                 <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.nickname}</td>
-                                <td class="text-start over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.appTitle}</td>
-                                <td class="text-start over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">${review.comment}</td>
+                                <td class="text-start over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">
+				                    <c:choose>
+				                        <c:when test="${fn:length(review.appTitle) > 25}">
+				                            ${fn:substring(review.appTitle, 0, 25)}...
+				                        </c:when>
+				                        <c:otherwise>
+				                            ${review.appTitle}
+				                        </c:otherwise>
+				                    </c:choose>
+                                </td>
+								<td class="text-start over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">
+				                    <c:choose>
+				                        <c:when test="${fn:length(review.comment) > 20}">
+				                            ${fn:substring(review.comment, 0, 20)}...
+				                        </c:when>
+				                        <c:otherwise>
+				                            ${review.comment}
+				                        </c:otherwise>
+				                    </c:choose>
+				                </td>
                                 <td class="over-hidden" onclick="location.href='${pageContext.request.contextPath}/eventBoard/detail?appId=${review.appId}#review-container'" style="cursor: pointer;">
                                     <fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd HH:mm:ss" />
                                 </td>

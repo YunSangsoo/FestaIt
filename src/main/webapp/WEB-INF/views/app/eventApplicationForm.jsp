@@ -308,7 +308,7 @@
     	const initialPosterSrc = "${not empty eventApplication.posterImage.changeName ? pageContext.request.contextPath.concat(eventApplication.posterImage.changeName) : ''}";
     	const initialExistingImgNo = "${empty eventApplication.posterImage.imgNo ? 0 : eventApplication.posterImage.imgNo }";
     	
-    	const isViewMode = ${(isViewMode&&eventApplication.statCode!='A') || eventApplication.statCode == 'S'};
+    	const isViewMode = ${(isViewMode&&eventApplication.statCode!='A') || (isEditMode&&eventApplication.statCode=='A')|| eventApplication.statCode == 'S'};
         const isEditMode = ${(isEditMode && (eventApplication.statCode=='P'||eventApplication.statCode=='R'))||(isViewMode&&eventApplication.statCode!='A')};
         const initialEventCode = "${eventApplication.eventCode}";
 	</script>

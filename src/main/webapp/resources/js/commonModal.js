@@ -9,7 +9,7 @@ let loadingModalBody = null;
 
 
 // 로딩 모달 인스턴스를 저장할 전용 변수
-let loadingModalElement = document.getElementById('loadingModal');;
+let loadingModalElement = document.getElementById('loadingModal');
 
 // DOMContentLoaded 이후에 Bootstrap 모달 인스턴스를 초기화 (안정성 강화)
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,22 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     commonModalElement._currentModalPromiseResolve = null;
                 }
             }
+            
+            
         });
     } else {
         console.error("Error: The commonModal HTML structure (ID 'commonModal') was not found. Please ensure commonModal.jsp is included.");
     }
     
     if (loadingModalElement) {
-        loadingModal = new bootstrap.Modal(loadingModalElement, {
-                backdrop: 'static',
-                keyboard: false
-            });
+        loadingModal = new bootstrap.Modal(loadingModalElement);
     } else {
         console.error("Error: The commonModal HTML structure (ID 'loadingModal') was not found. Please ensure commonModal.jsp is included.");
     }
     
 });
-
 
 /**
  * 공통 모달을 표시하고 사용자의 선택 결과를 Promise로 반환하는 함수
@@ -69,14 +67,13 @@ window.showCommonModal = function(title, content, options = {}) {
     }
 
     return new Promise((resolve) => {
-    
+    	
         // 이전 Promise를 덮어쓰지 않도록, 모달 요소에 resolve 함수를 저장
         commonModalElement._currentModalPromiseResolve = resolve;
         
-        const defaultOptions = { showCancelButton: true, cancelButtonText: "취소", onCancel: null, showConfirmButton: true, confirmButtonText: "확인", onConfirm: null };
+        const defaultOptions = { showCancelButton: true, cancelButtonText: "취소", onCancel: null, showConfirmButton: true, confirmButtonText: "확인", onConfirm: null, backdrop: true };
         
         const mergedOptions = Object.assign({}, defaultOptions, options);
-
         // 제목 및 내용 설정
         if (commonModalTitle) commonModalTitle.innerHTML = title;
         if (commonModalBody) commonModalBody.innerHTML = content;
@@ -84,7 +81,6 @@ window.showCommonModal = function(title, content, options = {}) {
         // 푸터 버튼 초기화 및 설정
         if (commonModalFooter) {
             commonModalFooter.innerHTML = ''; // 기존 버튼 모두 제거
-
             // 취소 버튼 생성
             if (mergedOptions.showCancelButton) {
                 const cancelButton = document.createElement('button');
@@ -121,7 +117,7 @@ window.showCommonModal = function(title, content, options = {}) {
                 commonModalFooter.appendChild(confirmButton);
             }
         }
-
+        
         // 모달 표시
         commonModal.show();
         
@@ -196,8 +192,8 @@ window.showLoadingModal = function(){
 
 window.hideLoadingModal = function() {
     // Bootstrap Modal 객체를 직접 제어하여 모달을 닫는 함수
-    const loadingModalElement = document.getElementById('commonModal');
-    const modal = bootstrap.Modal.getInstance(loadingModalElement);
+    const loadingModalElement1 = document.getElementById('commonModal');
+    const modal = bootstrap.Modal.getInstance(loadingModalElement1);
     if (modal) {
         modal.hide();
     }
