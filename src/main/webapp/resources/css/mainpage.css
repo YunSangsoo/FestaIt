@@ -252,6 +252,13 @@
 	min-width: 60px;
 }
 
+.review-app-title {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	overflow: hidden;
+}
+
 .review-content {
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
