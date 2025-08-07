@@ -82,7 +82,7 @@
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
-						<div>등록한 리뷰가 없습니다.</div>
+						<div>등록한 북마크가 없습니다.</div>
 					</c:otherwise>
 				</c:choose>
 			</div>

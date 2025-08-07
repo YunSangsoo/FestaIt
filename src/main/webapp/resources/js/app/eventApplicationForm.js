@@ -1,5 +1,5 @@
 
-(function () {
+/*(function () {
   'use strict';
 
   // Bootstrap 유효성 검사 스타일을 적용할 모든 폼 가져오기
@@ -13,13 +13,8 @@
         // 제출을 발생시킨 버튼을 찾습니다. (HTML5 'submit' 이벤트의 submitter 속성 활용)
         const submitter = event.submitter;
         
-        console.log(submitter);
-        
         // 1. 만약 제출된 버튼에 'formnovalidate' 속성이 있다면
         if (submitter && submitter.hasAttribute('formnovalidate')) {
-          // 브라우저의 기본 동작(폼 제출)을 막지 않고, Bootstrap의 유효성 검사도 건너뜝니다.
-          // 이렇게 하면 HTML5 formnovalidate가 의도한 대로 작동합니다.
-          console.log("Formnovalidate 버튼 클릭됨. Bootstrap 유효성 검사를 건너뜝니다.");
           return; // 이벤트 리스너에서 빠져나가 기본 폼 제출을 허용
         }
 
@@ -38,7 +33,7 @@
     });
     
     
-})();
+})();*/
 
 $('#startDate').datepicker({
 	dateFormat: 'yy-mm-dd', // 날짜 형식: YYYY-MM-DD
@@ -104,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateHomepageButtonVisibility();
     
     
-    if(isViewMode){
+    if(isViewMode||isViewSet){
     	const dSetElements = document.querySelectorAll('.dSet');
 	    dSetElements.forEach(element => {
 	        // element.disabled = true;
@@ -234,8 +229,10 @@ new daum.Postcode({
 }).open();
 }
 
-document.getElementById('appForm').addEventListener('submit', async (event) => {
+/*document.getElementById('appForm').addEventListener('submit', async (event) => {
     event.preventDefault();
+    
+    const form = event.target;
     
  	// 어떤 버튼이 제출을 유발했는지 확인합니다.
     const submitter = event.submitter;
@@ -272,6 +269,14 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
     }
     
     if(!approval){
+    	
+    	if(actionValue=='submit'&& !submitter.hasAttribute('formnovalidate')){
+    		if (!form.checkValidity()) {
+		        form.classList.add('was-validated');
+		        return; // 유효성 검사 실패 시 여기서 함수를 종료하여 폼 제출을 막습니다.
+		    }
+    	}
+    	form.classList.remove('was-validated');
 	    const result = await window.showCommonModal(
 	            modalTitle,
 	            modalContent,
@@ -307,8 +312,6 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
 		    document.getElementById('actionHiddenInput').value = 'A';
 	        event.target.submit();
 	        
-	        
-	    	window.hideLoadingModal();
 	    	console.log("check");
 	    } else {
 	    	const rejectReasonResult = await window.showCommonModal(
@@ -316,7 +319,8 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
 		        '<textarea id="rejectReason" class="form-control overflow-y-auto" name="adminComment" rows="5" placeholder="반려 사유를 입력하세요."></textarea>',
 		        {
 		            cancelButtonText: '취소',
-		            confirmButtonText: '반려'
+		            confirmButtonText: '반려',
+		            backdrop: 'static' // 'backdrop: 'static'' 옵션을 추가하면 백그라운드 클릭으로 모달이 닫히지 않습니다.
 		        }
 	    	);
         	if (rejectReasonResult) {
@@ -331,11 +335,114 @@ document.getElementById('appForm').addEventListener('submit', async (event) => {
 	            document.getElementById('actionHiddenInput').value = 'R';
 	            document.getElementById('reasonHiddenInput').value = reasonText;
 	           	event.target.submit(); // 폼 제출
-	           	window.hideLoadingModal();
 	        }
 	        } 
     	}
     }
+});*/
+
+document.getElementById('appForm').addEventListener('submit', async (event) => {
+    // 폼 제출의 기본 동작을 무조건 막습니다.
+    event.preventDefault();
+
+    const form = event.target;
+    const submitter = event.submitter;
+
+    if (!submitter) {
+        return;
+    }
+
+    
+    let modalTitle = "";
+    let modalContent = "";
+    let approval = false;
+    let actionUrl = form.action; // 기본 action URL로 설정
+    const actionValue = submitter.value;
+
+    // 'submit' 버튼을 눌렀을 경우에만 유효성 검사를 수행합니다.
+    if (actionValue === 'submit') {
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return; // 유효성 검사 실패 시 함수를 종료합니다.
+        }
+    }
+    
+    // 유효성 검사를 통과했거나, 유효성 검사가 필요 없는 버튼을 눌렀을 때만 아래 로직이 실행됩니다.
+    // .was-validated 클래스를 제거하여 시각적 오류 표시를 초기화합니다.
+    form.classList.remove('was-validated');
+
+    if (actionValue === 'save') {
+        modalTitle = "임시 저장";
+        modalContent = "작업 내용을 임시로 저장하시겠습니까?";
+        actionUrl = submitter.getAttribute('formaction');
+    } else if (actionValue === 'edit') {
+        modalTitle = "행사 수정";
+        modalContent = "행사를 수정하시겠습니까?<br>제출 후에는 수정할 수 없습니다.";
+        actionUrl = submitter.getAttribute('formaction');
+    } else if (actionValue === 'submit') {
+        modalTitle = "최종 제출";
+        modalContent = "신청서를 최종 제출하시겠습니까?<br>제출 후에는 수정할 수 없습니다.";
+    } else if (actionValue === 'approval') {
+        modalTitle = "결재 처리";
+        approval = true;
+    } else if(actionValue === 'delete') {
+        modalTitle = "신청서 삭제";
+        modalContent = "작성중인 신청서를 삭제합니다.";
+        actionUrl = submitter.getAttribute('formaction');
+    }
+    
+    // 기존 모달 로직과 폼 제출 로직...
+    if(!approval){
+        const result = await window.showCommonModal(
+            modalTitle,
+            modalContent,
+            {
+                cancelButtonText: "아니오",
+                confirmButtonText: "네, 진행합니다"
+            }
+        );
+        if (result) {
+            document.getElementById('actionHiddenInput').value = actionValue;
+            if(actionValue=='delete'||actionValue=='edit'){
+	        	document.getElementById('appForm').action=actionUrl;
+        	}
+        	event.target.submit();
+        }
+    } else {
+        const result = await window.showCommonModal(
+            modalTitle,
+            '행사 결제를 승인하시겠습니까?',
+            {
+                cancelButtonText: "반려",
+                confirmButtonText: "승인"
+            }
+        );
+        if (result) {
+            document.getElementById('actionHiddenInput').value = 'A';
+            event.target.submit();
+        } else {
+            const rejectReasonResult = await window.showCommonModal(
+                '반려 사유 입력',
+                '<textarea id="rejectReason" class="form-control overflow-y-auto" name="adminComment" rows="5" placeholder="반려 사유를 입력하세요."></textarea>',
+                {
+                    cancelButtonText: '취소',
+                    confirmButtonText: '반려',
+                    backdrop: 'static'
+                }
+            );
+            if (rejectReasonResult) {
+                const reasonText = document.getElementById('rejectReason').value.trim();
+                if (reasonText === '') {
+                    await window.showCommonModal('경고', '반려 사유를 입력해야 합니다.', {
+                        showCancelButton: false,
+                        confirmButtonText: '확인'
+                    });
+                } else {
+                    document.getElementById('actionHiddenInput').value = 'R';
+                    document.getElementById('reasonHiddenInput').value = reasonText;
+                    event.target.submit();
+                }
+            }
+        }
+    }
 });
-
-
