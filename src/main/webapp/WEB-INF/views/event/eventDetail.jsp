@@ -37,6 +37,14 @@
 	.category{
 	padding-top: 10px;
 	}
+	nav{
+	height : 70px;
+	}
+	.navbar-brand{
+	font-family: 'Courgette', cursive;
+    font-size: 24px !important;
+    font-weight: bold;
+	}
 	</style>
 </head>
 <body>
