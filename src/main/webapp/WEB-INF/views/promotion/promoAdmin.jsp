@@ -26,7 +26,7 @@
             margin-top: 50px;
             max-width: 1160px;
         }
-
+        
         .table img {
             max-width: 80px;
             max-height: 80px;
@@ -190,10 +190,10 @@
                     </c:when>
                     <c:otherwise>
                         <c:forEach var="promo" items="${promoList}">
-                            <tr onclick="location.href='${contextPath}/promoBoard/detail?promoId=${promo.promoId}'" style="cursor: pointer;">
+                            <tr onclick="location.href='${contextPath}/promoAdmin/detail?promoId=${promo.promoId}'" style="cursor: pointer;">
                                 <td class="text-center"><c:out value="${promo.promoId}" /></td>
                                 <td class="text-center">
-                                    <a href="${contextPath}/promoBoard/detail?promoId=${promo.promoId}" onclick="event.stopPropagation();">
+                                    <a href="${contextPath}/promoAdmin/detail?promoId=${promo.promoId}" onclick="event.stopPropagation();">
                                         <c:out value="${promo.promoTitle}" />
                                     </a>
                                 </td>

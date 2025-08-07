@@ -16,8 +16,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="${contextPath}/resources/css/promoDetail.css" />
 
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <meta name="_csrf" content="${_csrf.token}" />
+    <meta name="_csrf_header" content="${_csrf.headerName}" />
 
     <script>
         var contextPath = "<c:out value='${contextPath}'/>";
@@ -42,7 +42,8 @@
                 <p><strong>이벤트 기간:</strong>
                     <c:choose>
                         <c:when test="${not empty promo.startDate and not empty promo.endDate}">
-                            <fmt:formatDate value="${promo.startDate}" pattern="yyyy.MM.dd" /> - <fmt:formatDate value="${promo.endDate}" pattern="yyyy.MM.dd" />
+                            <fmt:formatDate value="${promo.startDate}" pattern="yyyy.MM.dd" /> - 
+                            <fmt:formatDate value="${promo.endDate}" pattern="yyyy.MM.dd" />
                         </c:when>
                         <c:otherwise>날짜 정보 없음</c:otherwise>
                     </c:choose>
@@ -50,34 +51,32 @@
             </div>
         </div>
 
-        <div class="mb-4 image-preview-container">
-            <c:choose>
-                <c:when test="${not empty promo.posterImage.changeName}">
-                    <img src="${contextPath}${promo.posterImage.changeName}" alt="홍보 포스터" class="rounded shadow-sm"
-                         onerror="this.onerror=null;this.src='https://placehold.co/600x600/e0e0e0/ffffff?text=No+Image';" />
-                </c:when>
-                <c:otherwise>
-                    <span class="no-image-text">이미지 미리보기</span>
-                </c:otherwise>
-            </c:choose>
-        </div>
+		<div class="mb-4 image-preview-container">
+		    <c:choose>
+		        <c:when test="${not empty promo.posterImage and not empty promo.posterImage.changeName}">
+		            <img src="${contextPath}${promo.posterImage.changeName}" alt="홍보 포스터" class="rounded shadow-sm"
+		                 onerror="this.onerror=null;this.src='https://placehold.co/600x600/e0e0e0/ffffff?text=No+Image';" />
+		        </c:when>
+		        <c:otherwise>
+		            <span class="no-image-text">이미지 미리보기</span>
+		        </c:otherwise>
+		    </c:choose>
+		</div>
 
         <div class="mb-4 promo-detail-content">
             <p>${promo.promoDetail}</p>
         </div>
 
-		<div class="mb-4 text-center">
-		    <c:choose>
-				<c:when test="${not empty promo.promotionPageUrl}">
-				    <a href="${promo.promotionPageUrl}" target="_blank" class="homepage-link">
-				        홈페이지 바로가기
-				    </a>
-				</c:when>
-		        <c:otherwise>
-		            <p>정보 없음</p>
-		        </c:otherwise>
-		    </c:choose>
-		</div>
+        <div class="mb-4 text-center">
+            <c:choose>
+                <c:when test="${not empty promo.promotionPageUrl}">
+                    <a href="${promo.promotionPageUrl}" target="_blank" class="homepage-link">홈페이지 바로가기</a>
+                </c:when>
+                <c:otherwise>
+                    <p>정보 없음</p>
+                </c:otherwise>
+            </c:choose>
+        </div>
 
         <hr />
 
@@ -85,7 +84,6 @@
             <a href="${contextPath}/promoBoard" class="btn btn-outline-secondary">목록 보기</a>
 
             <%-- 수정/삭제 버튼: 작성자이거나 관리자 --%>
-            <%-- 작성자인 경우의 버튼 --%>
             <c:if test="${loginUser.userNo == promo.writerUserNo}">
                 <div class="btn-group">
                     <a href="${contextPath}/promoBoard/promoUpdate?promoId=${promo.promoId}" class="btn btn-primary">수정</a>
@@ -93,7 +91,6 @@
                 </div>
             </c:if>
 
-            <%-- 관리자인 경우의 버튼 (작성자가 아닌 경우만 추가) --%>
             <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <c:if test="${loginUser.userNo != promo.writerUserNo}">
                     <div class="btn-group">
@@ -112,11 +109,11 @@
     <script src="${contextPath}/resources/js/commonModal.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const deleteButton = document.getElementById('deleteButton');
 
             if (deleteButton) {
-                deleteButton.addEventListener('click', async function() {
+                deleteButton.addEventListener('click', async function () {
                     const confirmed = await window.showCommonModal(
                         "게시글 삭제 확인",
                         "정말 이 게시글을 삭제하시겠습니까?",
@@ -124,56 +121,46 @@
                     );
 
                     if (confirmed) {
-                        // CSRF 토큰 정보 가져오기
                         const csrfToken = document.querySelector('meta[name="_csrf"]').content;
                         const csrfHeaderName = document.querySelector('meta[name="_csrf_header"]').content;
 
-                        // URLSearchParams를 사용하여 데이터 구성 (promoId만 본문에 포함)
                         const params = new URLSearchParams();
                         params.append('promoId', '${promo.promoId}');
-                        // params.append(csrfHeaderName, csrfToken); // 본문이 아닌 헤더에 추가하므로 이 줄은 제거합니다.
 
-                        // fetch 요청: headers에 CSRF 토큰을 추가
                         fetch('${contextPath}/promoBoard/delete', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
-                                [csrfHeaderName]: csrfToken // CSRF 토큰을 HTTP 헤더에 추가
+                                [csrfHeaderName]: csrfToken
                             },
-                            body: params.toString() // promoId만 본문에 전송
+                            body: params.toString()
                         })
                         .then(response => {
-                            // 응답 상태가 200 OK가 아니면 오류 처리
                             if (!response.ok) {
-                                // HTTP 에러 상태 코드에 따른 상세 에러 메시지 처리
                                 if (response.status === 403) {
-                                    // 403 Forbidden 오류 시: 응답이 JSON이 아닐 가능성이 높으므로 response.text()로 먼저 파싱
                                     return response.text().then(errorMessage => {
                                         console.error("403 Forbidden 응답 내용:", errorMessage);
                                         throw new Error('권한이 없거나 요청이 위조되었을 수 있습니다.');
                                     });
                                 }
-                                // 그 외 HTTP 오류: JSON 응답을 기대할 수 있으므로 json()으로 시도
                                 return response.json().then(errorData => {
                                     throw new Error(errorData.message || `HTTP 오류! 상태: ${response.status}`);
                                 }).catch(() => {
-                                    // JSON 파싱 실패 시: 일반 텍스트로 처리하여 SyntaxError 방지
                                     return response.text().then(errorMessage => {
                                         console.error(`HTTP 오류 ${response.status} 응답 내용:`, errorMessage);
                                         throw new Error(`알 수 없는 HTTP 오류! 상태: ${response.status}`);
                                     });
                                 });
                             }
-                            // 성공적인 응답일 경우 JSON 파싱
                             return response.json();
                         })
                         .then(data => {
                             if (data.msg === 'success') {
-                                window.showCommonModal("삭제 완료", "게시글이 성공적으로 삭제되었습니다.").then(() => {
-                                    window.location.href = '${contextPath}/promoBoard'; // 성공 시 게시글 목록으로 이동
-                                });
+                                window.showCommonModal("삭제 완료", "게시글이 성공적으로 삭제되었습니다.")
+                                    .then(() => {
+                                        window.location.href = '${contextPath}/promoBoard';
+                                    });
                             } else {
-                                // 서버에서 'success'가 아닌 다른 메시지를 보낸 경우
                                 window.showCommonModal("삭제 실패", "게시글 삭제에 실패했습니다. " + (data.message || "다시 시도해주세요."));
                             }
                         })
