@@ -38,7 +38,8 @@
 		<intercept-url pattern="/promoAdmin/**" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/promoBoard/**" access='permitAll' />
 
-		<intercept-url pattern="/reviewBoard/**" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/reviewBoard/" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/reviewBoard/**" access="hasRole('USER')" />
 
 		<intercept-url pattern="/user/Idpw" access="permitAll" />
 		<intercept-url pattern="/user/findIdEmail" access="permitAll" />

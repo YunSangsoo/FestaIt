@@ -263,6 +263,7 @@ public class UserController {
 			return "fail";
 		}
 		int userNo = ((User) auth.getPrincipal()).getUserNo(); // 이런식으로 가져와야함
+
 		Image result = uService.uploadProfile(file, userNo);
 
 		((User) auth.getPrincipal()).setProfileImage(result);

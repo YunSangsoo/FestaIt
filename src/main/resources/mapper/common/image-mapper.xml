@@ -6,8 +6,13 @@
 
 	<select id="selectImageByRefNoAndType" parameterType="map" resultType="Image">
 		SELECT *
-	    FROM IMAGE
-	    WHERE REF_NO = #{refNo} AND IMG_TYPE = #{imgType}
+		FROM (
+		    SELECT *
+		    FROM IMAGE
+		    WHERE REF_NO = #{refNo} AND IMG_TYPE = #{imgType}
+		    ORDER BY IMG_NO DESC
+		)
+		WHERE ROWNUM = 1
 	</select>
 	
 	<delete id="deleteImageByRefNoAndType" parameterType="map">
