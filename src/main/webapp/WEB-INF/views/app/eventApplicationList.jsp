@@ -106,8 +106,16 @@
                 <c:choose>
                     <c:when test="${not empty list}">
                         <c:forEach var="app" items="${list}">
-                            <tr>
-                           
+                            <tr style = "cursor: pointer;" data-href=
+                            <c:choose>
+                                		<c:when test="${isEditMode}">
+                                    		"${contextPath}/myEventApp/appEdit/${app.appId}"
+                                    	</c:when>
+                                    	<c:when test="${isViewMode }">
+                                    		"${contextPath}/eventApp/appDetail/${app.appId}"
+                                    	</c:when>
+                             </c:choose>
+                           >
 	            		<c:if test="${fn:startsWith(requestScope['javax.servlet.forward.request_uri'], pageContext.request.contextPath.concat('/eventApp'))}" >
                                 <td>
                                 	<c:choose>
@@ -130,17 +138,7 @@
                                     </c:choose>
                                 </td>
                                 <td class="text-start">
-                                	<c:choose>
-                                		<c:when test="${isEditMode}">
-                                    		<a href="${contextPath}/myEventApp/appEdit/${app.appId}" class="text-decoration-none text-dark">
-                                    	</c:when>
-                                    	<c:when test="${isViewMode }">
-                                    		<a href="${contextPath}/eventApp/appDetail/${app.appId}" class="text-decoration-none text-dark">
-                                    	</c:when>
-                                    	<c:otherwise><a></c:otherwise>
-                                	</c:choose>
-    									${app.appTitle}
-									</a>
+    									<a>${app.appTitle}</a>
                                 </td>
                                 
                                 <td>
@@ -287,6 +285,14 @@
 
         // 페이지 로드 시 현재 검색 기준에 맞는 드롭다운 텍스트 설정 (반복되는 코드 제거)
         // 다만, 필요에 따라 초기화 로직을 추가할 수 있습니다.
+        
+        const rows = document.querySelectorAll("tr[data-href]");
+
+        rows.forEach(row => {
+          row.addEventListener("click", () => {
+            window.location.href = row.dataset.href;
+          });
+        });
     });
 </script>
 </body>
